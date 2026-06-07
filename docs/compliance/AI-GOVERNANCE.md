@@ -1,0 +1,143 @@
+# AI Governance Alignment
+
+**Version:** 1.0.0  
+**Date:** 2026-06-07  
+**Owner:** AI Lead / ISMS Lead  
+**Source of truth (operational):** [Tranc3 `docs/compliance/AI_GOVERNANCE.md`](https://github.com/Trancendos/Tranc3/blob/main/docs/compliance/AI_GOVERNANCE.md)  
+**Review cadence:** Quarterly
+
+---
+
+## 1. Governance scope
+
+AI systems within Tranc3 ISMS scope:
+
+| Model ID | Name | Risk tier (EU AI Act) | Owner |
+|----------|------|----------------------|-------|
+| `luminous` | Luminous — Core AI Engine | Limited | AI Engineering |
+| `turings_hub` | Turing's Hub — 3D Entity Builder | Limited | AI Engineering |
+| `mlflow_experiments` | MLflow Experiment Tracker | Minimal | MLOps |
+
+**API:** `GET /compliance/ai/model-cards` · `POST /compliance/ai/incidents`
+
+---
+
+## 2. Framework coverage
+
+| Framework | Status | Magna Carta artefact |
+|-----------|--------|----------------------|
+| EU AI Act (2024/1689) | ⚠️ Partial | POL-AI-001, this document |
+| ISO/IEC 42001:2023 | ⚠️ Partial | AI governance module |
+| NIST AI RMF 1.0 | ⚠️ Partial | Risk classification |
+| UK AI Safety (voluntary) | ⚠️ Applied | Transparency principles |
+| GDPR Art. 22 | ✅ Active | Model cards, human review |
+
+---
+
+## 3. EU AI Act mapping
+
+| Article | Requirement | Implementation | Gap |
+|---------|-------------|----------------|-----|
+| Art. 5 | Prohibited practices | Blocklist in model cards | Formal review pending |
+| Art. 9 | Risk management | `classify_risk()` runtime | Annex III assessment incomplete |
+| Art. 13 | Transparency | Model cards published | — |
+| Art. 14 | Human oversight | High-risk → manual review | Workflow informal |
+| Art. 15 | Accuracy & robustness | Fairness metrics defined | **Unmeasured** — needs dataset |
+| Art. 50 | Limited-risk transparency | AI-labelled responses | — |
+| Art. 16–17 | High-risk obligations | N/A unless tier escalated | — |
+
+---
+
+## 4. Lifecycle controls
+
+```
+Design → Register → Risk classify → Deploy → Monitor → Incident → Retire
+   │         │            │            │         │          │         │
+   │         │            │            │         │          │         └─ Archive model card
+   │         │            │            │         │          └─ POST /compliance/ai/incidents
+   │         │            │            │         └─ Fairness report API
+   │         │            │            └─ Magna Carta ai_governance rules
+   │         │            └─ classify_risk() + use-case rules
+   │         └─ Model registry (ai_governance.py)
+   └─ DPIA if profiling / special category
+```
+
+---
+
+## 5. Prohibited and restricted uses
+
+**Prohibited (platform-wide):**
+- Social scoring affecting legal rights
+- Real-time biometric identification in public spaces (without legal basis)
+- Subliminal manipulation causing harm
+- Exploitation of vulnerable groups
+- Unacceptable-risk classification per EU AI Act Art. 5
+
+**Restricted (require approval):**
+- Automated decisions affecting employment, credit, or legal status
+- Processing special category data in AI pipelines
+- Deployment of third-party models without security review
+
+---
+
+## 6. NIST AI RMF functions
+
+| Function | Status | Evidence |
+|----------|--------|----------|
+| **GOVERN** | ✅ | AI policy, registry, incident log |
+| **MAP** | ⚠️ | Risk tiers; context docs partial |
+| **MEASURE** | ⚠️ | Fairness framework; metrics unmeasured |
+| **MANAGE** | ⚠️ | Incident workflow; improvement informal |
+
+---
+
+## 7. Runtime enforcement (Magna Carta)
+
+When `MAGNA_CARTA_ENABLED=true`, config rules enforce:
+
+```json
+{
+  "type": "ai_governance",
+  "checks": [
+    "model_registered",
+    "risk_tier_documented",
+    "prohibited_use_blocked",
+    "ai_content_labelled"
+  ]
+}
+```
+
+See [config/magna_carta_config.json](../../config/magna_carta_config.json).
+
+---
+
+## 8. Human agency principles (Magna Carta)
+
+1. AI outputs are **assistive**, not authoritative, unless explicitly configured.
+2. Users must be informed when interacting with AI (Art. 50).
+3. High-risk automated decisions require **human review** before effect.
+4. Users may request explanation of automated logic via DSR (Art. 22).
+5. Kill-switch: operators can disable AI routes via feature flags / Town Hall.
+
+---
+
+## 9. Action register
+
+| Action | Priority | Owner | Target |
+|--------|----------|-------|--------|
+| Run bias measurement suite | High | AI Engineering | Q3 2026 |
+| Board-approve POL-AI-001 | High | Executive | Q3 2026 |
+| Complete Annex III assessment | Medium | DPO + AI Lead | Q4 2026 |
+| ISO 42001 gap assessment | Medium | ISMS Lead | Q1 2027 |
+| Formal improvement process (ISO 42001 §10) | Medium | AI Lead | Q4 2026 |
+
+---
+
+## 10. Related documents
+
+- [POL-AI-001](../policies/POL-AI-001-AI-Ethics-Governance.md)
+- [REGULATION-MATRIX.md](REGULATION-MATRIX.md)
+- Tranc3 `src/compliance/ai_governance.py`
+- Tranc3 `src/compliance/magna_carta.py` (runtime hooks)
+
+**Next review:** 2026-09-07

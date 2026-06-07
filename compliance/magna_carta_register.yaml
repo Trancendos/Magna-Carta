@@ -1,0 +1,209 @@
+---
+# Magna Carta Compliance Register — Extensions to Tranc3 DEFSTAN Register
+# Generated: 2026-06-07
+# Scope: Governance, digital rights, and runtime rules beyond baseline DEFSTAN
+# Parent register: Tranc3 compliance/register.yaml
+# Documentation: https://github.com/Trancendos/magna-carta
+
+meta:
+  register_version: "1.0.0"
+  framework: "Magna Carta"
+  platform: "Tranc3 / Trancendos"
+  classification: "UNCLASSIFIED — PUBLIC"
+  owner: "Trancendos Platform Engineering"
+  last_updated: "2026-06-07"
+  review_cycle: "quarterly"
+  parent_register: "compliance/register.yaml"
+  runtime_config: "config/magna_carta_config.json"
+
+requirements:
+  # ─────────────────────────────────────────────────────────────────────────────
+  # MAGNA CARTA GOVERNANCE & DIGITAL RIGHTS
+  # ─────────────────────────────────────────────────────────────────────────────
+  - id: MC-001
+    standard: "Magna Carta / GDPR"
+    title: "Digital Rights Transparency"
+    description: "Users must be informed of data processing purposes, AI involvement, retention periods, and exercise paths for digital rights (access, rectification, erasure, portability) before or at the point of collection."
+    status: PARTIAL
+    evidence:
+      - type: policy
+        path: docs/policies/POL-PRI-001-Data-Protection-Privacy.md
+        description: "Data protection and privacy policy"
+      - type: procedure
+        path: docs/procedures/PROC-DSR-001-Data-Subject-Requests.md
+        description: "Data subject request handling"
+      - type: config
+        path: config/magna_carta_config.json
+        description: "MC-RULE-008 transparency checks"
+      - type: code
+        path: src/compliance/magna_carta.py
+        description: "Runtime transparency rule hook (Tranc3)"
+    maps_to:
+      - REQ-IA-006
+      - GDPR Art. 13
+      - GDPR Art. 14
+      - SOC2 CC2.2
+    verification_method: policy_review
+    last_reviewed: "2026-06-07"
+    reviewer: "Trancendos"
+    notes: "Privacy notice and AI disclosure UX to be validated in production UI audit Q3 2026"
+
+  - id: MC-002
+    standard: "Magna Carta"
+    title: "Zero-Cost Sovereignty"
+    description: "Core platform capabilities must remain operable without mandatory paid third-party APIs. Where external services are used, self-hosted alternatives must be documented and customer opt-in required for paid dependencies."
+    status: PARTIAL
+    evidence:
+      - type: document
+        path: docs/01-MAGNACARTA-FOUNDATION.md
+        description: "Zero-cost sovereignty principle"
+      - type: config
+        path: config/magna_carta_config.json
+        description: "MC-RULE-005 zero_cost checks"
+      - type: code
+        path: workers/vault-service/
+        description: "Self-hosted vault replacing CF Worker"
+      - type: code
+        path: workers/rate-limit-service/
+        description: "Self-hosted rate limiting"
+    maps_to:
+      - REQ-IA-002
+      - ISO27001 A.5.19
+    verification_method: architecture_review
+    last_reviewed: "2026-06-07"
+    reviewer: "Trancendos"
+    notes: "Vendor dependency register under POL-SUP-001 to be completed"
+
+  - id: MC-003
+    standard: "Magna Carta / Town Hall"
+    title: "Town Hall Governance Gate"
+    description: "Material changes to authentication, encryption, data retention, AI models, or supplier onboarding require documented Town Hall or CAB approval before production deployment."
+    status: PARTIAL
+    evidence:
+      - type: policy
+        path: docs/policies/POL-OPS-002-Change-Management.md
+        description: "Change management policy"
+      - type: procedure
+        path: docs/procedures/PROC-CHG-001-Change-Request.md
+        description: "Change request procedure"
+      - type: config
+        path: config/magna_carta_config.json
+        description: "MC-RULE-007 governance checks"
+      - type: code
+        path: config/townhall/frameworks.yaml
+        description: "Magna Carta listed as active framework (Tranc3)"
+    maps_to:
+      - REQ-SW-003
+      - SOC2 CC8.1
+      - ISO27001 A.8.32
+    verification_method: process_audit
+    last_reviewed: "2026-06-07"
+    reviewer: "Trancendos"
+    notes: "Automated CAB gate in CI pipeline planned; manual process active"
+
+  - id: MC-004
+    standard: "Magna Carta"
+    title: "Magna Carta Runtime Rules"
+    description: "When MAGNA_CARTA_ENABLED=true, request-boundary compliance rules from magna_carta_config.json must be evaluated and violations logged via magna_carta.py audit hooks."
+    status: PARTIAL
+    evidence:
+      - type: config
+        path: config/magna_carta_config.json
+        description: "Eight runtime rule definitions"
+      - type: code
+        path: src/compliance/magna_carta.py
+        description: "Compliance singleton and check_request()"
+      - type: document
+        path: docs/architecture/CONTROL-TO-COMPONENT-MAP.md
+        description: "Rule type to component mapping"
+    maps_to:
+      - REQ-IA-001
+      - REQ-IA-004
+      - REQ-IA-005
+      - REQ-IA-006
+    verification_method: code_review
+    last_reviewed: "2026-06-07"
+    reviewer: "Trancendos"
+    notes: "Rule logic in magna_carta.py is placeholder; config-driven enforcement to be implemented in Tranc3"
+
+  - id: MC-005
+    standard: "Magna Carta / EU AI Act"
+    title: "AI Ethics and Human Agency"
+    description: "AI outputs must be labelled as assistive; high-risk automated decisions require human review; prohibited AI uses must be blocked at inference boundary."
+    status: PARTIAL
+    evidence:
+      - type: policy
+        path: docs/policies/POL-AI-001-AI-Ethics-Governance.md
+        description: "AI ethics policy (draft — board approval pending)"
+      - type: document
+        path: docs/compliance/AI-GOVERNANCE.md
+        description: "AI governance alignment"
+      - type: config
+        path: config/magna_carta_config.json
+        description: "MC-RULE-004 ai_governance checks"
+      - type: code
+        path: src/compliance/ai_governance.py
+        description: "AI governance module (Tranc3)"
+    maps_to:
+      - REQ-AI-001
+      - EU AI Act Art. 9
+      - EU AI Act Art. 50
+    verification_method: policy_review
+    last_reviewed: "2026-06-07"
+    reviewer: "Trancendos"
+    notes: "POL-AI-001 board sign-off and bias measurement suite outstanding"
+
+  - id: MC-006
+    standard: "Magna Carta / ISO 27001"
+    title: "Policy and Procedure Library"
+    description: "A maintained library of approved policies and procedures must exist, be version-controlled, and be reviewed at least annually with evidence of acknowledgement for privileged roles."
+    status: COMPLIANT
+    evidence:
+      - type: policy
+        path: docs/policies/
+        description: "Eight baseline policies with INDEX"
+      - type: procedure
+        path: docs/procedures/
+        description: "Seven baseline procedures with INDEX"
+      - type: document
+        path: FRAMEWORK.md
+        description: "Master framework blueprint"
+      - type: document
+        path: docs/compliance/COMPLIANCE-BLUEPRINT.md
+        description: "Compliance operating model"
+    maps_to:
+      - ISO27001 A.5.1
+      - ISO27001 A.5.2
+      - SOC2 CC1.1
+      - SOC2 CC2.1
+    verification_method: document_review
+    last_reviewed: "2026-06-07"
+    reviewer: "Trancendos"
+    notes: "Staff acknowledgement tracking via HR/ISMS tooling TBD"
+
+  - id: MC-007
+    standard: "Magna Carta"
+    title: "Architecture Evidence Pack"
+    description: "Canonical as-built architecture, control-to-component mapping, and threat model must be maintained and referenced for audits instead of aspirational architecture documents."
+    status: COMPLIANT
+    evidence:
+      - type: document
+        path: docs/architecture/AS-BUILT-ARCHITECTURE.md
+        description: "Canonical as-built architecture"
+      - type: document
+        path: docs/architecture/CONTROL-TO-COMPONENT-MAP.md
+        description: "Control traceability matrix"
+      - type: document
+        path: docs/architecture/BLUEPRINT.md
+        description: "Architecture blueprint"
+      - type: code
+        path: ARCHITECTURE_THREAT_MODEL.md
+        description: "STRIDE threat model (Tranc3)"
+    maps_to:
+      - ISO27001 A.8.9
+      - DEF STAN 00-600
+      - SOC2 CC6.1
+    verification_method: architecture_review
+    last_reviewed: "2026-06-07"
+    reviewer: "Trancendos"
+    notes: "DOC-02 in Tranc3 is aspirational; auditors should use Magna Carta AS-BUILT"
