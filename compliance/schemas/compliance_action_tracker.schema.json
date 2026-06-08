@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/compliance_action_tracker.schema.json",
+  "title": "Compliance Action Tracker",
+  "type": "object",
+  "required": ["meta", "actions"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" },
+        "procedure": { "type": "string" }
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "action_id",
+          "title",
+          "owner",
+          "due_date",
+          "status",
+          "priority",
+          "validation_type"
+        ],
+        "properties": {
+          "action_id": { "type": "string", "pattern": "^ACT-[0-9]{3}$" },
+          "title": { "type": "string" },
+          "owner": { "type": "string" },
+          "due_date": { "type": "string", "format": "date" },
+          "status": {
+            "type": "string",
+            "enum": ["Open", "In progress", "Blocked", "Closed"]
+          },
+          "priority": { "type": "string", "enum": ["P0", "P1", "P2", "P3"] },
+          "validation_type": { "type": "string", "enum": ["programme", "external"] },
+          "source": { "type": "string" },
+          "evidence_target": { "type": "string" }
+        }
+      }
+    }
+  }
+}

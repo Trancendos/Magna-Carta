@@ -22,8 +22,8 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | Architecture Blueprint | 1.0.0 | ✅ Active |
 | Policy Library | 1.0.0 | ✅ Authored (9 policies; BoardRoom approval 🎯) |
 | Procedure Library | 1.0.0 | ✅ Active (12 procedures) |
-| Documentation artefact model | 1.0.0 | ✅ Cookbooks, Bible, Hymn sheets, Schemas, Registers (starter set) |
-| Compliance maintenance monitor | 1.0.0 | ✅ Programme + `compliance_health_check.py` (CI hook 🎯) |
+| Documentation artefact model | 1.1.0 | ✅ Full cookbook/hymn coverage (12/12 procedures) |
+| Compliance maintenance monitor | 1.1.0 | ✅ Local weekly health check (no cloud CI) |
 | Governance artefacts | 1.0.0 | ✅ Draft charter, RACI, audit programme (operational use 🎯) |
 | Evidence & assurance programme | 1.0.0 | ✅ MC-010 authored (pen test / attestations / audits 🎯) |
 | Tranc3 integration bridge | 1.0.0 | ✅ MC-011 authored (staging enablement / enforcement 🎯) |
@@ -99,6 +99,7 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [docs/evidence/PEN-TEST-PROGRAMME.md](docs/evidence/PEN-TEST-PROGRAMME.md) | Annual penetration test programme |
 | [docs/evidence/PEN-TEST-LOG.md](docs/evidence/PEN-TEST-LOG.md) | Penetration test execution log |
 | [docs/evidence/POLICY-ATTESTATION-REGISTER.md](docs/evidence/POLICY-ATTESTATION-REGISTER.md) | Staff policy acknowledgement register |
+| [docs/evidence/COMPLIANCE-HEALTH-LOG.md](docs/evidence/COMPLIANCE-HEALTH-LOG.md) | Weekly documentation health check audit trail |
 
 ### Architecture
 
@@ -147,7 +148,10 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [compliance/risk_register.yaml](compliance/risk_register.yaml) | Machine-readable risk register |
 | [compliance/policy_attestation_register.yaml](compliance/policy_attestation_register.yaml) | Machine-readable policy attestation register |
 | [compliance/maintenance_monitor.yaml](compliance/maintenance_monitor.yaml) | Documentation health monitor configuration |
+| [compliance/health_check_history.yaml](compliance/health_check_history.yaml) | Append-only weekly health check run log |
 | [scripts/compliance_health_check.py](scripts/compliance_health_check.py) | Automated drift, staleness, and link checker |
+| [scripts/weekly_compliance_health.sh](scripts/weekly_compliance_health.sh) | Weekly wrapper (logs results; zero cloud CI cost) |
+| [scripts/install_local_weekly_cron.sh](scripts/install_local_weekly_cron.sh) | Optional local crontab installer (Mondays 08:00) |
 
 ## Directory structure
 
@@ -164,9 +168,13 @@ magna-carta/
 │   ├── compliance_action_tracker.yaml
 │   ├── risk_register.yaml
 │   ├── policy_attestation_register.yaml
-│   └── maintenance_monitor.yaml
+│   ├── maintenance_monitor.yaml
+│   ├── health_check_history.yaml
+│   └── schemas/
 ├── scripts/
-│   └── compliance_health_check.py
+│   ├── compliance_health_check.py
+│   ├── weekly_compliance_health.sh
+│   └── install_local_weekly_cron.sh
 └── docs/
     ├── 00-EXECUTIVE-SUMMARY.md
     ├── 01-MAGNACARTA-FOUNDATION.md

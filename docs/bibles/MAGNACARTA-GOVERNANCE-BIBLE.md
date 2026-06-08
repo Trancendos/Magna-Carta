@@ -67,7 +67,7 @@ Artifact definitions: [DOCUMENTATION-ARTIFACT-MODEL.md](../governance/DOCUMENTAT
 | Activity | Frequency | Owner | Procedure / cookbook |
 |----------|-----------|-------|----------------------|
 | Compliance review | Quarterly | ISMS Lead | PROC-CMP-001 / COOK-CMP-001 |
-| Maintenance health check | Weekly (CI) + quarterly | ISMS Lead | COMPLIANCE-MAINTENANCE-PROGRAMME |
+| Maintenance health check | Weekly (local) + quarterly | ISMS Lead | `scripts/weekly_compliance_health.sh` |
 | Legislation scan | Quarterly | DPO | LEGISLATION-REGISTER |
 | Access review | Quarterly | ISMS Lead | PROC-IAM-001 |
 | Internal audit | Annual min | ISMS Lead | INTERNAL-AUDIT-PROGRAMME |
@@ -86,7 +86,7 @@ Full reviewer list: [REVIEWERS-REGISTER.md](../governance/REVIEWERS-REGISTER.md)
 2. **Personal data breach** → DPO within 1h → ICO assessment within 72h
 3. **P0 action past due** → ISMS → Executive
 4. **Regulator letter** → Legal within 24h → Executive
-5. **Health check red in CI** → ISMS + Platform Eng next stand-up
+5. **Health check errors in weekly log** → ISMS + doc owner next stand-up
 
 ---
 

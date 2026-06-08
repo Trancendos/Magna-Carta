@@ -1,0 +1,17 @@
+meta:
+  register_version: 1.0.0
+  owner: ISMS Lead
+  last_updated: '2026-06-08'
+  review_cycle: quarterly
+  cadence_days: 7
+  procedure: docs/governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md
+runs:
+- timestamp: '2026-06-08T18:04:26Z'
+  operator: ubuntu
+  errors: 0
+  warnings: 1
+  exit_code: 0
+  findings:
+  - check_id: MON-008
+    severity: warning
+    message: No weekly health check logged yet — run scripts/weekly_compliance_health.sh

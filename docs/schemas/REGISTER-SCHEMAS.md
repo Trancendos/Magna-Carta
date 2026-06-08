@@ -1,7 +1,7 @@
 # Register Schemas
 
-**Version:** 1.0.0  
-**Date:** 2026-06-07  
+**Version:** 1.1.0  
+**Date:** 2026-06-08  
 **Owner:** ISMS Lead  
 **Purpose:** Field definitions for machine-readable YAML registers and human register tables.
 
@@ -18,6 +18,7 @@
 | `compliance/risk_register.yaml` | 1.0.0 | ISMS Lead |
 | `compliance/policy_attestation_register.yaml` | 1.0.0 | HR / ISMS |
 | `compliance/maintenance_monitor.yaml` | 1.0.0 | ISMS Lead |
+| `compliance/health_check_history.yaml` | 1.0.0 | ISMS Lead |
 
 ---
 
@@ -125,8 +126,18 @@ Run schema-adjacent checks:
 
 ```bash
 python3 scripts/compliance_health_check.py --report
+./scripts/weekly_compliance_health.sh   # weekly cadence + append-only log
 ```
 
-Future: JSON Schema files in `docs/schemas/json/` if registers grow (not required today).
+### JSON Schema files
+
+Machine-readable schemas (Draft 2020-12) live in `compliance/schemas/`:
+
+| File | Register |
+|------|----------|
+| `compliance_action_tracker.schema.json` | `compliance/compliance_action_tracker.yaml` |
+| `health_check_history.schema.json` | `compliance/health_check_history.yaml` |
+
+`compliance_health_check.py` performs lightweight structural validation (MON-009) without requiring the `jsonschema` package. Add further schemas as registers grow.
 
 **Next review:** 2026-09-06

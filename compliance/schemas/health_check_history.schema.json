@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/health_check_history.schema.json",
+  "title": "Health Check History",
+  "type": "object",
+  "required": ["meta", "runs"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "cadence_days": { "type": "integer", "minimum": 1 },
+        "review_cycle": { "type": "string" },
+        "procedure": { "type": "string" }
+      }
+    },
+    "runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["timestamp", "errors", "warnings", "exit_code"],
+        "properties": {
+          "timestamp": { "type": "string" },
+          "operator": { "type": "string" },
+          "errors": { "type": "integer", "minimum": 0 },
+          "warnings": { "type": "integer", "minimum": 0 },
+          "exit_code": { "type": "integer" },
+          "findings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["check_id", "severity", "message"],
+              "properties": {
+                "check_id": { "type": "string" },
+                "severity": { "type": "string" },
+                "message": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

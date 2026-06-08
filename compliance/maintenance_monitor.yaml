@@ -36,6 +36,10 @@ required_files:
     check_id: MON-005
   - path: docs/hymn-sheets/INDEX.md
     check_id: MON-005
+  - path: docs/evidence/COMPLIANCE-HEALTH-LOG.md
+    check_id: MON-007
+  - path: scripts/weekly_compliance_health.sh
+    check_id: MON-007
 
 yaml_registers:
   - path: compliance/compliance_action_tracker.yaml
@@ -50,6 +54,21 @@ yaml_registers:
     check_id: MON-006
   - path: compliance/policy_attestation_register.yaml
     check_id: MON-006
+  - path: compliance/health_check_history.yaml
+    check_id: MON-006
+
+weekly_cadence:
+  check_id: MON-008
+  max_gap_days: 7
+  history: compliance/health_check_history.yaml
+
+schema_validation:
+  - check_id: MON-009
+    register: compliance/compliance_action_tracker.yaml
+    schema: compliance/schemas/compliance_action_tracker.schema.json
+  - check_id: MON-009
+    register: compliance/health_check_history.yaml
+    schema: compliance/schemas/health_check_history.schema.json
 
 index_drift_checks:
   - check_id: MON-004

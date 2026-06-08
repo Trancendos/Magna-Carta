@@ -18,7 +18,7 @@
 8. Legislation register scan ([LEGISLATION-REGISTER.md](../compliance/LEGISLATION-REGISTER.md)); regulators/ombudsmen ([REGULATORS-OMBUDSMEN-REGISTER.md](../compliance/REGULATORS-OMBUDSMEN-REGISTER.md))
 9. Pen test / vuln programme status
 10. Tranc3 integration bridge status (`tranc3_register_bridge.yaml`, ACT-009 staging)
-11. Documentation health: run `python3 scripts/compliance_health_check.py --report`; review [COMPLIANCE-MAINTENANCE-PROGRAMME.md](../governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md)
+11. Documentation health: confirm weekly `./scripts/weekly_compliance_health.sh` ran (see [COMPLIANCE-HEALTH-LOG.md](../evidence/COMPLIANCE-HEALTH-LOG.md)); run `python3 scripts/compliance_health_check.py --report` if needed; review [COMPLIANCE-MAINTENANCE-PROGRAMME.md](../governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md)
 12. Actions and owners
 
 ### Participants

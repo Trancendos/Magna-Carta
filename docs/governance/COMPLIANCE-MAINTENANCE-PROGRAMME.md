@@ -1,10 +1,10 @@
 # Compliance Maintenance Programme
 
-**Version:** 1.0.0  
+**Version:** 1.1.0  
 **Date:** 2026-06-07  
 **Owner:** ISMS Lead  
 **Procedure:** [PROC-CMP-001](../procedures/PROC-CMP-001-Compliance-Review.md)  
-**Automation:** `scripts/compliance_health_check.py` · `compliance/maintenance_monitor.yaml`
+**Automation:** `scripts/compliance_health_check.py` · `scripts/weekly_compliance_health.sh` · `compliance/maintenance_monitor.yaml`
 
 ---
 
@@ -12,11 +12,13 @@
 
 Keep Magna Carta documentation **accurate, linked, and timely** without relying on memory. Combines:
 
-- **Proactive** automated checks (CI + local)
+- **Proactive** automated checks (local weekly + on-demand)
 - **Reactive** quarterly human review
 - **Adaptive** triggers on regulatory or architecture change
 
 This is **not** operational certification monitoring — see ACT-001–012 for layer 3.
+
+**Cost policy:** Weekly monitoring runs **locally** (cron on ISMS machine or manual). **No GitHub Actions** — avoids CI minute charges across org repos.
 
 ---
 
@@ -24,13 +26,13 @@ This is **not** operational certification monitoring — see ACT-001–012 for l
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  LAYER A — Automated (weekly CI / on-demand)            │
-│  compliance_health_check.py → maintenance_monitor.yaml  │
+│  LAYER A — Automated (weekly local / on-demand)         │
+│  weekly_compliance_health.sh → health_check_history.yaml│
 └───────────────────────────┬─────────────────────────────┘
                             ▼
 ┌─────────────────────────────────────────────────────────┐
-│  LAYER B — Quarterly human (PROC-CMP-001)               │
-│  COOK-CMP-001 + HYMN-CMP-001                            │
+│  LAYER B — Quarterly human (PROC-CMP-001)             │
+│  COOK-CMP-001 + HYMN-CMP-001                          │
 └───────────────────────────┬─────────────────────────────┘
                             ▼
 ┌─────────────────────────────────────────────────────────┐
@@ -51,6 +53,8 @@ This is **not** operational certification monitoring — see ACT-001–012 for l
 | MON-005 | Cookbook/hymn index references resolve | error | Fix broken links |
 | MON-006 | YAML registers parseable | error | Fix syntax |
 | MON-007 | Programme milestone docs exist (artifact model) | warning | Create missing artefact |
+| MON-008 | Last logged health check within 7 days | warning | Run weekly script |
+| MON-009 | YAML registers match JSON Schema structure | error | Fix register fields |
 
 Full config: `compliance/maintenance_monitor.yaml`
 
@@ -60,7 +64,7 @@ Full config: `compliance/maintenance_monitor.yaml`
 
 | Activity | When | Tool / owner |
 |----------|------|--------------|
-| Health check in CI | Weekly (Monday) | GitHub/Forgejo workflow — ISMS |
+| Weekly health check | Monday (local cron or manual) | `scripts/weekly_compliance_health.sh` — ISMS |
 | Health check before quarterly review | T-7 days | ISMS Lead |
 | Full register human review | Quarterly | PROC-CMP-001 |
 | Artifact model gap scan | Quarterly | DOCUMENTATION-ARTIFACT-MODEL §7 |
@@ -69,7 +73,29 @@ Full config: `compliance/maintenance_monitor.yaml`
 
 ---
 
-## 5. Triggers (adaptive)
+## 5. Weekly run (zero cloud CI cost)
+
+```bash
+# From repo root — logs to compliance/health_check_history.yaml
+./scripts/weekly_compliance_health.sh
+
+# Optional: user crontab on ISMS workstation (Mondays 08:00)
+./scripts/install_local_weekly_cron.sh
+```
+
+Human-readable mirror: [COMPLIANCE-HEALTH-LOG.md](../evidence/COMPLIANCE-HEALTH-LOG.md)
+
+**Pre-merge / pre-review (on demand):**
+
+```bash
+python3 scripts/compliance_health_check.py --report --strict
+```
+
+`--strict` exits non-zero on `error` severity — use before quarterly review or doc merges; not required in cloud CI.
+
+---
+
+## 6. Triggers (adaptive)
 
 | Event | Action | Within |
 |-------|--------|--------|
@@ -82,25 +108,12 @@ Full config: `compliance/maintenance_monitor.yaml`
 
 ---
 
-## 6. CI integration (recommended)
-
-Add to Forgejo/GitHub Actions (Tranc3 or Magna Carta repo):
-
-```yaml
-- name: Compliance documentation health
-  run: python3 scripts/compliance_health_check.py --strict
-```
-
-`--strict` exits non-zero on `error` severity — blocks merge if registers broken.
-
----
-
 ## 7. Roles
 
 | Role | Responsibility |
 |------|----------------|
-| ISMS Lead | Owns programme; chairs quarterly review |
-| Platform Engineering | Fixes CI failures; SYSTEMS-REGISTER |
+| ISMS Lead | Owns programme; runs weekly check; chairs quarterly review |
+| Platform Engineering | Fixes register drift; SYSTEMS-REGISTER |
 | DPO | Legislation, regulators, privacy registers |
 | All doc owners | Keep `last_updated` and review dates honest |
 
@@ -113,7 +126,8 @@ Add to Forgejo/GitHub Actions (Tranc3 or Magna Carta repo):
 | Health check error count | 0 |
 | Open warnings at quarter end | < 5 with owners |
 | ACT P0 past due | 0 |
-| Cookbook coverage (P0 procedures) | 100% within 12 months |
+| Cookbook coverage (all procedures) | 100% |
+| Weekly runs logged (52/year) | ≥ 48 |
 | Register review on time | 100% |
 
 ---
@@ -123,6 +137,6 @@ Add to Forgejo/GitHub Actions (Tranc3 or Magna Carta repo):
 | Activity | Next |
 |----------|------|
 | Programme review | 2026-09-06 |
-| Add CI workflow to Tranc3/Magna Carta | 🎯 Platform Engineering |
+| First weekly log entry after merge | ISMS Lead |
 
 **Related:** [CONTINUOUS-IMPROVEMENT-PROGRAMME.md](CONTINUOUS-IMPROVEMENT-PROGRAMME.md) · [DOCUMENTATION-ARTIFACT-MODEL.md](DOCUMENTATION-ARTIFACT-MODEL.md)

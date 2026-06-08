@@ -6,7 +6,8 @@ Reads compliance/maintenance_monitor.yaml and validates register freshness,
 file existence, YAML parseability, README/index drift, and overdue actions.
 
 Usage:
-  python3 scripts/compliance_health_check.py [--report] [--strict]
+  python3 scripts/compliance_health_check.py [--report] [--strict] [--log] [--weekly-report]
+  ./scripts/weekly_compliance_health.sh   # preferred weekly wrapper (zero CI cost)
 
 Exit codes:
   0 — no errors (warnings allowed unless --strict treats warnings as errors)
@@ -19,7 +20,7 @@ import argparse
 import re
 import sys
 from dataclasses import dataclass
-from datetime import date, datetime
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 try:
@@ -177,6 +178,126 @@ def check_overdue_actions(cfg: dict, findings: list[Finding]) -> None:
             )
 
 
+def load_health_history() -> dict:
+    path = ROOT / "compliance" / "health_check_history.yaml"
+    if not path.is_file() or yaml is None:
+        return {"runs": [], "meta": {"cadence_days": 7}}
+    with path.open(encoding="utf-8") as f:
+        data = yaml.safe_load(f) or {}
+    data.setdefault("runs", [])
+    return data
+
+
+def append_health_log(
+    findings: list[Finding],
+    operator: str,
+    exit_code: int,
+) -> None:
+    if yaml is None:
+        return
+    path = ROOT / "compliance" / "health_check_history.yaml"
+    data = load_health_history()
+    errors = sum(1 for f in findings if f.severity == "error")
+    warnings = sum(1 for f in findings if f.severity == "warning")
+    run = {
+        "timestamp": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "operator": operator,
+        "errors": errors,
+        "warnings": warnings,
+        "exit_code": exit_code,
+        "findings": [
+            {"check_id": f.check_id, "severity": f.severity, "message": f.message}
+            for f in findings
+        ],
+    }
+    data["runs"].append(run)
+    if len(data["runs"]) > 52:
+        data["runs"] = data["runs"][-52:]
+    if "meta" not in data:
+        data["meta"] = {}
+    data["meta"]["last_updated"] = date.today().isoformat()
+    with path.open("w", encoding="utf-8") as f:
+        yaml.safe_dump(data, f, sort_keys=False, allow_unicode=True)
+
+
+def check_weekly_cadence(cfg: dict, findings: list[Finding]) -> None:
+    block = cfg.get("weekly_cadence", {})
+    if not block:
+        return
+    cid = block.get("check_id", "MON-008")
+    history = load_health_history()
+    runs = history.get("runs", [])
+    if not runs:
+        findings.append(
+            Finding(
+                cid,
+                "warning",
+                "No weekly health check logged yet — run scripts/weekly_compliance_health.sh",
+            )
+        )
+        return
+    last_ts = runs[-1].get("timestamp", "")
+    try:
+        last_dt = datetime.strptime(last_ts[:10], "%Y-%m-%d").date()
+    except ValueError:
+        return
+    cadence = block.get(
+        "max_gap_days",
+        history.get("meta", {}).get("cadence_days", 7),
+    )
+    gap = (date.today() - last_dt).days
+    if gap > cadence:
+        findings.append(
+            Finding(
+                cid,
+                "warning",
+                f"Last health check {gap}d ago (>{cadence}d cadence) — run weekly script",
+            )
+        )
+
+
+def validate_register_schema(cfg: dict, findings: list[Finding]) -> None:
+    """Lightweight structural validation without external jsonschema dependency."""
+    import json
+
+    for block in cfg.get("schema_validation", []):
+        cid = block.get("check_id", "MON-009")
+        rel = block["register"]
+        schema_rel = block["schema"]
+        reg_path = ROOT / rel
+        schema_path = ROOT / schema_rel
+        if not reg_path.is_file() or not schema_path.is_file() or yaml is None:
+            continue
+        with schema_path.open(encoding="utf-8") as f:
+            schema = json.load(f)
+        with reg_path.open(encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+        required_top = schema.get("required", [])
+        for key in required_top:
+            if key not in data:
+                findings.append(
+                    Finding(cid, "error", f"{rel} missing required top-level key: {key}")
+                )
+        item_schema = (
+            schema.get("properties", {})
+            .get("actions", {})
+            .get("items", {})
+            .get("required", [])
+        )
+        if item_schema and "actions" in data:
+            for action in data["actions"]:
+                for field in item_schema:
+                    if field not in action:
+                        aid = action.get("action_id", "?")
+                        findings.append(
+                            Finding(
+                                cid,
+                                "error",
+                                f"{rel} action {aid} missing field: {field}",
+                            )
+                        )
+
+
 def check_cookbook_links(cfg: dict, findings: list[Finding]) -> None:
     for block in cfg.get("cookbook_links", []):
         cid = block.get("check_id", "MON-005")
@@ -195,15 +316,19 @@ def check_cookbook_links(cfg: dict, findings: list[Finding]) -> None:
                 findings.append(Finding(cid, "error", f"Broken link in {block['index']}: {target}"))
 
 
-def run_checks() -> list[Finding]:
+def run_checks(*, include_weekly_cadence: bool = False) -> list[Finding]:
     findings: list[Finding] = []
     cfg = load_monitor_config()
+    if not include_weekly_cadence:
+        cfg = {**cfg, "weekly_cadence": {}}
     check_required_files(cfg, findings)
     check_yaml_registers(cfg, findings)
     check_index_drift(cfg, findings)
     check_stale_reviews(cfg, findings)
     check_overdue_actions(cfg, findings)
     check_cookbook_links(cfg, findings)
+    check_weekly_cadence(cfg, findings)
+    validate_register_schema(cfg, findings)
     return findings
 
 
@@ -228,10 +353,25 @@ def main() -> int:
         action="store_true",
         help="Exit non-zero on warnings as well as errors",
     )
+    parser.add_argument(
+        "--log",
+        action="store_true",
+        help="Append run to compliance/health_check_history.yaml",
+    )
+    parser.add_argument(
+        "--weekly-report",
+        action="store_true",
+        help="Include weekly cadence (MON-008) check in this run",
+    )
+    parser.add_argument(
+        "--operator",
+        default="local",
+        help="Operator id recorded with --log (default: local)",
+    )
     args = parser.parse_args()
 
     try:
-        findings = run_checks()
+        findings = run_checks(include_weekly_cadence=args.weekly_report)
     except Exception as exc:  # noqa: BLE001
         print(f"FATAL: {exc}", file=sys.stderr)
         return 1
@@ -241,11 +381,12 @@ def main() -> int:
 
     errors = [f for f in findings if f.severity == "error"]
     warnings = [f for f in findings if f.severity == "warning"]
-    if errors:
-        return 1
-    if args.strict and warnings:
-        return 1
-    return 0
+    exit_code = 1 if errors or (args.strict and warnings) else 0
+
+    if args.log:
+        append_health_log(findings, args.operator, exit_code)
+
+    return exit_code
 
 
 if __name__ == "__main__":
