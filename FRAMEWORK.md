@@ -21,6 +21,8 @@ The Magna Carta Framework defines **how Trancendos governs, secures, complies, a
 
 This document is the **blueprint** that connects governance intent to Tranc3 implementation.
 
+**Maturity:** Artefacts in this repository prove the **documentation programme** (policies, registers, mappings). They do not by themselves prove ISO 27001 certification, SOC 2 Type II, signed supplier DPAs, or production runtime enforcement — those require operational validation. See [docs/00-EXECUTIVE-SUMMARY.md](docs/00-EXECUTIVE-SUMMARY.md#maturity-model-read-this-first).
+
 ---
 
 ## 2. Framework layers

@@ -8,8 +8,10 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 
 | Symbol | Meaning |
 |--------|---------|
-| ✅ **Programme implemented** | Policy, procedure, register, or alignment artefact exists in this repo and is maintained |
-| 🎯 **External validation pending** | Certification, fee payment, signed third-party contract, or operational evidence run not yet complete |
+| ✅ **Programme artefact** | Policy, procedure, register, or alignment document **exists in this repo** and is maintained (documentation programme — not operational certification) |
+| 🎯 **Operational validation pending** | Board approval, signed contract, certification audit, fee payment, drill, observation window, or production enforcement not yet demonstrated |
+
+**Three layers:** (1) Tranc3 platform controls in code · (2) Magna Carta documentation in this repo · (3) validated operations and external assurance. ✅ marks layer 2 only unless stated otherwise. See [docs/00-EXECUTIVE-SUMMARY.md](docs/00-EXECUTIVE-SUMMARY.md#maturity-model-read-this-first).
 
 ## Programme status
 
@@ -18,15 +20,15 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | Foundation Framework | 1.0.0 | ✅ Active |
 | Compliance Blueprint | 1.0.0 | ✅ Active |
 | Architecture Blueprint | 1.0.0 | ✅ Active |
-| Policy Library | 1.0.0 | ✅ Active (8 policies) |
+| Policy Library | 1.0.0 | ✅ Authored (8 policies; BoardRoom approval 🎯) |
 | Procedure Library | 1.0.0 | ✅ Active (10 procedures) |
-| Governance artefacts | 1.0.0 | ✅ Committee charter, RACI, internal audit programme |
-| Evidence & assurance programme | 1.0.0 | ✅ MC-010 (external runs 🎯) |
-| Tranc3 integration bridge | 1.0.0 | ✅ MC-011 (staging enablement 🎯) |
-| Supplier DPA register | 1.0.0 | ✅ Programme (signed DPAs 🎯) |
-| Tranc3 Integration Config | 1.0.0 | ✅ Ready for `MAGNA_CARTA_ENABLED=true` |
-| ISO 27001 certification | — | 🎯 SOA programme complete; external audit pending |
-| SOC 2 Type II | — | 🎯 Controls mapped; external audit pending |
+| Governance artefacts | 1.0.0 | ✅ Draft charter, RACI, audit programme (operational use 🎯) |
+| Evidence & assurance programme | 1.0.0 | ✅ MC-010 authored (pen test / attestations / audits 🎯) |
+| Tranc3 integration bridge | 1.0.0 | ✅ MC-011 authored (staging enablement / enforcement 🎯) |
+| Supplier DPA register | 1.0.0 | ✅ Register exists (**signed DPAs incomplete** 🎯) |
+| Tranc3 Integration Config | 1.0.0 | ✅ Spec ready; production enablement 🎯 |
+| ISO 27001 certification | — | 🎯 SOA drafted; org controls partial; external audit pending |
+| SOC 2 Type II | — | 🎯 TSC mapped; 6-month observation window not started |
 | ICO registration (fee paid) | — | 🎯 Programme documented; live number pending |
 | HIPAA Tier C attestation | — | 🎯 BAA programme; per-customer BAAs pending |
 

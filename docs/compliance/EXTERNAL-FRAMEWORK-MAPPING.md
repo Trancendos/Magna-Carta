@@ -75,7 +75,7 @@ Connor Domain                          Magna Carta Layer              Primary ar
 | Incident response (AI-specific) | POL-OPS-001 + PROC-IR-001 + AI incidents API | `POST /compliance/ai/incidents` |
 | Ethics framework | POL-AI-001, AI-GOVERNANCE §8 | `ai_governance` Magna Carta rules |
 
-**Gap priorities (post-2026-06-07):** Board-approved POL-AI-001; formal AI governance committee charter; centralised GenAI use-case inventory beyond registered models. **Programme complete:** Connor/Google mapping, GENAI-MATURITY §10 baseline, HIPAA (MC-008), FCA (MC-009).
+**Gap priorities (post-2026-06-07):** Board approval for all policies (POL-AI-001 drafted); AI governance committee **charter authored** but first meeting 🎯; centralised GenAI use-case inventory beyond registered models. **Programme artefacts (layer 2):** Connor/Google mapping doc, GENAI-MATURITY §10 baseline, HIPAA (MC-008), FCA (MC-009) alignment docs.
 
 ---
 
@@ -90,7 +90,7 @@ Connor Domain                          Magna Carta Layer              Primary ar
 | Cross-border compliance | GDPR-ALIGNMENT (SCCs for AI fallback) | ROPA external processors |
 | Self-learning models | AI-GOVERNANCE lifecycle §4 | Monitor + re-classify risk tier |
 
-**Gap priorities:** Formal data-lineage tooling; automated regulatory change alerts; complete processor DPA register. **Programme complete:** LEGISLATION-REGISTER (LEG-006–010), OBLIGATIONS-REGISTER §4.6–4.7.
+**Gap priorities:** Formal data-lineage tooling; automated regulatory change alerts; **signed processor DPAs** (register exists; countersignature incomplete). **Programme artefacts (layer 2):** LEGISLATION-REGISTER (LEG-006–010), OBLIGATIONS-REGISTER §4.6–4.7.
 
 ---
 

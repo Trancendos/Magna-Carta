@@ -15,6 +15,10 @@ meta:
   review_cycle: "quarterly"
   parent_register: "compliance/register.yaml"
   runtime_config: "config/magna_carta_config.json"
+  status_legend:
+    PROGRAMME_ARTEFACT: "Documentation, register entry, or config exists in Magna Carta; operational validation may be pending (see notes)"
+    OPERATIONAL: "Externally validated or exercised in production (not used for MC entries yet)"
+  status_note: "MC requirements track the documentation programme. PROGRAMME_ARTEFACT does not imply ISO/SOC certification or signed third-party contracts."
 
 requirements:
   # ─────────────────────────────────────────────────────────────────────────────
@@ -24,7 +28,7 @@ requirements:
     standard: "Magna Carta / GDPR"
     title: "Digital Rights Transparency"
     description: "Users must be informed of data processing purposes, AI involvement, retention periods, and exercise paths for digital rights (access, rectification, erasure, portability) before or at the point of collection."
-    status: COMPLIANT
+    status: PROGRAMME_ARTEFACT
     evidence:
       - type: policy
         path: docs/policies/POL-PRI-001-Data-Protection-Privacy.md
@@ -52,7 +56,7 @@ requirements:
     standard: "Magna Carta"
     title: "Zero-Cost Sovereignty"
     description: "Core platform capabilities must remain operable without mandatory paid third-party APIs. Where external services are used, self-hosted alternatives must be documented and customer opt-in required for paid dependencies."
-    status: COMPLIANT
+    status: PROGRAMME_ARTEFACT
     evidence:
       - type: document
         path: docs/01-MAGNACARTA-FOUNDATION.md
@@ -78,7 +82,7 @@ requirements:
     standard: "Magna Carta / Town Hall"
     title: "Town Hall Governance Gate"
     description: "Material changes to authentication, encryption, data retention, AI models, or supplier onboarding require documented Town Hall or CAB approval before production deployment."
-    status: COMPLIANT
+    status: PROGRAMME_ARTEFACT
     evidence:
       - type: policy
         path: docs/policies/POL-OPS-002-Change-Management.md
@@ -105,7 +109,7 @@ requirements:
     standard: "Magna Carta"
     title: "Magna Carta Runtime Rules"
     description: "When MAGNA_CARTA_ENABLED=true, request-boundary compliance rules from magna_carta_config.json must be evaluated and violations logged via magna_carta.py audit hooks."
-    status: COMPLIANT
+    status: PROGRAMME_ARTEFACT
     evidence:
       - type: config
         path: config/magna_carta_config.json
@@ -130,7 +134,7 @@ requirements:
     standard: "Magna Carta / EU AI Act"
     title: "AI Ethics and Human Agency"
     description: "AI outputs must be labelled as assistive; high-risk automated decisions require human review; prohibited AI uses must be blocked at inference boundary."
-    status: COMPLIANT
+    status: PROGRAMME_ARTEFACT
     evidence:
       - type: policy
         path: docs/policies/POL-AI-001-AI-Ethics-Governance.md
@@ -157,7 +161,7 @@ requirements:
     standard: "Magna Carta / ISO 27001"
     title: "Policy and Procedure Library"
     description: "A maintained library of approved policies and procedures must exist, be version-controlled, and be reviewed at least annually with evidence of acknowledgement for privileged roles."
-    status: COMPLIANT
+    status: PROGRAMME_ARTEFACT
     evidence:
       - type: policy
         path: docs/policies/
@@ -185,7 +189,7 @@ requirements:
     standard: "Magna Carta"
     title: "Architecture Evidence Pack"
     description: "Canonical as-built architecture, control-to-component mapping, and threat model must be maintained and referenced for audits instead of aspirational architecture documents."
-    status: COMPLIANT
+    status: PROGRAMME_ARTEFACT
     evidence:
       - type: document
         path: docs/architecture/AS-BUILT-ARCHITECTURE.md
@@ -212,7 +216,7 @@ requirements:
     standard: "Magna Carta / HIPAA"
     title: "HIPAA Alignment Programme"
     description: "US PHI boundary controls, BAA process, Security/Privacy/Breach safeguards, and tiered marketing claims when HIPAA_PROFILE is enabled for health integrations (Sync-Bot, wellbeing tier)."
-    status: COMPLIANT
+    status: PROGRAMME_ARTEFACT
     evidence:
       - type: document
         path: docs/compliance/HIPAA-ALIGNMENT.md
@@ -244,7 +248,7 @@ requirements:
     standard: "Magna Carta / FCA Handbook"
     title: "FCA Alignment Programme"
     description: "UK financial conduct governance for platform provider perimeter — PRIN/Consumer Duty, COBS 4 financial promotions, PS21/3 supplier resilience, payment orchestration via authorised PSP only, and AI not presented as regulated advice."
-    status: COMPLIANT
+    status: PROGRAMME_ARTEFACT
     evidence:
       - type: document
         path: docs/compliance/FCA-ALIGNMENT.md
@@ -278,7 +282,7 @@ requirements:
     standard: "Magna Carta / ISO 27001 / SOC 2"
     title: "Evidence & Assurance Programme"
     description: "Action tracker, risk register, SOC 2 evidence schedule, internal audit programme, pen test programme, policy attestation, and management review must be maintained with quarterly review and linked remediation owners."
-    status: COMPLIANT
+    status: PROGRAMME_ARTEFACT
     evidence:
       - type: document
         path: docs/compliance/COMPLIANCE-ACTION-TRACKER.md
@@ -323,7 +327,7 @@ requirements:
     standard: "Magna Carta / DEFSTAN"
     title: "Tranc3 Integration Bridge"
     description: "Canonical mapping between Magna Carta register (MC-###), Tranc3 DEFSTAN register (REQ-###), and runtime rules with staging enablement guide for MAGNA_CARTA_ENABLED integration."
-    status: COMPLIANT
+    status: PROGRAMME_ARTEFACT
     evidence:
       - type: config
         path: compliance/tranc3_register_bridge.yaml

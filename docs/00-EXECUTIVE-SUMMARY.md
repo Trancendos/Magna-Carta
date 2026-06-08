@@ -12,7 +12,7 @@
 
 The **Magna Carta Framework** is Trancendos' unified governance, compliance, and architecture documentation suite for the Tranc3 AI platform. It consolidates:
 
-- **8 enterprise policies** covering security, privacy, operations, suppliers, and AI ethics (POL-AI-001 BoardRoom-approved)
+- **8 enterprise policies** covering security, privacy, operations, suppliers, and AI ethics (authored in this repo; BoardRoom approval 🎯 for several — see [COMPLIANCE-BLUEPRINT.md](compliance/COMPLIANCE-BLUEPRINT.md) §9)
 - **10 operational procedures** with clear triggers, owners, and evidence requirements
 - **14+ regulatory alignment documents** (ISO 27001, SOC 2, GDPR, DEFSTAN, AI, HIPAA, FCA, PECR, Companies Act, and more)
 - **Governance artefacts** — AI Governance Committee charter, RACI matrix, internal audit programme, management review template
@@ -31,20 +31,34 @@ Tranc3 already implements strong technical controls (Zero Trust IAM, encrypted v
 4. Defines canonical architecture (as-built vs aspirational)
 5. Activates the previously placeholder Magna Carta runtime module
 
-## Current maturity
+## Maturity model (read this first)
+
+This framework spans **three layers**. Documents in *this repo* mostly prove layer 2. Do not confuse layer 2 with layer 3.
+
+| Layer | What it means | Where evidence lives |
+|-------|----------------|----------------------|
+| **1 — Platform implementation** | Controls built and tested in Tranc3 | Tranc3 codebase, DEFSTAN register, CI gates |
+| **2 — Documentation programme** | Policies, procedures, registers, mappings authored and maintained here | This Magna Carta repository (MC-001–MC-011) |
+| **3 — Validated operations** | Board approval, signed contracts, drills, observation windows, external audits | Town Hall, legal, SOC 2 collector, third parties |
+
+**Legend:** ✅ = layer 2 artefact exists in this repo · 🎯 = layer 3 not yet demonstrated
+
+---
+
+## Current maturity (honest baseline)
 
 | Area | Assessment |
 |------|------------|
-| Technical security controls | **Strong** — implemented in code with automated tests |
-| DEFSTAN traceability | **Strong** — 53 requirements, machine-readable register, CI gate |
-| Privacy (GDPR) | **Good** — ROPA, PIA, DSR; supplier DPA register programme-complete; signed DPAs 🎯 |
-| ISO 27001 | **Draft** — SOA exists; org programme docs complete; certification audit 🎯 Q2 2027 |
-| SOC 2 | **Draft** — TSC mapping and evidence schedule; observation period 🎯 Q1 2027 |
-| Policy library | **Baseline complete** — eight policies approved at framework level |
-| Evidence & assurance | **Programme complete** — MC-010 artefacts; external pen test / attestations 🎯 |
-| Tranc3 integration | **Programme complete** — MC-011 bridge; staging enablement / enforcement 🎯 |
-| HIPAA / FCA / PECR | **Programme** — alignment docs, MC-008/009, obligations register |
-| Architecture clarity | **Improved** — as-built doc resolves multi-version architecture drift |
+| Technical security controls | **Strong** — implemented in Tranc3 code with automated tests (layer 1) |
+| DEFSTAN traceability | **Strong** — 53 requirements, machine-readable register, CI gate (layer 1) |
+| Privacy (GDPR) | **Good** — ROPA, PIA, DSR endpoints documented; **DPA register incomplete** (unsigned processor DPAs) |
+| ISO 27001 | **Draft** — SOA exists; org controls (AUP, BCP, RACI) **partially planned**, not fully operational |
+| SOC 2 | **Draft** — TSC mapping and evidence schedule; **6-month observation window planned**, not running |
+| Policy library | **Baseline** — core policies **authored** in this framework; not all BoardRoom-operationalised |
+| Evidence & assurance (MC-010) | **Baseline** — trackers, schedules, and programmes **authored**; pen test / attestations / audits 🎯 |
+| Tranc3 integration (MC-011) | **Baseline** — bridge and integration guide **authored**; staging enablement / runtime enforcement 🎯 |
+| HIPAA / FCA / PECR | **Baseline** — alignment docs and register entries; live attestation / BAAs 🎯 |
+| Architecture clarity | **Improved** — as-built doc reduces drift vs aspirational Tranc3 architecture docs |
 | External certification | **Not yet** — targets Q1–Q2 2027 |
 
 ## Certification roadmap

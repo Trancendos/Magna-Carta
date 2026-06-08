@@ -147,7 +147,7 @@ Identify → Map to control → Implement → Monitor → Evidence → Review �
 | OBL-112 | UK PECR | Unsubscribe / suppression | PECR-ALIGNMENT | Suppression list procedure | DPO | ✅ |
 | OBL-113 | ICO fee regulations | Data protection fee registration | ICO-REGISTRATION | Fee tier assessment | DPO | ✅ Programme |
 
-**Note:** OBL-113 programme complete; live ICO register entry is 🎯 DPO execution before scale processing.
+**Note:** OBL-113 programme artefact exists (ICO registration doc); live ICO register entry and fee payment are 🎯 DPO execution before scale processing.
 
 ---
 
