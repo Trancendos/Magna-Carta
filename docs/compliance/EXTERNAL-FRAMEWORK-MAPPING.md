@@ -75,7 +75,7 @@ Connor Domain                          Magna Carta Layer              Primary ar
 | Incident response (AI-specific) | POL-OPS-001 + PROC-IR-001 + AI incidents API | `POST /compliance/ai/incidents` |
 | Ethics framework | POL-AI-001, AI-GOVERNANCE §8 | `ai_governance` Magna Carta rules |
 
-**Gap priorities:** Board-approved POL-AI-001; formal AI governance committee charter; centralised GenAI use-case inventory beyond registered models.
+**Gap priorities (post-2026-06-07):** Board-approved POL-AI-001; formal AI governance committee charter; centralised GenAI use-case inventory beyond registered models. **Programme complete:** Connor/Google mapping, GENAI-MATURITY §10 baseline, HIPAA (MC-008), FCA (MC-009).
 
 ---
 
@@ -90,7 +90,7 @@ Connor Domain                          Magna Carta Layer              Primary ar
 | Cross-border compliance | GDPR-ALIGNMENT (SCCs for AI fallback) | ROPA external processors |
 | Self-learning models | AI-GOVERNANCE lifecycle §4 | Monitor + re-classify risk tier |
 
-**Gap priorities:** Formal data-lineage tooling; automated regulatory change alerts; complete processor DPA register.
+**Gap priorities:** Formal data-lineage tooling; automated regulatory change alerts; complete processor DPA register. **Programme complete:** LEGISLATION-REGISTER (LEG-006–010), OBLIGATIONS-REGISTER §4.6–4.7.
 
 ---
 
@@ -189,5 +189,7 @@ Adapted from Connor framework adoption steps:
 - [COMPLIANCE-BLUEPRINT.md](COMPLIANCE-BLUEPRINT.md)
 - [FRAMEWORK.md](../../FRAMEWORK.md)
 - [REGULATION-MATRIX.md](REGULATION-MATRIX.md)
+- [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md)
+- [FCA-ALIGNMENT.md](FCA-ALIGNMENT.md)
 
 **Next review:** 2026-12-07

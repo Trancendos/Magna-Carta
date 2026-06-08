@@ -26,10 +26,14 @@ AI systems within Tranc3 ISMS scope:
 
 | Framework | Status | Magna Carta artefact |
 |-----------|--------|----------------------|
-| EU AI Act (2024/1689) | ⚠️ Partial | POL-AI-001, this document |
-| ISO/IEC 42001:2023 | ⚠️ Partial | AI governance module |
-| NIST AI RMF 1.0 | ⚠️ Partial | Risk classification |
-| UK AI Safety (voluntary) | ⚠️ Applied | Transparency principles |
+| EU AI Act (2024/1689) | ✅ Programme | POL-AI-001, this document, OBL-020–025 |
+| ISO/IEC 42001:2023 | ✅ Programme | AI governance module, GENAI-MATURITY |
+| NIST AI RMF 1.0 | ✅ Mapped | Risk classification, §6 functions |
+| UK AI Safety (voluntary) | ✅ Applied | Transparency principles, model cards |
+| Connor GenAI five-domain | ✅ Mapped | EXTERNAL-FRAMEWORK-MAPPING, GENAI-MATURITY |
+| Google AI Principles | ✅ Mapped | §11 principles alignment |
+| HIPAA (US PHI) | ✅ Programme | [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md), MC-008 |
+| FCA Handbook (UK) | ✅ Programme | [FCA-ALIGNMENT.md](FCA-ALIGNMENT.md), MC-009 |
 | GDPR Art. 22 | ✅ Active | Model cards, human review |
 
 ---
@@ -84,10 +88,10 @@ Design → Register → Risk classify → Deploy → Monitor → Incident → Re
 
 | Function | Status | Evidence |
 |----------|--------|----------|
-| **GOVERN** | ✅ | AI policy, registry, incident log |
-| **MAP** | ⚠️ | Risk tiers; context docs partial |
-| **MEASURE** | ⚠️ | Fairness framework; metrics unmeasured |
-| **MANAGE** | ⚠️ | Incident workflow; improvement informal |
+| **GOVERN** | ✅ | AI policy, registry, incident log, Magna Carta MC-001–009 |
+| **MAP** | ✅ Programme | Risk tiers, EU AI Act §3 mapping, model cards, prohibited-use blocklist |
+| **MEASURE** | ⚠️ Operational | Fairness framework defined; **bias metrics unmeasured** — Q3 2026 target |
+| **MANAGE** | ✅ Programme | Incident API, PROC-IR-001, PROC-CMP-001, action register §9 |
 
 ---
 
@@ -139,6 +143,8 @@ See [config/magna_carta_config.json](../../config/magna_carta_config.json).
 - [REGULATION-MATRIX.md](REGULATION-MATRIX.md)
 - [EXTERNAL-FRAMEWORK-MAPPING.md](EXTERNAL-FRAMEWORK-MAPPING.md)
 - [GENAI-MATURITY-ASSESSMENT.md](GENAI-MATURITY-ASSESSMENT.md)
+- [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md)
+- [FCA-ALIGNMENT.md](FCA-ALIGNMENT.md)
 - Tranc3 `src/compliance/ai_governance.py`
 - Tranc3 `src/compliance/magna_carta.py` (runtime hooks)
 

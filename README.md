@@ -31,6 +31,8 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md](docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md) | Third-party GenAI/compliance frameworks → Magna Carta |
 | [docs/compliance/GENAI-MATURITY-ASSESSMENT.md](docs/compliance/GENAI-MATURITY-ASSESSMENT.md) | GenAI governance maturity self-assessment |
 | [docs/compliance/OBLIGATIONS-REGISTER.md](docs/compliance/OBLIGATIONS-REGISTER.md) | Regulatory and contractual obligations register |
+| [docs/compliance/HIPAA-ALIGNMENT.md](docs/compliance/HIPAA-ALIGNMENT.md) | US PHI boundary, BAA tiers, MC-008 / MC-RULE-009 |
+| [docs/compliance/FCA-ALIGNMENT.md](docs/compliance/FCA-ALIGNMENT.md) | UK financial conduct (supplier perimeter), MC-009 |
 | [docs/architecture/BLUEPRINT.md](docs/architecture/BLUEPRINT.md) | Platform architecture blueprint |
 | [docs/architecture/AS-BUILT-ARCHITECTURE.md](docs/architecture/AS-BUILT-ARCHITECTURE.md) | Canonical as-built architecture (auditor-facing) |
 | [docs/architecture/CONTROL-TO-COMPONENT-MAP.md](docs/architecture/CONTROL-TO-COMPONENT-MAP.md) | Control traceability to code and workers |
@@ -61,7 +63,9 @@ magna-carta/
     │   ├── SOC2-ALIGNMENT.md
     │   ├── GDPR-ALIGNMENT.md
     │   ├── DEFSTAN-ALIGNMENT.md
-    │   └── AI-GOVERNANCE.md
+    │   ├── AI-GOVERNANCE.md
+    │   ├── HIPAA-ALIGNMENT.md
+    │   └── FCA-ALIGNMENT.md
     ├── policies/
     │   ├── INDEX.md
     │   ├── information-security-policy.md

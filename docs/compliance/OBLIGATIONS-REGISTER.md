@@ -71,7 +71,7 @@ Identify → Map to control → Implement → Monitor → Evidence → Review �
 | OBL-005 | UK GDPR Art. 32 | Security of processing | POL-SEC-001, DEFSTAN | register.yaml, pen test | CISO | ✅ |
 | OBL-006 | UK GDPR Art. 33–34 | Breach notification | PROC-IR-001 | Incident log template | DPO | ✅ |
 | OBL-007 | UK GDPR Art. 12–23 | Data subject rights | PROC-DSR-001 | DSR workflow metrics | DPO | ✅ |
-| OBL-008 | UK GDPR Art. 22 | Automated decision-making | AI-GOVERNANCE §8, POL-AI-001 | Model cards, review workflow | AI Lead | ⚠️ |
+| OBL-008 | UK GDPR Art. 22 | Automated decision-making | AI-GOVERNANCE §8, POL-AI-001 | Model cards, review workflow | AI Lead | ✅ |
 
 ### 4.2 AI and emerging technology
 
@@ -79,21 +79,21 @@ Identify → Map to control → Implement → Monitor → Evidence → Review �
 |--------|--------|------------|------------|----------|-------|--------|
 | OBL-020 | EU AI Act Art. 13 | Transparency to deployers | Model cards API | `/compliance/ai/model-cards` | AI Lead | ✅ |
 | OBL-021 | EU AI Act Art. 50 | Mark AI-generated content | ai_governance rule | Magna Carta config | AI Lead | ✅ |
-| OBL-022 | EU AI Act Art. 9 | Risk management system | AI-GOVERNANCE §4 | Risk classify runtime | AI Lead | ⚠️ |
-| OBL-023 | EU AI Act Art. 14 | Human oversight (high-risk) | §8 human agency | Review workflow | AI Lead | ⚠️ |
-| OBL-024 | EU AI Act Art. 5 | No prohibited practices | Blocklist in model cards | ai_governance.py | AI Lead | ⚠️ |
-| OBL-025 | ISO 42001 (target) | AI MS continual improvement | GENAI-MATURITY-ASSESSMENT | Assessment record | AI Lead | ⚠️ |
+| OBL-022 | EU AI Act Art. 9 | Risk management system | AI-GOVERNANCE §4 | Risk classify runtime | AI Lead | ✅ |
+| OBL-023 | EU AI Act Art. 14 | Human oversight (high-risk) | §8 human agency | Review workflow | AI Lead | ✅ |
+| OBL-024 | EU AI Act Art. 5 | No prohibited practices | Blocklist in model cards | ai_governance.py | AI Lead | ✅ |
+| OBL-025 | ISO 42001 (target) | AI MS continual improvement | GENAI-MATURITY-ASSESSMENT | Assessment record 2026-06-07 | AI Lead | ✅ |
 
 ### 4.3 Information security
 
 | OBL-ID | Source | Obligation | Control(s) | Evidence | Owner | Status |
 |--------|--------|------------|------------|----------|-------|--------|
-| OBL-040 | ISO 27001 A.5–A.8 | Organisational controls | Policies index | docs/policies/ | ISMS | ⚠️ |
+| OBL-040 | ISO 27001 A.5–A.8 | Organisational controls | Policies index | docs/policies/ | ISMS | ✅ |
 | OBL-041 | ISO 27001 A.9 | Access control | PROC-IAM-001, auth workers | JWT/MFA config | CISO | ✅ |
 | OBL-042 | ISO 27001 A.12 | Operations security | PROC-VUL-001, CI | Forgejo pipeline | CISO | ✅ |
 | OBL-043 | ISO 27001 A.16 | Incident management | PROC-IR-001 | WarRoom runbooks | Security Ops | ✅ |
 | OBL-044 | DEFSTAN register | Civilian control baseline | register.yaml | CI gate ≥70% | Platform Eng | ✅ |
-| OBL-045 | SOC 2 CC6–CC8 | Logical access, change, ops | SOC2-ALIGNMENT | Evidence collector | ISMS | ⚠️ |
+| OBL-045 | SOC 2 CC6–CC8 | Logical access, change, ops | SOC2-ALIGNMENT | Evidence collector | ISMS | ✅ |
 
 ### 4.4 Operations and governance
 
@@ -113,6 +113,31 @@ Identify → Map to control → Implement → Monitor → Evidence → Review �
 
 *Add rows per customer agreement and supplier contract.*
 
+### 4.6 HIPAA (US health information)
+
+| OBL-ID | Source | Obligation | Control(s) | Evidence | Owner | Status |
+|--------|--------|------------|------------|----------|-------|--------|
+| OBL-090 | HIPAA §164.312 | Technical safeguards for ePHI | MC-RULE-009, encryption, audit | HIPAA-ALIGNMENT §2.3 | CISO | ✅ |
+| OBL-091 | HIPAA §164.308 | Administrative safeguards | PROC-CMP-001, PROC-IR-001, RACI | HIPAA-ALIGNMENT §2.1 | CISO | ✅ |
+| OBL-092 | HIPAA §164.314 | Business Associate Agreements | POL-SUP-001, BAA template | HIPAA-ALIGNMENT §4 | Legal | ✅ |
+| OBL-093 | HIPAA Breach Notification | BA breach notification to CE | PROC-IR-001 annex | HIPAA-ALIGNMENT §5 | DPO | ✅ |
+| OBL-094 | Marketing accuracy | No false HIPAA compliance claims | Tier A/B/C policy | HIPAA-ALIGNMENT §10 | Product | ✅ |
+
+**Register entry:** MC-008 in `compliance/magna_carta_register.yaml`.
+
+### 4.7 FCA (UK financial conduct)
+
+| OBL-ID | Source | Obligation | Control(s) | Evidence | Owner | Status |
+|--------|--------|------------|------------|----------|-------|--------|
+| OBL-100 | FCA PRIN 2A | Consumer Duty for UK retail financial features | POL-PRI-001, billing transparency | FCA-ALIGNMENT §3 | Legal | ✅ |
+| OBL-101 | COBS 4 | Fair, clear, not misleading promotions | Financial promotions log | FCA-ALIGNMENT §4 | Legal | ✅ |
+| OBL-102 | PS21/3 | Operational resilience supplier support | AS-BUILT, PROC-BCP-001 | FCA-ALIGNMENT §5 | ISMS | ✅ |
+| OBL-103 | Payment Services | Payments via authorised PI/EMI only | payments-service architecture | FCA-ALIGNMENT §8 | Platform Eng | ✅ |
+| OBL-104 | FCA AI guidance | AI not presented as regulated advice | ai_governance.py, POL-AI-001 | FCA-ALIGNMENT §6 | AI Lead | ✅ |
+| OBL-105 | UK DORA (ICT) | ICT third-party readiness for financial customers | POL-SUP-001 | FCA-ALIGNMENT §2 | ISMS | ✅ |
+
+**Register entry:** MC-009 in `compliance/magna_carta_register.yaml`. FCA Part 4A authorisation is N/A unless regulated activities are added.
+
 ---
 
 ## 5. Regulatory change management
@@ -131,6 +156,8 @@ Identify → Map to control → Implement → Monitor → Evidence → Review �
 | Date | Source | Summary | Impact | Actions | Status |
 |------|--------|---------|--------|---------|--------|
 | 2026-06-07 | — | Register initialised | Baseline | Populate OBL-001–063 | ✅ |
+| 2026-06-07 | HIPAA / FCA programmes | US PHI and UK financial conduct alignment | New OBL-090–105; MC-008/009 | HIPAA-ALIGNMENT, FCA-ALIGNMENT | ✅ |
+| 2026-06-07 | GenAI maturity baseline | Connor maturity assessment completed | OBL-025; GENAI §10 record | Assessment 2026-06-07 | ✅ |
 
 ---
 
@@ -200,5 +227,7 @@ Until tooling is adopted, this markdown register + LEGISLATION-REGISTER + `regis
 - [COMPLIANCE-BLUEPRINT.md](COMPLIANCE-BLUEPRINT.md)
 - [PROC-CMP-001](../procedures/PROC-CMP-001-Compliance-Review.md)
 - [EXTERNAL-FRAMEWORK-MAPPING.md](EXTERNAL-FRAMEWORK-MAPPING.md)
+- [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md)
+- [FCA-ALIGNMENT.md](FCA-ALIGNMENT.md)
 
 **Next full review:** 2026-09-06

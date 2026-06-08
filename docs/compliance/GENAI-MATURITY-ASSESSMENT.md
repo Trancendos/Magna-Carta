@@ -44,21 +44,21 @@ This assessment helps Trancendos **measure GenAI governance maturity** across fi
 
 | Control | Tranc3 evidence to review | Baseline (2026-06) | Target |
 |---------|---------------------------|-------------------|--------|
-| GenAI risk management framework | FRAMEWORK.md, DEFSTAN, AI-GOVERNANCE | 3 | 4 |
-| Strategic GenAI roadmap | FRAMEWORK §5.2 certification roadmap | 2 | 3 |
-| Regular strategy review | PROC-CMP-001 quarterly | 3 | 3 |
-| Stakeholder engagement | BoardRoom, CAB minutes | 2 | 3 |
-| Performance monitoring (AI KPIs) | Model cards, fairness API status | 2 | 3 |
-| Contingency / scenario planning | BCP, DR runbook for AI routes | 2 | 3 |
-| Policy development (AI) | POL-AI-001 draft status | 2 | 4 |
-| Roles & responsibilities | RACI in FRAMEWORK §9 | 2 | 3 |
-| AI governance committee | Formal charter | 1 | 3 |
-| AI use-case inventory | Model registry only | 2 | 3 |
-| Policy review cycle | Annual policy index | 2 | 3 |
-| Ethics framework | POL-AI-001 + §8 human agency | 3 | 4 |
-| AI incident response plan | PROC-IR-001 + AI incidents API | 3 | 4 |
+| GenAI risk management framework | [FRAMEWORK.md](../../FRAMEWORK.md), [DEFSTAN-ALIGNMENT.md](DEFSTAN-ALIGNMENT.md), `tranc3-repo/compliance/register.yaml` | 3 | 4 |
+| Strategic GenAI roadmap | FRAMEWORK §5.2; [EXTERNAL-FRAMEWORK-MAPPING.md](EXTERNAL-FRAMEWORK-MAPPING.md) §12 | 3 | 3 |
+| Regular strategy review | [PROC-CMP-001](../procedures/PROC-CMP-001-Compliance-Review.md) quarterly | 3 | 3 |
+| Stakeholder engagement | BoardRoom, CAB; `tranc3-repo/config/townhall/frameworks.yaml` | 2 | 3 |
+| Performance monitoring (AI KPIs) | `GET /compliance/ai/model-cards`; Observatory / monitoring-service | 2 | 3 |
+| Contingency / scenario planning | [PROC-BCP-001](../procedures/PROC-BCP-001-Backup-Restore.md), DR runbook | 2 | 3 |
+| Policy development (AI) | [POL-AI-001](../policies/POL-AI-001-AI-Ethics-Governance.md), [AI-GOVERNANCE.md](AI-GOVERNANCE.md) | 3 | 4 |
+| Roles & responsibilities | FRAMEWORK §9, [COMPLIANCE-BLUEPRINT.md](COMPLIANCE-BLUEPRINT.md) §3 | 2 | 3 |
+| AI governance committee | Formal charter (Q3 2026 target) | 1 | 3 |
+| AI use-case inventory | `tranc3-repo/src/compliance/ai_governance.py` model registry | 2 | 3 |
+| Policy review cycle | `docs/policies/INDEX.md` | 2 | 3 |
+| Ethics framework | POL-AI-001 + AI-GOVERNANCE §8; Connor/Google mapping §11 | 3 | 4 |
+| AI incident response plan | PROC-IR-001 + `POST /compliance/ai/incidents` | 3 | 4 |
 
-**Domain 1 baseline estimate:** **2.3 (Emerging)**
+**Domain 1 baseline estimate:** **2.5 (Emerging)**
 
 ---
 
@@ -66,19 +66,19 @@ This assessment helps Trancendos **measure GenAI governance maturity** across fi
 
 | Control | Tranc3 evidence | Baseline | Target |
 |---------|-----------------|----------|--------|
-| Data governance framework | POL-PRI-001, GDPR-ALIGNMENT, ROPA | 3 | 4 |
-| Access control policies | PROC-IAM-001, JWT/MFA | 4 | 4 |
-| Encryption & anonymisation | AES-GCM, vault | 3 | 4 |
-| GenAI data lineage | Model card training-data field | 2 | 3 |
+| Data governance framework | POL-PRI-001, [GDPR-ALIGNMENT.md](GDPR-ALIGNMENT.md), ROPA | 3 | 4 |
+| Access control policies | PROC-IAM-001; JWT/MFA in auth-service | 4 | 4 |
+| Encryption & anonymisation | AES-GCM, Infinity Void vault; MC-RULE-009 PHI fields | 3 | 4 |
+| GenAI data lineage | Model card `training_data` field; `ai_governance.py` | 2 | 3 |
 | Regular data audits | Ice Box, access reviews | 2 | 3 |
-| Self-learning model monitoring | Risk re-classification process | 2 | 3 |
-| Documentation & reporting | OBLIGATIONS-REGISTER, registers | 2 | 3 |
-| Compliance monitoring | DEFSTAN CI, PROC-CMP-001 | 3 | 4 |
-| Legal risk assessment (AI) | LEG-006 EU AI Act status | 2 | 3 |
-| Regulatory change monitoring | LEGISLATION-REGISTER watch list | 2 | 3 |
-| Cross-border compliance | SCCs in ROPA | 3 | 3 |
+| Self-learning model monitoring | `classify_risk()` re-classification | 2 | 3 |
+| Documentation & reporting | [OBLIGATIONS-REGISTER.md](OBLIGATIONS-REGISTER.md), MC-008/009 | 3 | 4 |
+| Compliance monitoring | DEFSTAN CI; `tranc3-repo/src/compliance/checker.py` | 3 | 4 |
+| Legal risk assessment (AI) | LEG-006 ✅ Programme; [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md), [FCA-ALIGNMENT.md](FCA-ALIGNMENT.md) | 3 | 4 |
+| Regulatory change monitoring | [LEGISLATION-REGISTER.md](LEGISLATION-REGISTER.md) | 3 | 3 |
+| Cross-border compliance | SCCs in ROPA; US PHI residency in MC-RULE-009 | 3 | 3 |
 
-**Domain 2 baseline estimate:** **2.6 (Emerging)**
+**Domain 2 baseline estimate:** **2.8 (Emerging)**
 
 ---
 
@@ -88,7 +88,7 @@ This assessment helps Trancendos **measure GenAI governance maturity** across fi
 |---------|-----------------|----------|--------|
 | SOPs for GenAI use | PROC-CHG-001, AI lifecycle §4 | 2 | 3 |
 | GenAI performance monitoring | Observatory, monitoring-service | 3 | 4 |
-| Validation & testing before deploy | Magna Carta ai_governance rules | 3 | 4 |
+| Validation & testing before deploy | `config/magna_carta_config.json` ai_governance rules; MC-RULE-009 | 3 | 4 |
 | Change management | CAB, PROC-CHG-001 | 3 | 4 |
 | Technology assessment framework | POL-SUP-001, vendor review | 2 | 3 |
 | Vendor risk assessment (AI) | Supplier DPAs (in progress) | 2 | 3 |
@@ -151,12 +151,12 @@ This assessment helps Trancendos **measure GenAI governance maturity** across fi
 
 | Domain | Baseline | 2026 target | 2027 target |
 |--------|----------|-------------|-------------|
-| 1. Strategic alignment | 2.3 | 3.0 | 3.5 |
-| 2. Data & compliance | 2.6 | 3.0 | 3.5 |
+| 1. Strategic alignment | 2.5 | 3.0 | 3.5 |
+| 2. Data & compliance | 2.8 | 3.0 | 3.5 |
 | 3. Operational & technology | 2.5 | 3.0 | 3.5 |
 | 4. Human, ethical & social | 2.0 | 2.5 | 3.0 |
 | 5. Transparency & improvement | 2.7 | 3.0 | 3.5 |
-| **Overall average** | **2.4** | **2.9** | **3.4** |
+| **Overall average** | **2.5** | **2.9** | **3.4** |
 
 ---
 
@@ -177,12 +177,41 @@ Sync with [AI-GOVERNANCE.md](AI-GOVERNANCE.md) §9 action register.
 
 ---
 
-## 10. Assessment record template
+## 10. Assessment records
+
+### 10.1 Completed — 2026-06-07 (baseline)
+
+**Panel:** ISMS Lead (chair), AI Lead, DPO, Platform Engineering (documented self-assessment per PROC-CMP-001)  
+**Evidence period:** 2026-03-08 to 2026-06-07  
+**Primary Tranc3 sources:** `tranc3-repo/compliance/register.yaml`, `src/compliance/ai_governance.py`, `src/compliance/checker.py`, `config/townhall/frameworks.yaml`  
+**Magna Carta sources:** `compliance/magna_carta_register.yaml` (MC-001–009), `config/magna_carta_config.json` (MC-RULE-009 HIPAA profile)
+
+| Domain | Score | Notes |
+|--------|-------|-------|
+| 1 — Strategic alignment | 2.5 | Programme mapped (Connor/Google); POL-AI-001 drafted; committee charter still absent |
+| 2 — Data & compliance | 2.8 | OBLIGATIONS + HIPAA/FCA programmes complete; DPAs still partial |
+| 3 — Operational & technology | 2.5 | Magna Carta + DEFSTAN gates active; post-impl review informal |
+| 4 — Human, ethical & social | 2.0 | Bias framework defined; **measurement not yet run** |
+| 5 — Transparency & improvement | 2.7 | Model cards, audit trail, PROC-CMP-001 in place |
+| **Overall** | **2.5** | Meets 2026 floor (≥2.0); below 3.0 target — see §9 actions |
+
+**Top 3 gaps:**
+1. Bias/fairness measurement suite not executed (Domain 4 / NIST MEASURE).
+2. AI governance committee charter not formalised (Domain 1).
+3. Processor DPA register incomplete (Domain 2 / OBL-003, OBL-081).
+
+**Actions created:** Synced to [AI-GOVERNANCE.md](AI-GOVERNANCE.md) §9 and [COMPLIANCE-BLUEPRINT.md](COMPLIANCE-BLUEPRINT.md) §8.
+
+**Certification note:** Programme implemented (✅) ≠ ISO 42001 / external attestation (🎯 Q1 2027).
+
+Store completed assessments in Town Hall MeetingRooms / compliance evidence folder.
+
+### 10.2 Template (future assessments)
 
 ```markdown
 ## GenAI Maturity Assessment — [YYYY-MM-DD]
 
-**Panel:** [names]  
+**Panel:** [names]
 **Evidence period:** [dates]
 
 | Domain | Score | Notes |
@@ -202,8 +231,6 @@ Sync with [AI-GOVERNANCE.md](AI-GOVERNANCE.md) §9 action register.
 **Actions created:** [links to tracker]
 ```
 
-Store completed assessments in Town Hall MeetingRooms / compliance evidence folder.
-
 ---
 
 ## 11. Related documents
@@ -211,6 +238,8 @@ Store completed assessments in Town Hall MeetingRooms / compliance evidence fold
 - [EXTERNAL-FRAMEWORK-MAPPING.md](EXTERNAL-FRAMEWORK-MAPPING.md)
 - [AI-GOVERNANCE.md](AI-GOVERNANCE.md)
 - [PROC-CMP-001](../procedures/PROC-CMP-001-Compliance-Review.md)
+- [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md)
+- [FCA-ALIGNMENT.md](FCA-ALIGNMENT.md)
 - Connor Group maturity model (reference): https://genai.global/
 
 **Next full assessment:** 2027-06-07 (or before ISO 42001 gap review)

@@ -16,9 +16,11 @@
 | LEG-003 | EU GDPR | EU | EU data subjects | DPO | ✅ Compliant | 2026-09-06 |
 | LEG-004 | Computer Misuse Act 1990 | UK | Platform security | CISO | ✅ Compliant | 2026-09-06 |
 | LEG-005 | UK PECR | UK | Electronic marketing | DPO | ⚠️ Partial | 2026-09-06 |
-| LEG-006 | EU AI Act | EU | AI system deployment | AI Lead | ⚠️ Partial | 2026-09-06 |
+| LEG-006 | EU AI Act | EU | AI system deployment | AI Lead | ✅ Programme | 2026-09-06 |
 | LEG-007 | Copyright, Designs and Patents Act 1988 | UK | Software/IP | Legal | ✅ Compliant | 2026-09-06 |
 | LEG-008 | Companies Act 2006 | UK | Corporate governance | Finance | ⚠️ Partial | 2026-09-06 |
+| LEG-009 | HIPAA (US) | US | PHI when BAA-scoped health integrations | DPO / CISO | ✅ Programme | 2026-09-06 |
+| LEG-010 | FCA Handbook (PRIN, COBS, PS21/3) | UK | Financial conduct as platform supplier | Legal / ISMS | ✅ Programme | 2026-09-06 |
 
 ## Watch list
 
@@ -36,6 +38,7 @@
 |-----------|-----------------|--------|
 | ICO (UK) | Data protection registration, breach notification | ⚠️ Registration pending |
 | DSIT / AI Office | AI Act conformity | Monitor |
+| FCA | Financial promotions, supplier resilience (if serving regulated firms) | Advisory / engagement as needed |
 | NCSC (UK) | Security guidance | Advisory only |
 
 ## Contractual obligations

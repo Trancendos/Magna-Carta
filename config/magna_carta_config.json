@@ -56,7 +56,10 @@
         "ssn",
         "credit_card",
         "api_key",
-        "refresh_token"
+        "refresh_token",
+        "phi",
+        "medical_record_number",
+        "health_plan_id"
       ]
     },
     {
@@ -188,6 +191,35 @@
         "ai_disclosure_when_applicable",
         "rights_contact_documented"
       ]
+    },
+    {
+      "id": "MC-RULE-009",
+      "type": "health_data",
+      "title": "HIPAA and PHI boundary controls",
+      "description": "When HIPAA_PROFILE is enabled, PHI must use encrypted storage, US residency, BAA coverage, blocked external AI egress, and tiered marketing claims.",
+      "policy_ref": "docs/compliance/HIPAA-ALIGNMENT.md",
+      "magna_carta_ref": "MC-008",
+      "hipaa_ref": "45 CFR §164.312",
+      "severity": "high",
+      "enabled": true,
+      "scope": {
+        "paths": ["/sync/*", "/wellbeing/*", "/health/*"],
+        "profile_flag": "HIPAA_PROFILE=enabled"
+      },
+      "checks": [
+        "baa_signed",
+        "phi_encrypted_at_rest",
+        "phi_encrypted_in_transit",
+        "us_data_residency",
+        "phi_redacted_in_logs",
+        "external_ai_on_phi_blocked",
+        "marketing_claim_tier_valid"
+      ],
+      "marketing_claim_tiers": {
+        "tier_a": "hipaa_aligned_controls_with_baa",
+        "tier_b": "hipaa_ready_deployment",
+        "tier_c": "hipaa_compliant_requires_attestation"
+      }
     }
   ]
 }

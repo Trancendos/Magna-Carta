@@ -47,7 +47,7 @@
 | OWASP Top 10 (2021) | ✅ | ✅ | Active | Penetration tests, hardening |
 | OWASP ASVS L2 | ⚠️ Target | ⚠️ Partial | — | Auth, validation, logging strong |
 | PCI DSS v4.0 | ❌ | — | — | No CHD; payments via third-party if any |
-| HIPAA | ❌* | — | — | *Unless health boundary formally scoped |
+| HIPAA | ⚠️ US PHI boundary | ✅ Programme | 🎯 Tier C on customer path | [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md), MC-008, MC-RULE-009 |
 | FedRAMP | ❌ | — | — | Not US government cloud |
 | CMMC 2.0 | ❌ | — | — | Not defence contractor CUI |
 
@@ -57,13 +57,13 @@
 
 | Framework | Applicability | Status | Evidence |
 |-----------|---------------|--------|----------|
-| EU AI Act | ✅ (deploy in EU) | ⚠️ | `AI_GOVERNANCE.md`, model cards |
-| ISO/IEC 42001:2023 | ⚠️ Target | ⚠️ | AI governance module |
-| NIST AI RMF 1.0 | ⚠️ Reference | ⚠️ Mapped | AI-GOVERNANCE.md |
+| EU AI Act | ✅ (deploy in EU) | ✅ Programme | `AI_GOVERNANCE.md`, model cards, MC-RULE-004 |
+| ISO/IEC 42001:2023 | ⚠️ Target | ✅ Programme | AI governance module, GENAI-MATURITY |
+| NIST AI RMF 1.0 | ⚠️ Reference | ✅ Mapped | AI-GOVERNANCE.md |
 | UK AI White Paper / DSIT | ⚠️ Reference | 📋 | Monitor legislation |
-| Algorithmic transparency | ⚠️ | ⚠️ | Model cards; bias metrics pending |
-| Connor GenAI Governance Framework v1.0 | ✅ Reference | ⚠️ Mapped | [EXTERNAL-FRAMEWORK-MAPPING.md](EXTERNAL-FRAMEWORK-MAPPING.md), [GENAI-MATURITY-ASSESSMENT.md](GENAI-MATURITY-ASSESSMENT.md) |
-| Google AI Principles | ✅ Reference | ⚠️ Mapped | [AI-GOVERNANCE.md](AI-GOVERNANCE.md) §11 |
+| Algorithmic transparency | ⚠️ | ✅ Programme | Model cards; bias measurement operational target |
+| Connor GenAI Governance Framework v1.0 | ✅ Reference | ✅ Mapped | [EXTERNAL-FRAMEWORK-MAPPING.md](EXTERNAL-FRAMEWORK-MAPPING.md), [GENAI-MATURITY-ASSESSMENT.md](GENAI-MATURITY-ASSESSMENT.md) |
+| Google AI Principles | ✅ Reference | ✅ Mapped | [AI-GOVERNANCE.md](AI-GOVERNANCE.md) §11 |
 
 ---
 
@@ -83,6 +83,7 @@
 | Area | Applicability | Status | Artefact |
 |------|---------------|--------|----------|
 | UK Companies Act | ✅ | ⚠️ | Financial oversight framework (Town Hall) |
+| FCA Handbook (PRIN, COBS 4, PS21/3) | ✅ Supplier / conduct | ✅ Programme | [FCA-ALIGNMENT.md](FCA-ALIGNMENT.md), MC-009 |
 | IP / copyright | ✅ | ✅ | Proprietary code; OSS licence audit |
 | Contract law (SLAs) | ✅ | ⚠️ | Customer agreements TBD |
 | Export controls | ❌ | — | No controlled cryptography export |
@@ -94,8 +95,8 @@
 
 | Regulation | Trigger | Status |
 |------------|---------|--------|
-| HIPAA | Health data processing with US persons | ❌ Not implemented |
-| FCA / PRA | Regulated financial services in UK | ❌ Not in scope |
+| HIPAA | Health data processing with US persons | ✅ Programme — [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md) |
+| FCA / PRA | Regulated financial services in UK | ✅ Programme (supplier/conduct) — authorisation N/A unless regulated activities |
 | NHS DSPT | NHS data handling | ❌ Not in scope |
 
 **Rule:** Do not claim compliance in product copy (`platform.py`, marketing) unless the corresponding row is ✅ with evidence.

@@ -142,7 +142,7 @@ Documented in `compliance/waivers.yaml` (Tranc3). All current waivers: **RESOLVE
 | P1 | Supplier DPAs incomplete | DPA register + Fly.io/CF DPAs | Legal | Q3 2026 |
 | P2 | RACI / SoD matrix | Formalise in ISMS docs | ISMS | Q4 2026 |
 | P2 | AI bias metrics | Implement fairness test suite | AI Lead | Q4 2026 |
-| P2 | HIPAA marketing claims | Remove or build HIPAA scope | Product | Q3 2026 |
+| P2 | HIPAA marketing claims | Tier A/B copy only until Tier C BAA path; see [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md) §10 | Product / Legal | Q3 2026 |
 | P3 | ISO 42001 cert | AI MS programme | AI Lead | 2027 |
 
 ---
@@ -191,3 +191,5 @@ Procedure: [PROC-CMP-001-Compliance-Review.md](../procedures/PROC-CMP-001-Compli
 - [EXTERNAL-FRAMEWORK-MAPPING.md](EXTERNAL-FRAMEWORK-MAPPING.md)
 - [GENAI-MATURITY-ASSESSMENT.md](GENAI-MATURITY-ASSESSMENT.md)
 - [OBLIGATIONS-REGISTER.md](OBLIGATIONS-REGISTER.md)
+- [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md)
+- [FCA-ALIGNMENT.md](FCA-ALIGNMENT.md)

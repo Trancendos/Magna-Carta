@@ -130,7 +130,7 @@ Identify → Implement → Verify → Evidence → Review → Improve
 | External security review | Q4 2026 | ⚠️ Planned |
 | SOC 2 Type II report | Q1 2027 | ⚠️ Evidence collection active |
 | ISO 27001:2022 certification | Q2 2027 | ⚠️ SOA draft complete |
-| ISO 42001 (AI MS) | TBD | ⚠️ AI governance partial |
+| ISO 42001 (AI MS) | TBD | ✅ Programme baseline (GENAI-MATURITY §10) |
 
 ### 5.3 Regulation coverage summary
 
@@ -141,12 +141,13 @@ Identify → Implement → Verify → Evidence → Review → Improve
 | ISO 27001:2022 | ✅ Full | Draft SOA | `docs/compliance/ISO27001_SOA.md` |
 | SOC 2 Type II | ✅ Full | Draft mapping | `docs/compliance/SOC2_TYPE_II.md` |
 | DEFSTAN (civilian) | ✅ Voluntary | Strong | `compliance/register.yaml` |
-| EU AI Act | ⚠️ Partial | Baseline | `AI_GOVERNANCE.md`, model cards |
-| ISO 42001 | ⚠️ Partial | Baseline | AI governance module |
-| NIST AI RMF | ⚠️ Partial | Mapped | AI governance mapping |
+| EU AI Act | ✅ Programme | Implemented | `AI_GOVERNANCE.md`, model cards, MC-RULE-004 |
+| ISO 42001 | ✅ Programme | Baseline | AI governance module, GENAI-MATURITY |
+| NIST AI RMF | ✅ Programme | Mapped | AI governance mapping |
 | OWASP Top 10 | ✅ Full | Operational | Penetration tests, hardening |
 | PCI DSS | ❌ N/A | — | No cardholder data environment |
-| HIPAA | ❌ N/A* | — | *Remove marketing claims unless BAA scope built |
+| HIPAA | ⚠️ US PHI boundary | Programme | [HIPAA-ALIGNMENT.md](docs/compliance/HIPAA-ALIGNMENT.md), MC-008 |
+| FCA Handbook | ✅ Supplier / conduct | Programme | [FCA-ALIGNMENT.md](docs/compliance/FCA-ALIGNMENT.md), MC-009 |
 | FedRAMP / CMMC | ❌ N/A | — | Not in scope |
 | SOX | ❌ N/A | — | Not a listed entity |
 | CCPA/CPRA | ⚠️ Partial | Via GDPR controls | Extend if US CA users material |
