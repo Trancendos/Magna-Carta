@@ -64,3 +64,18 @@ ISMS Lead (chair), DPO, Platform Engineering lead, Security Ops, AI Lead (if AI 
 | Q4 | December |
 
 Aligned with DEFSTAN `meta.review_cycle: quarterly`.
+
+## 6. Monitoring vs audit
+
+| Activity | Type | Owner | Cadence |
+|----------|------|-------|---------|
+| DEFSTAN CI score check | Monitoring | Platform Engineering | Every merge |
+| `GET /compliance/status` review | Monitoring | ISMS Lead | Weekly |
+| Quarterly compliance review (this procedure) | Monitoring | ISMS Lead | Quarterly |
+| Policy attestation cycle | Audit | BoardRoom / Executive | Annual |
+| ISO/SOC2 evidence pack assembly | Audit | ISMS Lead | Pre-audit |
+| External penetration test | Audit | Security Lead | Annual |
+
+Monitoring identifies issues for correction before audit. Findings from audit feed the next quarterly review action tracker.
+
+References: [COMPLIANCE-BLUEPRINT.md](../compliance/COMPLIANCE-BLUEPRINT.md) §10, [OBLIGATIONS-REGISTER.md](../compliance/OBLIGATIONS-REGISTER.md)

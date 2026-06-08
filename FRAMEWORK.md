@@ -153,6 +153,18 @@ Identify → Implement → Verify → Evidence → Review → Improve
 
 Full matrix: [docs/compliance/REGULATION-MATRIX.md](docs/compliance/REGULATION-MATRIX.md)
 
+### 5.4 External governance frameworks (adapted)
+
+Third-party GenAI and compliance methodologies are mapped to Magna Carta — not adopted wholesale. Use these when communicating maturity to boards, auditors, or partners:
+
+| Artefact | Purpose |
+|----------|---------|
+| [docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md](docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md) | Connor Group five-domain GenAI framework → Magna Carta layers |
+| [docs/compliance/GENAI-MATURITY-ASSESSMENT.md](docs/compliance/GENAI-MATURITY-ASSESSMENT.md) | Nascent → Leading maturity self-assessment with Tranc3 baseline |
+| [docs/compliance/OBLIGATIONS-REGISTER.md](docs/compliance/OBLIGATIONS-REGISTER.md) | Regulatory obligations register; monitoring vs audit distinction |
+
+Attribution: adapt concepts and cite sources; do not reproduce copyrighted framework text in customer packs.
+
 ---
 
 ## 6. Architecture blueprint summary

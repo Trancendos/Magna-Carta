@@ -46,4 +46,8 @@
 | Supplier DPA | Art. 28 GDPR processor terms | Supplier register (planned) |
 | Employee / contractor | Confidentiality, data handling | HR files |
 
+## Obligations register
+
+Statutory and contractual obligations are tracked in detail in [OBLIGATIONS-REGISTER.md](OBLIGATIONS-REGISTER.md), including monitoring cadence, evidence owners, and regulatory change log.
+
 **Next full review:** 2026-09-06

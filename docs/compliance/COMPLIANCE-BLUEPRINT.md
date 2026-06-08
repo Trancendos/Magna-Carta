@@ -163,7 +163,23 @@ Documented in `compliance/waivers.yaml` (Tranc3). All current waivers: **RESOLVE
 
 ---
 
-## 10. References
+## 10. Monitoring vs audit
+
+Compliance assurance uses two complementary modes (aligned with NGX compliance programme practice):
+
+| Mode | When | Who | Examples in Tranc3 |
+|------|------|-----|-------------------|
+| **Monitoring** | Continuous or near-real-time, within operational line | Service owners, automated checks | DEFSTAN CI gate, `GET /compliance/status`, quarterly PROC-CMP-001 reviews, access reviews |
+| **Audit** | Periodic, independent of day-to-day operations | ISMS lead, external auditor | ISO/SOC2 evidence packs, pen test reports, policy attestation cycles |
+
+**Design rule:** Monitoring catches drift early; audit verifies that monitoring and controls are effective. Operational management must not override independent audit findings.
+
+Obligations tracking: [OBLIGATIONS-REGISTER.md](OBLIGATIONS-REGISTER.md)  
+Procedure: [PROC-CMP-001-Compliance-Review.md](../procedures/PROC-CMP-001-Compliance-Review.md)
+
+---
+
+## 11. References
 
 - [REGULATION-MATRIX.md](REGULATION-MATRIX.md)
 - [ISO27001-ALIGNMENT.md](ISO27001-ALIGNMENT.md)
@@ -172,3 +188,6 @@ Documented in `compliance/waivers.yaml` (Tranc3). All current waivers: **RESOLVE
 - [DEFSTAN-ALIGNMENT.md](DEFSTAN-ALIGNMENT.md)
 - [AI-GOVERNANCE.md](AI-GOVERNANCE.md)
 - [LEGISLATION-REGISTER.md](LEGISLATION-REGISTER.md)
+- [EXTERNAL-FRAMEWORK-MAPPING.md](EXTERNAL-FRAMEWORK-MAPPING.md)
+- [GENAI-MATURITY-ASSESSMENT.md](GENAI-MATURITY-ASSESSMENT.md)
+- [OBLIGATIONS-REGISTER.md](OBLIGATIONS-REGISTER.md)

@@ -137,7 +137,35 @@ See [config/magna_carta_config.json](../../config/magna_carta_config.json).
 
 - [POL-AI-001](../policies/POL-AI-001-AI-Ethics-Governance.md)
 - [REGULATION-MATRIX.md](REGULATION-MATRIX.md)
+- [EXTERNAL-FRAMEWORK-MAPPING.md](EXTERNAL-FRAMEWORK-MAPPING.md)
+- [GENAI-MATURITY-ASSESSMENT.md](GENAI-MATURITY-ASSESSMENT.md)
 - Tranc3 `src/compliance/ai_governance.py`
 - Tranc3 `src/compliance/magna_carta.py` (runtime hooks)
+
+---
+
+## 11. External principles alignment
+
+Magna Carta AI governance aligns with widely cited public principles. These are **adapted** for Tranc3 — not copied verbatim from vendor documents.
+
+### 11.1 Google AI Principles (reference)
+
+| Principle | Magna Carta expression |
+|-----------|------------------------|
+| **Bold innovation** | AI features ship through DEFSTAN-gated CI; model cards and Observatory metrics prove outcomes |
+| **Responsible development** | Human oversight (§8), bias testing (action register), kill-switch via Town Hall |
+| **Collaborative progress** | Open standards (NIST AI RMF, ISO 42001 mapping); partner DPAs and SCCs documented |
+
+### 11.2 Connor Group five-domain mapping
+
+| Domain | Primary Magna Carta artefact |
+|--------|------------------------------|
+| Strategic alignment | [FRAMEWORK.md](../../FRAMEWORK.md) §3, [POL-AI-001](../policies/POL-AI-001-AI-Ethics-Governance.md) |
+| Data & compliance | [LEGISLATION-REGISTER.md](LEGISLATION-REGISTER.md), [OBLIGATIONS-REGISTER.md](OBLIGATIONS-REGISTER.md), GDPR alignment |
+| Operational & technology | [COMPLIANCE-BLUEPRINT.md](COMPLIANCE-BLUEPRINT.md), DEFSTAN register, CI gates |
+| Human, ethical & social | §8 human agency, POL-AI-001, bias and transparency controls |
+| Transparency & improvement | [PROC-CMP-001](../procedures/PROC-CMP-001-Compliance-Review.md), [GENAI-MATURITY-ASSESSMENT.md](GENAI-MATURITY-ASSESSMENT.md) |
+
+Full mapping: [EXTERNAL-FRAMEWORK-MAPPING.md](EXTERNAL-FRAMEWORK-MAPPING.md)
 
 **Next review:** 2026-09-07

@@ -62,6 +62,8 @@
 | NIST AI RMF 1.0 | ⚠️ Reference | ⚠️ Mapped | AI-GOVERNANCE.md |
 | UK AI White Paper / DSIT | ⚠️ Reference | 📋 | Monitor legislation |
 | Algorithmic transparency | ⚠️ | ⚠️ | Model cards; bias metrics pending |
+| Connor GenAI Governance Framework v1.0 | ✅ Reference | ⚠️ Mapped | [EXTERNAL-FRAMEWORK-MAPPING.md](EXTERNAL-FRAMEWORK-MAPPING.md), [GENAI-MATURITY-ASSESSMENT.md](GENAI-MATURITY-ASSESSMENT.md) |
+| Google AI Principles | ✅ Reference | ⚠️ Mapped | [AI-GOVERNANCE.md](AI-GOVERNANCE.md) §11 |
 
 ---
 
