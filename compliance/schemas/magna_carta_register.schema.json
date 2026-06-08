@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/magna_carta_register.schema.json",
+  "title": "Magna Carta Register",
+  "type": "object",
+  "required": ["meta", "requirements"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" },
+        "framework": { "type": "string" }
+      }
+    },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "status"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^MC-[0-9]{3}$" },
+          "title": { "type": "string" },
+          "standard": { "type": "string" },
+          "status": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    }
+  }
+}

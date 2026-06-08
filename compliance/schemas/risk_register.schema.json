@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/risk_register.schema.json",
+  "title": "Risk Register",
+  "type": "object",
+  "required": ["meta", "risks"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" },
+        "framework": { "type": "string" }
+      }
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["risk_id", "title", "likelihood", "impact", "treatment"],
+        "properties": {
+          "risk_id": { "type": "string", "pattern": "^RISK-[0-9]{3}$" },
+          "title": { "type": "string" },
+          "category": { "type": "string" },
+          "likelihood": { "type": "integer", "minimum": 1, "maximum": 5 },
+          "impact": { "type": "integer", "minimum": 1, "maximum": 5 },
+          "inherent_score": { "type": "integer" },
+          "treatment": {
+            "type": "string",
+            "enum": ["Mitigate", "Accept", "Transfer", "Avoid"]
+          }
+        }
+      }
+    }
+  }
+}

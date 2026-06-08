@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/supplier_dpa_register.schema.json",
+  "title": "Supplier DPA Register",
+  "type": "object",
+  "required": ["meta", "suppliers"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" },
+        "policy": { "type": "string" }
+      }
+    },
+    "suppliers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["supplier_id", "name", "risk_tier", "dpa_status", "review_date"],
+        "properties": {
+          "supplier_id": { "type": "string", "pattern": "^SUP-[0-9]{3}$" },
+          "name": { "type": "string" },
+          "category": { "type": "string" },
+          "risk_tier": {
+            "type": "string",
+            "enum": ["Critical", "High", "Medium", "Low"]
+          },
+          "dpa_status": { "type": "string" },
+          "review_date": { "type": "string", "format": "date" }
+        }
+      }
+    }
+  }
+}

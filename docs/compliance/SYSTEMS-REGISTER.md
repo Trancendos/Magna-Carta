@@ -59,7 +59,7 @@ Lightweight configuration management for compliance, BCP, and supplier reviews. 
 |--------|--------|----------|-------|
 | SYS-040 | Magna Carta repo (this) | Layer 2 documentation | ISMS Lead |
 | SYS-041 | Town Hall / BoardRoom | ITSM, meetings, stage gates | ISMS Lead |
-| SYS-042 | compliance_health_check.py | Register freshness monitor | ISMS Lead |
+| SYS-042 | compliance_health_check.py + weekly_compliance_health.sh | Local register freshness monitor (MON-001–010; no GHA) | ISMS Lead |
 
 ---
 

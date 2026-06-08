@@ -40,6 +40,20 @@ required_files:
     check_id: MON-007
   - path: scripts/weekly_compliance_health.sh
     check_id: MON-007
+  - path: docs/bibles/PRIVACY-BIBLE.md
+    check_id: MON-007
+  - path: docs/bibles/SECURITY-BIBLE.md
+    check_id: MON-007
+  - path: docs/runbooks/RUN-OMB-001-Ombudsman-Escalation.md
+    check_id: MON-007
+  - path: docs/runbooks/RUN-PECR-001-Cookie-Deployment.md
+    check_id: MON-007
+  - path: docs/compliance/ASVS-GAP-CHECKLIST.md
+    check_id: MON-007
+  - path: docs/templates/TEMPLATE-FAIRNESS-TEST-REPORT.md
+    check_id: MON-007
+  - path: docs/templates/TEMPLATE-INTERNAL-AUDIT-REPORT.md
+    check_id: MON-007
 
 yaml_registers:
   - path: compliance/compliance_action_tracker.yaml
@@ -56,6 +70,8 @@ yaml_registers:
     check_id: MON-006
   - path: compliance/health_check_history.yaml
     check_id: MON-006
+  - path: compliance/maintenance_monitor.yaml
+    check_id: MON-006
 
 weekly_cadence:
   check_id: MON-008
@@ -69,6 +85,31 @@ schema_validation:
   - check_id: MON-009
     register: compliance/health_check_history.yaml
     schema: compliance/schemas/health_check_history.schema.json
+  - check_id: MON-009
+    register: compliance/risk_register.yaml
+    schema: compliance/schemas/risk_register.schema.json
+  - check_id: MON-009
+    register: compliance/supplier_dpa_register.yaml
+    schema: compliance/schemas/supplier_dpa_register.schema.json
+  - check_id: MON-009
+    register: compliance/magna_carta_register.yaml
+    schema: compliance/schemas/magna_carta_register.schema.json
+  - check_id: MON-009
+    register: compliance/tranc3_register_bridge.yaml
+    schema: compliance/schemas/tranc3_register_bridge.schema.json
+  - check_id: MON-009
+    register: compliance/policy_attestation_register.yaml
+    schema: compliance/schemas/policy_attestation_register.schema.json
+  - check_id: MON-009
+    register: compliance/maintenance_monitor.yaml
+    schema: compliance/schemas/maintenance_monitor.schema.json
+
+procedure_coverage:
+  check_id: MON-010
+  procedures_dir: docs/procedures
+  cookbooks_dir: docs/cookbooks
+  hymn_sheets_dir: docs/hymn-sheets
+  code_pattern: "PROC-([A-Z]+-\\d+)"
 
 index_drift_checks:
   - check_id: MON-004

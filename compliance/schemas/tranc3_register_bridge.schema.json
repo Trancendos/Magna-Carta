@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/tranc3_register_bridge.schema.json",
+  "title": "Tranc3 Register Bridge",
+  "type": "object",
+  "required": ["meta", "bridges"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" }
+      }
+    },
+    "integration_status": {
+      "type": "object",
+      "properties": {
+        "register_import": { "type": "string" },
+        "staging_enablement": { "type": "string" }
+      }
+    },
+    "bridges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["mc_id", "title"],
+        "properties": {
+          "mc_id": { "type": "string", "pattern": "^MC-[0-9]{3}$" },
+          "title": { "type": "string" },
+          "tranc3_requirements": { "type": "array" },
+          "runtime_rules": { "type": "array" }
+        }
+      }
+    }
+  }
+}

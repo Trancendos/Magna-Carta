@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/policy_attestation_register.schema.json",
+  "title": "Policy Attestation Register",
+  "type": "object",
+  "required": ["meta", "cycle", "attestations"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" },
+        "cycle_id": { "type": "string" }
+      }
+    },
+    "cycle": {
+      "type": "object",
+      "required": ["attestation_id", "due_date", "status"],
+      "properties": {
+        "attestation_id": { "type": "string" },
+        "due_date": { "type": "string", "format": "date" },
+        "status": { "type": "string" },
+        "policies_in_scope": { "type": "array" }
+      }
+    },
+    "attestations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["person_id", "role_tier", "status"],
+        "properties": {
+          "person_id": { "type": "string" },
+          "role_tier": { "type": "string" },
+          "status": { "type": "string" },
+          "attested_date": { "type": "string", "format": "date" }
+        }
+      }
+    }
+  }
+}

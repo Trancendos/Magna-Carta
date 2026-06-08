@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/maintenance_monitor.schema.json",
+  "title": "Maintenance Monitor",
+  "type": "object",
+  "required": ["meta", "settings", "required_files", "yaml_registers"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" }
+      }
+    },
+    "settings": {
+      "type": "object",
+      "required": ["default_max_age_days"],
+      "properties": {
+        "default_max_age_days": { "type": "integer", "minimum": 1 },
+        "strict_exit_on_error": { "type": "boolean" }
+      }
+    },
+    "required_files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "check_id"],
+        "properties": {
+          "path": { "type": "string" },
+          "check_id": { "type": "string", "pattern": "^MON-[0-9]{3}$" }
+        }
+      }
+    },
+    "yaml_registers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "check_id"],
+        "properties": {
+          "path": { "type": "string" },
+          "check_id": { "type": "string", "pattern": "^MON-[0-9]{3}$" }
+        }
+      }
+    },
+    "schema_validation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["check_id", "register", "schema"],
+        "properties": {
+          "check_id": { "type": "string" },
+          "register": { "type": "string" },
+          "schema": { "type": "string" }
+        }
+      }
+    },
+    "procedure_coverage": {
+      "type": "object",
+      "properties": {
+        "check_id": { "type": "string" },
+        "procedures_dir": { "type": "string" },
+        "cookbooks_dir": { "type": "string" },
+        "hymn_sheets_dir": { "type": "string" }
+      }
+    }
+  }
+}

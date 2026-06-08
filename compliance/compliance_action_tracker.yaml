@@ -164,3 +164,27 @@ programme_milestones:
     completed_date: "2026-06-07"
     validation_type: programme
     evidence: "docs/evidence/PEN-TEST-FUTURE-SCOPE-ANNEX.md, docs/templates/TEMPLATE-TIA-US-AI-FALLBACK.md"
+
+  - milestone_id: PM-005
+    title: "Full JSON Schema coverage for YAML registers (MON-009)"
+    completed_date: "2026-06-08"
+    validation_type: programme
+    evidence: "compliance/schemas/*.schema.json (8 files), compliance/maintenance_monitor.yaml schema_validation"
+
+  - milestone_id: PM-006
+    title: "Procedure coverage automation (MON-010) — 12 cookbooks + 12 hymn sheets"
+    completed_date: "2026-06-08"
+    validation_type: programme
+    evidence: "docs/cookbooks/, docs/hymn-sheets/, scripts/compliance_health_check.py check_procedure_coverage"
+
+  - milestone_id: PM-007
+    title: "Domain bibles, runbooks, ASVS gap checklist"
+    completed_date: "2026-06-08"
+    validation_type: programme
+    evidence: "docs/bibles/PRIVACY-BIBLE.md, SECURITY-BIBLE.md, docs/runbooks/, docs/compliance/ASVS-GAP-CHECKLIST.md"
+
+  - milestone_id: PM-008
+    title: "Evidence templates for ACT-004 and ACT-011"
+    completed_date: "2026-06-08"
+    validation_type: programme
+    evidence: "docs/templates/TEMPLATE-FAIRNESS-TEST-REPORT.md, TEMPLATE-INTERNAL-AUDIT-REPORT.md"

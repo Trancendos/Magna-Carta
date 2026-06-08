@@ -164,15 +164,19 @@ All items require parties outside documentation-only work:
 | **Bible** | MAGNACARTA-GOVERNANCE-BIBLE | ✅ Programme (v1) | Expand as procedures mature |
 | **Cookbooks** | 12 cookbooks + INDEX (all PROC-*) | ✅ Programme | Operational drills not evidenced 🎯 |
 | **Hymn sheets** | 12 hymn sheets + INDEX (all PROC-*) | ✅ Programme | Named signatories in production 🎯 |
-| **Schemas** | REGISTER-SCHEMAS + JSON Schema (2 registers) | ✅ Programme | Extend schemas to all YAML registers 🎯 |
+| **Schemas** | REGISTER-SCHEMAS + 8 JSON schemas (MON-009) | ✅ Programme | Schema drift on new fields — monitor via health check |
 | **Standards** | STANDARDS-REGISTER | ✅ Programme | Not external certification |
 | **Regulators / ombudsmen** | REGULATORS-OMBUDSMEN-REGISTER | ✅ Programme | Contact verification 🎯 |
 | **Systems** | SYSTEMS-REGISTER | ✅ Programme | Production monitoring hooks 🎯 |
 | **Reviewers** | REVIEWERS-REGISTER | ✅ Programme | Named individuals external 🎯 |
 | **Maintenance** | COMPLIANCE-MAINTENANCE-PROGRAMME v1.1 | ✅ Programme | First weekly local run logged 🎯 |
 | **Automation** | weekly_compliance_health.sh + health_check_history.yaml | ✅ Programme | Optional local cron on ISMS machine 🎯 |
+| **Runbooks** | RUN-OMB-001, RUN-PECR-001 + INDEX | ✅ Programme | Live escalation tickets 🎯 |
+| **Domain bibles** | PRIVACY-BIBLE, SECURITY-BIBLE + INDEX | ✅ Programme | Tranc3 upstream sync 🎯 |
+| **Evidence templates** | Fairness test + internal audit report | ✅ Programme | ACT-004, ACT-011 execution 🎯 |
+| **ASVS gap tracker** | ASVS-GAP-CHECKLIST | ✅ Programme | Pen test / remediation evidence 🎯 |
 
-**Still missing (honest backlog):** JSON Schema for remaining YAML registers; ombudsman escalation runbooks where sector-specific; named individuals in REVIEWERS-REGISTER; operational evidence that cookbooks were exercised (drills, tickets).
+**Still missing (honest backlog):** Named individuals in REVIEWERS-REGISTER; operational evidence that cookbooks were exercised (drills, tickets); ACT-001–012 external closure; sector-specific runbooks beyond ICO/FOS/PECR starters.
 
 ---
 
@@ -180,7 +184,7 @@ All items require parties outside documentation-only work:
 
 | Layer | What “done” looks like | Target |
 |-------|------------------------|--------|
-| Programme (layer 2) | Every applicable/future row has owner doc + artefact taxonomy | **Achieved** (full cookbook/hymn coverage; schemas started) |
+| Programme (layer 2) | Every applicable/future row has owner doc + artefact taxonomy | **Achieved** (full cookbook/hymn/schema coverage; local monitor) |
 | Maintenance (layer 2b) | Weekly local health check logged; quarterly PROC-CMP-001 | First weekly run + Q3 review 2026-09-06 |
 | Operations (layer 3) | ACT-001–012 closed with evidence | 2026–2027 |
 | External assurance | ISO 27001, SOC 2, ICO live | Q1–Q2 2027 |

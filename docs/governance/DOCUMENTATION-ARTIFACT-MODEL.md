@@ -1,7 +1,7 @@
 # Documentation Artifact Model
 
-**Version:** 1.0.0  
-**Date:** 2026-06-07  
+**Version:** 1.1.0  
+**Date:** 2026-06-08  
 **Owner:** ISMS Lead  
 **Purpose:** Define every documentation category in Magna Carta — what it is, where it lives, who maintains it, and how it is monitored.
 
@@ -97,27 +97,31 @@ FRAMEWORK is strategic; the Bible is operational reference.
 
 All artefacts are subject to [COMPLIANCE-MAINTENANCE-PROGRAMME.md](COMPLIANCE-MAINTENANCE-PROGRAMME.md):
 
-- **Automated:** `scripts/compliance_health_check.py` (CI + local)
+- **Automated (local):** `scripts/compliance_health_check.py` and `scripts/weekly_compliance_health.sh` — no GitHub Actions (zero CI minute cost)
+- **Optional cron:** `scripts/install_local_weekly_cron.sh` on ISMS workstation
 - **Machine-readable config:** `compliance/maintenance_monitor.yaml`
 - **Human cadence:** PROC-CMP-001 quarterly review
+- **Checks:** MON-001–MON-010 (see [COMPLIANCE-MAINTENANCE-PROGRAMME.md](COMPLIANCE-MAINTENANCE-PROGRAMME.md))
 
 ---
 
 ## 7. Completeness checklist (artifact model)
 
-| Category | Status (2026-06-07) | Notes |
+| Category | Status (2026-06-08) | Notes |
 |----------|---------------------|-------|
 | Policies | ✅ 9 policies | BoardRoom approval 🎯 |
 | Procedures | ✅ 12 procedures | — |
-| Cookbooks | ✅ Starter set (2) | Expand per procedure backlog |
-| Bibles | ✅ Governance Bible | Domain bibles (security, privacy) 🎯 |
-| Hymn sheets | ✅ Starter set (2) | Align to remaining P0 procedures |
-| Schemas | ✅ REGISTER-SCHEMAS | Extend when new YAML registers added |
+| Cookbooks | ✅ 12 + INDEX (MON-010) | Operational drills not evidenced 🎯 |
+| Bibles | ✅ 3 + INDEX (gov, privacy, security) | Expand as domains mature |
+| Hymn sheets | ✅ 12 + INDEX (MON-010) | Named signatories in production 🎯 |
+| Schemas | ✅ REGISTER-SCHEMAS + 8 JSON schemas | MON-009 validates all YAML registers |
+| Runbooks | ✅ 2 + INDEX | Ombudsman, PECR deployment |
+| Evidence templates | ✅ 7 (incl. fairness + internal audit) | Execution pending ACT-004, ACT-011 🎯 |
 | Standards register | ✅ | Linked from REGULATION-MATRIX |
 | Regulators / Ombudsmen | ✅ | ICO, FCA, FOS, etc. |
 | Systems register | ✅ | Derived from AS-BUILT |
-| Reviewers register | ✅ | Extends RACI |
-| Automated monitor | ✅ | Health check script + YAML |
+| Reviewers register | ✅ | Named individuals external 🎯 |
+| Automated monitor | ✅ | Local weekly health check + history log |
 
 ---
 

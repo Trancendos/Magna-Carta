@@ -256,6 +256,25 @@ def check_weekly_cadence(cfg: dict, findings: list[Finding]) -> None:
         )
 
 
+def _validate_object_fields(
+    cid: str,
+    rel: str,
+    obj: dict,
+    required_fields: list[str],
+    label: str,
+    findings: list[Finding],
+) -> None:
+    for field in required_fields:
+        if field not in obj:
+            findings.append(
+                Finding(
+                    cid,
+                    "error",
+                    f"{rel} {label} missing field: {field}",
+                )
+            )
+
+
 def validate_register_schema(cfg: dict, findings: list[Finding]) -> None:
     """Lightweight structural validation without external jsonschema dependency."""
     import json
@@ -266,36 +285,112 @@ def validate_register_schema(cfg: dict, findings: list[Finding]) -> None:
         schema_rel = block["schema"]
         reg_path = ROOT / rel
         schema_path = ROOT / schema_rel
-        if not reg_path.is_file() or not schema_path.is_file() or yaml is None:
+        if not reg_path.is_file():
+            findings.append(Finding(cid, "error", f"Register missing for schema check: {rel}"))
+            continue
+        if not schema_path.is_file():
+            findings.append(Finding(cid, "error", f"Schema missing: {schema_rel}"))
+            continue
+        if yaml is None:
             continue
         with schema_path.open(encoding="utf-8") as f:
             schema = json.load(f)
         with reg_path.open(encoding="utf-8") as f:
-            data = yaml.safe_load(f)
-        required_top = schema.get("required", [])
-        for key in required_top:
+            data = yaml.safe_load(f) or {}
+        for key in schema.get("required", []):
             if key not in data:
                 findings.append(
                     Finding(cid, "error", f"{rel} missing required top-level key: {key}")
                 )
-        item_schema = (
-            schema.get("properties", {})
-            .get("actions", {})
-            .get("items", {})
-            .get("required", [])
-        )
-        if item_schema and "actions" in data:
-            for action in data["actions"]:
-                for field in item_schema:
-                    if field not in action:
-                        aid = action.get("action_id", "?")
-                        findings.append(
-                            Finding(
-                                cid,
-                                "error",
-                                f"{rel} action {aid} missing field: {field}",
-                            )
+        properties = schema.get("properties", {})
+        meta_props = properties.get("meta", {})
+        if isinstance(data.get("meta"), dict) and meta_props.get("type") == "object":
+            _validate_object_fields(
+                cid,
+                rel,
+                data["meta"],
+                meta_props.get("required", []),
+                "meta",
+                findings,
+            )
+        for prop_name, prop_schema in properties.items():
+            if prop_name == "meta":
+                continue
+            if prop_schema.get("type") != "array":
+                continue
+            items_schema = prop_schema.get("items", {})
+            if items_schema.get("type") != "object":
+                continue
+            required_item_fields = items_schema.get("required", [])
+            if not required_item_fields:
+                continue
+            items = data.get(prop_name)
+            if not isinstance(items, list):
+                findings.append(
+                    Finding(cid, "error", f"{rel} missing or invalid array: {prop_name}")
+                )
+                continue
+            id_field = next(
+                (f for f in required_item_fields if f.endswith("_id") or f == "id"),
+                None,
+            )
+            for idx, item in enumerate(items):
+                if not isinstance(item, dict):
+                    findings.append(
+                        Finding(
+                            cid,
+                            "error",
+                            f"{rel} {prop_name}[{idx}] is not an object",
                         )
+                    )
+                    continue
+                label = prop_name
+                if id_field and id_field in item:
+                    label = f"{prop_name} item {item[id_field]}"
+                _validate_object_fields(
+                    cid,
+                    rel,
+                    item,
+                    required_item_fields,
+                    label,
+                    findings,
+                )
+
+
+def check_procedure_coverage(cfg: dict, findings: list[Finding]) -> None:
+    """Ensure every PROC-* has matching COOK-* and HYMN-* artefacts (MON-010)."""
+    block = cfg.get("procedure_coverage", {})
+    if not block:
+        return
+    cid = block.get("check_id", "MON-010")
+    proc_dir = ROOT / block.get("procedures_dir", "docs/procedures")
+    cook_dir = ROOT / block.get("cookbooks_dir", "docs/cookbooks")
+    hymn_dir = ROOT / block.get("hymn_sheets_dir", "docs/hymn-sheets")
+    pattern = block.get("code_pattern", r"PROC-([A-Z]+-\d+)")
+    for proc in sorted(proc_dir.glob("PROC-*.md")):
+        match = re.match(pattern, proc.name)
+        if not match:
+            findings.append(
+                Finding(cid, "warning", f"Procedure filename not matched by MON-010: {proc.name}")
+            )
+            continue
+        code = match.group(1)
+        if not list(cook_dir.glob(f"COOK-{code}-*.md")):
+            findings.append(
+                Finding(
+                    cid,
+                    "error",
+                    f"No cookbook for {proc.name} (expected docs/cookbooks/COOK-{code}-*.md)",
+                )
+            )
+        if not list(hymn_dir.glob(f"HYMN-{code}-*.md")):
+            findings.append(
+                Finding(
+                    cid,
+                    "error",
+                    f"No hymn sheet for {proc.name} (expected docs/hymn-sheets/HYMN-{code}-*.md)",
+                )
+            )
 
 
 def check_cookbook_links(cfg: dict, findings: list[Finding]) -> None:
@@ -327,6 +422,7 @@ def run_checks(*, include_weekly_cadence: bool = False) -> list[Finding]:
     check_stale_reviews(cfg, findings)
     check_overdue_actions(cfg, findings)
     check_cookbook_links(cfg, findings)
+    check_procedure_coverage(cfg, findings)
     check_weekly_cadence(cfg, findings)
     validate_register_schema(cfg, findings)
     return findings

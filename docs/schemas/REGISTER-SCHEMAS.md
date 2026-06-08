@@ -137,7 +137,13 @@ Machine-readable schemas (Draft 2020-12) live in `compliance/schemas/`:
 |------|----------|
 | `compliance_action_tracker.schema.json` | `compliance/compliance_action_tracker.yaml` |
 | `health_check_history.schema.json` | `compliance/health_check_history.yaml` |
+| `risk_register.schema.json` | `compliance/risk_register.yaml` |
+| `supplier_dpa_register.schema.json` | `compliance/supplier_dpa_register.yaml` |
+| `magna_carta_register.schema.json` | `compliance/magna_carta_register.yaml` |
+| `tranc3_register_bridge.schema.json` | `compliance/tranc3_register_bridge.yaml` |
+| `policy_attestation_register.schema.json` | `compliance/policy_attestation_register.yaml` |
+| `maintenance_monitor.schema.json` | `compliance/maintenance_monitor.yaml` |
 
-`compliance_health_check.py` performs lightweight structural validation (MON-009) without requiring the `jsonschema` package. Add further schemas as registers grow.
+`compliance_health_check.py` performs lightweight structural validation (MON-009) for all eight register/schema pairs without requiring the `jsonschema` package. Procedure coverage (MON-010) ensures every `PROC-*.md` has matching cookbook and hymn sheet.
 
 **Next review:** 2026-09-06

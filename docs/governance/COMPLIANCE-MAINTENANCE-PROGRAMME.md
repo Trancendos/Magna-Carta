@@ -54,7 +54,8 @@ This is **not** operational certification monitoring — see ACT-001–012 for l
 | MON-006 | YAML registers parseable | error | Fix syntax |
 | MON-007 | Programme milestone docs exist (artifact model) | warning | Create missing artefact |
 | MON-008 | Last logged health check within 7 days | warning | Run weekly script |
-| MON-009 | YAML registers match JSON Schema structure | error | Fix register fields |
+| MON-009 | YAML registers match JSON Schema structure (8 pairs) | error | Fix register fields |
+| MON-010 | Every PROC-* has COOK-* and HYMN-* | error | Create missing cookbook/hymn sheet |
 
 Full config: `compliance/maintenance_monitor.yaml`
 
