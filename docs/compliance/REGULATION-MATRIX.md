@@ -1,7 +1,7 @@
 # Regulation & Standards Matrix
 
-**Version:** 1.0.0  
-**Date:** 2026-06-07  
+**Version:** 1.1.0  
+**Date:** 2026-06-08  
 **Owner:** ISMS Lead / DPO  
 **Scope:** Tranc3 platform and Trancendos-operated services
 
@@ -123,7 +123,21 @@ Full component mapping: [../architecture/CONTROL-TO-COMPONENT-MAP.md](../archite
 
 ---
 
-## 8. Review schedule
+## 8. Master framework catalogue
+
+Customer-requested assurance frameworks (CSA STAR, GxP, ISO family, PCI family, SOC, FedRAMP, CMMC, global privacy laws, NIST, sector regimes, vendor portals) are inventoried in:
+
+| Artefact | Scope |
+|----------|-------|
+| [STANDARDS-AND-FRAMEWORKS-REGISTER.md](STANDARDS-AND-FRAMEWORKS-REGISTER.md) | Human master (FW-001–FW-130, 112 deduplicated entries) |
+| [readiness/INDEX.md](readiness/INDEX.md) | Grouped readiness docs by domain |
+| `compliance/frameworks_register.yaml` | Machine-readable mirror (MON-009 validated) |
+
+Programme milestone **PM-009** (2026-06-08) closed Layer 2 catalogue coverage. External certification and signed evidence remain Layer 3 (**ACT-001–ACT-012**).
+
+---
+
+## 9. Review schedule
 
 | Activity | Frequency |
 |----------|-----------|

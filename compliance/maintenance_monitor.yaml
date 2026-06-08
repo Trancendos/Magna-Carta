@@ -6,7 +6,7 @@
 meta:
   register_version: "1.0.0"
   owner: "ISMS Lead"
-  last_updated: "2026-06-07"
+  last_updated: "2026-06-08"
   review_cycle: "quarterly"
 
 settings:
@@ -17,6 +17,10 @@ required_files:
   - path: docs/compliance/COMPLIANCE-COVERAGE-REGISTER.md
     check_id: MON-001
   - path: docs/compliance/STANDARDS-REGISTER.md
+    check_id: MON-001
+  - path: docs/compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md
+    check_id: MON-001
+  - path: docs/compliance/readiness/INDEX.md
     check_id: MON-001
   - path: docs/compliance/REGULATORS-OMBUDSMEN-REGISTER.md
     check_id: MON-001
@@ -70,6 +74,8 @@ yaml_registers:
     check_id: MON-006
   - path: compliance/health_check_history.yaml
     check_id: MON-006
+  - path: compliance/frameworks_register.yaml
+    check_id: MON-006
   - path: compliance/maintenance_monitor.yaml
     check_id: MON-006
 
@@ -103,6 +109,9 @@ schema_validation:
   - check_id: MON-009
     register: compliance/maintenance_monitor.yaml
     schema: compliance/schemas/maintenance_monitor.schema.json
+  - check_id: MON-009
+    register: compliance/frameworks_register.yaml
+    schema: compliance/schemas/frameworks_register.schema.json
 
 procedure_coverage:
   check_id: MON-010

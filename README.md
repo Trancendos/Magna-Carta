@@ -58,6 +58,8 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [docs/compliance/OBLIGATIONS-REGISTER.md](docs/compliance/OBLIGATIONS-REGISTER.md) | Regulatory and contractual obligations register |
 | [docs/compliance/LEGISLATION-REGISTER.md](docs/compliance/LEGISLATION-REGISTER.md) | UK/EU legislation applicability |
 | [docs/compliance/STANDARDS-REGISTER.md](docs/compliance/STANDARDS-REGISTER.md) | ISO, NIST, DEFSTAN, OWASP and framework standards |
+| [docs/compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md](docs/compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md) | Master catalogue (FW-001–FW-130, 112 frameworks) |
+| [docs/compliance/readiness/INDEX.md](docs/compliance/readiness/INDEX.md) | Grouped readiness docs (ISO, SOC, PCI, NIST, privacy, gov) |
 | [docs/compliance/REGULATORS-OMBUDSMEN-REGISTER.md](docs/compliance/REGULATORS-OMBUDSMEN-REGISTER.md) | Regulators, supervisory authorities, ombudsmen |
 | [docs/compliance/SYSTEMS-REGISTER.md](docs/compliance/SYSTEMS-REGISTER.md) | Governance and compliance systems (Town Hall, registers, CI) |
 | [docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md](docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md) | Third-party GenAI/compliance frameworks → Magna Carta |
@@ -147,6 +149,7 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [compliance/compliance_action_tracker.yaml](compliance/compliance_action_tracker.yaml) | Machine-readable action tracker |
 | [compliance/risk_register.yaml](compliance/risk_register.yaml) | Machine-readable risk register |
 | [compliance/policy_attestation_register.yaml](compliance/policy_attestation_register.yaml) | Machine-readable policy attestation register |
+| [compliance/frameworks_register.yaml](compliance/frameworks_register.yaml) | Machine-readable frameworks catalogue (MON-009) |
 | [compliance/maintenance_monitor.yaml](compliance/maintenance_monitor.yaml) | Documentation health monitor configuration |
 | [compliance/health_check_history.yaml](compliance/health_check_history.yaml) | Append-only weekly health check run log |
 | [scripts/compliance_health_check.py](scripts/compliance_health_check.py) | Automated drift, staleness, and link checker |

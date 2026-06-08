@@ -1,0 +1,694 @@
+---
+meta:
+  register_version: 1.0.0
+  owner: ISMS Lead
+  last_updated: '2026-06-08'
+  review_cycle: quarterly
+  procedure: docs/procedures/PROC-CMP-001-Compliance-Review.md
+  human_readable: docs/compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md
+  framework_count: 112
+schema:
+  framework_id: FW-### unique identifier
+  name: Framework or regulation name
+  category: iso_ms | soc_assurance | pci | nist | us_government | international_assurance
+    | eu_industry | global_privacy
+  applicability: applicable | conditional | reference | awareness | not_applicable
+  programme_status: programme | operational | partial | readiness | not_applicable
+  certification_target: optional target date or note
+  readiness_doc: relative path to mapping or readiness doc
+frameworks:
+- framework_id: FW-001
+  name: ISO/IEC 27001:2022
+  category: iso_ms
+  applicability: applicable
+  programme_status: partial
+  certification_target: Q2 2027
+  readiness_doc: docs/compliance/ISO27001-ALIGNMENT.md
+- framework_id: FW-002
+  name: ISO/IEC 27017
+  category: iso_ms
+  applicability: applicable
+  programme_status: partial
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+- framework_id: FW-003
+  name: ISO/IEC 27018
+  category: iso_ms
+  applicability: applicable
+  programme_status: partial
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+- framework_id: FW-004
+  name: ISO/IEC 27701
+  category: iso_ms
+  applicability: conditional
+  programme_status: readiness
+  certification_target: with 27001
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+- framework_id: FW-005
+  name: ISO/IEC 42001
+  category: iso_ms
+  applicability: conditional
+  programme_status: programme
+  certification_target: '2027'
+  readiness_doc: docs/compliance/GENAI-MATURITY-ASSESSMENT.md
+- framework_id: FW-006
+  name: ISO 22301
+  category: iso_ms
+  applicability: conditional
+  programme_status: programme
+  certification_target: drills
+  readiness_doc: docs/procedures/PROC-BCP-001-Business-Continuity.md
+- framework_id: FW-007
+  name: ISO 9001
+  category: iso_ms
+  applicability: not_applicable
+  programme_status: not_applicable
+  readiness_doc: docs/compliance/DEFSTAN-ALIGNMENT.md
+- framework_id: FW-008
+  name: ISO/IEC 20000
+  category: iso_ms
+  applicability: reference
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+- framework_id: FW-009
+  name: ISO 14001
+  category: iso_ms
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+- framework_id: FW-010
+  name: ISO 45001
+  category: iso_ms
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+- framework_id: FW-011
+  name: ISO 50001
+  category: iso_ms
+  applicability: not_applicable
+  programme_status: not_applicable
+- framework_id: FW-012
+  name: SNI ISO/IEC 27001
+  category: iso_ms
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+- framework_id: FW-013
+  name: SNI ISO/IEC 27017
+  category: iso_ms
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+- framework_id: FW-014
+  name: SNI ISO/IEC 27018
+  category: iso_ms
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+- framework_id: FW-015
+  name: SNI ISO 9001
+  category: iso_ms
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+- framework_id: FW-016
+  name: K-ISMS
+  category: iso_ms
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+- framework_id: FW-020
+  name: SOC 2 Type II
+  category: soc_assurance
+  applicability: applicable
+  programme_status: partial
+  certification_target: Q1 2027
+  readiness_doc: docs/compliance/SOC2-ALIGNMENT.md
+- framework_id: FW-021
+  name: SOC 1 Type II
+  category: soc_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+- framework_id: FW-022
+  name: SOC 3
+  category: soc_assurance
+  applicability: conditional
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+- framework_id: FW-023
+  name: CSA STAR
+  category: soc_assurance
+  applicability: conditional
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+- framework_id: FW-024
+  name: HITRUST CSF
+  category: soc_assurance
+  applicability: conditional
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+- framework_id: FW-025
+  name: KY3P
+  category: soc_assurance
+  applicability: conditional
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+- framework_id: FW-026
+  name: ProcessUnity
+  category: soc_assurance
+  applicability: conditional
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+- framework_id: FW-027
+  name: CyberVadis
+  category: soc_assurance
+  applicability: conditional
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+- framework_id: FW-028
+  name: Uptime Institute Tiers
+  category: soc_assurance
+  applicability: not_applicable
+  programme_status: not_applicable
+- framework_id: FW-030
+  name: PCI DSS v4.0
+  category: pci
+  applicability: not_applicable
+  programme_status: programme
+  readiness_doc: docs/compliance/PCI-DSS-POSITION.md
+- framework_id: FW-031
+  name: PCI 3-D Secure
+  category: pci
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/PCI-FAMILY-POSITION.md
+- framework_id: FW-032
+  name: PCI P2PE
+  category: pci
+  applicability: not_applicable
+  programme_status: not_applicable
+  readiness_doc: docs/compliance/readiness/PCI-FAMILY-POSITION.md
+- framework_id: FW-033
+  name: PCI PIN
+  category: pci
+  applicability: not_applicable
+  programme_status: not_applicable
+  readiness_doc: docs/compliance/readiness/PCI-FAMILY-POSITION.md
+- framework_id: FW-040
+  name: NIST Cybersecurity Framework 2.0
+  category: nist
+  applicability: reference
+  programme_status: programme
+  readiness_doc: docs/compliance/NIST-CSF-ALIGNMENT.md
+- framework_id: FW-041
+  name: NIST SP 800-53 Rev 5
+  category: nist
+  applicability: reference
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/NIST-FAMILY-READINESS.md
+- framework_id: FW-042
+  name: NIST SP 800-171 / 800-172
+  category: nist
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/NIST-FAMILY-READINESS.md
+- framework_id: FW-043
+  name: NIST SP 800-162
+  category: nist
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/NIST-FAMILY-READINESS.md
+- framework_id: FW-044
+  name: NIST SP 800-34
+  category: nist
+  applicability: reference
+  programme_status: programme
+  readiness_doc: docs/procedures/PROC-BCP-001-Business-Continuity.md
+- framework_id: FW-045
+  name: NIST SP 800-64
+  category: nist
+  applicability: applicable
+  programme_status: programme
+  readiness_doc: docs/compliance/DEFSTAN-ALIGNMENT.md
+- framework_id: FW-046
+  name: NIST Risk Management Framework
+  category: nist
+  applicability: reference
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/NIST-FAMILY-READINESS.md
+- framework_id: FW-050
+  name: FedRAMP
+  category: us_government
+  applicability: not_applicable
+  programme_status: programme
+  readiness_doc: docs/compliance/FEDRAMP-READINESS.md
+- framework_id: FW-051
+  name: GovRAMP
+  category: us_government
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+- framework_id: FW-052
+  name: FISMA
+  category: us_government
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+- framework_id: FW-053
+  name: CMMC 2.0
+  category: us_government
+  applicability: not_applicable
+  programme_status: programme
+  readiness_doc: docs/compliance/CMMC-READINESS.md
+- framework_id: FW-054
+  name: DoD (general)
+  category: us_government
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+- framework_id: FW-055
+  name: DoD Impact Level 2
+  category: us_government
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+- framework_id: FW-056
+  name: DoD Impact Level 4
+  category: us_government
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+- framework_id: FW-057
+  name: DoD Impact Level 5
+  category: us_government
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+- framework_id: FW-058
+  name: DoD Impact Level 6
+  category: us_government
+  applicability: not_applicable
+  programme_status: not_applicable
+- framework_id: FW-059
+  name: DFARS / NIST 800-171 flow-down
+  category: us_government
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+- framework_id: FW-060
+  name: FIPS 140-3
+  category: us_government
+  applicability: conditional
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+- framework_id: FW-061
+  name: CJIS Security Policy
+  category: us_government
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+- framework_id: FW-062
+  name: HIPAA Security Rule
+  category: us_government
+  applicability: conditional
+  programme_status: programme
+  certification_target: per customer
+  readiness_doc: docs/compliance/HIPAA-ALIGNMENT.md
+- framework_id: FW-063
+  name: FERPA
+  category: us_government
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+- framework_id: FW-064
+  name: IRS Publication 1075
+  category: us_government
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+- framework_id: FW-065
+  name: SEC Rule 17a-4(f)
+  category: us_government
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+- framework_id: FW-066
+  name: US CLOUD Act
+  category: us_government
+  applicability: awareness
+  programme_status: readiness
+  readiness_doc: docs/compliance/GDPR-ALIGNMENT.md
+- framework_id: FW-067
+  name: US EAR
+  category: us_government
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+- framework_id: FW-068
+  name: US ITAR
+  category: us_government
+  applicability: not_applicable
+  programme_status: not_applicable
+- framework_id: FW-069
+  name: VPAT / Section 508
+  category: us_government
+  applicability: conditional
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+- framework_id: FW-070
+  name: IRAP
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-071
+  name: ISMAP
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-072
+  name: CSAP
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-073
+  name: CCCS Medium Assessment
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-074
+  name: CCCS PBHVA Assessment
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-075
+  name: Canada RPAA
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-076
+  name: UK Cyber Essentials Plus
+  category: international_assurance
+  applicability: conditional
+  programme_status: readiness
+  certification_target: optional
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-077
+  name: UK G-Cloud
+  category: international_assurance
+  applicability: conditional
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-078
+  name: UK PASF
+  category: international_assurance
+  applicability: conditional
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-079
+  name: C5 (Germany BSI)
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-080
+  name: ENS High (Spain)
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-081
+  name: CCN CPSTIC (Spain)
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-082
+  name: CISPE Code of Conduct
+  category: international_assurance
+  applicability: reference
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-083
+  name: DESC CSP (Saudi)
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-084
+  name: ASIP HDS (France)
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-085
+  name: MeitY
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-086
+  name: MTCS (Singapore)
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-087
+  name: NISC Japan
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-088
+  name: TISAX
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-089
+  name: NHS DSPT
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: programme
+  readiness_doc: docs/compliance/NHS-DSPT-READINESS.md
+- framework_id: FW-090
+  name: MPA
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-091
+  name: ABS OSPAR
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-092
+  name: GNS (Germany)
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+- framework_id: FW-093
+  name: Pinakes
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+- framework_id: FW-094
+  name: PiTuKri
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+- framework_id: FW-095
+  name: GSMA NESAS / SCAS
+  category: international_assurance
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+- framework_id: FW-100
+  name: DORA
+  category: eu_industry
+  applicability: conditional
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+- framework_id: FW-101
+  name: FINMA
+  category: eu_industry
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+- framework_id: FW-102
+  name: BIO Thema-uitwerking Clouddiensten
+  category: eu_industry
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+- framework_id: FW-103
+  name: UAE IAR
+  category: eu_industry
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+- framework_id: FW-104
+  name: FINTECH sector programmes
+  category: eu_industry
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/FCA-ALIGNMENT.md
+- framework_id: FW-105
+  name: Japan FISC
+  category: eu_industry
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+- framework_id: FW-106
+  name: Japan Medical Information Guidelines
+  category: eu_industry
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+- framework_id: FW-107
+  name: GxP (21 CFR Part 11 / EU Annex 11)
+  category: eu_industry
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+- framework_id: FW-108
+  name: CE+ Framework
+  category: eu_industry
+  applicability: reference
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+- framework_id: FW-110
+  name: GDPR (EU/UK)
+  category: global_privacy
+  applicability: applicable
+  programme_status: programme
+  readiness_doc: docs/compliance/GDPR-ALIGNMENT.md
+- framework_id: FW-111
+  name: EU-U.S. Data Privacy Framework
+  category: global_privacy
+  applicability: conditional
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-112
+  name: CCPA / CPRA
+  category: global_privacy
+  applicability: conditional
+  programme_status: programme
+  readiness_doc: docs/compliance/CCPA-CPRA-ALIGNMENT.md
+- framework_id: FW-113
+  name: Canada PIPEDA
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-114
+  name: Australia Privacy Act
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-115
+  name: Argentina PDPA
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-116
+  name: Brazil LGPD
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: programme
+  readiness_doc: docs/compliance/LGPD-READINESS.md
+- framework_id: FW-117
+  name: Chile privacy law
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-118
+  name: Mexico LFPDPPP
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-119
+  name: Hong Kong PDPO
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-120
+  name: India DPDP Act
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-121
+  name: Indonesia PDP Law
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-122
+  name: Japan APPI
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-123
+  name: Korea PIPA
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-124
+  name: Malaysia PDPA
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-125
+  name: New Zealand Privacy Act
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-126
+  name: Philippines DPA
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-127
+  name: Singapore PDPA
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-128
+  name: Taiwan PDPA
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-129
+  name: Thailand PDPA
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: readiness
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+- framework_id: FW-130
+  name: South Africa POPIA
+  category: global_privacy
+  applicability: not_applicable
+  programme_status: programme
+  readiness_doc: docs/compliance/POPIA-READINESS.md

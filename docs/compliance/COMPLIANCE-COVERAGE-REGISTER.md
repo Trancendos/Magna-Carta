@@ -178,6 +178,17 @@ All items require parties outside documentation-only work:
 
 **Still missing (honest backlog):** Named individuals in REVIEWERS-REGISTER; operational evidence that cookbooks were exercised (drills, tickets); ACT-001–012 external closure; sector-specific runbooks beyond ICO/FOS/PECR starters.
 
+### 8.3 Framework catalogue wave (2026-06-08)
+
+| Milestone | Status |
+|-----------|--------|
+| STANDARDS-AND-FRAMEWORKS-REGISTER (FW-001–FW-130) | ✅ Programme |
+| Readiness groups (ISO, SOC, PCI, NIST, US gov, intl, privacy, industry) | ✅ Programme |
+| frameworks_register.yaml + schema (MON-009) | ✅ Programme |
+| PM-009 / PM-010 programme milestones | ✅ Programme |
+
+**Honest gap:** Layer 3 external validation (certificates, authorisations, signed BAAs, pen test, drills) — see ACT-001–ACT-012.
+
 ---
 
 ## 9. Path to comprehensive ✅ (summary)

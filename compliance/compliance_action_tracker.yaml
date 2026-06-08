@@ -8,7 +8,7 @@
 meta:
   register_version: "1.0.0"
   owner: "ISMS Lead"
-  last_updated: "2026-06-07"
+  last_updated: "2026-06-08"
   review_cycle: "quarterly"
   procedure: "docs/procedures/PROC-CMP-001-Compliance-Review.md"
 
@@ -188,3 +188,15 @@ programme_milestones:
     completed_date: "2026-06-08"
     validation_type: programme
     evidence: "docs/templates/TEMPLATE-FAIRNESS-TEST-REPORT.md, TEMPLATE-INTERNAL-AUDIT-REPORT.md"
+
+  - milestone_id: PM-009
+    title: "Master standards & frameworks catalogue (FW-001–FW-130) + readiness groups"
+    completed_date: "2026-06-08"
+    validation_type: programme
+    evidence: "docs/compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md, docs/compliance/readiness/, compliance/frameworks_register.yaml"
+
+  - milestone_id: PM-010
+    title: "Layer 3 external validation backlog documented (ACT-001–ACT-012)"
+    completed_date: "2026-06-08"
+    validation_type: programme
+    evidence: "compliance/compliance_action_tracker.yaml actions ACT-001–ACT-012; STANDARDS-AND-FRAMEWORKS-REGISTER §10"

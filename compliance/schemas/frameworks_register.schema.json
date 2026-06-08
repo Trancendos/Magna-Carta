@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/frameworks_register.schema.json",
+  "title": "Frameworks Register",
+  "type": "object",
+  "required": ["meta", "frameworks"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" },
+        "procedure": { "type": "string" },
+        "human_readable": { "type": "string" },
+        "framework_count": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "schema": {
+      "type": "object"
+    },
+    "frameworks": {
+      "type": "array",
+      "minItems": 100,
+      "items": {
+        "type": "object",
+        "required": [
+          "framework_id",
+          "name",
+          "category",
+          "applicability",
+          "programme_status"
+        ],
+        "properties": {
+          "framework_id": { "type": "string", "pattern": "^FW-[0-9]{3}$" },
+          "name": { "type": "string", "minLength": 1 },
+          "category": {
+            "type": "string",
+            "enum": [
+              "iso_ms",
+              "soc_assurance",
+              "pci",
+              "nist",
+              "us_government",
+              "international_assurance",
+              "eu_industry",
+              "global_privacy"
+            ]
+          },
+          "applicability": {
+            "type": "string",
+            "enum": [
+              "applicable",
+              "conditional",
+              "reference",
+              "awareness",
+              "not_applicable"
+            ]
+          },
+          "programme_status": {
+            "type": "string",
+            "enum": [
+              "programme",
+              "operational",
+              "partial",
+              "readiness",
+              "not_applicable"
+            ]
+          },
+          "certification_target": { "type": "string" },
+          "readiness_doc": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # Register Schemas
 
-**Version:** 1.1.0  
+**Version:** 1.2.0  
 **Date:** 2026-06-08  
 **Owner:** ISMS Lead  
 **Purpose:** Field definitions for machine-readable YAML registers and human register tables.
@@ -19,6 +19,7 @@
 | `compliance/policy_attestation_register.yaml` | 1.0.0 | HR / ISMS |
 | `compliance/maintenance_monitor.yaml` | 1.0.0 | ISMS Lead |
 | `compliance/health_check_history.yaml` | 1.0.0 | ISMS Lead |
+| `compliance/frameworks_register.yaml` | 1.0.0 | ISMS Lead |
 
 ---
 
@@ -92,7 +93,23 @@ meta:
 
 ---
 
-## 7. maintenance_monitor.yaml
+## 7. frameworks_register.yaml
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `framework_id` | string | yes | `FW-###` stable identifier |
+| `name` | string | yes | Framework or regulation name |
+| `category` | enum | yes | iso_ms, soc_assurance, pci, nist, us_government, international_assurance, eu_industry, global_privacy |
+| `applicability` | enum | yes | applicable, conditional, reference, awareness, not_applicable |
+| `programme_status` | enum | yes | programme, operational, partial, readiness, not_applicable |
+| `certification_target` | string | no | Target date or note (not a certification claim) |
+| `readiness_doc` | string | no | Relative path to mapping or readiness doc |
+
+Human-readable master: [STANDARDS-AND-FRAMEWORKS-REGISTER.md](../compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md)
+
+---
+
+## 8. maintenance_monitor.yaml
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -104,7 +121,7 @@ meta:
 
 ---
 
-## 8. Human register tables (markdown)
+## 9. Human register tables (markdown)
 
 Standard columns used across Magna Carta registers:
 
@@ -120,7 +137,7 @@ Obligation extended schema: [OBLIGATIONS-REGISTER.md](../compliance/OBLIGATIONS-
 
 ---
 
-## 9. Validation
+## 10. Validation
 
 Run schema-adjacent checks:
 
@@ -143,7 +160,8 @@ Machine-readable schemas (Draft 2020-12) live in `compliance/schemas/`:
 | `tranc3_register_bridge.schema.json` | `compliance/tranc3_register_bridge.yaml` |
 | `policy_attestation_register.schema.json` | `compliance/policy_attestation_register.yaml` |
 | `maintenance_monitor.schema.json` | `compliance/maintenance_monitor.yaml` |
+| `frameworks_register.schema.json` | `compliance/frameworks_register.yaml` |
 
-`compliance_health_check.py` performs lightweight structural validation (MON-009) for all eight register/schema pairs without requiring the `jsonschema` package. Procedure coverage (MON-010) ensures every `PROC-*.md` has matching cookbook and hymn sheet.
+`compliance_health_check.py` performs lightweight structural validation (MON-009) for all nine register/schema pairs without requiring the `jsonschema` package. Procedure coverage (MON-010) ensures every `PROC-*.md` has matching cookbook and hymn sheet.
 
 **Next review:** 2026-09-06

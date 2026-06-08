@@ -114,7 +114,7 @@ All artefacts are subject to [COMPLIANCE-MAINTENANCE-PROGRAMME.md](COMPLIANCE-MA
 | Cookbooks | ✅ 12 + INDEX (MON-010) | Operational drills not evidenced 🎯 |
 | Bibles | ✅ 3 + INDEX (gov, privacy, security) | Expand as domains mature |
 | Hymn sheets | ✅ 12 + INDEX (MON-010) | Named signatories in production 🎯 |
-| Schemas | ✅ REGISTER-SCHEMAS + 8 JSON schemas | MON-009 validates all YAML registers |
+| Schemas | ✅ REGISTER-SCHEMAS + 9 JSON schemas | MON-009 validates all YAML registers |
 | Runbooks | ✅ 2 + INDEX | Ombudsman, PECR deployment |
 | Evidence templates | ✅ 7 (incl. fairness + internal audit) | Execution pending ACT-004, ACT-011 🎯 |
 | Standards register | ✅ | Linked from REGULATION-MATRIX |

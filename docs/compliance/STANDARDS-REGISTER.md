@@ -1,10 +1,10 @@
 # Standards Register
 
-**Version:** 1.0.0  
-**Date:** 2026-06-07  
+**Version:** 2.0.0  
+**Date:** 2026-06-08  
 **Owner:** ISMS Lead  
 **Review cycle:** Quarterly (PROC-CMP-001)  
-**Purpose:** Canonical list of external standards, frameworks, and normative references adopted or mapped by Magna Carta.
+**Purpose:** Curated list of standards actively adopted or targeted by Magna Carta (STD-IDs). For the full customer-requested catalogue (112 frameworks, FW-001–FW-130), see [STANDARDS-AND-FRAMEWORKS-REGISTER.md](STANDARDS-AND-FRAMEWORKS-REGISTER.md) and `compliance/frameworks_register.yaml`.
 
 ---
 
@@ -78,6 +78,7 @@ Status symbols match [COMPLIANCE-COVERAGE-REGISTER.md](COMPLIANCE-COVERAGE-REGIS
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-06-08 | v2.0 — cross-reference to master FW catalogue (PM-009) | ISMS Lead |
 | 2026-06-07 | Initial standards register (artifact model wave) | ISMS Lead |
 
 **Next review:** 2026-09-06 (PROC-CMP-001)
