@@ -26,7 +26,7 @@
 | UK GDPR | UK | ✅ | ✅ | ROPA, PIA, users-service DSR | POL-PRI-001, PROC-DSR-001 |
 | DPA 2018 | UK | ✅ | ✅ | Same as UK GDPR | LEGISLATION-REGISTER |
 | EU GDPR | EU | ✅ | ✅ | SCCs for external AI fallback in ROPA | GDPR-ALIGNMENT.md |
-| PECR | UK | ⚠️ | ⚠️ | Cookie/consent if marketing cookies used | Privacy policy |
+| PECR | UK | ⚠️ | ✅ Programme | [PECR-ALIGNMENT.md](PECR-ALIGNMENT.md), POL-PRI-001 | Cookie UI if marketing cookies deployed 🎯 |
 | ePrivacy Directive | EU | ⚠️ | ⚠️ | Same | Privacy policy |
 | CCPA / CPRA | California, US | ⚠️ | 📋 | GDPR controls provide baseline | Extend if CA users material |
 | LGPD | Brazil | ❌ | — | No BR operations planned | — |
@@ -71,9 +71,9 @@
 
 | Standard | Applicability | Status | Evidence |
 |----------|---------------|--------|----------|
-| ITIL 4 | ✅ Internal | ⚠️ | Town Hall ITSM, incident templates |
-| PRINCE2 7 | ✅ Projects | ⚠️ | Stage gates via BoardRoom |
-| ISO 22301 (BCM) | ⚠️ Target | ⚠️ | DR runbook; formal BCP policy added here |
+| ITIL 4 | ✅ Internal | ✅ Programme | Town Hall ITSM, incident templates, PROC-IR-001 |
+| PRINCE2 7 | ✅ Projects | ✅ Programme | Stage gates via BoardRoom, PROC-CHG-002 PIR |
+| ISO 22301 (BCM) | ⚠️ Target | ✅ Programme | POL-OPS-003, PROC-BCP-001, [BCP-RESTORE-TEST-LOG.md](../evidence/BCP-RESTORE-TEST-LOG.md) |
 | ISO 9001 | ❌ | — | — | QA via DEFSTAN 05-086 instead |
 
 ---
@@ -82,7 +82,7 @@
 
 | Area | Applicability | Status | Artefact |
 |------|---------------|--------|----------|
-| UK Companies Act | ✅ | ⚠️ | Financial oversight framework (Town Hall) |
+| UK Companies Act | ✅ | ✅ Programme | [COMPANIES-ACT-ALIGNMENT.md](COMPANIES-ACT-ALIGNMENT.md), BoardRoom |
 | FCA Handbook (PRIN, COBS 4, PS21/3) | ✅ Supplier / conduct | ✅ Programme | [FCA-ALIGNMENT.md](FCA-ALIGNMENT.md), MC-009 |
 | IP / copyright | ✅ | ✅ | Proprietary code; OSS licence audit |
 | Contract law (SLAs) | ✅ | ⚠️ | Customer agreements TBD |

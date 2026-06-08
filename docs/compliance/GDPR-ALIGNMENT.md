@@ -60,7 +60,7 @@
 | UK-only hosting | No transfer | ✅ Default self-hosted |
 | EU hosting | Adequacy / UK extension | ✅ If EU region selected |
 | US AI fallback (if enabled) | SCCs + transfer impact assessment | ⚠️ Document in ROPA before enable |
-| Sub-processors | DPA + Article 28 terms | ⚠️ POL-SUP-001 |
+| Sub-processors | DPA + Article 28 terms | ✅ Programme — [SUPPLIER-DPA-REGISTER.md](SUPPLIER-DPA-REGISTER.md); signed DPAs 🎯 |
 
 **Rule:** No transfer to inadequate country without documented safeguards and DPO approval.
 
@@ -86,7 +86,7 @@ Linked procedure: [PROC-IR-001](../procedures/PROC-IR-001-Incident-Response.md)
 |------|--------|----------------|
 | Controller | Trancendos Ltd (for platform SaaS) | Determines purposes; DPO appointed |
 | Processor | Trancendos (for customer data in multi-tenant) | Processes per customer instructions |
-| Sub-processor | Documented suppliers only | Listed in supplier register |
+| Sub-processor | Documented suppliers only | [SUPPLIER-DPA-REGISTER.md](SUPPLIER-DPA-REGISTER.md), `compliance/supplier_dpa_register.yaml` |
 
 Customer self-hosted deployments: Customer is controller; Trancendos provides software only.
 

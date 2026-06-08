@@ -28,7 +28,7 @@
 |---------|--------|----------|
 | Integrity and ethical values | ⚠️ | Code of conduct, Magna Carta foundation |
 | Board oversight | ⚠️ | BoardRoom governance |
-| Organisational structure | ⚠️ | RACI in FRAMEWORK.md |
+| Organisational structure | ✅ Programme | [RACI-MATRIX.md](../governance/RACI-MATRIX.md), FRAMEWORK §9 |
 | Competence | ⚠️ | Training planned (Academy) |
 | Accountability | ✅ | DEFSTAN register ownership |
 
@@ -46,8 +46,8 @@
 | Control | Status | Evidence |
 |---------|--------|----------|
 | Vulnerability management | ✅ | pip-audit, security-scan CI |
-| Incident detection | ⚠️ | Observatory; formal IR planned |
-| Incident response | ⚠️ | PROC-IR-001 (this repo) |
+| Incident detection | ✅ Programme | Observatory, monitoring-service, audit ledger |
+| Incident response | ✅ Programme | POL-OPS-001, PROC-IR-001 |
 | Change management | ✅ | CAB, change-request-process |
 
 ### CC8 — Change management
@@ -62,9 +62,9 @@
 
 | Control | Status | Gap |
 |---------|--------|-----|
-| Vendor inventory | ⚠️ | ZERO_COST_VENDOR_MATRIX |
-| Vendor risk assessment | ⚠️ | POL-SUP-001 |
-| Vendor monitoring | ⚠️ | RSS changelog monitoring planned |
+| Vendor inventory | ✅ Programme | [SUPPLIER-DPA-REGISTER.md](SUPPLIER-DPA-REGISTER.md), `supplier_dpa_register.yaml` |
+| Vendor risk assessment | ✅ Programme | POL-SUP-001, supplier register |
+| Vendor monitoring | ⚠️ | Annual review cycle documented; automated RSS monitoring planned |
 
 ---
 

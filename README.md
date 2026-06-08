@@ -4,16 +4,29 @@ The **Trancendos Magna Carta** is the governance and compliance foundation for t
 
 This repository is the **canonical documentation home** for Magna Carta. Runtime enforcement hooks live in [Tranc3](https://github.com/Trancendos/Tranc3) (`src/compliance/magna_carta.py`).
 
-## Status
+## Status legend
+
+| Symbol | Meaning |
+|--------|---------|
+| ✅ **Programme implemented** | Policy, procedure, register, or alignment artefact exists in this repo and is maintained |
+| 🎯 **External validation pending** | Certification, fee payment, signed third-party contract, or operational evidence run not yet complete |
+
+## Programme status
 
 | Artifact | Version | Status |
 |----------|---------|--------|
-| Foundation Framework | 1.0.0 | Active |
-| Compliance Blueprint | 1.0.0 | Active |
-| Architecture Blueprint | 1.0.0 | Active |
-| Policy Library | 1.0.0 | Active (baseline set) |
-| Procedure Library | 1.0.0 | Active (baseline set) |
-| Tranc3 Integration Config | 1.0.0 | Ready for `MAGNA_CARTA_ENABLED=true` |
+| Foundation Framework | 1.0.0 | ✅ Active |
+| Compliance Blueprint | 1.0.0 | ✅ Active |
+| Architecture Blueprint | 1.0.0 | ✅ Active |
+| Policy Library | 1.0.0 | ✅ Active (9 policies) |
+| Procedure Library | 1.0.0 | ✅ Active (9 procedures) |
+| Governance artefacts | 1.0.0 | ✅ Committee charter, RACI matrix |
+| Supplier DPA register | 1.0.0 | ✅ Programme (signed DPAs 🎯) |
+| Tranc3 Integration Config | 1.0.0 | ✅ Ready for `MAGNA_CARTA_ENABLED=true` |
+| ISO 27001 certification | — | 🎯 SOA programme complete; external audit pending |
+| SOC 2 Type II | — | 🎯 Controls mapped; external audit pending |
+| ICO registration (fee paid) | — | 🎯 Programme documented; live number pending |
+| HIPAA Tier C attestation | — | 🎯 BAA programme; per-customer BAAs pending |
 
 **Platform baseline:** Tranc3 v2.1.0-rc1 (as of 2026-05-22)  
 **Owner:** Trancendos Platform Engineering  
@@ -21,33 +34,83 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 
 ## Quick navigation
 
+### Core framework
+
 | Document | Purpose |
 |----------|---------|
 | [FRAMEWORK.md](FRAMEWORK.md) | Master blueprint — how all pieces fit together |
 | [docs/00-EXECUTIVE-SUMMARY.md](docs/00-EXECUTIVE-SUMMARY.md) | Executive overview and certification roadmap |
 | [docs/01-MAGNACARTA-FOUNDATION.md](docs/01-MAGNACARTA-FOUNDATION.md) | Digital rights, governance principles, Town Hall alignment |
+
+### Compliance & regulation
+
+| Document | Purpose |
+|----------|---------|
 | [docs/compliance/REGULATION-MATRIX.md](docs/compliance/REGULATION-MATRIX.md) | All regulations mapped to Tranc3 controls |
 | [docs/compliance/COMPLIANCE-BLUEPRINT.md](docs/compliance/COMPLIANCE-BLUEPRINT.md) | End-to-end compliance operating model |
+| [docs/compliance/OBLIGATIONS-REGISTER.md](docs/compliance/OBLIGATIONS-REGISTER.md) | Regulatory and contractual obligations register |
+| [docs/compliance/LEGISLATION-REGISTER.md](docs/compliance/LEGISLATION-REGISTER.md) | UK/EU legislation applicability |
 | [docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md](docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md) | Third-party GenAI/compliance frameworks → Magna Carta |
 | [docs/compliance/GENAI-MATURITY-ASSESSMENT.md](docs/compliance/GENAI-MATURITY-ASSESSMENT.md) | GenAI governance maturity self-assessment |
-| [docs/compliance/OBLIGATIONS-REGISTER.md](docs/compliance/OBLIGATIONS-REGISTER.md) | Regulatory and contractual obligations register |
+
+### Framework alignments
+
+| Document | Purpose |
+|----------|---------|
+| [docs/compliance/ISO27001-ALIGNMENT.md](docs/compliance/ISO27001-ALIGNMENT.md) | ISO 27001:2022 control mapping |
+| [docs/compliance/SOC2-ALIGNMENT.md](docs/compliance/SOC2-ALIGNMENT.md) | SOC 2 Trust Services Criteria |
+| [docs/compliance/GDPR-ALIGNMENT.md](docs/compliance/GDPR-ALIGNMENT.md) | UK GDPR / EU GDPR |
 | [docs/compliance/HIPAA-ALIGNMENT.md](docs/compliance/HIPAA-ALIGNMENT.md) | US PHI boundary, BAA tiers, MC-008 / MC-RULE-009 |
 | [docs/compliance/FCA-ALIGNMENT.md](docs/compliance/FCA-ALIGNMENT.md) | UK financial conduct (supplier perimeter), MC-009 |
+| [docs/compliance/PECR-ALIGNMENT.md](docs/compliance/PECR-ALIGNMENT.md) | Privacy and Electronic Communications Regulations |
+| [docs/compliance/COMPANIES-ACT-ALIGNMENT.md](docs/compliance/COMPANIES-ACT-ALIGNMENT.md) | Companies Act 2006 governance duties |
+| [docs/compliance/ICO-REGISTRATION.md](docs/compliance/ICO-REGISTRATION.md) | ICO fee tier and registration programme |
+| [docs/compliance/SUPPLIER-DPA-REGISTER.md](docs/compliance/SUPPLIER-DPA-REGISTER.md) | Sub-processor DPA/BAA register (human-readable) |
+| [docs/compliance/AI-GOVERNANCE.md](docs/compliance/AI-GOVERNANCE.md) | NIST AI RMF / EU AI Act alignment |
+| [docs/compliance/DEFSTAN-ALIGNMENT.md](docs/compliance/DEFSTAN-ALIGNMENT.md) | DEF STAN 05-138 cyber security |
+
+### Governance & evidence
+
+| Document | Purpose |
+|----------|---------|
+| [docs/governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md](docs/governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md) | AI Governance Committee terms of reference |
+| [docs/governance/RACI-MATRIX.md](docs/governance/RACI-MATRIX.md) | Control ownership RACI |
+| [docs/evidence/BCP-RESTORE-TEST-LOG.md](docs/evidence/BCP-RESTORE-TEST-LOG.md) | BCP restore test evidence log |
+
+### Architecture
+
+| Document | Purpose |
+|----------|---------|
 | [docs/architecture/BLUEPRINT.md](docs/architecture/BLUEPRINT.md) | Platform architecture blueprint |
 | [docs/architecture/AS-BUILT-ARCHITECTURE.md](docs/architecture/AS-BUILT-ARCHITECTURE.md) | Canonical as-built architecture (auditor-facing) |
 | [docs/architecture/CONTROL-TO-COMPONENT-MAP.md](docs/architecture/CONTROL-TO-COMPONENT-MAP.md) | Control traceability to code and workers |
+
+### Policies & procedures
+
+| Document | Purpose |
+|----------|---------|
+| [docs/policies/INDEX.md](docs/policies/INDEX.md) | Policy library index (9 policies) |
+| [docs/procedures/INDEX.md](docs/procedures/INDEX.md) | Procedure library index (9 procedures) |
+
+### Runtime configuration
+
+| Document | Purpose |
+|----------|---------|
 | [config/magna_carta_config.json](config/magna_carta_config.json) | Runtime rule configuration for Tranc3 |
+| [compliance/magna_carta_register.yaml](compliance/magna_carta_register.yaml) | Magna Carta compliance register (MC-001–MC-009) |
+| [compliance/supplier_dpa_register.yaml](compliance/supplier_dpa_register.yaml) | Machine-readable supplier DPA register |
 
 ## Directory structure
 
 ```
 magna-carta/
-├── FRAMEWORK.md                 # Master blueprint
-├── README.md                    # This file
+├── FRAMEWORK.md
+├── README.md
 ├── config/
 │   └── magna_carta_config.json
 ├── compliance/
-│   └── magna_carta_register.yaml
+│   ├── magna_carta_register.yaml
+│   └── supplier_dpa_register.yaml
 └── docs/
     ├── 00-EXECUTIVE-SUMMARY.md
     ├── 01-MAGNACARTA-FOUNDATION.md
@@ -59,32 +122,33 @@ magna-carta/
     │   ├── REGULATION-MATRIX.md
     │   ├── COMPLIANCE-BLUEPRINT.md
     │   ├── LEGISLATION-REGISTER.md
+    │   ├── OBLIGATIONS-REGISTER.md
     │   ├── ISO27001-ALIGNMENT.md
     │   ├── SOC2-ALIGNMENT.md
     │   ├── GDPR-ALIGNMENT.md
+    │   ├── HIPAA-ALIGNMENT.md
+    │   ├── FCA-ALIGNMENT.md
+    │   ├── PECR-ALIGNMENT.md
+    │   ├── COMPANIES-ACT-ALIGNMENT.md
+    │   ├── ICO-REGISTRATION.md
+    │   ├── SUPPLIER-DPA-REGISTER.md
     │   ├── DEFSTAN-ALIGNMENT.md
     │   ├── AI-GOVERNANCE.md
-    │   ├── HIPAA-ALIGNMENT.md
-    │   └── FCA-ALIGNMENT.md
+    │   ├── GENAI-MATURITY-ASSESSMENT.md
+    │   └── EXTERNAL-FRAMEWORK-MAPPING.md
+    ├── governance/
+    │   ├── AI-GOVERNANCE-COMMITTEE-CHARTER.md
+    │   └── RACI-MATRIX.md
+    ├── engineering/
+    │   └── TRANC3-HIPAA-COPY-REMEDIATION.md
+    ├── evidence/
+    │   └── BCP-RESTORE-TEST-LOG.md
     ├── policies/
     │   ├── INDEX.md
-    │   ├── information-security-policy.md
-    │   ├── acceptable-use-policy.md
-    │   ├── data-protection-privacy-policy.md
-    │   ├── incident-response-policy.md
-    │   ├── change-management-policy.md
-    │   ├── business-continuity-policy.md
-    │   ├── supplier-management-policy.md
-    │   └── ai-ethics-policy.md
+    │   └── POL-*.md (9 policies)
     └── procedures/
         ├── INDEX.md
-        ├── incident-response-procedure.md
-        ├── change-request-procedure.md
-        ├── access-provisioning-procedure.md
-        ├── data-subject-request-procedure.md
-        ├── vulnerability-management-procedure.md
-        ├── backup-restore-procedure.md
-        └── compliance-review-procedure.md
+        └── PROC-*.md (9 procedures)
 ```
 
 ## Relationship to Tranc3
@@ -96,6 +160,8 @@ magna-carta/
 | `magna_carta_register.yaml` | Extends `compliance/register.yaml` |
 | Governance narrative | Town Hall API (`/townhall/*`) |
 | Architecture blueprint | `ARCHITECTURE_THREAT_MODEL.md`, workers |
+
+**Document precedence:** Legislation → certification → Magna Carta policies → Tranc3 `register.yaml` → procedures → aspirational architecture.
 
 ## Enabling in Tranc3
 

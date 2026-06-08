@@ -17,6 +17,8 @@
 | [PROC-VUL-001](PROC-VUL-001-Vulnerability-Management.md) | Vulnerability Management | POL-SEC-001 | Security Ops |
 | [PROC-BCP-001](PROC-BCP-001-Backup-Restore.md) | Backup & Restore | POL-OPS-003 | Operations |
 | [PROC-CMP-001](PROC-CMP-001-Compliance-Review.md) | Compliance Review | All | ISMS Lead |
+| [PROC-AI-002](PROC-AI-002-Fairness-Bias-Testing.md) | Fairness & Bias Testing | POL-AI-001 | AI Lead |
+| [PROC-CHG-002](PROC-CHG-002-Post-Implementation-Review.md) | Post-Implementation Review | POL-OPS-002 | CAB |
 
 ---
 
@@ -31,6 +33,8 @@
 | PROC-VUL-001 | CVE alert, scan finding, pen test report |
 | PROC-BCP-001 | Scheduled backup; disaster declaration |
 | PROC-CMP-001 | Quarterly calendar |
+| PROC-AI-002 | Model change; annual fairness cycle; high-risk AI feature launch |
+| PROC-CHG-002 | Major production change closure (CAB) |
 
 ---
 

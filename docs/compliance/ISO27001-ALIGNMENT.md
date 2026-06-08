@@ -22,14 +22,17 @@
 | Status | Count | Key gaps |
 |--------|-------|----------|
 | ✅ Implemented | 12 | — |
-| ⚠️ Partial / Planned | 22 | AUP, BCP, RACI, supplier DPAs, incident IR |
+| ⚠️ Partial / Planned | 22 | HR screening/training; MDM/DLP; external audit 🎯 |
 | ❌ N/A | 3 | Physical asset return (cloud) |
 
-**Magna Carta additions addressing gaps:**
+**Magna Carta programme artefacts (Clause 5 gaps addressed in documentation):**
 - POL-SEC-002 Acceptable Use Policy
-- POL-OPS-003 Business Continuity Policy
-- POL-SUP-001 Supplier Management Policy
+- POL-OPS-003 Business Continuity Policy; PROC-BCP-001; [BCP-RESTORE-TEST-LOG.md](../evidence/BCP-RESTORE-TEST-LOG.md)
+- POL-SUP-001 Supplier Management; [SUPPLIER-DPA-REGISTER.md](SUPPLIER-DPA-REGISTER.md)
 - PROC-IR-001 Incident Response Procedure
+- [RACI-MATRIX.md](../governance/RACI-MATRIX.md); PROC-CHG-002 Post-Implementation Review
+
+**Certification note:** Programme ✅ ≠ ISO 27001 certificate 🎯 Q2 2027.
 
 ### Clause 6 — People (8 controls)
 
@@ -74,7 +77,7 @@
 | Internal audit programme | ⚠️ Planned Q4 2026 |
 | Management review | ⚠️ Planned annual |
 | Corrective action process | ⚠️ Via CAB + IR |
-| Documented operating procedures | ⚠️ Procedures in this repo |
+| Documented operating procedures | ✅ Nine procedures in this repo |
 | External certification audit | 🎯 Q2 2027 |
 
 ---

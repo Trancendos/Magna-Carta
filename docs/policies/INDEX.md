@@ -18,7 +18,7 @@
 | [POL-OPS-002](POL-OPS-002-Change-Management.md) | Change Management | CAB Chair | Approved (framework) | 2027-06-07 |
 | [POL-OPS-003](POL-OPS-003-Business-Continuity.md) | Business Continuity | Operations | Approved (framework) | 2027-06-07 |
 | [POL-SUP-001](POL-SUP-001-Supplier-Management.md) | Supplier Management | Procurement / ISMS | Approved (framework) | 2027-06-07 |
-| [POL-AI-001](POL-AI-001-AI-Ethics-Governance.md) | AI Ethics & Governance | AI Lead | Draft — board approval pending | 2026-12-07 |
+| [POL-AI-001](POL-AI-001-AI-Ethics-Governance.md) | AI Ethics & Governance | AI Lead | Approved (framework) | 2026-12-07 |
 
 ---
 

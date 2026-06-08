@@ -34,8 +34,15 @@ Before onboarding:
 
 ## 6. Register
 
-Maintain supplier register in Town Hall with risk tier, DPA status, and review date.
+Maintain the canonical supplier and DPA register in:
+
+- [compliance/supplier_dpa_register.yaml](../../compliance/supplier_dpa_register.yaml) (machine-readable)
+- [SUPPLIER-DPA-REGISTER.md](../compliance/SUPPLIER-DPA-REGISTER.md) (auditor-facing)
+
+Each record includes risk tier, DPA status, sub-processor disclosure, and annual review date. Town Hall may mirror summary fields for operations.
+
+**External validation:** Individual signed DPAs (SUP-003–005 templates) remain 🎯 until countersigned.
 
 ## 7. Related documents
 
-POL-SEC-001, POL-PRI-001, GDPR-ALIGNMENT.md
+POL-SEC-001, POL-PRI-001, GDPR-ALIGNMENT.md, SUPPLIER-DPA-REGISTER.md

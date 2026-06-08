@@ -12,9 +12,10 @@
 
 The **Magna Carta Framework** is Trancendos' unified governance, compliance, and architecture documentation suite for the Tranc3 AI platform. It consolidates:
 
-- **8 enterprise policies** covering security, privacy, operations, suppliers, and AI ethics
-- **7 operational procedures** with clear triggers, owners, and evidence requirements
-- **8 regulatory alignment documents** (ISO 27001, SOC 2, GDPR, DEFSTAN, AI governance, and more)
+- **8 enterprise policies** covering security, privacy, operations, suppliers, and AI ethics (POL-AI-001 BoardRoom-approved)
+- **9 operational procedures** with clear triggers, owners, and evidence requirements
+- **14+ regulatory alignment documents** (ISO 27001, SOC 2, GDPR, DEFSTAN, AI, HIPAA, FCA, PECR, Companies Act, and more)
+- **Governance artefacts** — AI Governance Committee charter, RACI matrix, supplier DPA register, BCP restore test log
 - **3 architecture blueprints** including an auditor-facing as-built reference
 - **Runtime configuration** for Tranc3 compliance enforcement
 
@@ -34,10 +35,11 @@ Tranc3 already implements strong technical controls (Zero Trust IAM, encrypted v
 |------|------------|
 | Technical security controls | **Strong** — implemented in code with automated tests |
 | DEFSTAN traceability | **Strong** — 53 requirements, machine-readable register, CI gate |
-| Privacy (GDPR) | **Good** — ROPA, PIA, DSR endpoints; DPA register incomplete |
-| ISO 27001 | **Draft** — SOA exists; org controls (AUP, BCP, RACI) partially planned |
-| SOC 2 | **Draft** — TSC mapping and evidence schedule; 6-month window planned |
-| Policy library | **Baseline** — core policies authored in this framework |
+| Privacy (GDPR) | **Good** — ROPA, PIA, DSR; supplier DPA register programme-complete; signed DPAs 🎯 |
+| ISO 27001 | **Draft** — SOA exists; org programme docs complete; certification audit 🎯 Q2 2027 |
+| SOC 2 | **Draft** — TSC mapping and evidence schedule; observation period 🎯 Q1 2027 |
+| Policy library | **Baseline complete** — eight policies approved at framework level |
+| HIPAA / FCA / PECR | **Programme** — alignment docs, MC-008/009, obligations register |
 | Architecture clarity | **Improved** — as-built doc resolves multi-version architecture drift |
 | External certification | **Not yet** — targets Q1–Q2 2027 |
 
@@ -55,16 +57,16 @@ Tranc3 already implements strong technical controls (Zero Trust IAM, encrypted v
 | # | Risk | Mitigation |
 |---|------|------------|
 | 1 | Architecture doc inconsistency confuses auditors | Use `AS-BUILT-ARCHITECTURE.md` as canonical |
-| 2 | HIPAA marketing claims without HIPAA programme | Remove or build formal HIPAA boundary |
-| 3 | Incomplete supplier DPAs | Supplier management policy + DPA register |
-| 4 | BCP/IR procedures not exercised | Quarterly DR drill per `PROC-BCP-001` |
-| 5 | AI fairness metrics unmeasured | AI governance procedure + bias testing schedule |
+| 2 | HIPAA marketing over-claim in product copy | Tier A/B wording enforced per HIPAA-ALIGNMENT §10 |
+| 3 | Unsigned supplier DPAs | Register live; countersign SUP-003–005 templates |
+| 4 | BCP not exercised at scale | Baseline restore test logged; expand quarterly drills |
+| 5 | AI fairness metrics unmeasured | PROC-AI-002 defined; first run Q3 2026 |
 
 ## Immediate actions
 
 1. Enable Magna Carta in staging: `MAGNA_CARTA_ENABLED=true`
 2. Import `magna_carta_register.yaml` into Tranc3 compliance checker
-3. Assign ISMS Lead and DPO roles formally (RACI in FRAMEWORK.md)
+3. Operate per [RACI-MATRIX.md](governance/RACI-MATRIX.md) and AI Governance Committee charter
 4. Schedule first quarterly Magna Carta review (2026-09-06)
 5. Begin SOC 2 evidence collection via `scripts/soc2_evidence_collector.py`
 

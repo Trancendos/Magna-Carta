@@ -129,7 +129,7 @@ Identify → Implement → Verify → Evidence → Review → Improve
 | DEFSTAN CI gate ≥70% | Active | ✅ Enforced in Forgejo |
 | External security review | Q4 2026 | ⚠️ Planned |
 | SOC 2 Type II report | Q1 2027 | ⚠️ Evidence collection active |
-| ISO 27001:2022 certification | Q2 2027 | ⚠️ SOA draft complete |
+| ISO 27001:2022 certification | Q2 2027 | ✅ Programme (SOA); 🎯 external audit |
 | ISO 42001 (AI MS) | TBD | ✅ Programme baseline (GENAI-MATURITY §10) |
 
 ### 5.3 Regulation coverage summary
@@ -163,6 +163,15 @@ Third-party GenAI and compliance methodologies are mapped to Magna Carta — not
 | [docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md](docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md) | Connor Group five-domain GenAI framework → Magna Carta layers |
 | [docs/compliance/GENAI-MATURITY-ASSESSMENT.md](docs/compliance/GENAI-MATURITY-ASSESSMENT.md) | Nascent → Leading maturity self-assessment with Tranc3 baseline |
 | [docs/compliance/OBLIGATIONS-REGISTER.md](docs/compliance/OBLIGATIONS-REGISTER.md) | Regulatory obligations register; monitoring vs audit distinction |
+| [docs/compliance/HIPAA-ALIGNMENT.md](docs/compliance/HIPAA-ALIGNMENT.md) | US PHI boundary, BAA tiers, MC-008 / MC-RULE-009 |
+| [docs/compliance/FCA-ALIGNMENT.md](docs/compliance/FCA-ALIGNMENT.md) | UK financial conduct supplier perimeter, MC-009 |
+| [docs/compliance/PECR-ALIGNMENT.md](docs/compliance/PECR-ALIGNMENT.md) | UK electronic marketing and cookies programme |
+| [docs/compliance/COMPANIES-ACT-ALIGNMENT.md](docs/compliance/COMPANIES-ACT-ALIGNMENT.md) | Corporate governance alignment |
+| [docs/compliance/SUPPLIER-DPA-REGISTER.md](docs/compliance/SUPPLIER-DPA-REGISTER.md) | Processor DPA register (Art. 28) |
+| [docs/compliance/ICO-REGISTRATION.md](docs/compliance/ICO-REGISTRATION.md) | ICO fee tier and registration programme |
+| [docs/governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md](docs/governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md) | AI governance committee charter |
+| [docs/governance/RACI-MATRIX.md](docs/governance/RACI-MATRIX.md) | Extended RACI by activity |
+| [docs/evidence/BCP-RESTORE-TEST-LOG.md](docs/evidence/BCP-RESTORE-TEST-LOG.md) | BCP restore test evidence log |
 
 Attribution: adapt concepts and cite sources; do not reproduce copyrighted framework text in customer packs.
 
@@ -226,6 +235,8 @@ Index: [docs/policies/INDEX.md](docs/policies/INDEX.md)
 | PROC-VUL-001 | Vulnerability Management | POL-SEC-001 |
 | PROC-BCP-001 | Backup & Restore | POL-OPS-003 |
 | PROC-CMP-001 | Compliance Review | All |
+| PROC-AI-002 | Fairness & Bias Testing | POL-AI-001 |
+| PROC-CHG-002 | Post-Implementation Review | POL-OPS-002 |
 
 Index: [docs/procedures/INDEX.md](docs/procedures/INDEX.md)
 
@@ -254,6 +265,8 @@ Configuration: [config/magna_carta_config.json](config/magna_carta_config.json)
 ---
 
 ## 9. Roles and responsibilities (RACI summary)
+
+Summary matrix below; full activity-level RACI: [docs/governance/RACI-MATRIX.md](docs/governance/RACI-MATRIX.md). AI committee charter: [docs/governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md](docs/governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md).
 
 | Activity | ISMS Lead | Engineering | DPO | CAB | Executive |
 |----------|-----------|-------------|-----|-----|-----------|

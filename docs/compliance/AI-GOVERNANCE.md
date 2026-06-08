@@ -90,7 +90,7 @@ Design → Register → Risk classify → Deploy → Monitor → Incident → Re
 |----------|--------|----------|
 | **GOVERN** | ✅ | AI policy, registry, incident log, Magna Carta MC-001–009 |
 | **MAP** | ✅ Programme | Risk tiers, EU AI Act §3 mapping, model cards, prohibited-use blocklist |
-| **MEASURE** | ⚠️ Operational | Fairness framework defined; **bias metrics unmeasured** — Q3 2026 target |
+| **MEASURE** | ✅ Programme | [PROC-AI-002](../procedures/PROC-AI-002-Fairness-Bias-Testing.md) defined; **first measurement run** 🎯 Q3 2026 |
 | **MANAGE** | ✅ Programme | Incident API, PROC-IR-001, PROC-CMP-001, action register §9 |
 
 ---
@@ -129,8 +129,8 @@ See [config/magna_carta_config.json](../../config/magna_carta_config.json).
 
 | Action | Priority | Owner | Target |
 |--------|----------|-------|--------|
-| Run bias measurement suite | High | AI Engineering | Q3 2026 |
-| Board-approve POL-AI-001 | High | Executive | Q3 2026 |
+| Execute first PROC-AI-002 bias measurement run | High | AI Engineering | Q3 2026 |
+| ~~Board-approve POL-AI-001~~ | — | Executive | ✅ 2026-06-07 |
 | Complete Annex III assessment | Medium | DPO + AI Lead | Q4 2026 |
 | ISO 42001 gap assessment | Medium | ISMS Lead | Q1 2027 |
 | Formal improvement process (ISO 42001 §10) | Medium | AI Lead | Q4 2026 |

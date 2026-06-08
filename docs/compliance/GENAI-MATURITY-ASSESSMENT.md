@@ -50,9 +50,9 @@ This assessment helps Trancendos **measure GenAI governance maturity** across fi
 | Stakeholder engagement | BoardRoom, CAB; `tranc3-repo/config/townhall/frameworks.yaml` | 2 | 3 |
 | Performance monitoring (AI KPIs) | `GET /compliance/ai/model-cards`; Observatory / monitoring-service | 2 | 3 |
 | Contingency / scenario planning | [PROC-BCP-001](../procedures/PROC-BCP-001-Backup-Restore.md), DR runbook | 2 | 3 |
-| Policy development (AI) | [POL-AI-001](../policies/POL-AI-001-AI-Ethics-Governance.md), [AI-GOVERNANCE.md](AI-GOVERNANCE.md) | 3 | 4 |
-| Roles & responsibilities | FRAMEWORK §9, [COMPLIANCE-BLUEPRINT.md](COMPLIANCE-BLUEPRINT.md) §3 | 2 | 3 |
-| AI governance committee | Formal charter (Q3 2026 target) | 1 | 3 |
+| Policy development (AI) | [POL-AI-001](../policies/POL-AI-001-AI-Ethics-Governance.md) (approved), [AI-GOVERNANCE.md](AI-GOVERNANCE.md) | 4 | 4 |
+| Roles & responsibilities | [RACI-MATRIX.md](../governance/RACI-MATRIX.md), FRAMEWORK §9 | 3 | 3 |
+| AI governance committee | [AI-GOVERNANCE-COMMITTEE-CHARTER.md](../governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md) | 3 | 3 |
 | AI use-case inventory | `tranc3-repo/src/compliance/ai_governance.py` model registry | 2 | 3 |
 | Policy review cycle | `docs/policies/INDEX.md` | 2 | 3 |
 | Ethics framework | POL-AI-001 + AI-GOVERNANCE §8; Connor/Google mapping §11 | 3 | 4 |
@@ -164,12 +164,12 @@ This assessment helps Trancendos **measure GenAI governance maturity** across fi
 
 | Priority | Action | Domain | Owner | Target |
 |----------|--------|--------|-------|--------|
-| P1 | Board-approve POL-AI-001 | 1 | Executive | Q3 2026 |
-| P1 | Implement bias measurement suite | 4 | AI Engineering | Q3 2026 |
-| P1 | Formal AI governance committee charter | 1 | ISMS + AI Lead | Q3 2026 |
+| P1 | Execute first PROC-AI-002 bias measurement run | 4 | AI Engineering | Q3 2026 |
+| ~~P1 Board-approve POL-AI-001~~ | — | Executive | ✅ 2026-06-07 |
+| ~~P1 Formal AI governance committee charter~~ | — | ISMS + AI Lead | ✅ 2026-06-07 |
 | P2 | Central GenAI use-case inventory | 1 | AI Lead | Q4 2026 |
 | P2 | Employee AI literacy programme | 4 | HR + AI Lead | Q4 2026 |
-| P2 | Post-implementation review template | 3 | CAB | Q4 2026 |
+| P2 | Operationalise PROC-CHG-002 on all major changes | 3 | CAB | Q4 2026 |
 | P2 | Obligations register automation | 2 | DPO | Q4 2026 |
 | P3 | ESG note on model cards | 4 | Platform | 2027 |
 
@@ -188,17 +188,17 @@ Sync with [AI-GOVERNANCE.md](AI-GOVERNANCE.md) §9 action register.
 
 | Domain | Score | Notes |
 |--------|-------|-------|
-| 1 — Strategic alignment | 2.5 | Programme mapped (Connor/Google); POL-AI-001 drafted; committee charter still absent |
-| 2 — Data & compliance | 2.8 | OBLIGATIONS + HIPAA/FCA programmes complete; DPAs still partial |
-| 3 — Operational & technology | 2.5 | Magna Carta + DEFSTAN gates active; post-impl review informal |
+| 1 — Strategic alignment | 2.8 | POL-AI-001 approved; AI committee charter and RACI matrix in place |
+| 2 — Data & compliance | 3.0 | OBLIGATIONS + HIPAA/FCA/PECR programmes; supplier DPA register live; signed DPAs 🎯 |
+| 3 — Operational & technology | 2.7 | Magna Carta + DEFSTAN gates; PROC-CHG-002 PIR; BCP restore test logged |
 | 4 — Human, ethical & social | 2.0 | Bias framework defined; **measurement not yet run** |
 | 5 — Transparency & improvement | 2.7 | Model cards, audit trail, PROC-CMP-001 in place |
-| **Overall** | **2.5** | Meets 2026 floor (≥2.0); below 3.0 target — see §9 actions |
+| **Overall** | **2.7** | Meets 2026 floor (≥2.0); approaching 3.0 target — see §9 actions |
 
 **Top 3 gaps:**
-1. Bias/fairness measurement suite not executed (Domain 4 / NIST MEASURE).
-2. AI governance committee charter not formalised (Domain 1).
-3. Processor DPA register incomplete (Domain 2 / OBL-003, OBL-081).
+1. Bias/fairness measurement suite not yet executed (Domain 4 / NIST MEASURE — PROC-AI-002).
+2. Individual supplier signed DPAs outstanding (Domain 2 — templates issued).
+3. ICO registration fee payment and live registration number (OBL-113).
 
 **Actions created:** Synced to [AI-GOVERNANCE.md](AI-GOVERNANCE.md) §9 and [COMPLIANCE-BLUEPRINT.md](COMPLIANCE-BLUEPRINT.md) §8.
 

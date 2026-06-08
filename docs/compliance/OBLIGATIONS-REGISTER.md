@@ -66,7 +66,7 @@ Identify → Map to control → Implement → Monitor → Evidence → Review �
 |--------|--------|------------|------------|----------|-------|--------|
 | OBL-001 | UK GDPR Art. 5 | Lawfulness, fairness, transparency | POL-PRI-001, ROPA | ROPA doc, privacy notice | DPO | ✅ |
 | OBL-002 | UK GDPR Art. 25 | Privacy by design | Architecture, Ice Box | AS-BUILT, DPIA templates | DPO | ✅ |
-| OBL-003 | UK GDPR Art. 28 | Processor agreements | POL-SUP-001 | DPA register | DPO | ⚠️ |
+| OBL-003 | UK GDPR Art. 28 | Processor agreements | POL-SUP-001, SUPPLIER-DPA-REGISTER | `supplier_dpa_register.yaml` | DPO | ✅ |
 | OBL-004 | UK GDPR Art. 30 | Records of processing | ROPA | ROPA in users-service area | DPO | ✅ |
 | OBL-005 | UK GDPR Art. 32 | Security of processing | POL-SEC-001, DEFSTAN | register.yaml, pen test | CISO | ✅ |
 | OBL-006 | UK GDPR Art. 33–34 | Breach notification | PROC-IR-001 | Incident log template | DPO | ✅ |
@@ -101,15 +101,15 @@ Identify → Map to control → Implement → Monitor → Evidence → Review �
 |--------|--------|------------|------------|----------|-------|--------|
 | OBL-060 | Internal — Magna Carta | Quarterly compliance review | PROC-CMP-001 | Meeting minutes | ISMS | ✅ |
 | OBL-061 | Internal — CAB | Controlled production change | PROC-CHG-001 | Change records | CAB | ✅ |
-| OBL-062 | Internal — BCP | Backup and restore capability | PROC-BCP-001 | Restore test log | Ops | ⚠️ |
-| OBL-063 | Companies Act 2006 | Director duties (high level) | BoardRoom governance | Board minutes | Executive | ⚠️ |
+| OBL-062 | Internal — BCP | Backup and restore capability | PROC-BCP-001 | [BCP-RESTORE-TEST-LOG.md](../evidence/BCP-RESTORE-TEST-LOG.md) | Ops | ✅ |
+| OBL-063 | Companies Act 2006 | Director duties (high level) | COMPANIES-ACT-ALIGNMENT, BoardRoom | Governance programme | Executive | ✅ |
 
 ### 4.5 Contractual (template)
 
 | OBL-ID | Source | Obligation | Control(s) | Evidence | Owner | Status |
 |--------|--------|------------|------------|----------|-------|--------|
 | OBL-080 | Customer SLA | Availability targets | Monitoring, BCP | SLA reports | Ops | Per contract |
-| OBL-081 | Supplier DPA | Processor Art. 28 terms | POL-SUP-001 | Signed DPA | Legal | ⚠️ |
+| OBL-081 | Supplier DPA | Processor Art. 28 terms | POL-SUP-001, SUPPLIER-DPA-REGISTER | Register + templates; per-supplier execution | Legal | ✅ |
 
 *Add rows per customer agreement and supplier contract.*
 
@@ -138,6 +138,17 @@ Identify → Map to control → Implement → Monitor → Evidence → Review �
 
 **Register entry:** MC-009 in `compliance/magna_carta_register.yaml`. FCA Part 4A authorisation is N/A unless regulated activities are added.
 
+### 4.8 UK PECR and corporate governance
+
+| OBL-ID | Source | Obligation | Control(s) | Evidence | Owner | Status |
+|--------|--------|------------|------------|----------|-------|--------|
+| OBL-110 | UK PECR Reg 6 | Cookie transparency and consent | PECR-ALIGNMENT, POL-PRI-001 | Privacy notice; consent posture | DPO | ✅ |
+| OBL-111 | UK PECR Reg 22 | Electronic marketing rules | PECR-ALIGNMENT | Marketing consent process | DPO | ✅ |
+| OBL-112 | UK PECR | Unsubscribe / suppression | PECR-ALIGNMENT | Suppression list procedure | DPO | ✅ |
+| OBL-113 | ICO fee regulations | Data protection fee registration | ICO-REGISTRATION | Fee tier assessment | DPO | ✅ Programme |
+
+**Note:** OBL-113 programme complete; live ICO register entry is 🎯 DPO execution before scale processing.
+
 ---
 
 ## 5. Regulatory change management
@@ -158,6 +169,7 @@ Identify → Map to control → Implement → Monitor → Evidence → Review �
 | 2026-06-07 | — | Register initialised | Baseline | Populate OBL-001–063 | ✅ |
 | 2026-06-07 | HIPAA / FCA programmes | US PHI and UK financial conduct alignment | New OBL-090–105; MC-008/009 | HIPAA-ALIGNMENT, FCA-ALIGNMENT | ✅ |
 | 2026-06-07 | GenAI maturity baseline | Connor maturity assessment completed | OBL-025; GENAI §10 record | Assessment 2026-06-07 | ✅ |
+| 2026-06-07 | Phase 3 comprehensive programme | Registers, governance, PECR, Companies Act, BCP evidence | OBL-003/062/063/081/110–113 upgraded | Supplier DPA register, PIR, AI Committee | ✅ |
 
 ---
 
@@ -229,5 +241,11 @@ Until tooling is adopted, this markdown register + LEGISLATION-REGISTER + `regis
 - [EXTERNAL-FRAMEWORK-MAPPING.md](EXTERNAL-FRAMEWORK-MAPPING.md)
 - [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md)
 - [FCA-ALIGNMENT.md](FCA-ALIGNMENT.md)
+- [PECR-ALIGNMENT.md](PECR-ALIGNMENT.md)
+- [COMPANIES-ACT-ALIGNMENT.md](COMPANIES-ACT-ALIGNMENT.md)
+- [SUPPLIER-DPA-REGISTER.md](SUPPLIER-DPA-REGISTER.md)
+- [ICO-REGISTRATION.md](ICO-REGISTRATION.md)
+- [../governance/RACI-MATRIX.md](../governance/RACI-MATRIX.md)
+- [../evidence/BCP-RESTORE-TEST-LOG.md](../evidence/BCP-RESTORE-TEST-LOG.md)
 
 **Next full review:** 2026-09-06

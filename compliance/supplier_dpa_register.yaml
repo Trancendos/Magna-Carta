@@ -1,0 +1,90 @@
+---
+# Supplier & Data Processing Agreement Register
+# Generated: 2026-06-07 (Phase 3 comprehensive programme)
+# Owner: DPO / Procurement
+# Policy: POL-SUP-001
+# Obligations: OBL-003, OBL-081
+
+meta:
+  register_version: "1.0.0"
+  owner: "DPO / Procurement"
+  last_updated: "2026-06-07"
+  review_cycle: "quarterly"
+  policy: "docs/policies/POL-SUP-001-Supplier-Management.md"
+  markdown_index: "docs/compliance/SUPPLIER-DPA-REGISTER.md"
+
+schema:
+  supplier_id: "SUP-### unique identifier"
+  risk_tier: "Critical | High | Medium | Low"
+  dpa_status: "Signed | Template issued | In negotiation | Not required | N/A"
+  transfer_mechanism: "UK IDTA | SCCs | Adequacy | N/A (UK only)"
+  sub_processor_disclosed: "boolean"
+  review_date: "YYYY-MM-DD"
+
+suppliers:
+  - supplier_id: SUP-001
+    name: "Self-hosted Tranc3 stack"
+    category: "Platform (first-party)"
+    data_processed: "All platform PII/PHI per deployment scope"
+    risk_tier: Critical
+    dpa_status: N/A
+    transfer_mechanism: N/A
+    sub_processor_disclosed: true
+    security_evidence: "DEFSTAN register, Magna Carta policies"
+    review_date: "2026-09-06"
+    notes: "Processor obligations met via customer DPA; no third-party processor"
+
+  - supplier_id: SUP-002
+    name: "Forgejo (self-hosted)"
+    category: "DevOps / SCM"
+    data_processed: "Source code, CI metadata, commit identities"
+    risk_tier: High
+    dpa_status: Not required
+    transfer_mechanism: N/A
+    sub_processor_disclosed: true
+    security_evidence: "Self-hosted; no SaaS data egress"
+    review_date: "2026-09-06"
+
+  - supplier_id: SUP-003
+    name: "Authorised Payment Service Provider (PSP)"
+    category: "Payments"
+    data_processed: "Payment tokens, transaction metadata (no PAN storage on Tranc3)"
+    risk_tier: Critical
+    dpa_status: Template issued
+    transfer_mechanism: UK IDTA
+    sub_processor_disclosed: true
+    security_evidence: "FCA authorisation required for PSP; POL-SUP-001 assessment"
+    review_date: "2026-09-06"
+    notes: "Execute signed DPA before production payment routing — Legal action item"
+
+  - supplier_id: SUP-004
+    name: "Optional US AI inference fallback (if enabled)"
+    category: "AI sub-processor"
+    data_processed: "Prompts, inference metadata (no training by default)"
+    risk_tier: High
+    dpa_status: In negotiation
+    transfer_mechanism: SCCs
+    sub_processor_disclosed: true
+    security_evidence: "GDPR-ALIGNMENT §3; ROPA update before enable"
+    review_date: "2026-09-06"
+    notes: "Disabled by default; zero-cost sovereignty preferred"
+
+  - supplier_id: SUP-005
+    name: "Health platform connectors (Sync-Bot)"
+    category: "Wellbeing / PHI boundary"
+    data_processed: "US PHI when HIPAA profile; UK special category when EU/UK"
+    risk_tier: Critical
+    dpa_status: Template issued
+    transfer_mechanism: SCCs
+    sub_processor_disclosed: true
+    security_evidence: "HIPAA-ALIGNMENT §4 BAA template; MC-RULE-009"
+    review_date: "2026-09-06"
+    notes: "Per-integration BAA/DPA on customer onboarding"
+
+onboarding_checklist:
+  - "Complete security questionnaire or collect ISO 27001 / SOC 2 report"
+  - "Execute Art. 28 DPA (UK GDPR) or BAA (US PHI)"
+  - "Record transfer mechanism (IDTA/SCCs) in ROPA"
+  - "Disclose sub-processors in customer schedule"
+  - "Town Hall zero-cost check if paid mandatory API"
+  - "Add row to this register and SUPPLIER-DPA-REGISTER.md"

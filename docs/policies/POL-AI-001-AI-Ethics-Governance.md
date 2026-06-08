@@ -1,7 +1,7 @@
 # POL-AI-001 — AI Ethics & Governance Policy
 
-**Version:** 1.0.0 (Draft) · **Effective:** 2026-06-07 · **Owner:** AI Lead · **Review:** Semi-annual  
-**Status:** Pending BoardRoom approval
+**Version:** 1.0.0 · **Effective:** 2026-06-07 · **Owner:** AI Lead · **Review:** Semi-annual  
+**Status:** Approved (framework) — BoardRoom 2026-06-07
 
 ---
 
@@ -27,7 +27,7 @@ All registered models (Luminous, Turing's Hub, MLflow, future models) and AI-int
 - All models registered before production deployment
 - Risk tier assigned per EU AI Act; unacceptable risk prohibited
 - Model cards updated on material change
-- Fairness metrics measured annually (minimum)
+- Fairness metrics measured per [PROC-AI-002](../procedures/PROC-AI-002-Fairness-Bias-Testing.md) (minimum annually)
 - AI incidents reported via `/compliance/ai/incidents`
 - Magna Carta `ai_governance` rules enabled in production
 
@@ -43,7 +43,8 @@ Listed in AI-GOVERNANCE.md §5; enforced at runtime where technically feasible.
 | DPO | DPIA, Art. 22 transparency |
 | Security Ops | Adversarial testing, Ice Box |
 | CAB | Approve new high-risk AI features |
+| AI Governance Committee | Charter oversight per [AI-GOVERNANCE-COMMITTEE-CHARTER.md](../governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md) |
 
 ## 7. Related documents
 
-AI-GOVERNANCE.md, PROC-CMP-001, `ai_governance.py`, config/magna_carta_config.json
+AI-GOVERNANCE.md, PROC-AI-002, PROC-CMP-001, [AI-GOVERNANCE-COMMITTEE-CHARTER.md](../governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md), `ai_governance.py`, config/magna_carta_config.json

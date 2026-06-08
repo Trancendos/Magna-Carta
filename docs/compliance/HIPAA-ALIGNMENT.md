@@ -183,7 +183,7 @@ Full register: [OBLIGATIONS-REGISTER.md](OBLIGATIONS-REGISTER.md) §4.6.
 | **Tier B — Deployment qualified** | "HIPAA-ready deployment" | BAA signed, HIPAA_PROFILE enabled, evidence pack |
 | **Tier C — Full compliance claim** | "HIPAA compliant" | External assessment or customer attestation + all Tier B |
 
-**Action:** Product copy must use Tier A or B until Tier C evidence exists. Engineering backlog tracked in COMPLIANCE-BLUEPRINT §8 (resolved from gap to programme).
+**Action:** Product copy must use Tier A or B until Tier C evidence exists. Remediation specification: [TRANC3-HIPAA-COPY-REMEDIATION.md](../engineering/TRANC3-HIPAA-COPY-REMEDIATION.md) (merge to Tranc3 repo; local mirror updated for review).
 
 ---
 
@@ -207,3 +207,4 @@ Full register: [OBLIGATIONS-REGISTER.md](OBLIGATIONS-REGISTER.md) §4.6.
 - [FCA-ALIGNMENT.md](FCA-ALIGNMENT.md) — separate financial perimeter
 - [AI-GOVERNANCE.md](AI-GOVERNANCE.md) — biometric / health AI restrictions
 - [OBLIGATIONS-REGISTER.md](OBLIGATIONS-REGISTER.md)
+- [TRANC3-HIPAA-COPY-REMEDIATION.md](../engineering/TRANC3-HIPAA-COPY-REMEDIATION.md) — Tranc3 product copy patch spec
