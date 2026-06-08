@@ -26,7 +26,7 @@ ISMS Lead (chair), DPO, Platform Engineering lead, Security Ops, AI Lead (if AI 
 ### Outputs
 
 - Meeting minutes in Town Hall MeetingRooms
-- Updated action tracker
+- Updated [COMPLIANCE-ACTION-TRACKER.md](../compliance/COMPLIANCE-ACTION-TRACKER.md) (`compliance/compliance_action_tracker.yaml`)
 - Register.yaml updates merged within 2 weeks
 
 ## 2. Annual review
@@ -78,4 +78,4 @@ Aligned with DEFSTAN `meta.review_cycle: quarterly`.
 
 Monitoring identifies issues for correction before audit. Findings from audit feed the next quarterly review action tracker.
 
-References: [COMPLIANCE-BLUEPRINT.md](../compliance/COMPLIANCE-BLUEPRINT.md) §10, [OBLIGATIONS-REGISTER.md](../compliance/OBLIGATIONS-REGISTER.md)
+References: [COMPLIANCE-BLUEPRINT.md](../compliance/COMPLIANCE-BLUEPRINT.md) §10, [OBLIGATIONS-REGISTER.md](../compliance/OBLIGATIONS-REGISTER.md), [COMPLIANCE-ACTION-TRACKER.md](../compliance/COMPLIANCE-ACTION-TRACKER.md), [RISK-REGISTER.md](../compliance/RISK-REGISTER.md), [SOC2-EVIDENCE-SCHEDULE.md](../compliance/SOC2-EVIDENCE-SCHEDULE.md)

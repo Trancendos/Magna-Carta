@@ -52,7 +52,8 @@ This document is the **blueprint** that connects governance intent to Tranc3 imp
 └───────────────────────────────┬─────────────────────────────────────┘
                                 │
 ┌───────────────────────────────▼─────────────────────────────────────┐
-│  LAYER 6 — EVIDENCE & AUTOMATION (PROOF it works)                   │
+│  LAYER 6 — EVIDENCE & ASSURANCE (PROOF it works)                    │
+│  Action tracker · risk register · SOC2 schedule · audit programme   │
 │  register.yaml · test_evidence.yaml · CI gates · SOC2 collector     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
@@ -172,6 +173,13 @@ Third-party GenAI and compliance methodologies are mapped to Magna Carta — not
 | [docs/governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md](docs/governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md) | AI governance committee charter |
 | [docs/governance/RACI-MATRIX.md](docs/governance/RACI-MATRIX.md) | Extended RACI by activity |
 | [docs/evidence/BCP-RESTORE-TEST-LOG.md](docs/evidence/BCP-RESTORE-TEST-LOG.md) | BCP restore test evidence log |
+| [docs/compliance/COMPLIANCE-ACTION-TRACKER.md](docs/compliance/COMPLIANCE-ACTION-TRACKER.md) | Open compliance actions and remediation owners |
+| [docs/compliance/RISK-REGISTER.md](docs/compliance/RISK-REGISTER.md) | Information security risk register |
+| [docs/compliance/SOC2-EVIDENCE-SCHEDULE.md](docs/compliance/SOC2-EVIDENCE-SCHEDULE.md) | SOC 2 Type II evidence catalogue (EV-SOC-001–018) |
+| [docs/governance/INTERNAL-AUDIT-PROGRAMME.md](docs/governance/INTERNAL-AUDIT-PROGRAMME.md) | ISO 9.2 internal audit plan (MC-010) |
+| [docs/governance/MANAGEMENT-REVIEW-TEMPLATE.md](docs/governance/MANAGEMENT-REVIEW-TEMPLATE.md) | ISO 9.3 management review template |
+| [docs/evidence/PEN-TEST-PROGRAMME.md](docs/evidence/PEN-TEST-PROGRAMME.md) | Annual penetration test programme |
+| [docs/evidence/POLICY-ATTESTATION-REGISTER.md](docs/evidence/POLICY-ATTESTATION-REGISTER.md) | Staff policy acknowledgement register |
 
 Attribution: adapt concepts and cite sources; do not reproduce copyrighted framework text in customer packs.
 
@@ -237,6 +245,7 @@ Index: [docs/policies/INDEX.md](docs/policies/INDEX.md)
 | PROC-CMP-001 | Compliance Review | All |
 | PROC-AI-002 | Fairness & Bias Testing | POL-AI-001 |
 | PROC-CHG-002 | Post-Implementation Review | POL-OPS-002 |
+| PROC-TRN-001 | Security Awareness & Attestation | POL-SEC-001, POL-SEC-002 |
 
 Index: [docs/procedures/INDEX.md](docs/procedures/INDEX.md)
 

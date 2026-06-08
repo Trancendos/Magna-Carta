@@ -170,6 +170,7 @@ Identify → Map to control → Implement → Monitor → Evidence → Review �
 | 2026-06-07 | HIPAA / FCA programmes | US PHI and UK financial conduct alignment | New OBL-090–105; MC-008/009 | HIPAA-ALIGNMENT, FCA-ALIGNMENT | ✅ |
 | 2026-06-07 | GenAI maturity baseline | Connor maturity assessment completed | OBL-025; GENAI §10 record | Assessment 2026-06-07 | ✅ |
 | 2026-06-07 | Phase 3 comprehensive programme | Registers, governance, PECR, Companies Act, BCP evidence | OBL-003/062/063/081/110–113 upgraded | Supplier DPA register, PIR, AI Committee | ✅ |
+| 2026-06-07 | Phase 4 evidence & assurance programme | Action tracker, risk register, SOC2 schedule, audit programme | MC-010; ACT-001–012 opened | COMPLIANCE-ACTION-TRACKER, INTERNAL-AUDIT-PROGRAMME | ✅ |
 
 ---
 
@@ -226,7 +227,7 @@ Until tooling is adopted, this markdown register + LEGISLATION-REGISTER + `regis
 - [ ] All OBL rows status verified against evidence
 - [ ] New legislation from LEGISLATION-REGISTER reflected
 - [ ] Contractual obligations updated (DPAs, SLAs)
-- [ ] Gaps (⚠️/❌) have owners and dates in action tracker
+- [ ] Gaps (⚠️/❌) have owners and dates in [COMPLIANCE-ACTION-TRACKER.md](COMPLIANCE-ACTION-TRACKER.md) (`compliance/compliance_action_tracker.yaml`)
 - [ ] Change log updated
 - [ ] Summary reported in PROC-CMP-001 minutes
 
@@ -247,5 +248,11 @@ Until tooling is adopted, this markdown register + LEGISLATION-REGISTER + `regis
 - [ICO-REGISTRATION.md](ICO-REGISTRATION.md)
 - [../governance/RACI-MATRIX.md](../governance/RACI-MATRIX.md)
 - [../evidence/BCP-RESTORE-TEST-LOG.md](../evidence/BCP-RESTORE-TEST-LOG.md)
+- [COMPLIANCE-ACTION-TRACKER.md](COMPLIANCE-ACTION-TRACKER.md)
+- [RISK-REGISTER.md](RISK-REGISTER.md)
+- [SOC2-EVIDENCE-SCHEDULE.md](SOC2-EVIDENCE-SCHEDULE.md)
+- [../governance/INTERNAL-AUDIT-PROGRAMME.md](../governance/INTERNAL-AUDIT-PROGRAMME.md)
+- [../evidence/PEN-TEST-PROGRAMME.md](../evidence/PEN-TEST-PROGRAMME.md)
+- [../evidence/POLICY-ATTESTATION-REGISTER.md](../evidence/POLICY-ATTESTATION-REGISTER.md)
 
 **Next full review:** 2026-09-06

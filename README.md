@@ -18,9 +18,10 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | Foundation Framework | 1.0.0 | ✅ Active |
 | Compliance Blueprint | 1.0.0 | ✅ Active |
 | Architecture Blueprint | 1.0.0 | ✅ Active |
-| Policy Library | 1.0.0 | ✅ Active (9 policies) |
-| Procedure Library | 1.0.0 | ✅ Active (9 procedures) |
-| Governance artefacts | 1.0.0 | ✅ Committee charter, RACI matrix |
+| Policy Library | 1.0.0 | ✅ Active (8 policies) |
+| Procedure Library | 1.0.0 | ✅ Active (10 procedures) |
+| Governance artefacts | 1.0.0 | ✅ Committee charter, RACI, internal audit programme |
+| Evidence & assurance programme | 1.0.0 | ✅ MC-010 (external runs 🎯) |
 | Supplier DPA register | 1.0.0 | ✅ Programme (signed DPAs 🎯) |
 | Tranc3 Integration Config | 1.0.0 | ✅ Ready for `MAGNA_CARTA_ENABLED=true` |
 | ISO 27001 certification | — | 🎯 SOA programme complete; external audit pending |
@@ -75,7 +76,15 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 |----------|---------|
 | [docs/governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md](docs/governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md) | AI Governance Committee terms of reference |
 | [docs/governance/RACI-MATRIX.md](docs/governance/RACI-MATRIX.md) | Control ownership RACI |
+| [docs/governance/INTERNAL-AUDIT-PROGRAMME.md](docs/governance/INTERNAL-AUDIT-PROGRAMME.md) | ISO 9.2 internal audit plan (MC-010) |
+| [docs/governance/MANAGEMENT-REVIEW-TEMPLATE.md](docs/governance/MANAGEMENT-REVIEW-TEMPLATE.md) | ISO 9.3 management review template |
+| [docs/compliance/COMPLIANCE-ACTION-TRACKER.md](docs/compliance/COMPLIANCE-ACTION-TRACKER.md) | Open compliance actions (ACT-001–012) |
+| [docs/compliance/RISK-REGISTER.md](docs/compliance/RISK-REGISTER.md) | Information security risk register |
+| [docs/compliance/SOC2-EVIDENCE-SCHEDULE.md](docs/compliance/SOC2-EVIDENCE-SCHEDULE.md) | SOC 2 Type II evidence catalogue |
 | [docs/evidence/BCP-RESTORE-TEST-LOG.md](docs/evidence/BCP-RESTORE-TEST-LOG.md) | BCP restore test evidence log |
+| [docs/evidence/PEN-TEST-PROGRAMME.md](docs/evidence/PEN-TEST-PROGRAMME.md) | Annual penetration test programme |
+| [docs/evidence/PEN-TEST-LOG.md](docs/evidence/PEN-TEST-LOG.md) | Penetration test execution log |
+| [docs/evidence/POLICY-ATTESTATION-REGISTER.md](docs/evidence/POLICY-ATTESTATION-REGISTER.md) | Staff policy acknowledgement register |
 
 ### Architecture
 
@@ -89,16 +98,28 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 
 | Document | Purpose |
 |----------|---------|
-| [docs/policies/INDEX.md](docs/policies/INDEX.md) | Policy library index (9 policies) |
-| [docs/procedures/INDEX.md](docs/procedures/INDEX.md) | Procedure library index (9 procedures) |
+| [docs/policies/INDEX.md](docs/policies/INDEX.md) | Policy library index (8 policies) |
+| [docs/procedures/INDEX.md](docs/procedures/INDEX.md) | Procedure library index (10 procedures) |
+| [docs/templates/TEMPLATE-DPA-UK-GDPR.md](docs/templates/TEMPLATE-DPA-UK-GDPR.md) | UK GDPR processor DPA template |
+| [docs/templates/TEMPLATE-BAA-HIPAA.md](docs/templates/TEMPLATE-BAA-HIPAA.md) | HIPAA business associate agreement template |
+| [docs/templates/TEMPLATE-SCC-ANNEX.md](docs/templates/TEMPLATE-SCC-ANNEX.md) | Standard contractual clauses annex template |
+
+### Engineering handoffs (Tranc3 repo)
+
+| Document | Purpose |
+|----------|---------|
+| [docs/engineering/TRANC3-HIPAA-COPY-REMEDIATION.md](docs/engineering/TRANC3-HIPAA-COPY-REMEDIATION.md) | HIPAA Tier A product copy — patch spec for Tranc3 PR |
 
 ### Runtime configuration
 
 | Document | Purpose |
 |----------|---------|
 | [config/magna_carta_config.json](config/magna_carta_config.json) | Runtime rule configuration for Tranc3 |
-| [compliance/magna_carta_register.yaml](compliance/magna_carta_register.yaml) | Magna Carta compliance register (MC-001–MC-009) |
+| [compliance/magna_carta_register.yaml](compliance/magna_carta_register.yaml) | Magna Carta compliance register (MC-001–MC-010) |
 | [compliance/supplier_dpa_register.yaml](compliance/supplier_dpa_register.yaml) | Machine-readable supplier DPA register |
+| [compliance/compliance_action_tracker.yaml](compliance/compliance_action_tracker.yaml) | Machine-readable action tracker |
+| [compliance/risk_register.yaml](compliance/risk_register.yaml) | Machine-readable risk register |
+| [compliance/policy_attestation_register.yaml](compliance/policy_attestation_register.yaml) | Machine-readable policy attestation register |
 
 ## Directory structure
 
@@ -110,7 +131,10 @@ magna-carta/
 │   └── magna_carta_config.json
 ├── compliance/
 │   ├── magna_carta_register.yaml
-│   └── supplier_dpa_register.yaml
+│   ├── supplier_dpa_register.yaml
+│   ├── compliance_action_tracker.yaml
+│   ├── risk_register.yaml
+│   └── policy_attestation_register.yaml
 └── docs/
     ├── 00-EXECUTIVE-SUMMARY.md
     ├── 01-MAGNACARTA-FOUNDATION.md
@@ -135,20 +159,32 @@ magna-carta/
     │   ├── DEFSTAN-ALIGNMENT.md
     │   ├── AI-GOVERNANCE.md
     │   ├── GENAI-MATURITY-ASSESSMENT.md
-    │   └── EXTERNAL-FRAMEWORK-MAPPING.md
+    │   ├── EXTERNAL-FRAMEWORK-MAPPING.md
+    │   ├── COMPLIANCE-ACTION-TRACKER.md
+    │   ├── RISK-REGISTER.md
+    │   └── SOC2-EVIDENCE-SCHEDULE.md
     ├── governance/
     │   ├── AI-GOVERNANCE-COMMITTEE-CHARTER.md
-    │   └── RACI-MATRIX.md
+    │   ├── RACI-MATRIX.md
+    │   ├── INTERNAL-AUDIT-PROGRAMME.md
+    │   └── MANAGEMENT-REVIEW-TEMPLATE.md
     ├── engineering/
     │   └── TRANC3-HIPAA-COPY-REMEDIATION.md
     ├── evidence/
-    │   └── BCP-RESTORE-TEST-LOG.md
+    │   ├── BCP-RESTORE-TEST-LOG.md
+    │   ├── PEN-TEST-PROGRAMME.md
+    │   ├── PEN-TEST-LOG.md
+    │   └── POLICY-ATTESTATION-REGISTER.md
+    ├── templates/
+    │   ├── TEMPLATE-DPA-UK-GDPR.md
+    │   ├── TEMPLATE-BAA-HIPAA.md
+    │   └── TEMPLATE-SCC-ANNEX.md
     ├── policies/
     │   ├── INDEX.md
-    │   └── POL-*.md (9 policies)
+    │   └── POL-*.md (8 policies)
     └── procedures/
         ├── INDEX.md
-        └── PROC-*.md (9 procedures)
+        └── PROC-*.md (10 procedures)
 ```
 
 ## Relationship to Tranc3

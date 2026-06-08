@@ -13,9 +13,10 @@
 The **Magna Carta Framework** is Trancendos' unified governance, compliance, and architecture documentation suite for the Tranc3 AI platform. It consolidates:
 
 - **8 enterprise policies** covering security, privacy, operations, suppliers, and AI ethics (POL-AI-001 BoardRoom-approved)
-- **9 operational procedures** with clear triggers, owners, and evidence requirements
+- **10 operational procedures** with clear triggers, owners, and evidence requirements
 - **14+ regulatory alignment documents** (ISO 27001, SOC 2, GDPR, DEFSTAN, AI, HIPAA, FCA, PECR, Companies Act, and more)
-- **Governance artefacts** — AI Governance Committee charter, RACI matrix, supplier DPA register, BCP restore test log
+- **Governance artefacts** — AI Governance Committee charter, RACI matrix, internal audit programme, management review template
+- **Evidence & assurance programme (MC-010)** — action tracker, risk register, SOC 2 evidence schedule, pen test programme, policy attestation register, contract templates
 - **3 architecture blueprints** including an auditor-facing as-built reference
 - **Runtime configuration** for Tranc3 compliance enforcement
 
@@ -39,6 +40,7 @@ Tranc3 already implements strong technical controls (Zero Trust IAM, encrypted v
 | ISO 27001 | **Draft** — SOA exists; org programme docs complete; certification audit 🎯 Q2 2027 |
 | SOC 2 | **Draft** — TSC mapping and evidence schedule; observation period 🎯 Q1 2027 |
 | Policy library | **Baseline complete** — eight policies approved at framework level |
+| Evidence & assurance | **Programme complete** — MC-010 artefacts; external pen test / attestations 🎯 |
 | HIPAA / FCA / PECR | **Programme** — alignment docs, MC-008/009, obligations register |
 | Architecture clarity | **Improved** — as-built doc resolves multi-version architecture drift |
 | External certification | **Not yet** — targets Q1–Q2 2027 |
@@ -60,7 +62,9 @@ Tranc3 already implements strong technical controls (Zero Trust IAM, encrypted v
 | 2 | HIPAA marketing over-claim in product copy | Tier A/B wording enforced per HIPAA-ALIGNMENT §10 |
 | 3 | Unsigned supplier DPAs | Register live; countersign SUP-003–005 templates |
 | 4 | BCP not exercised at scale | Baseline restore test logged; expand quarterly drills |
-| 5 | AI fairness metrics unmeasured | PROC-AI-002 defined; first run Q3 2026 |
+| 5 | AI fairness metrics unmeasured | PROC-AI-002 defined; first run Q3 2026 (ACT-004) |
+
+See also: [RISK-REGISTER.md](compliance/RISK-REGISTER.md) and [COMPLIANCE-ACTION-TRACKER.md](compliance/COMPLIANCE-ACTION-TRACKER.md) for full risk and remediation inventory.
 
 ## Immediate actions
 
@@ -68,7 +72,8 @@ Tranc3 already implements strong technical controls (Zero Trust IAM, encrypted v
 2. Import `magna_carta_register.yaml` into Tranc3 compliance checker
 3. Operate per [RACI-MATRIX.md](governance/RACI-MATRIX.md) and AI Governance Committee charter
 4. Schedule first quarterly Magna Carta review (2026-09-06)
-5. Begin SOC 2 evidence collection via `scripts/soc2_evidence_collector.py`
+5. Begin SOC 2 evidence collection per [SOC2-EVIDENCE-SCHEDULE.md](compliance/SOC2-EVIDENCE-SCHEDULE.md) and Tranc3 `scripts/soc2_evidence_collector.py`
+6. Execute open actions in [COMPLIANCE-ACTION-TRACKER.md](compliance/COMPLIANCE-ACTION-TRACKER.md) (signed DPAs, ICO fee, pen test, Tranc3 HIPAA copy PR)
 
 ## Document map
 

@@ -164,7 +164,7 @@ requirements:
         description: "Eight baseline policies with INDEX"
       - type: procedure
         path: docs/procedures/
-        description: "Nine baseline procedures with INDEX (incl. PROC-AI-002, PROC-CHG-002)"
+        description: "Ten baseline procedures with INDEX (incl. PROC-AI-002, PROC-CHG-002, PROC-TRN-001)"
       - type: document
         path: FRAMEWORK.md
         description: "Master framework blueprint"
@@ -273,3 +273,48 @@ requirements:
     last_reviewed: "2026-06-07"
     reviewer: "Trancendos"
     notes: "Programme implemented; FCA Part 4A authorisation N/A unless regulated activities added"
+
+  - id: MC-010
+    standard: "Magna Carta / ISO 27001 / SOC 2"
+    title: "Evidence & Assurance Programme"
+    description: "Action tracker, risk register, SOC 2 evidence schedule, internal audit programme, pen test programme, policy attestation, and management review must be maintained with quarterly review and linked remediation owners."
+    status: COMPLIANT
+    evidence:
+      - type: document
+        path: docs/compliance/COMPLIANCE-ACTION-TRACKER.md
+        description: "Open compliance actions and owners"
+      - type: document
+        path: docs/compliance/RISK-REGISTER.md
+        description: "Information security risk register"
+      - type: document
+        path: docs/compliance/SOC2-EVIDENCE-SCHEDULE.md
+        description: "SOC 2 Type II evidence catalogue"
+      - type: document
+        path: docs/governance/INTERNAL-AUDIT-PROGRAMME.md
+        description: "ISO 9.2 internal audit plan"
+      - type: document
+        path: docs/governance/MANAGEMENT-REVIEW-TEMPLATE.md
+        description: "ISO 9.3 management review"
+      - type: document
+        path: docs/evidence/PEN-TEST-PROGRAMME.md
+        description: "Annual penetration test programme"
+      - type: document
+        path: docs/evidence/POLICY-ATTESTATION-REGISTER.md
+        description: "Staff policy acknowledgement register"
+      - type: config
+        path: compliance/compliance_action_tracker.yaml
+        description: "Machine-readable action tracker"
+      - type: procedure
+        path: docs/procedures/PROC-TRN-001-Security-Awareness-Attestation.md
+        description: "Security awareness and attestation"
+    maps_to:
+      - ISO27001 A.5.7
+      - ISO27001 Clause 9.2
+      - ISO27001 Clause 9.3
+      - SOC2 CC1.1
+      - SOC2 CC4.1
+      - OBL-062
+    verification_method: process_audit
+    last_reviewed: "2026-06-07"
+    reviewer: "Trancendos"
+    notes: "Programme implemented Phase 4; external pen test, attestations, and audit execution are operational validation targets (ACT-005, ACT-007, ACT-011)"

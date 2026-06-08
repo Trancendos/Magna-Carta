@@ -1,0 +1,140 @@
+---
+# Compliance Action Tracker — open gaps and remediation items
+# Generated: 2026-06-07 (Phase 4 evidence & assurance programme)
+# Owner: ISMS Lead
+# Human-readable: docs/compliance/COMPLIANCE-ACTION-TRACKER.md
+# Updated: quarterly via PROC-CMP-001
+
+meta:
+  register_version: "1.0.0"
+  owner: "ISMS Lead"
+  last_updated: "2026-06-07"
+  review_cycle: "quarterly"
+  procedure: "docs/procedures/PROC-CMP-001-Compliance-Review.md"
+
+schema:
+  action_id: "ACT-### unique identifier"
+  status: "Open | In progress | Blocked | Closed"
+  priority: "P0 | P1 | P2 | P3"
+  validation_type: "programme | external"
+
+actions:
+  - action_id: ACT-001
+    title: "Execute signed DPA with authorised PSP (SUP-003)"
+    owner: Legal / Procurement
+    due_date: "2026-08-31"
+    status: Open
+    priority: P0
+    validation_type: external
+    source: "OBL-003, supplier_dpa_register SUP-003"
+    evidence_target: "Signed DPA on file; SUP-003 dpa_status → Signed"
+
+  - action_id: ACT-002
+    title: "Countersign health connector BAA/DPA templates (SUP-005)"
+    owner: Legal / DPO
+    due_date: "2026-09-30"
+    status: Open
+    priority: P0
+    validation_type: external
+    source: "HIPAA-ALIGNMENT §4, MC-008"
+    evidence_target: "Per-integration signed agreements on customer onboarding"
+
+  - action_id: ACT-003
+    title: "Pay ICO data protection fee and record live registration number"
+    owner: DPO
+    due_date: "2026-07-31"
+    status: Open
+    priority: P1
+    validation_type: external
+    source: "ICO-REGISTRATION.md, OBL-110"
+    evidence_target: "ICO-REGISTRATION.md updated with registration number"
+
+  - action_id: ACT-004
+    title: "First PROC-AI-002 fairness and bias measurement run"
+    owner: AI Lead
+    due_date: "2026-09-30"
+    status: Open
+    priority: P1
+    validation_type: external
+    source: "PROC-AI-002, MC-005"
+    evidence_target: "Fairness test report in evidence folder; GENAI-MATURITY updated"
+
+  - action_id: ACT-005
+    title: "Commission external penetration test (annual programme)"
+    owner: Security Ops
+    due_date: "2026-12-31"
+    status: Open
+    priority: P1
+    validation_type: external
+    source: "PEN-TEST-PROGRAMME.md, PROC-VUL-001"
+    evidence_target: "PEN-TEST-LOG.md entry with executive summary and remediation"
+
+  - action_id: ACT-006
+    title: "Complete Tranc3 HIPAA Tier A product copy remediation PR"
+    owner: Platform Engineering
+    due_date: "2026-07-15"
+    status: In progress
+    priority: P1
+    validation_type: external
+    source: "TRANC3-HIPAA-COPY-REMEDIATION.md"
+    evidence_target: "Merged Tranc3 PR; marketing audit sign-off"
+
+  - action_id: ACT-007
+    title: "Launch policy attestation cycle for privileged roles"
+    owner: HR / ISMS Lead
+    due_date: "2026-08-31"
+    status: Open
+    priority: P2
+    validation_type: external
+    source: "POLICY-ATTESTATION-REGISTER.md, PROC-TRN-001"
+    evidence_target: "100% privileged-role attestation logged"
+
+  - action_id: ACT-008
+    title: "Begin SOC 2 Type II observation period evidence collection"
+    owner: ISMS Lead
+    due_date: "2026-10-01"
+    status: Open
+    priority: P1
+    validation_type: external
+    source: "SOC2-EVIDENCE-SCHEDULE.md"
+    evidence_target: "Six-month continuous evidence per schedule"
+
+  - action_id: ACT-009
+    title: "Implement magna_carta.py full request-boundary enforcement in Tranc3"
+    owner: Platform Engineering
+    due_date: "2026-09-30"
+    status: Open
+    priority: P2
+    validation_type: external
+    source: "MC-004 notes"
+    evidence_target: "MAGNA_CARTA_ENABLED=true in staging; audit log samples"
+
+  - action_id: ACT-010
+    title: "Resolve US AI fallback DPA negotiation or keep disabled (SUP-004)"
+    owner: DPO / AI Lead
+    due_date: "2026-10-31"
+    status: Open
+    priority: P2
+    validation_type: external
+    source: "supplier_dpa_register SUP-004"
+    evidence_target: "Signed SCC DPA or documented disable decision"
+
+  - action_id: ACT-011
+    title: "Conduct first internal audit per INTERNAL-AUDIT-PROGRAMME"
+    owner: ISMS Lead
+    due_date: "2026-12-31"
+    status: Open
+    priority: P2
+    validation_type: external
+    source: "ISO27001-ALIGNMENT, MC-010"
+    evidence_target: "Internal audit report with findings and CAPA"
+
+  - action_id: ACT-012
+    title: "Expand BCP restore tests to all P0 databases"
+    owner: Operations
+    due_date: "2027-06-07"
+    status: Open
+    priority: P2
+    validation_type: external
+    source: "BCP-RESTORE-TEST-LOG.md"
+    evidence_target: "Additional BCP-RT-### entries for vault and Forgejo"

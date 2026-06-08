@@ -93,6 +93,8 @@ Automated via Tranc3 `scripts/soc2_evidence_collector.py`:
 | Incident log | Per event | Observatory + WarRoom |
 | Backup verification | Monthly | backup-service + DR drill |
 
+**Magna Carta evidence catalogue:** [SOC2-EVIDENCE-SCHEDULE.md](SOC2-EVIDENCE-SCHEDULE.md) (EV-SOC-001–018) maps each TSC control to policy, procedure, and artefact owners for the Q1 2027 observation period.
+
 ---
 
 ## Magna Carta contributions

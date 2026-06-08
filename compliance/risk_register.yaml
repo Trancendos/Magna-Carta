@@ -1,0 +1,77 @@
+---
+# Information Security & Compliance Risk Register
+# Generated: 2026-06-07 (Phase 4)
+# Owner: ISMS Lead
+# Human-readable: docs/compliance/RISK-REGISTER.md
+
+meta:
+  register_version: "1.0.0"
+  owner: "ISMS Lead"
+  last_updated: "2026-06-07"
+  review_cycle: "quarterly"
+  framework: "ISO 27001 A.5.7 / Magna Carta"
+
+schema:
+  risk_id: "RISK-###"
+  likelihood: "1-5 (1=rare, 5=almost certain)"
+  impact: "1-5 (1=negligible, 5=critical)"
+  inherent_score: "likelihood × impact"
+  treatment: "Mitigate | Accept | Transfer | Avoid"
+
+risks:
+  - risk_id: RISK-001
+    title: "Architecture documentation inconsistency confuses auditors"
+    category: Compliance
+    likelihood: 3
+    impact: 3
+    inherent_score: 9
+    treatment: Mitigate
+  - risk_id: RISK-002
+    title: "HIPAA marketing over-claim in product copy"
+    category: Regulatory
+    likelihood: 3
+    impact: 4
+    inherent_score: 12
+    treatment: Mitigate
+  - risk_id: RISK-003
+    title: "Unsigned supplier DPAs for critical sub-processors"
+    category: Privacy
+    likelihood: 4
+    impact: 4
+    inherent_score: 16
+    treatment: Mitigate
+  - risk_id: RISK-004
+    title: "BCP not exercised at production scale"
+    category: Availability
+    likelihood: 3
+    impact: 4
+    inherent_score: 12
+    treatment: Mitigate
+  - risk_id: RISK-005
+    title: "AI fairness metrics not measured"
+    category: AI governance
+    likelihood: 3
+    impact: 3
+    inherent_score: 9
+    treatment: Mitigate
+  - risk_id: RISK-006
+    title: "Magna Carta runtime rules not enforced in production"
+    category: Technical
+    likelihood: 3
+    impact: 3
+    inherent_score: 9
+    treatment: Mitigate
+  - risk_id: RISK-007
+    title: "Staff policy attestation gaps for privileged access"
+    category: Governance
+    likelihood: 3
+    impact: 3
+    inherent_score: 9
+    treatment: Mitigate
+  - risk_id: RISK-008
+    title: "Delayed ISO 27001 / SOC 2 certification affects enterprise sales"
+    category: Commercial
+    likelihood: 3
+    impact: 3
+    inherent_score: 9
+    treatment: Mitigate

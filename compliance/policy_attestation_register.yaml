@@ -1,0 +1,34 @@
+---
+# Policy Attestation Register — privileged role acknowledgement
+# Generated: 2026-06-07 (Phase 4)
+# Owner: HR / ISMS Lead
+# Procedure: docs/procedures/PROC-TRN-001-Security-Awareness-Attestation.md
+
+meta:
+  register_version: "1.0.0"
+  owner: "HR / ISMS Lead"
+  last_updated: "2026-06-07"
+  review_cycle: "annual"
+  cycle_id: "ATT-2026-01"
+
+schema:
+  attestation_id: "ATT-YYYY-## cycle identifier"
+  role_tier: "Privileged | Standard | Contractor"
+  status: "Pending | Attested | Overdue | Exempt"
+
+cycle:
+  attestation_id: ATT-2026-01
+  policies_in_scope:
+    - POL-SEC-001
+    - POL-SEC-002
+    - POL-PRI-001
+    - POL-OPS-001
+    - POL-OPS-002
+    - POL-OPS-003
+    - POL-SUP-001
+    - POL-AI-001
+  due_date: "2026-08-31"
+  status: Pending
+  notes: "First cycle — populate rows when HR tooling connected; programme baseline"
+
+attestations: []
