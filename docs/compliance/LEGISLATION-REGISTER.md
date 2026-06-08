@@ -34,6 +34,8 @@
 
 ## Regulatory contacts
 
+> **Extended register:** Supervisory authorities, sector regulators, and ombudsmen are maintained in [REGULATORS-OMBUDSMEN-REGISTER.md](REGULATORS-OMBUDSMEN-REGISTER.md). This section retains legislation-to-authority quick reference only.
+
 | Authority | Contact purpose | Status |
 |-----------|-----------------|--------|
 | ICO (UK) | Data protection registration, breach notification | ✅ Programme — fee payment 🎯 |

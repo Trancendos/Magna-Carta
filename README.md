@@ -22,6 +22,8 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | Architecture Blueprint | 1.0.0 | ✅ Active |
 | Policy Library | 1.0.0 | ✅ Authored (9 policies; BoardRoom approval 🎯) |
 | Procedure Library | 1.0.0 | ✅ Active (12 procedures) |
+| Documentation artefact model | 1.0.0 | ✅ Cookbooks, Bible, Hymn sheets, Schemas, Registers (starter set) |
+| Compliance maintenance monitor | 1.0.0 | ✅ Programme + `compliance_health_check.py` (CI hook 🎯) |
 | Governance artefacts | 1.0.0 | ✅ Draft charter, RACI, audit programme (operational use 🎯) |
 | Evidence & assurance programme | 1.0.0 | ✅ MC-010 authored (pen test / attestations / audits 🎯) |
 | Tranc3 integration bridge | 1.0.0 | ✅ MC-011 authored (staging enablement / enforcement 🎯) |
@@ -55,6 +57,9 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [docs/compliance/COMPLIANCE-BLUEPRINT.md](docs/compliance/COMPLIANCE-BLUEPRINT.md) | End-to-end compliance operating model |
 | [docs/compliance/OBLIGATIONS-REGISTER.md](docs/compliance/OBLIGATIONS-REGISTER.md) | Regulatory and contractual obligations register |
 | [docs/compliance/LEGISLATION-REGISTER.md](docs/compliance/LEGISLATION-REGISTER.md) | UK/EU legislation applicability |
+| [docs/compliance/STANDARDS-REGISTER.md](docs/compliance/STANDARDS-REGISTER.md) | ISO, NIST, DEFSTAN, OWASP and framework standards |
+| [docs/compliance/REGULATORS-OMBUDSMEN-REGISTER.md](docs/compliance/REGULATORS-OMBUDSMEN-REGISTER.md) | Regulators, supervisory authorities, ombudsmen |
+| [docs/compliance/SYSTEMS-REGISTER.md](docs/compliance/SYSTEMS-REGISTER.md) | Governance and compliance systems (Town Hall, registers, CI) |
 | [docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md](docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md) | Third-party GenAI/compliance frameworks → Magna Carta |
 | [docs/compliance/GENAI-MATURITY-ASSESSMENT.md](docs/compliance/GENAI-MATURITY-ASSESSMENT.md) | GenAI governance maturity self-assessment |
 
@@ -83,6 +88,9 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [docs/governance/INTERNAL-AUDIT-PROGRAMME.md](docs/governance/INTERNAL-AUDIT-PROGRAMME.md) | ISO 9.2 internal audit plan (MC-010) |
 | [docs/governance/MANAGEMENT-REVIEW-TEMPLATE.md](docs/governance/MANAGEMENT-REVIEW-TEMPLATE.md) | ISO 9.3 management review template |
 | [docs/governance/CONTINUOUS-IMPROVEMENT-PROGRAMME.md](docs/governance/CONTINUOUS-IMPROVEMENT-PROGRAMME.md) | PDCA cycle linking evidence programme to operations (MC-011) |
+| [docs/governance/DOCUMENTATION-ARTIFACT-MODEL.md](docs/governance/DOCUMENTATION-ARTIFACT-MODEL.md) | Taxonomy: policies, cookbooks, bibles, hymn sheets, schemas |
+| [docs/governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md](docs/governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md) | Automated freshness monitoring and review cadence |
+| [docs/governance/REVIEWERS-REGISTER.md](docs/governance/REVIEWERS-REGISTER.md) | Reviewer roles, RACI, and escalation paths |
 | [docs/compliance/COMPLIANCE-ACTION-TRACKER.md](docs/compliance/COMPLIANCE-ACTION-TRACKER.md) | Open compliance actions (ACT-001–012) |
 | [docs/compliance/TRANC3-REGISTER-BRIDGE.md](docs/compliance/TRANC3-REGISTER-BRIDGE.md) | MC-001–MC-011 ↔ REQ-### / MC-RULE mapping (MC-011) |
 | [docs/compliance/RISK-REGISTER.md](docs/compliance/RISK-REGISTER.md) | Information security risk register |
@@ -100,12 +108,21 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [docs/architecture/AS-BUILT-ARCHITECTURE.md](docs/architecture/AS-BUILT-ARCHITECTURE.md) | Canonical as-built architecture (auditor-facing) |
 | [docs/architecture/CONTROL-TO-COMPONENT-MAP.md](docs/architecture/CONTROL-TO-COMPONENT-MAP.md) | Control traceability to code and workers |
 
+### Operational artefacts (cookbooks, bibles, hymn sheets)
+
+| Document | Purpose |
+|----------|---------|
+| [docs/bibles/MAGNACARTA-GOVERNANCE-BIBLE.md](docs/bibles/MAGNACARTA-GOVERNANCE-BIBLE.md) | Governance encyclopaedia — how everything fits together |
+| [docs/cookbooks/INDEX.md](docs/cookbooks/INDEX.md) | Step-by-step operational playbooks |
+| [docs/hymn-sheets/INDEX.md](docs/hymn-sheets/INDEX.md) | Printable checklists for reviews and incidents |
+| [docs/schemas/REGISTER-SCHEMAS.md](docs/schemas/REGISTER-SCHEMAS.md) | YAML/Markdown register field schemas |
+
 ### Policies & procedures
 
 | Document | Purpose |
 |----------|---------|
-| [docs/policies/INDEX.md](docs/policies/INDEX.md) | Policy library index (8 policies) |
-| [docs/procedures/INDEX.md](docs/procedures/INDEX.md) | Procedure library index (10 procedures) |
+| [docs/policies/INDEX.md](docs/policies/INDEX.md) | Policy library index (9 policies) |
+| [docs/procedures/INDEX.md](docs/procedures/INDEX.md) | Procedure library index (12 procedures) |
 | [docs/templates/TEMPLATE-DPA-UK-GDPR.md](docs/templates/TEMPLATE-DPA-UK-GDPR.md) | UK GDPR processor DPA template |
 | [docs/templates/TEMPLATE-BAA-HIPAA.md](docs/templates/TEMPLATE-BAA-HIPAA.md) | HIPAA business associate agreement template |
 | [docs/templates/TEMPLATE-SCC-ANNEX.md](docs/templates/TEMPLATE-SCC-ANNEX.md) | Standard contractual clauses annex template |
@@ -129,6 +146,8 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [compliance/compliance_action_tracker.yaml](compliance/compliance_action_tracker.yaml) | Machine-readable action tracker |
 | [compliance/risk_register.yaml](compliance/risk_register.yaml) | Machine-readable risk register |
 | [compliance/policy_attestation_register.yaml](compliance/policy_attestation_register.yaml) | Machine-readable policy attestation register |
+| [compliance/maintenance_monitor.yaml](compliance/maintenance_monitor.yaml) | Documentation health monitor configuration |
+| [scripts/compliance_health_check.py](scripts/compliance_health_check.py) | Automated drift, staleness, and link checker |
 
 ## Directory structure
 
@@ -144,7 +163,10 @@ magna-carta/
 │   ├── supplier_dpa_register.yaml
 │   ├── compliance_action_tracker.yaml
 │   ├── risk_register.yaml
-│   └── policy_attestation_register.yaml
+│   ├── policy_attestation_register.yaml
+│   └── maintenance_monitor.yaml
+├── scripts/
+│   └── compliance_health_check.py
 └── docs/
     ├── 00-EXECUTIVE-SUMMARY.md
     ├── 01-MAGNACARTA-FOUNDATION.md
@@ -173,13 +195,30 @@ magna-carta/
     │   ├── COMPLIANCE-ACTION-TRACKER.md
     │   ├── RISK-REGISTER.md
     │   ├── SOC2-EVIDENCE-SCHEDULE.md
-    │   └── TRANC3-REGISTER-BRIDGE.md
+    │   ├── TRANC3-REGISTER-BRIDGE.md
+    │   ├── COMPLIANCE-COVERAGE-REGISTER.md
+    │   ├── STANDARDS-REGISTER.md
+    │   ├── REGULATORS-OMBUDSMEN-REGISTER.md
+    │   └── SYSTEMS-REGISTER.md
+    ├── bibles/
+    │   └── MAGNACARTA-GOVERNANCE-BIBLE.md
+    ├── cookbooks/
+    │   ├── INDEX.md
+    │   └── COOK-*.md
+    ├── hymn-sheets/
+    │   ├── INDEX.md
+    │   └── HYMN-*.md
+    ├── schemas/
+    │   └── REGISTER-SCHEMAS.md
     ├── governance/
     │   ├── AI-GOVERNANCE-COMMITTEE-CHARTER.md
     │   ├── RACI-MATRIX.md
     │   ├── INTERNAL-AUDIT-PROGRAMME.md
     │   ├── MANAGEMENT-REVIEW-TEMPLATE.md
-    │   └── CONTINUOUS-IMPROVEMENT-PROGRAMME.md
+    │   ├── CONTINUOUS-IMPROVEMENT-PROGRAMME.md
+    │   ├── DOCUMENTATION-ARTIFACT-MODEL.md
+    │   ├── COMPLIANCE-MAINTENANCE-PROGRAMME.md
+    │   └── REVIEWERS-REGISTER.md
     ├── engineering/
     │   ├── TRANC3-INTEGRATION-GUIDE.md
     │   └── TRANC3-HIPAA-COPY-REMEDIATION.md
@@ -195,10 +234,10 @@ magna-carta/
     │   └── TEMPLATE-SCC-ANNEX.md
     ├── policies/
     │   ├── INDEX.md
-    │   └── POL-*.md (8 policies)
+    │   └── POL-*.md (9 policies)
     └── procedures/
         ├── INDEX.md
-        └── PROC-*.md (10 procedures)
+        └── PROC-*.md (12 procedures)
 ```
 
 ## Relationship to Tranc3

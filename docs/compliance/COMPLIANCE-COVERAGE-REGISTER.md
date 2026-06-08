@@ -137,7 +137,9 @@ All items require parties outside documentation-only work:
 
 ---
 
-## 8. Programme milestones closed (2026-06-07 coverage wave)
+## 8. Programme milestones closed
+
+### 8.1 Coverage wave (2026-06-07)
 
 | Milestone | Status |
 |-----------|--------|
@@ -154,13 +156,32 @@ All items require parties outside documentation-only work:
 | NHS-DSPT-READINESS | ✅ Programme |
 | PCI-DSS-POSITION | ✅ Programme |
 
+### 8.2 Documentation artefact model wave (2026-06-07)
+
+| Artefact category | Milestone | Status | Honest gap |
+|-------------------|-----------|--------|------------|
+| **Model** | DOCUMENTATION-ARTIFACT-MODEL | ✅ Programme | — |
+| **Bible** | MAGNACARTA-GOVERNANCE-BIBLE | ✅ Programme (v1) | Expand as procedures mature |
+| **Cookbooks** | COOK-CMP-001, COOK-IR-001 + INDEX | ✅ Programme (starter) | Cookbook per remaining PROC-* |
+| **Hymn sheets** | HYMN-CMP-001, HYMN-IR-001 + INDEX | ✅ Programme (starter) | Hymn sheet per high-frequency PROC |
+| **Schemas** | REGISTER-SCHEMAS | ✅ Programme | Machine validation in CI 🎯 |
+| **Standards** | STANDARDS-REGISTER | ✅ Programme | Not external certification |
+| **Regulators / ombudsmen** | REGULATORS-OMBUDSMEN-REGISTER | ✅ Programme | Contact verification 🎯 |
+| **Systems** | SYSTEMS-REGISTER | ✅ Programme | Production monitoring hooks 🎯 |
+| **Reviewers** | REVIEWERS-REGISTER | ✅ Programme | Named individuals external 🎯 |
+| **Maintenance** | COMPLIANCE-MAINTENANCE-PROGRAMME | ✅ Programme | Weekly CI job not wired 🎯 |
+| **Automation** | maintenance_monitor.yaml + compliance_health_check.py | ✅ Programme | `--strict` in CI pipeline 🎯 |
+
+**Still missing (honest backlog):** cookbooks for PROC-DSR, PROC-VUL, PROC-BCP, PROC-CHG, PROC-IAM, PROC-AI-002, PROC-TRN, PROC-HR, PROC-CAPA; hymn sheets for same; JSON Schema files per register (schemas doc is narrative only); ombudsman escalation runbooks where sector-specific.
+
 ---
 
 ## 9. Path to comprehensive ✅ (summary)
 
 | Layer | What “done” looks like | Target |
 |-------|------------------------|--------|
-| Programme (layer 2) | Every applicable/future row has owner doc | **Achieved** in this wave |
+| Programme (layer 2) | Every applicable/future row has owner doc + artefact taxonomy | **Achieved** (starter cookbooks/hymn sheets; backlog in §8.2) |
+| Maintenance (layer 2b) | Health check green in CI; quarterly PROC-CMP-001 | Wire CI + first drill 2026-09-06 |
 | Operations (layer 3) | ACT-001–012 closed with evidence | 2026–2027 |
 | External assurance | ISO 27001, SOC 2, ICO live | Q1–Q2 2027 |
 

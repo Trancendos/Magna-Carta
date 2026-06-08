@@ -15,10 +15,11 @@
 5. GDPR: DSR metrics, breach log, ROPA updates
 6. AI governance: model registry, incidents, fairness status
 7. Risk register and open waivers
-8. Legislation register scan (LEGISLATION-REGISTER.md)
+8. Legislation register scan ([LEGISLATION-REGISTER.md](../compliance/LEGISLATION-REGISTER.md)); regulators/ombudsmen ([REGULATORS-OMBUDSMEN-REGISTER.md](../compliance/REGULATORS-OMBUDSMEN-REGISTER.md))
 9. Pen test / vuln programme status
 10. Tranc3 integration bridge status (`tranc3_register_bridge.yaml`, ACT-009 staging)
-11. Actions and owners
+11. Documentation health: run `python3 scripts/compliance_health_check.py --report`; review [COMPLIANCE-MAINTENANCE-PROGRAMME.md](../governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md)
+12. Actions and owners
 
 ### Participants
 

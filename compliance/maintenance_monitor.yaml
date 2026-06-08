@@ -1,0 +1,85 @@
+---
+# Maintenance monitor configuration — drives compliance_health_check.py
+# Owner: ISMS Lead
+# Human-readable: docs/governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md
+
+meta:
+  register_version: "1.0.0"
+  owner: "ISMS Lead"
+  last_updated: "2026-06-07"
+  review_cycle: "quarterly"
+
+settings:
+  default_max_age_days: 120
+  strict_exit_on_error: true
+
+required_files:
+  - path: docs/compliance/COMPLIANCE-COVERAGE-REGISTER.md
+    check_id: MON-001
+  - path: docs/compliance/STANDARDS-REGISTER.md
+    check_id: MON-001
+  - path: docs/compliance/REGULATORS-OMBUDSMEN-REGISTER.md
+    check_id: MON-001
+  - path: docs/compliance/SYSTEMS-REGISTER.md
+    check_id: MON-001
+  - path: docs/governance/REVIEWERS-REGISTER.md
+    check_id: MON-001
+  - path: docs/governance/DOCUMENTATION-ARTIFACT-MODEL.md
+    check_id: MON-007
+  - path: docs/governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md
+    check_id: MON-007
+  - path: docs/bibles/MAGNACARTA-GOVERNANCE-BIBLE.md
+    check_id: MON-007
+  - path: docs/schemas/REGISTER-SCHEMAS.md
+    check_id: MON-007
+  - path: docs/cookbooks/INDEX.md
+    check_id: MON-005
+  - path: docs/hymn-sheets/INDEX.md
+    check_id: MON-005
+
+yaml_registers:
+  - path: compliance/compliance_action_tracker.yaml
+    check_id: MON-006
+  - path: compliance/magna_carta_register.yaml
+    check_id: MON-006
+  - path: compliance/risk_register.yaml
+    check_id: MON-006
+  - path: compliance/supplier_dpa_register.yaml
+    check_id: MON-006
+  - path: compliance/tranc3_register_bridge.yaml
+    check_id: MON-006
+  - path: compliance/policy_attestation_register.yaml
+    check_id: MON-006
+
+index_drift_checks:
+  - check_id: MON-004
+    readme_path: README.md
+    index_path: docs/policies/INDEX.md
+    pattern: "Policy library index \\((\\d+) policies\\)"
+    count_method: count_policy_files
+  - check_id: MON-004
+    readme_path: README.md
+    index_path: docs/procedures/INDEX.md
+    pattern: "Procedure library index \\((\\d+) procedures\\)"
+    count_method: count_procedure_files
+
+stale_review_patterns:
+  - check_id: MON-002
+    glob: "docs/compliance/*.md"
+    patterns:
+      - "Next review:\\s*\\*\\*\\s*(\\d{4}-\\d{2}-\\d{2})"
+      - "\\*\\*Next review:\\*\\*\\s*(\\d{4}-\\d{2}-\\d{2})"
+    max_age_days: 120
+
+action_overdue:
+  check_id: MON-003
+  source: compliance/compliance_action_tracker.yaml
+  statuses: ["Open", "In progress", "Blocked"]
+
+cookbook_links:
+  - check_id: MON-005
+    index: docs/cookbooks/INDEX.md
+    base_dir: docs/cookbooks
+  - check_id: MON-005
+    index: docs/hymn-sheets/INDEX.md
+    base_dir: docs/hymn-sheets

@@ -56,6 +56,7 @@ Defines the Plan–Do–Check–Act (PDCA) cycle connecting Magna Carta policies
 | Penetration test | Annual | Security Ops | [PEN-TEST-PROGRAMME.md](../evidence/PEN-TEST-PROGRAMME.md) |
 | BCP restore drill | Annual (expand) | Operations | [BCP-RESTORE-TEST-LOG.md](../evidence/BCP-RESTORE-TEST-LOG.md) |
 | Fairness / bias test | Semi-annual | AI Lead | [PROC-AI-002](../procedures/PROC-AI-002-Fairness-Bias-Testing.md) |
+| Documentation health check | Weekly (CI) / each PROC-CMP-001 | ISMS Lead | [COMPLIANCE-MAINTENANCE-PROGRAMME.md](COMPLIANCE-MAINTENANCE-PROGRAMME.md), `scripts/compliance_health_check.py` |
 
 **Next quarterly review:** 2026-09-06
 
@@ -105,3 +106,5 @@ Defines the Plan–Do–Check–Act (PDCA) cycle connecting Magna Carta policies
 - [COMPLIANCE-BLUEPRINT.md](../compliance/COMPLIANCE-BLUEPRINT.md)
 - [TRANC3-REGISTER-BRIDGE.md](../compliance/TRANC3-REGISTER-BRIDGE.md)
 - [EXTERNAL-FRAMEWORK-MAPPING.md](../compliance/EXTERNAL-FRAMEWORK-MAPPING.md) — Connor domain 5
+- [DOCUMENTATION-ARTIFACT-MODEL.md](DOCUMENTATION-ARTIFACT-MODEL.md) — cookbooks, bibles, hymn sheets, schemas
+- [COMPLIANCE-MAINTENANCE-PROGRAMME.md](COMPLIANCE-MAINTENANCE-PROGRAMME.md) — automated drift monitoring
