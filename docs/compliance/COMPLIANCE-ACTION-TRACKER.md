@@ -28,7 +28,7 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 | ACT-003 | Pay ICO fee; record live registration number | DPO | 2026-07-31 | P1 | Open | 🎯 |
 | ACT-004 | First PROC-AI-002 fairness/bias measurement run | AI Lead | 2026-09-30 | P1 | Open | 🎯 |
 | ACT-005 | Commission external penetration test | Security Ops | 2026-12-31 | P1 | Open | 🎯 |
-| ACT-006 | Tranc3 HIPAA Tier A copy remediation PR | Platform Engineering | 2026-07-15 | P1 | In progress | 🎯 |
+| ACT-006 | Tranc3 HIPAA Tier A copy remediation PR | Platform Engineering | 2026-07-15 | P1 | In progress | 🎯 (local ✅; upstream merge pending) |
 | ACT-007 | Policy attestation cycle (privileged roles) | HR / ISMS Lead | 2026-08-31 | P2 | Open | 🎯 |
 | ACT-008 | SOC 2 observation period evidence collection | ISMS Lead | 2026-10-01 | P1 | Open | 🎯 |
 | ACT-009 | magna_carta.py request-boundary enforcement | Platform Engineering | 2026-09-30 | P2 | Open | 🎯 |
@@ -46,6 +46,7 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 | — | POL-AI-001 BoardRoom approval | 2026-06-07 | ✅ Programme |
 | — | BCP baseline restore test BCP-RT-001 | 2026-06-07 | ✅ Programme baseline; annual repeat 🎯 |
 | — | AI Governance Committee charter | 2026-06-07 | ✅ Programme |
+| — | Phase 5 Tranc3 integration bridge (MC-011) | 2026-06-07 | ✅ Programme; ACT-009 staging 🎯 |
 
 ---
 
@@ -65,5 +66,7 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 - [SUPPLIER-DPA-REGISTER.md](SUPPLIER-DPA-REGISTER.md)
 - [SOC2-EVIDENCE-SCHEDULE.md](SOC2-EVIDENCE-SCHEDULE.md)
 - [../governance/INTERNAL-AUDIT-PROGRAMME.md](../governance/INTERNAL-AUDIT-PROGRAMME.md)
+- [TRANC3-REGISTER-BRIDGE.md](TRANC3-REGISTER-BRIDGE.md)
+- [../engineering/TRANC3-INTEGRATION-GUIDE.md](../engineering/TRANC3-INTEGRATION-GUIDE.md)
 
 **Next review:** 2026-09-06 (PROC-CMP-001)

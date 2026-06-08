@@ -318,3 +318,35 @@ requirements:
     last_reviewed: "2026-06-07"
     reviewer: "Trancendos"
     notes: "Programme implemented Phase 4; external pen test, attestations, and audit execution are operational validation targets (ACT-005, ACT-007, ACT-011)"
+
+  - id: MC-011
+    standard: "Magna Carta / DEFSTAN"
+    title: "Tranc3 Integration Bridge"
+    description: "Canonical mapping between Magna Carta register (MC-###), Tranc3 DEFSTAN register (REQ-###), and runtime rules with staging enablement guide for MAGNA_CARTA_ENABLED integration."
+    status: COMPLIANT
+    evidence:
+      - type: config
+        path: compliance/tranc3_register_bridge.yaml
+        description: "MC↔REQ bridge mapping (machine-readable)"
+      - type: document
+        path: docs/compliance/TRANC3-REGISTER-BRIDGE.md
+        description: "Human-readable register bridge"
+      - type: document
+        path: docs/engineering/TRANC3-INTEGRATION-GUIDE.md
+        description: "Staging enablement and checker integration spec"
+      - type: document
+        path: docs/governance/CONTINUOUS-IMPROVEMENT-PROGRAMME.md
+        description: "PDCA cycle linking evidence programme to operations"
+      - type: document
+        path: docs/templates/INDEX.md
+        description: "Contract template library index"
+    maps_to:
+      - REQ-IA-001
+      - REQ-IA-006
+      - REQ-AI-001
+      - ISO27001 A.5.37
+      - SOC2 CC2.2
+    verification_method: document_review
+    last_reviewed: "2026-06-07"
+    reviewer: "Trancendos"
+    notes: "Programme implemented Phase 5; Tranc3 staging enablement and checker import are operational validation targets (ACT-009)"

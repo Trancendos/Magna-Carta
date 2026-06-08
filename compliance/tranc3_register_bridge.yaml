@@ -1,0 +1,186 @@
+---
+# Tranc3 Register Bridge — Magna Carta MC-### ↔ DEFSTAN REQ-### mapping
+# Generated: 2026-06-07 (Phase 5 integration programme)
+# Parent: compliance/magna_carta_register.yaml
+# Child: Tranc3 compliance/register.yaml (DEFSTAN)
+# Human-readable: docs/compliance/TRANC3-REGISTER-BRIDGE.md
+# Integration guide: docs/engineering/TRANC3-INTEGRATION-GUIDE.md
+
+meta:
+  register_version: "1.0.0"
+  owner: "Platform Engineering / ISMS Lead"
+  last_updated: "2026-06-07"
+  review_cycle: "quarterly"
+  magna_carta_register: "compliance/magna_carta_register.yaml"
+  tranc3_register: "compliance/register.yaml"
+  runtime_config: "config/magna_carta_config.json"
+
+integration_status:
+  register_import: pending
+  notes: "Tranc3 checker loads register.yaml only; import MC rows via bridge or dual-register merge (ACT-009)"
+  staging_enablement: pending
+  env_vars:
+    - MAGNA_CARTA_ENABLED
+    - MAGNA_CARTA_CONFIG_PATH
+    - MAGNA_CARTA_REGISTER_PATH
+
+bridges:
+  - mc_id: MC-001
+    title: "Digital Rights Transparency"
+    tranc3_requirements:
+      - REQ-IA-006
+    runtime_rules:
+      - MC-RULE-008
+    policies:
+      - POL-PRI-001
+    procedures:
+      - PROC-DSR-001
+    obligations:
+      - OBL-010
+      - OBL-011
+    integration_notes: "Transparency checks advisory until magna_carta.py rule logic complete"
+
+  - mc_id: MC-002
+    title: "Zero-Cost Sovereignty"
+    tranc3_requirements:
+      - REQ-IA-002
+    runtime_rules:
+      - MC-RULE-005
+    policies:
+      - POL-SUP-001
+    supplier_register:
+      - supplier_dpa_register.yaml
+    integration_notes: "Vault-service and rate-limit-service are primary evidence paths"
+
+  - mc_id: MC-003
+    title: "Town Hall Governance Gate"
+    tranc3_requirements:
+      - REQ-SW-003
+    runtime_rules:
+      - MC-RULE-007
+    policies:
+      - POL-OPS-002
+    procedures:
+      - PROC-CHG-001
+      - PROC-CHG-002
+    tranc3_paths:
+      - config/townhall/frameworks.yaml
+    integration_notes: "CAB manual gate active; automated Town Hall CI gate planned"
+
+  - mc_id: MC-004
+    title: "Magna Carta Runtime Rules"
+    tranc3_requirements:
+      - REQ-IA-001
+      - REQ-IA-004
+      - REQ-IA-005
+      - REQ-IA-006
+    runtime_rules:
+      - MC-RULE-001
+      - MC-RULE-002
+      - MC-RULE-003
+      - MC-RULE-004
+      - MC-RULE-005
+      - MC-RULE-006
+      - MC-RULE-007
+      - MC-RULE-008
+      - MC-RULE-009
+    tranc3_paths:
+      - src/compliance/magna_carta.py
+      - src/compliance/checker.py
+    integration_notes: "ACT-009 — enable staging + implement _apply_rule logic per rule type"
+
+  - mc_id: MC-005
+    title: "AI Ethics and Human Agency"
+    tranc3_requirements:
+      - REQ-AI-001
+    runtime_rules:
+      - MC-RULE-004
+    policies:
+      - POL-AI-001
+    procedures:
+      - PROC-AI-002
+    tranc3_paths:
+      - src/compliance/ai_governance.py
+    obligations:
+      - OBL-025
+      - OBL-090
+    integration_notes: "ACT-004 — first fairness measurement run"
+
+  - mc_id: MC-006
+    title: "Policy and Procedure Library"
+    tranc3_requirements: []
+    policies:
+      - docs/policies/
+    procedures:
+      - docs/procedures/
+    obligations:
+      - OBL-062
+    integration_notes: "Documentation-only MC row; evidence lives in Magna Carta repo"
+
+  - mc_id: MC-007
+    title: "Architecture Evidence Pack"
+    tranc3_requirements: []
+    tranc3_paths:
+      - ARCHITECTURE_THREAT_MODEL.md
+    magna_carta_paths:
+      - docs/architecture/AS-BUILT-ARCHITECTURE.md
+      - docs/architecture/CONTROL-TO-COMPONENT-MAP.md
+    integration_notes: "Auditors use Magna Carta AS-BUILT; Tranc3 DOC-02 is aspirational"
+
+  - mc_id: MC-008
+    title: "HIPAA Alignment Programme"
+    tranc3_requirements: []
+    runtime_rules:
+      - MC-RULE-009
+    policies:
+      - POL-PRI-001
+    templates:
+      - docs/templates/TEMPLATE-BAA-HIPAA.md
+    obligations:
+      - OBL-090
+      - OBL-091
+      - OBL-092
+      - OBL-093
+      - OBL-094
+    tranc3_paths:
+      - src/entities/platform.py
+      - src/config/id_registry.json
+    integration_notes: "ACT-006 — Tier A copy verified locally; Tranc3 PR merge pending"
+
+  - mc_id: MC-009
+    title: "FCA Alignment Programme"
+    tranc3_requirements: []
+    policies:
+      - POL-AI-001
+    obligations:
+      - OBL-100
+      - OBL-101
+      - OBL-102
+      - OBL-103
+      - OBL-104
+      - OBL-105
+    tranc3_paths:
+      - src/compliance/ai_governance.py
+    integration_notes: "Platform provider perimeter; PSP authorised only (SUP-003)"
+
+  - mc_id: MC-010
+    title: "Evidence & Assurance Programme"
+    tranc3_requirements: []
+    obligations:
+      - OBL-062
+    magna_carta_paths:
+      - compliance/compliance_action_tracker.yaml
+      - compliance/risk_register.yaml
+      - docs/compliance/SOC2-EVIDENCE-SCHEDULE.md
+      - docs/governance/INTERNAL-AUDIT-PROGRAMME.md
+    tranc3_paths:
+      - scripts/soc2_evidence_collector.py
+    integration_notes: "Combine Magna Carta evidence schedule with Tranc3 collector output"
+
+  - mc_id: MC-011
+    title: "Tranc3 Integration Bridge"
+    tranc3_requirements: []
+    magna_carta_paths:
+      - compliance/tranc3_register_bridge.yaml
+      - docs/engineering/TRANC3-INTEGRATION-GUIDE.md
+    integration_notes: "This file — canonical MC↔REQ mapping and staging enablement spec"

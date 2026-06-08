@@ -78,6 +78,7 @@ actions:
     validation_type: external
     source: "TRANC3-HIPAA-COPY-REMEDIATION.md"
     evidence_target: "Merged Tranc3 PR; marketing audit sign-off"
+    notes: "Local clone verified 2026-06-07 — Tier A wording in all five files; no hipaa compliant/strict hipaa matches. Upstream Tranc3 PR open/merge remains external validation."
 
   - action_id: ACT-007
     title: "Launch policy attestation cycle for privileged roles"

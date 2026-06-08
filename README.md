@@ -22,6 +22,7 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | Procedure Library | 1.0.0 | ✅ Active (10 procedures) |
 | Governance artefacts | 1.0.0 | ✅ Committee charter, RACI, internal audit programme |
 | Evidence & assurance programme | 1.0.0 | ✅ MC-010 (external runs 🎯) |
+| Tranc3 integration bridge | 1.0.0 | ✅ MC-011 (staging enablement 🎯) |
 | Supplier DPA register | 1.0.0 | ✅ Programme (signed DPAs 🎯) |
 | Tranc3 Integration Config | 1.0.0 | ✅ Ready for `MAGNA_CARTA_ENABLED=true` |
 | ISO 27001 certification | — | 🎯 SOA programme complete; external audit pending |
@@ -78,7 +79,9 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [docs/governance/RACI-MATRIX.md](docs/governance/RACI-MATRIX.md) | Control ownership RACI |
 | [docs/governance/INTERNAL-AUDIT-PROGRAMME.md](docs/governance/INTERNAL-AUDIT-PROGRAMME.md) | ISO 9.2 internal audit plan (MC-010) |
 | [docs/governance/MANAGEMENT-REVIEW-TEMPLATE.md](docs/governance/MANAGEMENT-REVIEW-TEMPLATE.md) | ISO 9.3 management review template |
+| [docs/governance/CONTINUOUS-IMPROVEMENT-PROGRAMME.md](docs/governance/CONTINUOUS-IMPROVEMENT-PROGRAMME.md) | PDCA cycle linking evidence programme to operations (MC-011) |
 | [docs/compliance/COMPLIANCE-ACTION-TRACKER.md](docs/compliance/COMPLIANCE-ACTION-TRACKER.md) | Open compliance actions (ACT-001–012) |
+| [docs/compliance/TRANC3-REGISTER-BRIDGE.md](docs/compliance/TRANC3-REGISTER-BRIDGE.md) | MC-001–MC-011 ↔ REQ-### / MC-RULE mapping (MC-011) |
 | [docs/compliance/RISK-REGISTER.md](docs/compliance/RISK-REGISTER.md) | Information security risk register |
 | [docs/compliance/SOC2-EVIDENCE-SCHEDULE.md](docs/compliance/SOC2-EVIDENCE-SCHEDULE.md) | SOC 2 Type II evidence catalogue |
 | [docs/evidence/BCP-RESTORE-TEST-LOG.md](docs/evidence/BCP-RESTORE-TEST-LOG.md) | BCP restore test evidence log |
@@ -103,19 +106,22 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [docs/templates/TEMPLATE-DPA-UK-GDPR.md](docs/templates/TEMPLATE-DPA-UK-GDPR.md) | UK GDPR processor DPA template |
 | [docs/templates/TEMPLATE-BAA-HIPAA.md](docs/templates/TEMPLATE-BAA-HIPAA.md) | HIPAA business associate agreement template |
 | [docs/templates/TEMPLATE-SCC-ANNEX.md](docs/templates/TEMPLATE-SCC-ANNEX.md) | Standard contractual clauses annex template |
+| [docs/templates/INDEX.md](docs/templates/INDEX.md) | Contract template library index |
 
 ### Engineering handoffs (Tranc3 repo)
 
 | Document | Purpose |
 |----------|---------|
-| [docs/engineering/TRANC3-HIPAA-COPY-REMEDIATION.md](docs/engineering/TRANC3-HIPAA-COPY-REMEDIATION.md) | HIPAA Tier A product copy — patch spec for Tranc3 PR |
+| [docs/engineering/TRANC3-INTEGRATION-GUIDE.md](docs/engineering/TRANC3-INTEGRATION-GUIDE.md) | Staging enablement for `MAGNA_CARTA_ENABLED`, checker import (ACT-009) |
+| [docs/engineering/TRANC3-HIPAA-COPY-REMEDIATION.md](docs/engineering/TRANC3-HIPAA-COPY-REMEDIATION.md) | HIPAA Tier A product copy — patch spec for Tranc3 PR (ACT-006) |
 
 ### Runtime configuration
 
 | Document | Purpose |
 |----------|---------|
 | [config/magna_carta_config.json](config/magna_carta_config.json) | Runtime rule configuration for Tranc3 |
-| [compliance/magna_carta_register.yaml](compliance/magna_carta_register.yaml) | Magna Carta compliance register (MC-001–MC-010) |
+| [compliance/magna_carta_register.yaml](compliance/magna_carta_register.yaml) | Magna Carta compliance register (MC-001–MC-011) |
+| [compliance/tranc3_register_bridge.yaml](compliance/tranc3_register_bridge.yaml) | MC↔REQ bridge mapping (machine-readable) |
 | [compliance/supplier_dpa_register.yaml](compliance/supplier_dpa_register.yaml) | Machine-readable supplier DPA register |
 | [compliance/compliance_action_tracker.yaml](compliance/compliance_action_tracker.yaml) | Machine-readable action tracker |
 | [compliance/risk_register.yaml](compliance/risk_register.yaml) | Machine-readable risk register |
@@ -131,6 +137,7 @@ magna-carta/
 │   └── magna_carta_config.json
 ├── compliance/
 │   ├── magna_carta_register.yaml
+│   ├── tranc3_register_bridge.yaml
 │   ├── supplier_dpa_register.yaml
 │   ├── compliance_action_tracker.yaml
 │   ├── risk_register.yaml
@@ -162,13 +169,16 @@ magna-carta/
     │   ├── EXTERNAL-FRAMEWORK-MAPPING.md
     │   ├── COMPLIANCE-ACTION-TRACKER.md
     │   ├── RISK-REGISTER.md
-    │   └── SOC2-EVIDENCE-SCHEDULE.md
+    │   ├── SOC2-EVIDENCE-SCHEDULE.md
+    │   └── TRANC3-REGISTER-BRIDGE.md
     ├── governance/
     │   ├── AI-GOVERNANCE-COMMITTEE-CHARTER.md
     │   ├── RACI-MATRIX.md
     │   ├── INTERNAL-AUDIT-PROGRAMME.md
-    │   └── MANAGEMENT-REVIEW-TEMPLATE.md
+    │   ├── MANAGEMENT-REVIEW-TEMPLATE.md
+    │   └── CONTINUOUS-IMPROVEMENT-PROGRAMME.md
     ├── engineering/
+    │   ├── TRANC3-INTEGRATION-GUIDE.md
     │   └── TRANC3-HIPAA-COPY-REMEDIATION.md
     ├── evidence/
     │   ├── BCP-RESTORE-TEST-LOG.md
@@ -176,6 +186,7 @@ magna-carta/
     │   ├── PEN-TEST-LOG.md
     │   └── POLICY-ATTESTATION-REGISTER.md
     ├── templates/
+    │   ├── INDEX.md
     │   ├── TEMPLATE-DPA-UK-GDPR.md
     │   ├── TEMPLATE-BAA-HIPAA.md
     │   └── TEMPLATE-SCC-ANNEX.md
@@ -194,6 +205,7 @@ magna-carta/
 | Policies, procedures, blueprints | Workers, services, CI gates |
 | `magna_carta_config.json` | `MAGNA_CARTA_CONFIG_PATH` env var |
 | `magna_carta_register.yaml` | Extends `compliance/register.yaml` |
+| `tranc3_register_bridge.yaml` | MC-### ↔ REQ-### crosswalk for checker import |
 | Governance narrative | Town Hall API (`/townhall/*`) |
 | Architecture blueprint | `ARCHITECTURE_THREAT_MODEL.md`, workers |
 
@@ -205,6 +217,8 @@ magna-carta/
 export MAGNA_CARTA_ENABLED=true
 export MAGNA_CARTA_CONFIG_PATH=/path/to/magna-carta/config/magna_carta_config.json
 ```
+
+See [docs/engineering/TRANC3-INTEGRATION-GUIDE.md](docs/engineering/TRANC3-INTEGRATION-GUIDE.md) for staging checklist and checker import steps (ACT-009).
 
 ## Review cycle
 

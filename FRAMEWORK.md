@@ -180,6 +180,10 @@ Third-party GenAI and compliance methodologies are mapped to Magna Carta — not
 | [docs/governance/MANAGEMENT-REVIEW-TEMPLATE.md](docs/governance/MANAGEMENT-REVIEW-TEMPLATE.md) | ISO 9.3 management review template |
 | [docs/evidence/PEN-TEST-PROGRAMME.md](docs/evidence/PEN-TEST-PROGRAMME.md) | Annual penetration test programme |
 | [docs/evidence/POLICY-ATTESTATION-REGISTER.md](docs/evidence/POLICY-ATTESTATION-REGISTER.md) | Staff policy acknowledgement register |
+| [docs/compliance/TRANC3-REGISTER-BRIDGE.md](docs/compliance/TRANC3-REGISTER-BRIDGE.md) | MC-001–MC-011 ↔ REQ-### / MC-RULE mapping (MC-011) |
+| [docs/engineering/TRANC3-INTEGRATION-GUIDE.md](docs/engineering/TRANC3-INTEGRATION-GUIDE.md) | Staging enablement and checker import (ACT-009) |
+| [docs/governance/CONTINUOUS-IMPROVEMENT-PROGRAMME.md](docs/governance/CONTINUOUS-IMPROVEMENT-PROGRAMME.md) | PDCA cycle linking evidence programme to operations |
+| [docs/templates/INDEX.md](docs/templates/INDEX.md) | Contract template library index |
 
 Attribution: adapt concepts and cite sources; do not reproduce copyrighted framework text in customer packs.
 
@@ -270,6 +274,8 @@ Rule categories in config:
 - `zero_cost` — Block deployments referencing paid mandatory APIs
 
 Configuration: [config/magna_carta_config.json](config/magna_carta_config.json)
+
+Register bridge and staging checklist: [docs/compliance/TRANC3-REGISTER-BRIDGE.md](docs/compliance/TRANC3-REGISTER-BRIDGE.md), [compliance/tranc3_register_bridge.yaml](compliance/tranc3_register_bridge.yaml), [docs/engineering/TRANC3-INTEGRATION-GUIDE.md](docs/engineering/TRANC3-INTEGRATION-GUIDE.md).
 
 ---
 

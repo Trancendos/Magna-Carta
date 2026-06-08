@@ -17,7 +17,8 @@
 7. Risk register and open waivers
 8. Legislation register scan (LEGISLATION-REGISTER.md)
 9. Pen test / vuln programme status
-10. Actions and owners
+10. Tranc3 integration bridge status (`tranc3_register_bridge.yaml`, ACT-009 staging)
+11. Actions and owners
 
 ### Participants
 
@@ -78,4 +79,4 @@ Aligned with DEFSTAN `meta.review_cycle: quarterly`.
 
 Monitoring identifies issues for correction before audit. Findings from audit feed the next quarterly review action tracker.
 
-References: [COMPLIANCE-BLUEPRINT.md](../compliance/COMPLIANCE-BLUEPRINT.md) §10, [OBLIGATIONS-REGISTER.md](../compliance/OBLIGATIONS-REGISTER.md), [COMPLIANCE-ACTION-TRACKER.md](../compliance/COMPLIANCE-ACTION-TRACKER.md), [RISK-REGISTER.md](../compliance/RISK-REGISTER.md), [SOC2-EVIDENCE-SCHEDULE.md](../compliance/SOC2-EVIDENCE-SCHEDULE.md)
+References: [COMPLIANCE-BLUEPRINT.md](../compliance/COMPLIANCE-BLUEPRINT.md) §10, [OBLIGATIONS-REGISTER.md](../compliance/OBLIGATIONS-REGISTER.md), [COMPLIANCE-ACTION-TRACKER.md](../compliance/COMPLIANCE-ACTION-TRACKER.md), [RISK-REGISTER.md](../compliance/RISK-REGISTER.md), [SOC2-EVIDENCE-SCHEDULE.md](../compliance/SOC2-EVIDENCE-SCHEDULE.md), [TRANC3-REGISTER-BRIDGE.md](../compliance/TRANC3-REGISTER-BRIDGE.md), [CONTINUOUS-IMPROVEMENT-PROGRAMME.md](../governance/CONTINUOUS-IMPROVEMENT-PROGRAMME.md)
