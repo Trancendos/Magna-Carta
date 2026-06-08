@@ -25,6 +25,7 @@ Standardised contract templates for supplier onboarding and customer health inte
 | TPL-DPA-001 | [TEMPLATE-DPA-UK-GDPR.md](TEMPLATE-DPA-UK-GDPR.md) | UK GDPR Article 28 processor DPA | SUP-001–003, OBL-003 |
 | TPL-BAA-001 | [TEMPLATE-BAA-HIPAA.md](TEMPLATE-BAA-HIPAA.md) | HIPAA business associate agreement | SUP-005, MC-008, OBL-090 |
 | TPL-SCC-001 | [TEMPLATE-SCC-ANNEX.md](TEMPLATE-SCC-ANNEX.md) | EU/UK standard contractual clauses annex | SUP-004, OBL-020 |
+| TPL-TIA-001 | [TEMPLATE-TIA-US-AI-FALLBACK.md](TEMPLATE-TIA-US-AI-FALLBACK.md) | Transfer impact assessment (US AI fallback) | SUP-004, ACT-010 |
 
 ---
 

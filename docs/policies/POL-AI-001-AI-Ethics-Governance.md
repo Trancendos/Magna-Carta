@@ -1,7 +1,7 @@
 # POL-AI-001 — AI Ethics & Governance Policy
 
 **Version:** 1.0.0 · **Effective:** 2026-06-07 · **Owner:** AI Lead · **Review:** Semi-annual  
-**Status:** Approved (framework) — BoardRoom 2026-06-07
+**Status:** Authored (framework) — BoardRoom approval 🎯
 
 ---
 

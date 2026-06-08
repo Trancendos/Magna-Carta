@@ -20,8 +20,8 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | Foundation Framework | 1.0.0 | ✅ Active |
 | Compliance Blueprint | 1.0.0 | ✅ Active |
 | Architecture Blueprint | 1.0.0 | ✅ Active |
-| Policy Library | 1.0.0 | ✅ Authored (8 policies; BoardRoom approval 🎯) |
-| Procedure Library | 1.0.0 | ✅ Active (10 procedures) |
+| Policy Library | 1.0.0 | ✅ Authored (9 policies; BoardRoom approval 🎯) |
+| Procedure Library | 1.0.0 | ✅ Active (12 procedures) |
 | Governance artefacts | 1.0.0 | ✅ Draft charter, RACI, audit programme (operational use 🎯) |
 | Evidence & assurance programme | 1.0.0 | ✅ MC-010 authored (pen test / attestations / audits 🎯) |
 | Tranc3 integration bridge | 1.0.0 | ✅ MC-011 authored (staging enablement / enforcement 🎯) |
@@ -51,6 +51,7 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | Document | Purpose |
 |----------|---------|
 | [docs/compliance/REGULATION-MATRIX.md](docs/compliance/REGULATION-MATRIX.md) | All regulations mapped to Tranc3 controls |
+| [docs/compliance/COMPLIANCE-COVERAGE-REGISTER.md](docs/compliance/COMPLIANCE-COVERAGE-REGISTER.md) | Honest ⚠️/📋/❌ status — why not operational ✅ |
 | [docs/compliance/COMPLIANCE-BLUEPRINT.md](docs/compliance/COMPLIANCE-BLUEPRINT.md) | End-to-end compliance operating model |
 | [docs/compliance/OBLIGATIONS-REGISTER.md](docs/compliance/OBLIGATIONS-REGISTER.md) | Regulatory and contractual obligations register |
 | [docs/compliance/LEGISLATION-REGISTER.md](docs/compliance/LEGISLATION-REGISTER.md) | UK/EU legislation applicability |

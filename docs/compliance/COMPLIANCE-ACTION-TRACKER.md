@@ -43,7 +43,7 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 | ID | Title | Closed | Notes |
 |----|-------|--------|-------|
 | — | Phase 3 supplier DPA register | 2026-06-07 | ✅ Programme; signed DPAs remain 🎯 |
-| — | POL-AI-001 BoardRoom approval | 2026-06-07 | ✅ Programme |
+| — | POL-AI-001 authored (framework) | 2026-06-07 | ✅ Programme; BoardRoom approval 🎯 |
 | — | BCP baseline restore test BCP-RT-001 | 2026-06-07 | ✅ Programme baseline; annual repeat 🎯 |
 | — | AI Governance Committee charter | 2026-06-07 | ✅ Programme |
 | — | Phase 5 Tranc3 integration bridge (MC-011) | 2026-06-07 | ✅ Programme; ACT-009 staging 🎯 |

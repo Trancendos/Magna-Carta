@@ -27,8 +27,8 @@ Defines scope, frequency, and remediation workflow for external penetration test
 | Authentication | ✅ | Zero Trust IAM, JWT, MFA |
 | API / workers | ✅ | Representative P0 services |
 | Internal segmentation | ⚠️ Optional | Docker network isolation |
-| Social engineering | ❌ | Out of scope unless contracted |
-| Denial of service | ❌ | Coordinated with ops only |
+| Social engineering | ❌ Default | Optional — [PEN-TEST-FUTURE-SCOPE-ANNEX.md](PEN-TEST-FUTURE-SCOPE-ANNEX.md) PT-SOCENG |
+| Denial of service | ❌ Default | Optional — [PEN-TEST-FUTURE-SCOPE-ANNEX.md](PEN-TEST-FUTURE-SCOPE-ANNEX.md) PT-DOS |
 
 **Environment:** Staging mirror of production; production only with written approval and change window.
 

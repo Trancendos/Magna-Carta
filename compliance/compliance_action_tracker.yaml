@@ -139,3 +139,28 @@ actions:
     validation_type: external
     source: "BCP-RESTORE-TEST-LOG.md"
     evidence_target: "Additional BCP-RT-### entries for vault and Forgejo"
+
+programme_milestones:
+  - milestone_id: PM-001
+    title: "COMPLIANCE-COVERAGE-REGISTER published"
+    completed_date: "2026-06-07"
+    validation_type: programme
+    evidence: "docs/compliance/COMPLIANCE-COVERAGE-REGISTER.md"
+
+  - milestone_id: PM-002
+    title: "Future-scenario readiness alignments (CCPA, LGPD, POPIA, NIST, FedRAMP, CMMC, NHS DSPT, PCI position)"
+    completed_date: "2026-06-07"
+    validation_type: programme
+    evidence: "docs/compliance/*-READINESS.md, PCI-DSS-POSITION.md, CCPA-CPRA-ALIGNMENT.md"
+
+  - milestone_id: PM-003
+    title: "ISO/SOC programme artefacts (RISK-TREATMENT-PLAN, PROC-HR-001, PROC-CAPA-001, POL-SEC-003)"
+    completed_date: "2026-06-07"
+    validation_type: programme
+    evidence: "docs/compliance/RISK-TREATMENT-PLAN.md, docs/procedures/, docs/policies/POL-SEC-003-Endpoint-Data-Protection.md"
+
+  - milestone_id: PM-004
+    title: "Pen-test future scope and TIA templates"
+    completed_date: "2026-06-07"
+    validation_type: programme
+    evidence: "docs/evidence/PEN-TEST-FUTURE-SCOPE-ANNEX.md, docs/templates/TEMPLATE-TIA-US-AI-FALLBACK.md"

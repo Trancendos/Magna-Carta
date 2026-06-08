@@ -27,7 +27,7 @@ This document **does not replace** Trancendos policies, DEFSTAN, or certificatio
 | Connor Group **Generative AI Governance Framework v1.0** | ✅ Yes | Five-domain structure, control considerations, maturity model |
 | Connor Group **GenAI Maturity Model v1.0** | ✅ Yes | Self-assessment (see [GENAI-MATURITY-ASSESSMENT.md](GENAI-MATURITY-ASSESSMENT.md)) |
 | NGX / Risk Academy **Compliance Programme** | ✅ Yes | Obligations management, monitoring vs audit (see [OBLIGATIONS-REGISTER.md](OBLIGATIONS-REGISTER.md)) |
-| University **Concordat / research legislation** | ⚠️ Partial | Research-data annex if academic or clinical research in scope |
+| University **Concordat / research legislation** | ✅ Programme (future) | [RESEARCH-DATA-CONCORDAT-ANNEX.md](RESEARCH-DATA-CONCORDAT-ANNEX.md) when research in scope |
 | **Google AI Principles** | ✅ Yes | Principles layer in [AI-GOVERNANCE.md](AI-GOVERNANCE.md) §11 |
 | **GitHub Brand Guidelines** | ❌ No | Marketing/visual identity only — out of governance scope |
 
@@ -164,7 +164,7 @@ Detail: [AI-GOVERNANCE.md](AI-GOVERNANCE.md) §11.
 
 ## 11. Research integrity (optional annex)
 
-If Trancendos processes **research data** (human subjects, clinical trials, export-controlled dual-use, GMO, animal research), extend LEGISLATION-REGISTER with domain-specific legislation and require Concordat-aligned integrity training. Default Tranc3 scope is **commercial AI platform** — research annex applies only when declared in scope statement.
+If Trancendos processes **research data** (human subjects, clinical trials, export-controlled dual-use, GMO, animal research), extend LEGISLATION-REGISTER with domain-specific legislation and require Concordat-aligned integrity training. Programme coverage: [RESEARCH-DATA-CONCORDAT-ANNEX.md](RESEARCH-DATA-CONCORDAT-ANNEX.md). Default Tranc3 scope is **commercial AI platform** — annex activates only when research is declared in scope statement.
 
 ---
 

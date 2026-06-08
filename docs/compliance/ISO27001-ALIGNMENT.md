@@ -26,11 +26,13 @@
 | ❌ N/A | 3 | Physical asset return (cloud) |
 
 **Magna Carta programme artefacts (Clause 5 gaps addressed in documentation):**
-- POL-SEC-002 Acceptable Use Policy
+- POL-SEC-002 Acceptable Use Policy; [POL-SEC-003](../policies/POL-SEC-003-Endpoint-Data-Protection.md) Endpoint & Data Protection
 - POL-OPS-003 Business Continuity Policy; PROC-BCP-001; [BCP-RESTORE-TEST-LOG.md](../evidence/BCP-RESTORE-TEST-LOG.md)
 - POL-SUP-001 Supplier Management; [SUPPLIER-DPA-REGISTER.md](SUPPLIER-DPA-REGISTER.md)
-- PROC-IR-001 Incident Response Procedure
+- PROC-IR-001 Incident Response Procedure; [PROC-CAPA-001](../procedures/PROC-CAPA-001-Corrective-Action.md)
+- [PROC-HR-001](../procedures/PROC-HR-001-Staff-Lifecycle.md) Staff Lifecycle
 - [RACI-MATRIX.md](../governance/RACI-MATRIX.md); PROC-CHG-002 Post-Implementation Review
+- [RISK-TREATMENT-PLAN.md](RISK-TREATMENT-PLAN.md)
 
 **Certification note:** Programme ✅ ≠ ISO 27001 certificate 🎯 Q2 2027.
 
@@ -70,14 +72,14 @@
 |--------------|--------|
 | ISMS scope document | ✅ This doc + SOA |
 | Risk assessment methodology | ✅ Risk register (Tranc3) |
-| Risk treatment plan | ⚠️ Partial |
+| Risk treatment plan | ✅ Programme — [RISK-TREATMENT-PLAN.md](RISK-TREATMENT-PLAN.md); ISMS sign-off 🎯 |
 | Information security policy | ✅ POL-SEC-001 |
 | Statement of Applicability | ✅ Draft in Tranc3 |
 | Risk register | ✅ Tranc3 `RISK_REGISTER.md` |
 | Internal audit programme | ⚠️ Planned Q4 2026 |
 | Management review | ⚠️ Planned annual |
-| Corrective action process | ⚠️ Via CAB + IR |
-| Documented operating procedures | ✅ Nine procedures in this repo |
+| Corrective action process | ✅ Programme — [PROC-CAPA-001](../procedures/PROC-CAPA-001-Corrective-Action.md) |
+| Documented operating procedures | ✅ Twelve procedures in this repo |
 | External certification audit | 🎯 Q2 2027 |
 
 ---

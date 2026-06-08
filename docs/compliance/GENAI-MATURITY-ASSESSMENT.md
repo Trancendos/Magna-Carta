@@ -50,7 +50,7 @@ This assessment helps Trancendos **measure GenAI governance maturity** across fi
 | Stakeholder engagement | BoardRoom, CAB; `tranc3-repo/config/townhall/frameworks.yaml` | 2 | 3 |
 | Performance monitoring (AI KPIs) | `GET /compliance/ai/model-cards`; Observatory / monitoring-service | 2 | 3 |
 | Contingency / scenario planning | [PROC-BCP-001](../procedures/PROC-BCP-001-Backup-Restore.md), DR runbook | 2 | 3 |
-| Policy development (AI) | [POL-AI-001](../policies/POL-AI-001-AI-Ethics-Governance.md) (approved), [AI-GOVERNANCE.md](AI-GOVERNANCE.md) | 4 | 4 |
+| Policy development (AI) | [POL-AI-001](../policies/POL-AI-001-AI-Ethics-Governance.md) (authored; BoardRoom 🎯), [AI-GOVERNANCE.md](AI-GOVERNANCE.md) | 3 | 4 |
 | Roles & responsibilities | [RACI-MATRIX.md](../governance/RACI-MATRIX.md), FRAMEWORK §9 | 3 | 3 |
 | AI governance committee | [AI-GOVERNANCE-COMMITTEE-CHARTER.md](../governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md) | 3 | 3 |
 | AI use-case inventory | `tranc3-repo/src/compliance/ai_governance.py` model registry | 2 | 3 |
@@ -165,7 +165,7 @@ This assessment helps Trancendos **measure GenAI governance maturity** across fi
 | Priority | Action | Domain | Owner | Target |
 |----------|--------|--------|-------|--------|
 | P1 | Execute first PROC-AI-002 bias measurement run | 4 | AI Engineering | Q3 2026 |
-| ~~P1 Board-approve POL-AI-001~~ | — | Executive | ✅ 2026-06-07 |
+| P1 Board-approve POL-AI-001 | 1 | Executive | 🎯 Q3 2026 |
 | ~~P1 Formal AI governance committee charter~~ | — | ISMS + AI Lead | ✅ 2026-06-07 |
 | P2 | Central GenAI use-case inventory | 1 | AI Lead | Q4 2026 |
 | P2 | Employee AI literacy programme | 4 | HR + AI Lead | Q4 2026 |
@@ -188,7 +188,7 @@ Sync with [AI-GOVERNANCE.md](AI-GOVERNANCE.md) §9 action register.
 
 | Domain | Score | Notes |
 |--------|-------|-------|
-| 1 — Strategic alignment | 2.8 | POL-AI-001 approved; AI committee charter and RACI matrix in place |
+| 1 — Strategic alignment | 2.7 | POL-AI-001 authored (BoardRoom pending); AI committee charter and RACI in place |
 | 2 — Data & compliance | 3.0 | OBLIGATIONS + HIPAA/FCA/PECR programmes; supplier DPA register live; signed DPAs 🎯 |
 | 3 — Operational & technology | 2.7 | Magna Carta + DEFSTAN gates; PROC-CHG-002 PIR; BCP restore test logged |
 | 4 — Human, ethical & social | 2.0 | Bias framework defined; **measurement not yet run** |

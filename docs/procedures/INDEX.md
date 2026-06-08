@@ -20,6 +20,8 @@
 | [PROC-AI-002](PROC-AI-002-Fairness-Bias-Testing.md) | Fairness & Bias Testing | POL-AI-001 | AI Lead |
 | [PROC-CHG-002](PROC-CHG-002-Post-Implementation-Review.md) | Post-Implementation Review | POL-OPS-002 | CAB |
 | [PROC-TRN-001](PROC-TRN-001-Security-Awareness-Attestation.md) | Security Awareness & Attestation | POL-SEC-001, POL-SEC-002 | HR / ISMS |
+| [PROC-HR-001](PROC-HR-001-Staff-Lifecycle.md) | Staff Lifecycle (screening / offboarding) | POL-SEC-001, POL-SEC-002 | HR / ISMS |
+| [PROC-CAPA-001](PROC-CAPA-001-Corrective-Action.md) | Corrective & Preventive Action | POL-SEC-001, POL-OPS-001 | ISMS Lead |
 
 ---
 
@@ -37,6 +39,8 @@
 | PROC-AI-002 | Model change; annual fairness cycle; high-risk AI feature launch |
 | PROC-CHG-002 | Major production change closure (CAB) |
 | PROC-TRN-001 | Onboarding; annual refresh; policy version change |
+| PROC-HR-001 | Joiner / mover / leaver; screening before privileged access |
+| PROC-CAPA-001 | Audit finding; pen test; incident; compliance gap |
 
 ---
 

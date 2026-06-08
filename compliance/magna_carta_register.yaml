@@ -138,7 +138,7 @@ requirements:
     evidence:
       - type: policy
         path: docs/policies/POL-AI-001-AI-Ethics-Governance.md
-        description: "AI ethics policy (BoardRoom approved 2026-06-07)"
+        description: "AI ethics policy (authored; BoardRoom approval pending)"
       - type: document
         path: docs/compliance/AI-GOVERNANCE.md
         description: "AI governance alignment"
@@ -155,7 +155,7 @@ requirements:
     verification_method: policy_review
     last_reviewed: "2026-06-07"
     reviewer: "Trancendos"
-    notes: "Programme implemented; POL-AI-001 approved; first PROC-AI-002 bias measurement run is operational validation target (Q3 2026)"
+    notes: "Programme implemented; POL-AI-001 authored (BoardRoom approval pending); first PROC-AI-002 bias measurement run is operational validation target (Q3 2026)"
 
   - id: MC-006
     standard: "Magna Carta / ISO 27001"

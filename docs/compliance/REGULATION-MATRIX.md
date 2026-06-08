@@ -28,9 +28,9 @@
 | EU GDPR | EU | ✅ | ✅ | SCCs for external AI fallback in ROPA | GDPR-ALIGNMENT.md |
 | PECR | UK | ⚠️ | ✅ Programme | [PECR-ALIGNMENT.md](PECR-ALIGNMENT.md), POL-PRI-001 | Cookie UI if marketing cookies deployed 🎯 |
 | ePrivacy Directive | EU | ⚠️ | ⚠️ | Same | Privacy policy |
-| CCPA / CPRA | California, US | ⚠️ | 📋 | GDPR controls provide baseline | Extend if CA users material |
-| LGPD | Brazil | ❌ | — | No BR operations planned | — |
-| POPIA | South Africa | ❌ | — | No ZA operations planned | — |
+| CCPA / CPRA | California, US | ⚠️ | ✅ Programme | GDPR baseline; [CCPA-CPRA-ALIGNMENT.md](CCPA-CPRA-ALIGNMENT.md) | Activate if CA users material 🎯 |
+| LGPD | Brazil | ❌ N/A | ✅ Programme (future) | No BR operations today | [LGPD-READINESS.md](LGPD-READINESS.md) |
+| POPIA | South Africa | ❌ N/A | ✅ Programme (future) | No ZA operations today | [POPIA-READINESS.md](POPIA-READINESS.md) |
 
 ---
 
@@ -42,14 +42,14 @@
 | ISO/IEC 27002:2022 | ✅ | ⚠️ | — | Control implementation via SOA |
 | SOC 2 Type II (TSC) | ✅ | ⚠️ Draft | 🎯 Q1 2027 | `SOC2_TYPE_II.md`, evidence collector |
 | DEFSTAN (civilian) | ✅ Voluntary | ✅ Strong | Active | `register.yaml`, CI gate |
-| NIST CSF 2.0 | ⚠️ Reference | 📋 | — | Mapped via ISO/SOC2 controls |
+| NIST CSF 2.0 | ⚠️ Reference | ✅ Programme | — | [NIST-CSF-ALIGNMENT.md](NIST-CSF-ALIGNMENT.md) |
 | CIS Controls v8 | ⚠️ Reference | ⚠️ Partial | — | IAM, logging, vuln mgmt implemented |
 | OWASP Top 10 (2021) | ✅ | ✅ | Active | Penetration tests, hardening |
 | OWASP ASVS L2 | ⚠️ Target | ⚠️ Partial | — | Auth, validation, logging strong |
-| PCI DSS v4.0 | ❌ | — | — | No CHD; payments via third-party if any |
+| PCI DSS v4.0 | ❌ N/A | ✅ Programme (position) | — | No CHD; [PCI-DSS-POSITION.md](PCI-DSS-POSITION.md) |
 | HIPAA | ⚠️ US PHI boundary | ✅ Programme | 🎯 Tier C on customer path | [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md), MC-008, MC-RULE-009 |
-| FedRAMP | ❌ | — | — | Not US government cloud |
-| CMMC 2.0 | ❌ | — | — | Not defence contractor CUI |
+| FedRAMP | ❌ N/A | ✅ Programme (future) | — | [FEDRAMP-READINESS.md](FEDRAMP-READINESS.md) |
+| CMMC 2.0 | ❌ N/A | ✅ Programme (future) | — | [CMMC-READINESS.md](CMMC-READINESS.md) |
 
 ---
 
@@ -60,7 +60,7 @@
 | EU AI Act | ✅ (deploy in EU) | ✅ Programme | `AI_GOVERNANCE.md`, model cards, MC-RULE-004 |
 | ISO/IEC 42001:2023 | ⚠️ Target | ✅ Programme | AI governance module, GENAI-MATURITY |
 | NIST AI RMF 1.0 | ⚠️ Reference | ✅ Mapped | AI-GOVERNANCE.md |
-| UK AI White Paper / DSIT | ⚠️ Reference | 📋 | Monitor legislation |
+| UK AI White Paper / DSIT | ⚠️ Reference | ✅ Programme | [UK-AI-LEGISLATION-MONITORING.md](UK-AI-LEGISLATION-MONITORING.md) |
 | Algorithmic transparency | ⚠️ | ✅ Programme | Model cards; bias measurement operational target |
 | Connor GenAI Governance Framework v1.0 | ✅ Reference | ✅ Mapped | [EXTERNAL-FRAMEWORK-MAPPING.md](EXTERNAL-FRAMEWORK-MAPPING.md), [GENAI-MATURITY-ASSESSMENT.md](GENAI-MATURITY-ASSESSMENT.md) |
 | Google AI Principles | ✅ Reference | ✅ Mapped | [AI-GOVERNANCE.md](AI-GOVERNANCE.md) §11 |
@@ -97,7 +97,10 @@
 |------------|---------|--------|
 | HIPAA | Health data processing with US persons | ✅ Programme — [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md) |
 | FCA / PRA | Regulated financial services in UK | ✅ Programme (supplier/conduct) — authorisation N/A unless regulated activities |
-| NHS DSPT | NHS data handling | ❌ Not in scope |
+| NHS DSPT | NHS data handling | ❌ N/A | ✅ Programme (future) | [NHS-DSPT-READINESS.md](NHS-DSPT-READINESS.md) |
+| Research / Concordat | Academic or clinical research data | ✅ Programme (future) | [RESEARCH-DATA-CONCORDAT-ANNEX.md](RESEARCH-DATA-CONCORDAT-ANNEX.md) |
+
+**Honest status register:** [COMPLIANCE-COVERAGE-REGISTER.md](COMPLIANCE-COVERAGE-REGISTER.md) — explains every ⚠️, 📋, and ❌.
 
 **Rule:** Do not claim compliance in product copy (`platform.py`, marketing) unless the corresponding row is ✅ with evidence.
 
