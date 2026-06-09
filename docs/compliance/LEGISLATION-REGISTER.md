@@ -42,6 +42,8 @@
 
 **EU secondary legislation** (delegated/implementing acts under LEG-006): tracked in `legislation_register.yaml` → `secondary_legislation_watch` and [EU-LEGISLATION-MONITORING.md](EU-LEGISLATION-MONITORING.md); first operational scan 🎯 ACT-014.
 
+**EU harmonised technical standards** (CEN/CENELEC JTC21 under LEG-006): tracked in `compliance/standards_watch.yaml` and [HARMONISED-STANDARDS-MONITORING.md](HARMONISED-STANDARDS-MONITORING.md); ETSI EN 304 223 reference alignment in [ETSI-SAI-ALIGNMENT.md](ETSI-SAI-ALIGNMENT.md); first operational watch 🎯 ACT-015.
+
 ---
 
 ## Regulatory contacts

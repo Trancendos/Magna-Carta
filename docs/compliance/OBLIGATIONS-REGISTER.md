@@ -177,6 +177,7 @@ Identify → Map to control → Implement → Monitor → Evidence → Review �
 | 2026-06-07 | Phase 4 evidence & assurance programme | Action tracker, risk register, SOC2 schedule, audit programme | MC-010; ACT-001–012 opened | COMPLIANCE-ACTION-TRACKER, INTERNAL-AUDIT-PROGRAMME | ✅ |
 | 2026-06-07 | Phase 5 Tranc3 integration bridge | MC↔REQ bridge, integration guide, CI programme, template index | MC-011; ACT-006 local copy verified | TRANC3-REGISTER-BRIDGE, TRANC3-INTEGRATION-GUIDE | ✅ |
 | 2026-06-08 | EUR-Lex / ELI programme wave | Machine-readable legislation register; EU delegated-act watch | PM-012; ACT-014 opened; OBL-020–024 EUR-Lex anchors | legislation_register.yaml, EUR-LEX-ELI-REFERENCE, EU-LEGISLATION-MONITORING | ✅ |
+| 2026-06-08 | ETSI SAI / harmonised standards wave | ETSI EN 304 223 reference alignment; JTC21 harmonised watch | PM-013; ACT-015 opened; STD-042/043 | standards_watch.yaml, ETSI-SAI-ALIGNMENT, HARMONISED-STANDARDS-MONITORING | ✅ |
 
 ---
 
