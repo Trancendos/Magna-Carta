@@ -55,8 +55,10 @@ Runtime enforcement for the **Tranc3 App Framework** lives in the [Tranc3](https
 | Document | Purpose |
 |----------|---------|
 | [FRAMEWORK.md](FRAMEWORK.md) | Master blueprint — how all pieces fit together |
+| [docs/architecture/TRANCENDOS-UNIVERSE-AND-INFINITY-NETWORK.md](docs/architecture/TRANCENDOS-UNIVERSE-AND-INFINITY-NETWORK.md) | Universe (Foundation) → Infinity Network → App Frameworks hierarchy |
 | [docs/00-EXECUTIVE-SUMMARY.md](docs/00-EXECUTIVE-SUMMARY.md) | Executive overview and certification roadmap |
 | [docs/01-MAGNACARTA-FOUNDATION.md](docs/01-MAGNACARTA-FOUNDATION.md) | Digital rights, governance principles, Town Hall alignment |
+| [docs/compliance/ZERO-COST-SECURITY-TOOLING.md](docs/compliance/ZERO-COST-SECURITY-TOOLING.md) | £0/$0 Layer B tooling policy (Aikido optional; local scripts mandatory) |
 
 ### Compliance & regulation
 
@@ -179,7 +181,20 @@ Runtime enforcement for the **Tranc3 App Framework** lives in the [Tranc3](https
 | [compliance/health_check_history.yaml](compliance/health_check_history.yaml) | Append-only weekly health check run log |
 | [scripts/compliance_health_check.py](scripts/compliance_health_check.py) | Automated drift, staleness, and link checker |
 | [scripts/weekly_compliance_health.sh](scripts/weekly_compliance_health.sh) | Weekly wrapper (logs results; zero cloud CI cost) |
+| [scripts/zero_cost_tooling_check.py](scripts/zero_cost_tooling_check.py) | Verifies mandatory zero-cost tooling paths (ZCT) |
+| [scripts/run_oss_security_scans.sh](scripts/run_oss_security_scans.sh) | Optional OSS security scans (skip if not installed) |
+| [compliance/zero_cost_tooling_register.yaml](compliance/zero_cost_tooling_register.yaml) | Machine-readable zero-cost tooling register |
+| [compliance/infinity_app_frameworks_register.yaml](compliance/infinity_app_frameworks_register.yaml) | Infinity Network app framework catalogue |
 | [scripts/install_local_weekly_cron.sh](scripts/install_local_weekly_cron.sh) | Optional local crontab installer (Mondays 08:00) |
+
+## Verify Layer B (zero cost)
+
+```bash
+pip install -r requirements.txt
+python3 scripts/readiness_automation_score.py --report
+python3 scripts/zero_cost_tooling_check.py --report
+./scripts/weekly_compliance_health.sh
+```
 
 ## Directory structure
 
@@ -262,6 +277,7 @@ magna-carta/
     │   ├── COMPLIANCE-MAINTENANCE-PROGRAMME.md
     │   └── REVIEWERS-REGISTER.md
     ├── engineering/
+    │   ├── INFINITY-APP-TRANC3-INTEGRATION-GUIDE.md
     │   ├── TRANC3-INTEGRATION-GUIDE.md
     │   └── TRANC3-HIPAA-COPY-REMEDIATION.md
     ├── evidence/
@@ -282,27 +298,29 @@ magna-carta/
         └── PROC-*.md (25 procedures)
 ```
 
-## Relationship to Tranc3
+## Infinity App bridge (Tranc3 exemplar)
 
-| Magna Carta (this repo) | Tranc3 (implementation) |
-|-------------------------|-------------------------|
+| Infinity Network — Magna Carta (this repo) | Tranc3 App Framework (implementation) |
+|--------------------------------------------|---------------------------------------|
 | Policies, procedures, blueprints | Workers, services, CI gates |
 | `magna_carta_config.json` | `MAGNA_CARTA_CONFIG_PATH` env var |
-| `magna_carta_register.yaml` | Extends `compliance/register.yaml` |
+| `magna_carta_register.yaml` | Extends app `compliance/register.yaml` |
 | `tranc3_register_bridge.yaml` | MC-### ↔ REQ-### crosswalk for checker import |
 | Governance narrative | Town Hall API (`/townhall/*`) |
 | Architecture blueprint | `ARCHITECTURE_THREAT_MODEL.md`, workers |
 
-**Document precedence:** Legislation → certification → Magna Carta policies → Tranc3 `register.yaml` → procedures → aspirational architecture.
+Other App Frameworks (Trance-One, T2ance, Spark, Void) follow the same bridge pattern when active — see [compliance/infinity_app_frameworks_register.yaml](compliance/infinity_app_frameworks_register.yaml).
 
-## Enabling in Tranc3
+**Document precedence:** Legislation → certification → Magna Carta policies → app framework `register.yaml` → procedures → aspirational architecture.
+
+## Enabling in Tranc3 App Framework
 
 ```bash
 export MAGNA_CARTA_ENABLED=true
 export MAGNA_CARTA_CONFIG_PATH=/path/to/magna-carta/config/magna_carta_config.json
 ```
 
-See [docs/engineering/TRANC3-INTEGRATION-GUIDE.md](docs/engineering/TRANC3-INTEGRATION-GUIDE.md) for staging checklist and checker import steps (ACT-009).
+See [docs/engineering/INFINITY-APP-TRANC3-INTEGRATION-GUIDE.md](docs/engineering/INFINITY-APP-TRANC3-INTEGRATION-GUIDE.md) for staging checklist and checker import steps (ACT-009).
 
 ## Review cycle
 
