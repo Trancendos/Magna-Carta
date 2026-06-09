@@ -144,3 +144,19 @@ external_action_packages:
     - action_id: ACT-012
       playbook_section: "§3.10 BCP restore tests (P0 databases)"
       status: open
+
+recurrence_schedule:
+  - evidence_id: EEV-006
+    title: "Quarterly EUR-Lex delegated-act scan"
+    cadence_days: 90
+    last_completed: "2026-06-09"
+    next_due: "2026-09-07"
+    owner: "AI Lead / DPO"
+    linked_action: ACT-014
+  - evidence_id: EEV-007
+    title: "Semi-annual harmonised standards and ETSI watch"
+    cadence_days: 180
+    last_completed: "2026-06-09"
+    next_due: "2026-12-31"
+    owner: "AI Lead / ISMS Lead"
+    linked_action: ACT-015

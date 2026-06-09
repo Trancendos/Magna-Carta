@@ -56,7 +56,7 @@ frameworks:
   applicability: conditional
   programme_status: programme
   certification_target: drills
-  readiness_doc: docs/procedures/PROC-BCP-001-Business-Continuity.md
+  readiness_doc: docs/procedures/PROC-BCP-001-Backup-Restore.md
 - framework_id: FW-007
   name: ISO 9001
   category: iso_ms
@@ -223,7 +223,7 @@ frameworks:
   category: nist
   applicability: reference
   programme_status: programme
-  readiness_doc: docs/procedures/PROC-BCP-001-Business-Continuity.md
+  readiness_doc: docs/procedures/PROC-BCP-001-Backup-Restore.md
 - framework_id: FW-045
   name: NIST SP 800-64
   category: nist

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/framework_triggers.schema.json",
+  "title": "Framework Triggers",
+  "type": "object",
+  "required": ["meta", "triggers"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" },
+        "signals_register": { "type": "string" },
+        "frameworks_register": { "type": "string" },
+        "runtime_config": { "type": "string" }
+      }
+    },
+    "defaults": { "type": "object" },
+    "triggers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["trigger_id", "signal_id", "framework_ids", "on_activate"],
+        "properties": {
+          "trigger_id": { "type": "string", "pattern": "^TRG-[A-Z0-9]+-[0-9]{3}$" },
+          "signal_id": { "type": "string", "pattern": "^SIG-[A-Z0-9]+-[0-9]{3}$" },
+          "framework_ids": {
+            "type": "array",
+            "items": { "type": "string", "pattern": "^FW-[0-9]{3}$" }
+          },
+          "on_activate": { "type": "object" },
+          "scan_checks": { "type": "array" }
+        }
+      }
+    },
+    "proactive_scans": { "type": "object" }
+  }
+}

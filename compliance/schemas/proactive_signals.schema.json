@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/proactive_signals.schema.json",
+  "title": "Proactive Signals",
+  "type": "object",
+  "required": ["meta", "signals"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" },
+        "runtime_config": { "type": "string" },
+        "trigger_register": { "type": "string" }
+      }
+    },
+    "signals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["signal_id", "name", "default_state", "detection"],
+        "properties": {
+          "signal_id": { "type": "string", "pattern": "^SIG-[A-Z0-9]+-[0-9]{3}$" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "default_state": {
+            "type": "string",
+            "enum": ["inactive", "active", "unknown"]
+          },
+          "detection": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["source"],
+              "properties": {
+                "source": { "type": "string", "enum": ["config", "env"] },
+                "path": { "type": "string" },
+                "json_path": { "type": "string" },
+                "variable": { "type": "string" },
+                "active_values": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

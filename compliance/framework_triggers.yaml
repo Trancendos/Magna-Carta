@@ -1,0 +1,149 @@
+---
+# Framework scope triggers — auto-activate protections when signals fire
+# Pattern inspired by Drata/Vanta continuous control monitoring (local, zero SaaS cost).
+# Owner: ISMS Lead
+# Consumed by: scripts/compliance_health_check.py (MON-016, MON-017)
+
+meta:
+  register_version: "1.0.0"
+  owner: "ISMS Lead"
+  last_updated: "2026-06-09"
+  review_cycle: "quarterly"
+  signals_register: "compliance/proactive_signals.yaml"
+  frameworks_register: "compliance/frameworks_register.yaml"
+  runtime_config: "config/magna_carta_config.json"
+
+schema:
+  trigger_id: "TRG-XXX-###"
+  signal_id: "SIG-XXX-### from proactive_signals.yaml"
+  on_activate: "required protections when signal is active"
+
+defaults:
+  enforcement_mode: advisory
+  fail_closed_on_violation: false
+  description: >
+    Safe default — optional frameworks remain programme/readiness until an operator
+    enables a scope signal. Health check escalates to error when signal is active but
+    enforcement profile does not match on_activate requirements.
+
+triggers:
+  - trigger_id: TRG-HIPAA-001
+    signal_id: SIG-HIPAA-001
+    framework_ids: [FW-062]
+    on_activate:
+      enforcement_mode: enforce
+      fail_closed_on_violation: true
+      rules_required_enabled: [MC-RULE-009]
+      supplier_dpa_required: [SUP-005]
+      linked_actions_must_not_be: open
+      linked_actions: [ACT-002, ACT-006]
+      programme_status_expect: programme
+    scan_checks:
+      - check_id: MON-016
+        severity: error
+      - check_id: MON-014
+        severity: error
+
+  - trigger_id: TRG-CCPA-001
+    signal_id: SIG-CCPA-001
+    framework_ids: [FW-112]
+    on_activate:
+      enforcement_mode: enforce
+      fail_closed_on_violation: true
+      rules_required_enabled: [MC-RULE-002, MC-RULE-008]
+      readiness_doc: docs/compliance/CCPA-CPRA-ALIGNMENT.md
+      programme_status_expect: programme
+    scan_checks:
+      - check_id: MON-016
+        severity: error
+
+  - trigger_id: TRG-PCI-001
+    signal_id: SIG-PCI-001
+    framework_ids: [FW-030]
+    on_activate:
+      enforcement_mode: enforce
+      fail_closed_on_violation: true
+      rules_required_enabled: [MC-RULE-001, MC-RULE-002, MC-RULE-006]
+      supplier_dpa_required: [SUP-003]
+      linked_actions: [ACT-001]
+      programme_status_expect: partial
+    scan_checks:
+      - check_id: MON-016
+        severity: error
+      - check_id: MON-014
+        severity: error
+
+  - trigger_id: TRG-FEDRAMP-001
+    signal_id: SIG-FEDRAMP-001
+    framework_ids: [FW-050]
+    on_activate:
+      enforcement_mode: enforce
+      fail_closed_on_violation: true
+      rules_required_enabled: [MC-RULE-001, MC-RULE-006, MC-RULE-007]
+      readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+      programme_status_expect: programme
+    scan_checks:
+      - check_id: MON-016
+        severity: error
+
+  - trigger_id: TRG-LGPD-001
+    signal_id: SIG-LGPD-001
+    framework_ids: [FW-116]
+    on_activate:
+      enforcement_mode: enforce
+      fail_closed_on_violation: true
+      rules_required_enabled: [MC-RULE-002, MC-RULE-008]
+      readiness_doc: docs/compliance/LGPD-READINESS.md
+      programme_status_expect: programme
+    scan_checks:
+      - check_id: MON-016
+        severity: error
+
+  - trigger_id: TRG-AI-US-001
+    signal_id: SIG-AI-US-001
+    framework_ids: [FW-004, FW-112]
+    on_activate:
+      enforcement_mode: enforce
+      fail_closed_on_violation: true
+      rules_required_enabled: [MC-RULE-004, MC-RULE-005]
+      supplier_dpa_required: [SUP-004]
+      linked_actions: [ACT-010]
+      programme_status_expect: programme
+    scan_checks:
+      - check_id: MON-014
+        severity: error
+      - check_id: MON-016
+        severity: warning
+
+  - trigger_id: TRG-PAYMENTS-001
+    signal_id: SIG-PAYMENTS-001
+    framework_ids: [FW-030]
+    on_activate:
+      enforcement_mode: enforce
+      fail_closed_on_violation: true
+      supplier_dpa_required: [SUP-003]
+      linked_actions: [ACT-001]
+      rules_required_enabled: [MC-RULE-001, MC-RULE-006]
+    scan_checks:
+      - check_id: MON-014
+        severity: error
+
+proactive_scans:
+  description: >
+    Scheduled programme scans independent of scope signals. Health check enforces
+    recurrence via execution_evidence_register.recurrence_schedule.
+  items:
+    - scan_id: SCAN-LEG-001
+      register: compliance/legislation_register.yaml
+      field: review_date
+      max_overdue_days: 0
+      check_id: MON-011
+      cadence_days: 90
+      linked_evidence: EEV-006
+    - scan_id: SCAN-STD-001
+      register: compliance/standards_watch.yaml
+      field: review_date
+      max_overdue_days: 0
+      check_id: MON-012
+      cadence_days: 180
+      linked_evidence: EEV-007

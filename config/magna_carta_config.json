@@ -14,7 +14,18 @@
     "mode": "advisory",
     "fail_closed_on_violation": false,
     "audit_all_checks": true,
-    "log_level": "info"
+    "log_level": "info",
+    "auto_escalate_on_signal": true,
+    "trigger_register": "compliance/framework_triggers.yaml"
+  },
+  "profiles": {
+    "HIPAA_PROFILE": "disabled",
+    "CCPA_SCOPE": "disabled",
+    "PCI_SCOPE": "disabled",
+    "FEDRAMP_SCOPE": "disabled",
+    "LGPD_SCOPE": "disabled",
+    "US_AI_FALLBACK": "disabled",
+    "PAYMENTS_LIVE": "disabled"
   },
   "rules": [
     {

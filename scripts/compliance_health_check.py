@@ -17,6 +17,8 @@ Exit codes:
 from __future__ import annotations
 
 import argparse
+import json
+import os
 import re
 import sys
 from dataclasses import dataclass
@@ -393,6 +395,310 @@ def check_procedure_coverage(cfg: dict, findings: list[Finding]) -> None:
             )
 
 
+def _load_yaml(rel: str) -> dict:
+    path = ROOT / rel
+    if not path.is_file() or yaml is None:
+        return {}
+    with path.open(encoding="utf-8") as f:
+        return yaml.safe_load(f) or {}
+
+
+def _parse_iso_date(raw: str | None) -> date | None:
+    if not raw:
+        return None
+    try:
+        return datetime.strptime(str(raw)[:10], "%Y-%m-%d").date()
+    except ValueError:
+        return None
+
+
+def _json_path_get(data: dict, dotted: str):
+    cur = data
+    for part in dotted.split("."):
+        if not isinstance(cur, dict) or part not in cur:
+            return None
+        cur = cur[part]
+    return cur
+
+
+def resolve_signal_states(signals_data: dict) -> dict[str, str]:
+    """Return signal_id -> active|inactive."""
+    states: dict[str, str] = {}
+    for sig in signals_data.get("signals", []):
+        sid = sig.get("signal_id", "")
+        active = False
+        for det in sig.get("detection", []):
+            active_values = {str(v).lower() for v in det.get("active_values", [])}
+            if det.get("source") == "config":
+                cfg_path = ROOT / det.get("path", "")
+                if cfg_path.is_file():
+                    with cfg_path.open(encoding="utf-8") as f:
+                        cfg_json = json.load(f)
+                    val = _json_path_get(cfg_json, det.get("json_path", ""))
+                    if val is not None and str(val).lower() in active_values:
+                        active = True
+                        break
+            elif det.get("source") == "env":
+                var = det.get("variable", "")
+                val = os.environ.get(var)
+                if val is not None and str(val).lower() in active_values:
+                    active = True
+                    break
+        states[sid] = "active" if active else "inactive"
+    return states
+
+
+def check_register_review_dates(
+    block: dict,
+    findings: list[Finding],
+    *,
+    default_cid: str,
+) -> None:
+    if not block:
+        return
+    cid = block.get("check_id", default_cid)
+    rel = block["register"]
+    data = _load_yaml(rel)
+    items_key = block.get("items_key", "")
+    review_field = block.get("review_field", "review_date")
+    exclude = {str(s).lower() for s in block.get("exclude_status", [])}
+    max_overdue = block.get("max_overdue_days", 0)
+    today = date.today()
+    for item in data.get(items_key, []):
+        status = str(item.get("status", "")).lower()
+        if status in exclude:
+            continue
+        review_raw = item.get(review_field)
+        review_dt = _parse_iso_date(review_raw)
+        if review_dt is None:
+            item_id = item.get("legislation_id") or item.get("standard_id") or "?"
+            findings.append(
+                Finding(
+                    cid,
+                    "warning",
+                    f"{rel} item {item_id} missing or invalid {review_field}",
+                )
+            )
+            continue
+        overdue = (today - review_dt).days
+        if overdue > max_overdue:
+            item_id = item.get("legislation_id") or item.get("standard_id") or "?"
+            findings.append(
+                Finding(
+                    cid,
+                    "error",
+                    f"{rel} item {item_id} {review_field} overdue by {overdue}d "
+                    f"(due {review_dt})",
+                )
+            )
+
+
+def check_framework_readiness_docs(cfg: dict, findings: list[Finding]) -> None:
+    block = cfg.get("framework_readiness", {})
+    if not block:
+        return
+    cid = block.get("check_id", "MON-013")
+    data = _load_yaml(block["register"])
+    statuses = set(block.get("require_doc_for_status", []))
+    applicabilities = set(block.get("require_doc_for_applicability", []))
+    for fw in data.get(block.get("items_key", "frameworks"), []):
+        status = fw.get("programme_status", "")
+        applicability = fw.get("applicability", "")
+        if status not in statuses and applicability not in applicabilities:
+            continue
+        doc = fw.get("readiness_doc")
+        fid = fw.get("framework_id", "?")
+        if not doc:
+            findings.append(
+                Finding(cid, "error", f"Framework {fid} missing readiness_doc")
+            )
+            continue
+        if not (ROOT / doc).is_file():
+            findings.append(
+                Finding(
+                    cid,
+                    "error",
+                    f"Framework {fid} readiness_doc missing on disk: {doc}",
+                )
+            )
+
+
+def check_supplier_dpa_gates(cfg: dict, findings: list[Finding]) -> None:
+    block = cfg.get("supplier_dpa_gates", {})
+    if not block:
+        return
+    cid = block.get("check_id", "MON-014")
+    data = _load_yaml(block["register"])
+    critical = set(block.get("critical_tiers", ["Critical"]))
+    blocked = set(block.get("blocked_dpa_status", []))
+    for sup in data.get(block.get("items_key", "suppliers"), []):
+        if sup.get("risk_tier") not in critical:
+            continue
+        if sup.get("dpa_status") not in blocked:
+            continue
+        sid = sup.get("supplier_id", "?")
+        findings.append(
+            Finding(
+                cid,
+                "warning",
+                f"Critical supplier {sid} ({sup.get('name')}) DPA status "
+                f"'{sup.get('dpa_status')}' — gate before production scope",
+            )
+        )
+
+
+def check_evidence_recurrence(cfg: dict, findings: list[Finding]) -> None:
+    block = cfg.get("evidence_recurrence", {})
+    if not block:
+        return
+    cid = block.get("check_id", "MON-015")
+    data = _load_yaml(block["register"])
+    today = date.today()
+    for item in data.get(block.get("schedule_key", "recurrence_schedule"), []):
+        due = _parse_iso_date(item.get("next_due"))
+        if due is None:
+            findings.append(
+                Finding(
+                    cid,
+                    "warning",
+                    f"Recurrence {item.get('evidence_id')} missing next_due",
+                )
+            )
+            continue
+        if due < today:
+            eid = item.get("evidence_id", "?")
+            overdue = (today - due).days
+            findings.append(
+                Finding(
+                    cid,
+                    "error",
+                    f"Recurring evidence {eid} overdue by {overdue}d (due {due})",
+                )
+            )
+
+
+def check_enforcement_alignment(cfg: dict, findings: list[Finding]) -> None:
+    block = cfg.get("enforcement_alignment", {})
+    if not block:
+        return
+    cid = block.get("check_id", "MON-016")
+    triggers = _load_yaml(block["triggers_register"])
+    signals = _load_yaml(block["signals_register"])
+    config_path = ROOT / block["runtime_config"]
+    if not config_path.is_file():
+        findings.append(Finding(cid, "error", f"Runtime config missing: {block['runtime_config']}"))
+        return
+    with config_path.open(encoding="utf-8") as f:
+        runtime = json.load(f)
+    enforcement = runtime.get("enforcement", {})
+    mode = str(enforcement.get("mode", "advisory")).lower()
+    fail_closed = bool(enforcement.get("fail_closed_on_violation", False))
+    rules_by_id = {r["id"]: r for r in runtime.get("rules", []) if "id" in r}
+    signal_states = resolve_signal_states(signals)
+    action_data = _load_yaml("compliance/compliance_action_tracker.yaml")
+    open_actions = {
+        a.get("action_id")
+        for a in action_data.get("actions", [])
+        if a.get("status") in ("Open", "In progress", "Blocked")
+    }
+    for trig in triggers.get("triggers", []):
+        sig_id = trig.get("signal_id", "")
+        if signal_states.get(sig_id) != "active":
+            continue
+        on_act = trig.get("on_activate", {})
+        tid = trig.get("trigger_id", "?")
+        sev = "error"
+        for sc in trig.get("scan_checks", []):
+            if sc.get("check_id") == "MON-016":
+                sev = sc.get("severity", "error")
+                break
+        expected_mode = str(on_act.get("enforcement_mode", "enforce")).lower()
+        if mode != expected_mode:
+            findings.append(
+                Finding(
+                    cid,
+                    sev,
+                    f"Trigger {tid}: signal {sig_id} active but enforcement.mode "
+                    f"is '{mode}' (expected '{expected_mode}')",
+                )
+            )
+        if on_act.get("fail_closed_on_violation") and not fail_closed:
+            findings.append(
+                Finding(
+                    cid,
+                    sev,
+                    f"Trigger {tid}: signal {sig_id} active but "
+                    "fail_closed_on_violation is false",
+                )
+            )
+        for rule_id in on_act.get("rules_required_enabled", []):
+            rule = rules_by_id.get(rule_id)
+            if not rule or not rule.get("enabled", False):
+                findings.append(
+                    Finding(
+                        cid,
+                        sev,
+                        f"Trigger {tid}: required rule {rule_id} not enabled",
+                    )
+                )
+        for act_id in on_act.get("linked_actions", []):
+            if act_id in open_actions:
+                findings.append(
+                    Finding(
+                        cid,
+                        "warning" if sev == "warning" else "error",
+                        f"Trigger {tid}: linked action {act_id} still open while "
+                        f"scope signal {sig_id} is active",
+                    )
+                )
+
+
+def check_trigger_integrity(cfg: dict, findings: list[Finding]) -> None:
+    block = cfg.get("trigger_integrity", {})
+    if not block:
+        return
+    cid = block.get("check_id", "MON-017")
+    triggers = _load_yaml(block["triggers_register"])
+    signals = _load_yaml(block["signals_register"])
+    frameworks = _load_yaml(block["frameworks_register"])
+    signal_ids = {s.get("signal_id") for s in signals.get("signals", [])}
+    framework_ids = {f.get("framework_id") for f in frameworks.get("frameworks", [])}
+    for trig in triggers.get("triggers", []):
+        tid = trig.get("trigger_id", "?")
+        sig = trig.get("signal_id")
+        if sig and sig not in signal_ids:
+            findings.append(
+                Finding(
+                    cid,
+                    "error",
+                    f"Trigger {tid} references unknown signal {sig}",
+                )
+            )
+        for fid in trig.get("framework_ids", []):
+            if fid not in framework_ids:
+                findings.append(
+                    Finding(
+                        cid,
+                        "error",
+                        f"Trigger {tid} references unknown framework {fid}",
+                    )
+                )
+
+
+def check_proactive_monitoring(cfg: dict, findings: list[Finding]) -> None:
+    """Run MON-011 through MON-017 from proactive_monitoring config."""
+    pm = cfg.get("proactive_monitoring", {})
+    if not pm:
+        return
+    check_register_review_dates(cfg.get("legislation_watch", {}), findings, default_cid="MON-011")
+    check_register_review_dates(cfg.get("standards_watch", {}), findings, default_cid="MON-012")
+    check_framework_readiness_docs(cfg, findings)
+    check_supplier_dpa_gates(cfg, findings)
+    check_evidence_recurrence(cfg, findings)
+    check_enforcement_alignment(cfg, findings)
+    check_trigger_integrity(cfg, findings)
+
+
 def check_cookbook_links(cfg: dict, findings: list[Finding]) -> None:
     for block in cfg.get("cookbook_links", []):
         cid = block.get("check_id", "MON-005")
@@ -425,6 +731,7 @@ def run_checks(*, include_weekly_cadence: bool = False) -> list[Finding]:
     check_procedure_coverage(cfg, findings)
     check_weekly_cadence(cfg, findings)
     validate_register_schema(cfg, findings)
+    check_proactive_monitoring(cfg, findings)
     return findings
 
 

@@ -51,6 +51,22 @@
         }
       }
     },
-    "external_action_packages": { "type": "object" }
+    "external_action_packages": { "type": "object" },
+    "recurrence_schedule": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["evidence_id", "cadence_days", "next_due"],
+        "properties": {
+          "evidence_id": { "type": "string", "pattern": "^EEV-[0-9]{3}$" },
+          "title": { "type": "string" },
+          "cadence_days": { "type": "integer", "minimum": 1 },
+          "last_completed": { "type": "string", "format": "date" },
+          "next_due": { "type": "string", "format": "date" },
+          "owner": { "type": "string" },
+          "linked_action": { "type": "string", "pattern": "^ACT-[0-9]{3}$" }
+        }
+      }
+    }
   }
 }

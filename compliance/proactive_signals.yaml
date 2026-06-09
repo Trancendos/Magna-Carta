@@ -1,0 +1,110 @@
+---
+# Proactive scope signals — machine-readable deployment/operator flags
+# Drives framework_triggers.yaml and MON-016 enforcement alignment checks.
+# Owner: ISMS Lead / Platform Engineering
+# No separate human doc required; health check validates consistency.
+
+meta:
+  register_version: "1.0.0"
+  owner: "ISMS Lead"
+  last_updated: "2026-06-09"
+  review_cycle: "quarterly"
+  runtime_config: "config/magna_carta_config.json"
+  trigger_register: "compliance/framework_triggers.yaml"
+
+schema:
+  signal_id: "SIG-XXX-### unique identifier"
+  state: "inactive | active | unknown"
+  detection: "ordered list of sources; first match wins"
+
+signals:
+  - signal_id: SIG-HIPAA-001
+    name: "HIPAA health data profile"
+    description: "US PHI processing or wellbeing connectors enabled"
+    default_state: inactive
+    detection:
+      - source: config
+        path: config/magna_carta_config.json
+        json_path: profiles.HIPAA_PROFILE
+        active_values: ["enabled", "true", "1"]
+      - source: env
+        variable: HIPAA_PROFILE
+        active_values: ["enabled", "true", "1"]
+
+  - signal_id: SIG-CCPA-001
+    name: "California consumer data scope"
+    description: "Processing personal information of California residents"
+    default_state: inactive
+    detection:
+      - source: config
+        path: config/magna_carta_config.json
+        json_path: profiles.CCPA_SCOPE
+        active_values: ["enabled", "true", "1"]
+      - source: env
+        variable: CCPA_SCOPE
+        active_values: ["enabled", "true", "1"]
+
+  - signal_id: SIG-PCI-001
+    name: "Cardholder data environment"
+    description: "Platform stores, processes, or transmits cardholder data"
+    default_state: inactive
+    detection:
+      - source: config
+        path: config/magna_carta_config.json
+        json_path: profiles.PCI_SCOPE
+        active_values: ["enabled", "true", "1"]
+      - source: env
+        variable: PCI_SCOPE
+        active_values: ["enabled", "true", "1"]
+
+  - signal_id: SIG-FEDRAMP-001
+    name: "US federal government workload"
+    description: "FedRAMP-authorised or federal-agency deployment scope"
+    default_state: inactive
+    detection:
+      - source: config
+        path: config/magna_carta_config.json
+        json_path: profiles.FEDRAMP_SCOPE
+        active_values: ["enabled", "true", "1"]
+      - source: env
+        variable: FEDRAMP_SCOPE
+        active_values: ["enabled", "true", "1"]
+
+  - signal_id: SIG-LGPD-001
+    name: "Brazil data subject scope"
+    description: "Processing personal data of individuals in Brazil"
+    default_state: inactive
+    detection:
+      - source: config
+        path: config/magna_carta_config.json
+        json_path: profiles.LGPD_SCOPE
+        active_values: ["enabled", "true", "1"]
+      - source: env
+        variable: LGPD_SCOPE
+        active_values: ["enabled", "true", "1"]
+
+  - signal_id: SIG-AI-US-001
+    name: "US AI inference fallback"
+    description: "Optional US-hosted AI sub-processor enabled (SUP-004)"
+    default_state: inactive
+    detection:
+      - source: config
+        path: config/magna_carta_config.json
+        json_path: profiles.US_AI_FALLBACK
+        active_values: ["enabled", "true", "1"]
+      - source: env
+        variable: US_AI_FALLBACK
+        active_values: ["enabled", "true", "1"]
+
+  - signal_id: SIG-PAYMENTS-001
+    name: "Production payment routing"
+    description: "Live PSP payment routing (not sandbox)"
+    default_state: inactive
+    detection:
+      - source: config
+        path: config/magna_carta_config.json
+        json_path: profiles.PAYMENTS_LIVE
+        active_values: ["enabled", "true", "1"]
+      - source: env
+        variable: PAYMENTS_LIVE
+        active_values: ["enabled", "true", "1"]

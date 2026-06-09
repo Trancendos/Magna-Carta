@@ -4,7 +4,7 @@
 # Human-readable: docs/governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md
 
 meta:
-  register_version: "1.0.0"
+  register_version: "1.1.0"
   owner: "ISMS Lead"
   last_updated: "2026-06-09"
   review_cycle: "quarterly"
@@ -100,6 +100,69 @@ yaml_registers:
     check_id: MON-006
   - path: compliance/maintenance_monitor.yaml
     check_id: MON-006
+  - path: compliance/proactive_signals.yaml
+    check_id: MON-006
+  - path: compliance/framework_triggers.yaml
+    check_id: MON-006
+
+proactive_monitoring:
+  signals_register: compliance/proactive_signals.yaml
+  triggers_register: compliance/framework_triggers.yaml
+  runtime_config: config/magna_carta_config.json
+
+legislation_watch:
+  check_id: MON-011
+  register: compliance/legislation_register.yaml
+  items_key: active_legislation
+  review_field: review_date
+  max_overdue_days: 0
+  exclude_status: ["N/A"]
+
+standards_watch:
+  check_id: MON-012
+  register: compliance/standards_watch.yaml
+  items_key: active_standards
+  review_field: review_date
+  max_overdue_days: 0
+  exclude_status: ["Not applicable"]
+
+framework_readiness:
+  check_id: MON-013
+  register: compliance/frameworks_register.yaml
+  items_key: frameworks
+  doc_field: readiness_doc
+  require_doc_for_status:
+    - programme
+    - partial
+    - readiness
+  require_doc_for_applicability:
+    - applicable
+    - conditional
+
+supplier_dpa_gates:
+  check_id: MON-014
+  register: compliance/supplier_dpa_register.yaml
+  items_key: suppliers
+  critical_tiers: ["Critical"]
+  blocked_dpa_status: ["Template issued", "In negotiation"]
+  trigger_supplier_map: compliance/framework_triggers.yaml
+
+evidence_recurrence:
+  check_id: MON-015
+  register: compliance/execution_evidence_register.yaml
+  schedule_key: recurrence_schedule
+
+enforcement_alignment:
+  check_id: MON-016
+  runtime_config: config/magna_carta_config.json
+  triggers_register: compliance/framework_triggers.yaml
+  signals_register: compliance/proactive_signals.yaml
+
+trigger_integrity:
+  check_id: MON-017
+  triggers_register: compliance/framework_triggers.yaml
+  signals_register: compliance/proactive_signals.yaml
+  frameworks_register: compliance/frameworks_register.yaml
 
 weekly_cadence:
   check_id: MON-008
@@ -143,6 +206,12 @@ schema_validation:
   - check_id: MON-009
     register: compliance/execution_evidence_register.yaml
     schema: compliance/schemas/execution_evidence_register.schema.json
+  - check_id: MON-009
+    register: compliance/proactive_signals.yaml
+    schema: compliance/schemas/proactive_signals.schema.json
+  - check_id: MON-009
+    register: compliance/framework_triggers.yaml
+    schema: compliance/schemas/framework_triggers.schema.json
 
 procedure_coverage:
   check_id: MON-010
