@@ -9,7 +9,7 @@
 
 ## Scope statement
 
-**ISMS scope:** Tranc3 platform — all self-hosted workers, infrastructure, data stores, CI/CD pipelines, and supporting observability systems operated by Trancendos Ltd.
+**ISMS scope:** Trancendos Universe — The Foundation and Infinity Network applications — all self-hosted workers, infrastructure, data stores, CI/CD pipelines, and supporting observability systems operated by Trancendos Ltd.
 
 **Exclusions:** Physical premises (cloud-hosted); customer-managed deployments outside Trancendos control.
 

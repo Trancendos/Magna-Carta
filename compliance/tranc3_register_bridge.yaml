@@ -1,5 +1,5 @@
 ---
-# Tranc3 Register Bridge — Magna Carta MC-### ↔ DEFSTAN REQ-### mapping
+# Infinity App Bridge (Tranc3) — Magna Carta MC-### ↔ DEFSTAN REQ-### mapping
 # Generated: 2026-06-07 (Phase 5 integration programme)
 # Parent: compliance/magna_carta_register.yaml
 # Child: Tranc3 compliance/register.yaml (DEFSTAN)
@@ -179,7 +179,7 @@ bridges:
     integration_notes: "Combine Magna Carta evidence schedule with Tranc3 collector output"
 
   - mc_id: MC-011
-    title: "Tranc3 Integration Bridge"
+    title: "Infinity App Bridge (Tranc3)"
     tranc3_requirements: []
     magna_carta_paths:
       - compliance/tranc3_register_bridge.yaml

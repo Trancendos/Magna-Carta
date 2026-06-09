@@ -251,7 +251,7 @@ Frameworks previously referenced only in [REGULATION-MATRIX.md](REGULATION-MATRI
 
 | Layer | What "started" means | Current state |
 |-------|---------------------|---------------|
-| **Layer 1** Tranc3 platform | Runtime controls, CI gates, registers in code | Operational in Tranc3 upstream |
+| **Layer 1** Trancendos Universe / App Framework (Tranc3 exemplar) | Runtime controls, CI gates, registers in code | Operational in Tranc3 upstream |
 | **Layer 2** Magna Carta programme | This register + policies + procedures + readiness groups | ✅ **Complete for catalogue** — PM-009 |
 | **Layer 3** External validation | SOC report, ISO cert, signed BAAs, pen test, drills | Open: ACT-001–003, ACT-005–010, ACT-012; baselines ACT-004/011/013/014/015 closed |
 

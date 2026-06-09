@@ -3,7 +3,7 @@
 **Version:** 1.1.0  
 **Date:** 2026-06-08  
 **Owner:** ISMS Lead / DPO  
-**Scope:** Tranc3 platform and Trancendos-operated services
+**Scope:** Infinity Network applications and Trancendos-operated services
 
 ---
 

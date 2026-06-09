@@ -79,6 +79,16 @@ required_files:
     check_id: MON-007
   - path: docs/compliance/AIKIDO-SECURITY-TESTING-FRAMEWORK.md
     check_id: MON-007
+  - path: docs/compliance/ZERO-COST-SECURITY-TOOLING.md
+    check_id: MON-007
+  - path: docs/architecture/TRANCENDOS-UNIVERSE-AND-INFINITY-NETWORK.md
+    check_id: MON-007
+  - path: docs/engineering/INFINITY-APP-TRANC3-INTEGRATION-GUIDE.md
+    check_id: MON-007
+  - path: scripts/zero_cost_tooling_check.py
+    check_id: MON-007
+  - path: scripts/run_oss_security_scans.sh
+    check_id: MON-007
   - path: scripts/readiness_automation_score.py
     check_id: MON-007
   - path: scripts/dpa_readiness_check.py
@@ -122,6 +132,10 @@ yaml_registers:
   - path: compliance/security_testing_register.yaml
     check_id: MON-006
   - path: compliance/certification_evidence_register.yaml
+    check_id: MON-006
+  - path: compliance/zero_cost_tooling_register.yaml
+    check_id: MON-006
+  - path: compliance/infinity_app_frameworks_register.yaml
     check_id: MON-006
 
 proactive_monitoring:
@@ -258,6 +272,12 @@ schema_validation:
   - check_id: MON-009
     register: compliance/certification_evidence_register.yaml
     schema: compliance/schemas/certification_evidence_register.schema.json
+  - check_id: MON-009
+    register: compliance/zero_cost_tooling_register.yaml
+    schema: compliance/schemas/zero_cost_tooling_register.schema.json
+  - check_id: MON-009
+    register: compliance/infinity_app_frameworks_register.yaml
+    schema: compliance/schemas/infinity_app_frameworks_register.schema.json
 
 procedure_coverage:
   check_id: MON-010

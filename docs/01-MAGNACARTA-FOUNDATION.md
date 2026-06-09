@@ -9,7 +9,7 @@
 
 ## 1. Charter
 
-The **Trancendos Magna Carta** establishes the constitutional layer for digital products built on Tranc3. It defines non-negotiable rights for users, obligations for operators, and governance mechanics for the organisation.
+The **Infinity Network — Magna Carta** establishes the constitutional layer for digital products built on Trancendos Universe and deployed as Infinity Network applications. It defines non-negotiable rights for users, obligations for operators, and governance mechanics for the organisation.
 
 It is registered in Town Hall as framework `magna-carta` (status: **active**) alongside governance-core, GDPR, security-framework, and blueprint documentation domains.
 

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "magna-carta/infinity_app_frameworks_register.schema.json",
+  "title": "Infinity App Frameworks Register",
+  "type": "object",
+  "required": ["meta", "frameworks"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "foundation": { "type": "string" },
+        "compliance_programme": { "type": "string" }
+      }
+    },
+    "frameworks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["app_id", "display_name", "status"],
+        "properties": {
+          "app_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "display_name": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["active", "planned", "deprecated"]
+          },
+          "bridge_register": { "type": ["string", "null"] },
+          "integration_guide": { "type": ["string", "null"] },
+          "runtime_notes": { "type": "string" },
+          "role": { "type": "string" }
+        }
+      }
+    }
+  }
+}

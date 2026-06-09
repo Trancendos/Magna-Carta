@@ -161,6 +161,15 @@ items:
     verification: compliance/framework_triggers.yaml
     evidence: compliance/proactive_signals.yaml
 
+  - item_id: AUTO-014
+    title: "Zero-cost tooling register and verifier (ZCT-001–011)"
+    category: security
+    executor: system
+    status: implemented
+    verification: scripts/zero_cost_tooling_check.py
+    evidence: compliance/zero_cost_tooling_register.yaml
+    notes: "Mandatory Layer B tools are £0/$0; Aikido Free is optional ZCT-011"
+
 owner_gates_excluded_from_score:
   description: >
     Actions with executor owner in compliance_action_tracker.yaml are Layer C.

@@ -1,0 +1,116 @@
+---
+# Zero-cost tooling register — Layer B mandatory £0/$0 at point of use
+# Scored by: scripts/zero_cost_tooling_check.py
+# Human-readable: docs/compliance/ZERO-COST-SECURITY-TOOLING.md
+
+meta:
+  register_version: "1.0.0"
+  owner: "Security Ops / ISMS Lead"
+  last_updated: "2026-06-09"
+  review_cycle: "quarterly"
+  policy: "No mandatory paid SaaS for Layer B automation; optional free tiers must document limits"
+
+schema:
+  tool_id: "ZCT-###"
+  cost_model: "free_oss | free_tier_no_cc | free_local_script"
+  mandatory: "true if Layer B depends on it; false if optional enhancement"
+
+tools:
+  - tool_id: ZCT-001
+    name: "Compliance health check"
+    cost_model: free_local_script
+    mandatory: true
+    path: scripts/compliance_health_check.py
+    dependency: "python3, PyYAML (pip install pyyaml)"
+    notes: "No cloud CI required"
+
+  - tool_id: ZCT-002
+    name: "Layer B readiness scorer"
+    cost_model: free_local_script
+    mandatory: true
+    path: scripts/readiness_automation_score.py
+    dependency: python3
+
+  - tool_id: ZCT-003
+    name: "DPA readiness check"
+    cost_model: free_local_script
+    mandatory: true
+    path: scripts/dpa_readiness_check.py
+    dependency: python3
+
+  - tool_id: ZCT-004
+    name: "Local security testing (SEC-002)"
+    cost_model: free_local_script
+    mandatory: true
+    path: scripts/run_security_testing.py
+    dependency: python3
+    checks:
+      - secret_patterns
+      - pem_keys
+      - committed_env
+      - dangerous_shell
+
+  - tool_id: ZCT-005
+    name: "Zero-cost tooling verifier"
+    cost_model: free_local_script
+    mandatory: true
+    path: scripts/zero_cost_tooling_check.py
+    dependency: python3
+
+  - tool_id: ZCT-006
+    name: "Weekly compliance wrapper"
+    cost_model: free_local_script
+    mandatory: true
+    path: scripts/weekly_compliance_health.sh
+    dependency: bash, python3
+
+  - tool_id: ZCT-007
+    name: "Gitleaks (optional OSS)"
+    cost_model: free_oss
+    mandatory: false
+    install: "https://github.com/gitleaks/gitleaks — binary or go install"
+    invoked_by: scripts/run_oss_security_scans.sh
+    notes: "Skipped gracefully if not installed"
+
+  - tool_id: ZCT-008
+    name: "Bandit Python SAST (optional OSS)"
+    cost_model: free_oss
+    mandatory: false
+    install: "pip install bandit"
+    invoked_by: scripts/run_oss_security_scans.sh
+    notes: "Skipped gracefully if not installed"
+
+  - tool_id: ZCT-009
+    name: "Semgrep Community (optional OSS)"
+    cost_model: free_oss
+    mandatory: false
+    install: "pip install semgrep"
+    invoked_by: scripts/run_oss_security_scans.sh
+    notes: "Community ruleset; no Semgrep Teams subscription required"
+
+  - tool_id: ZCT-010
+    name: "pip-audit (optional OSS)"
+    cost_model: free_oss
+    mandatory: false
+    install: "pip install pip-audit"
+    invoked_by: scripts/run_oss_security_scans.sh
+    notes: "Dependency CVE check when requirements.txt present"
+
+  - tool_id: ZCT-011
+    name: "Aikido Security — Free tier (optional)"
+    cost_model: free_tier_no_cc
+    mandatory: false
+    mcp_server: Aikido
+    sec_id: SEC-001
+    limits: >
+      Free plan: IDE/MCP SAST + secrets for JS/TS/Python; no credit card.
+      Paid features (IaC block, full GitHub Action SAST gate) not required for Layer B.
+    notes: "Enhancement only; SEC-002 satisfies Layer B without Aikido"
+
+prohibited_mandatory:
+  - name: "Vanta / Drata / Secureframe CCM"
+    reason: "Paid SaaS — documented as comparison only in maturity benchmark"
+  - name: "Annual external pen test"
+    reason: "Layer C owner gate (ACT-005); programme doc only until commissioned"
+  - name: "Aikido paid plan"
+    reason: "Not required; free tier or SEC-002 sufficient for Layer B"

@@ -3,14 +3,14 @@
 **Version:** 1.0.0  
 **Date:** 2026-06-07  
 **Owner:** Trancendos Platform Engineering  
-**Scope:** Tranc3 platform and Trancendos ecosystem services  
+**Scope:** Infinity Network applications and Trancendos Universe ecosystem services  
 **Classification:** UNCLASSIFIED — PUBLIC
 
 ---
 
 ## 1. Purpose
 
-The Magna Carta Framework defines **how Trancendos governs, secures, complies, and operates** the Tranc3 self-hosted AI platform. It is the single authoritative layer above:
+The Magna Carta Framework defines **how Trancendos governs, secures, complies, and operates** Infinity Network applications atop **Trancendos Universe — The Foundation**. It is the single authoritative layer above:
 
 - **DEFSTAN** — operational control register (53 requirements, CI-gated ≥70%)
 - **ISO 27001:2022** — ISMS Statement of Applicability (certification target Q2 2027)
@@ -19,7 +19,7 @@ The Magna Carta Framework defines **how Trancendos governs, secures, complies, a
 - **EU AI Act / ISO 42001 / NIST AI RMF** — AI governance baseline
 - **OWASP + Zero Trust** — application and identity security
 
-This document is the **blueprint** that connects governance intent to Tranc3 implementation.
+This document is the **blueprint** that connects governance intent to Infinity Network app implementations (e.g. Tranc3 App Framework).
 
 **Maturity:** Artefacts in this repository prove the **documentation programme** (policies, registers, mappings). They do not by themselves prove ISO 27001 certification, SOC 2 Type II, signed supplier DPAs, or production runtime enforcement — those require operational validation. See [docs/00-EXECUTIVE-SUMMARY.md](docs/00-EXECUTIVE-SUMMARY.md#maturity-model-read-this-first).
 

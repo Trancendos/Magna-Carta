@@ -64,7 +64,7 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 | — | POL-AI-001 authored (framework) | 2026-06-07 | ✅ Programme; BoardRoom approval 🎯 |
 | — | BCP baseline restore test BCP-RT-001 | 2026-06-07 | ✅ Programme baseline; annual repeat 🎯 |
 | — | AI Governance Committee charter | 2026-06-07 | ✅ Programme |
-| — | Phase 5 Tranc3 integration bridge (MC-011) | 2026-06-07 | ✅ Programme; ACT-009 staging 🎯 |
+| — | Phase 5 Infinity App (Tranc3) bridge (MC-011) | 2026-06-07 | ✅ Programme; ACT-009 staging 🎯 |
 
 ---
 

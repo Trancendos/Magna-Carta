@@ -10,7 +10,7 @@
 
 ## 1. Purpose
 
-Trancendos voluntarily applies **DEF STAN-inspired engineering discipline** to the Tranc3 platform. This is **not** MOD accreditation or classified systems compliance. It is a civilian quality and assurance model drawing from:
+Trancendos voluntarily applies **DEF STAN-inspired engineering discipline** to Trancendos Universe — The Foundation and Infinity Network App Frameworks (e.g. Tranc3). This is **not** MOD accreditation or classified systems compliance. It is a civilian quality and assurance model drawing from:
 
 | Standard | Theme | Tranc3 application |
 |----------|-------|-------------------|

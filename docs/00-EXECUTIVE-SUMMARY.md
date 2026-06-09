@@ -17,7 +17,7 @@ The **Magna Carta Framework** is Trancendos' unified governance, compliance, and
 - **14+ regulatory alignment documents** (ISO 27001, SOC 2, GDPR, DEFSTAN, AI, HIPAA, FCA, PECR, Companies Act, and more)
 - **Governance artefacts** — AI Governance Committee charter, RACI matrix, internal audit programme, management review template
 - **Evidence & assurance programme (MC-010)** — action tracker, risk register, SOC 2 evidence schedule, pen test programme, policy attestation register, contract templates
-- **Tranc3 integration bridge (MC-011)** — MC↔REQ register mapping, staging integration guide, continuous improvement programme, template library index
+- **Infinity App (Tranc3) bridge (MC-011)** — MC↔REQ register mapping, staging integration guide, continuous improvement programme, template library index
 - **3 architecture blueprints** including an auditor-facing as-built reference
 - **Runtime configuration** for Tranc3 compliance enforcement
 
