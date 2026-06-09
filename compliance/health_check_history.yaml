@@ -45,3 +45,18 @@ runs:
     severity: info
     message: Critical supplier SUP-005 (Health platform connectors (Sync-Bot)) DPA
       status 'Template issued' — informational until PAYMENTS_LIVE/HIPAA_PROFILE enabled
+- timestamp: '2026-06-09T23:29:12Z'
+  operator: ubuntu
+  errors: 0
+  warnings: 0
+  exit_code: 0
+  findings:
+  - check_id: MON-014
+    severity: info
+    message: Critical supplier SUP-003 (Authorised Payment Service Provider (PSP))
+      DPA status 'Template issued' — informational until PAYMENTS_LIVE/HIPAA_PROFILE
+      enabled
+  - check_id: MON-014
+    severity: info
+    message: Critical supplier SUP-005 (Health platform connectors (Sync-Bot)) DPA
+      status 'Template issued' — informational until PAYMENTS_LIVE/HIPAA_PROFILE enabled
