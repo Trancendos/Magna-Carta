@@ -61,7 +61,8 @@ AI systems within Tranc3 ISMS scope:
 
 **Canonical act:** Regulation (EU) 2024/1689 — CELEX `32024R1689`, ELI [eli/reg/2024/1689/oj/eng](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng).  
 **Register:** LEG-006 in [LEGISLATION-REGISTER.md](LEGISLATION-REGISTER.md) / `compliance/legislation_register.yaml`.  
-**EU change tracking:** [EU-LEGISLATION-MONITORING.md](EU-LEGISLATION-MONITORING.md) (delegated/implementing acts; ACT-014).
+**EU change tracking:** [EU-LEGISLATION-MONITORING.md](EU-LEGISLATION-MONITORING.md) (delegated/implementing acts; ACT-014).  
+**Technical standards watch:** [HARMONISED-STANDARDS-MONITORING.md](HARMONISED-STANDARDS-MONITORING.md) (JTC21 harmonised + ETSI deliverables; ACT-015); [ETSI-SAI-ALIGNMENT.md](ETSI-SAI-ALIGNMENT.md) (EN 304 223 reference — not presumption of conformity).
 
 | Article | EUR-Lex | Requirement | Implementation | Gap |
 |---------|---------|-------------|----------------|-----|

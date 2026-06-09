@@ -66,6 +66,8 @@
 | EU legislation (EUR-Lex / ELI) | ✅ Programme | ✅ Programme | Delegated acts not yet scanned operationally | [EU-LEGISLATION-MONITORING.md](EU-LEGISLATION-MONITORING.md), [EUR-LEX-ELI-REFERENCE.md](EUR-LEX-ELI-REFERENCE.md) | ACT-014 first quarterly scan |
 | Algorithmic transparency | ⚠️ | ✅ Programme / 🎯 measure | Bias run not executed | PROC-AI-002, model cards | ACT-004 |
 | AI security (OWASP AI Exchange) | ✅ Programme | ✅ Programme / 🎯 assess | First threat assessment not executed | OWASP-AI-EXCHANGE-ALIGNMENT, AI-SECURITY-THREAT-MODEL, PROC-AI-003 | ACT-013 |
+| ETSI EN 304 223 (Securing AI) | ✅ Programme | ✅ Programme / 🎯 watch | Not EU harmonised; no presumption of conformity | [ETSI-SAI-ALIGNMENT.md](ETSI-SAI-ALIGNMENT.md), `standards_watch.yaml` | ACT-015 semi-annual watch |
+| EU harmonised standards (JTC21) | ✅ Programme | ✅ Programme / 🎯 watch | prEN 18286 and Art. 9 drafts not OJEU-listed | [HARMONISED-STANDARDS-MONITORING.md](HARMONISED-STANDARDS-MONITORING.md) | ACT-015; cross-ref ACT-014 |
 | US AI fallback transfer | ⚠️ | ⚠️ Partial | SUP-004 DPA unsigned | TIA template, ROPA entry | ACT-010 |
 
 ---
@@ -136,6 +138,7 @@ All items require parties outside documentation-only work:
 | ACT-012 | BCP all P0 DBs | Drill schedule through 2027 | Operations |
 | ACT-013 | First PROC-AI-003 threat assessment | Operational test cycle | AI Lead / Security Ops |
 | ACT-014 | First EU EUR-Lex delegated-act scan | Quarterly monitoring not yet executed | AI Lead / DPO |
+| ACT-015 | First harmonised / ETSI standards watch | Semi-annual monitoring not yet executed | AI Lead / ISMS Lead |
 
 **Nothing blocks** further programme documentation — completed in this register's linked artefacts.
 
@@ -168,7 +171,7 @@ All items require parties outside documentation-only work:
 | **Bible** | MAGNACARTA-GOVERNANCE-BIBLE | ✅ Programme (v1) | Expand as procedures mature |
 | **Cookbooks** | 13 cookbooks + INDEX (all PROC-*) | ✅ Programme | Operational drills not evidenced 🎯 |
 | **Hymn sheets** | 13 hymn sheets + INDEX (all PROC-*) | ✅ Programme | Named signatories in production 🎯 |
-| **Schemas** | REGISTER-SCHEMAS + 10 JSON schemas (MON-009) | ✅ Programme | Schema drift on new fields — monitor via health check |
+| **Schemas** | REGISTER-SCHEMAS + 11 JSON schemas (MON-009) | ✅ Programme | Schema drift on new fields — monitor via health check |
 | **Standards** | STANDARDS-REGISTER | ✅ Programme | Not external certification |
 | **Regulators / ombudsmen** | REGULATORS-OMBUDSMEN-REGISTER | ✅ Programme | Contact verification 🎯 |
 | **Systems** | SYSTEMS-REGISTER | ✅ Programme | Production monitoring hooks 🎯 |
@@ -180,7 +183,7 @@ All items require parties outside documentation-only work:
 | **Evidence templates** | Fairness test + internal audit report | ✅ Programme | ACT-004, ACT-011 execution 🎯 |
 | **ASVS gap tracker** | ASVS-GAP-CHECKLIST | ✅ Programme | Pen test / remediation evidence 🎯 |
 
-**Still missing (honest backlog):** Named individuals in REVIEWERS-REGISTER; operational evidence that cookbooks were exercised (drills, tickets); ACT-001–014 external closure; sector-specific runbooks beyond ICO/FOS/PECR starters.
+**Still missing (honest backlog):** Named individuals in REVIEWERS-REGISTER; operational evidence that cookbooks were exercised (drills, tickets); ACT-001–015 external closure; sector-specific runbooks beyond ICO/FOS/PECR starters.
 
 ### 8.3 Framework catalogue wave (2026-06-08)
 
@@ -191,7 +194,7 @@ All items require parties outside documentation-only work:
 | frameworks_register.yaml + schema (MON-009) | ✅ Programme |
 | PM-009 / PM-010 programme milestones | ✅ Programme |
 
-**Honest gap:** Layer 3 external validation (certificates, authorisations, signed BAAs, pen test, drills) — see ACT-001–ACT-014.
+**Honest gap:** Layer 3 external validation (certificates, authorisations, signed BAAs, pen test, drills) — see ACT-001–ACT-015.
 
 ### 8.4 EUR-Lex / ELI programme wave (2026-06-08)
 
@@ -204,6 +207,18 @@ All items require parties outside documentation-only work:
 | PM-012 / ACT-014 opened | ✅ Programme / 🎯 first scan |
 
 **Honest gap:** First quarterly EUR-Lex delegated-act scan not yet executed (ACT-014 due 2026-09-30).
+
+### 8.5 ETSI SAI / harmonised standards wave (2026-06-08)
+
+| Milestone | Status |
+|-----------|--------|
+| standards_watch.yaml + schema (STD-WATCH-001–005, harmonised watch) | ✅ Programme |
+| ETSI-SAI-ALIGNMENT.md (EN 304 223 ↔ OWASP / PROC-AI-003) | ✅ Programme |
+| HARMONISED-STANDARDS-MONITORING.md (semi-annual workflow) | ✅ Programme |
+| STD-042 / STD-043 in STANDARDS-REGISTER | ✅ Programme |
+| PM-013 / ACT-015 opened | ✅ Programme / 🎯 first watch |
+
+**Honest gap:** EN 304 223 is a reference standard only — not OJEU harmonised. First semi-annual standards watch not yet executed (ACT-015 due 2026-12-31).
 
 ---
 

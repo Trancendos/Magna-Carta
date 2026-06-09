@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/standards_watch.schema.json",
+  "title": "Standards Watch Register",
+  "type": "object",
+  "required": ["meta", "active_standards", "harmonised_standards_watch", "monitoring_sources"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" },
+        "procedure": { "type": "string" },
+        "markdown_index": { "type": "string" },
+        "etsi_alignment": { "type": "string" }
+      }
+    },
+    "active_standards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["standard_id", "name", "deliverable_type", "status", "review_date"],
+        "properties": {
+          "standard_id": { "type": "string", "pattern": "^STD-WATCH-[0-9]{3}$" },
+          "name": { "type": "string" },
+          "short_name": { "type": "string" },
+          "deliverable_type": {
+            "type": "string",
+            "enum": ["EN", "TS", "TR", "prEN", "other"]
+          },
+          "version": { "type": "string" },
+          "published": { "type": "string" },
+          "etsi_committee": { "type": "string" },
+          "etsi_deliver_uri": { "type": "string", "format": "uri" },
+          "status": {
+            "type": "string",
+            "enum": ["Monitor", "Programme", "Reference", "Not applicable"]
+          },
+          "harmonised_status": {
+            "type": "string",
+            "enum": ["none", "candidate", "published_not_oj", "ojeu_listed"]
+          },
+          "programme_std_id": { "type": "string" },
+          "compliance_owner": { "type": "string" },
+          "related_legislation": { "type": "array", "items": { "type": "string" } },
+          "related_obligations": { "type": "array", "items": { "type": "string" } },
+          "programme_artefacts": { "type": "array", "items": { "type": "string" } },
+          "related_standards": { "type": "array", "items": { "type": "string" } },
+          "review_date": { "type": "string", "format": "date" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "harmonised_standards_watch": { "type": "object" },
+    "monitoring_sources": { "type": "array" }
+  }
+}

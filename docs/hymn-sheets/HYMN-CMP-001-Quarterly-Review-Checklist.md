@@ -16,6 +16,7 @@
 
 - [ ] DEFSTAN / register score discussed
 - [ ] Legislation + obligations registers current (incl. EU EUR-Lex scan / ACT-014)
+- [ ] Standards watch current (incl. harmonised / ETSI semi-annual watch / ACT-015 when due)
 - [ ] STANDARDS-REGISTER + REGULATORS register reviewed
 - [ ] SYSTEMS-REGISTER matches AS-BUILT
 - [ ] ISO SOA gaps updated

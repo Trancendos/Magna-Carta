@@ -66,6 +66,10 @@ required_files:
     check_id: MON-007
   - path: docs/compliance/EU-LEGISLATION-MONITORING.md
     check_id: MON-007
+  - path: docs/compliance/ETSI-SAI-ALIGNMENT.md
+    check_id: MON-007
+  - path: docs/compliance/HARMONISED-STANDARDS-MONITORING.md
+    check_id: MON-007
 
 yaml_registers:
   - path: compliance/compliance_action_tracker.yaml
@@ -85,6 +89,8 @@ yaml_registers:
   - path: compliance/frameworks_register.yaml
     check_id: MON-006
   - path: compliance/legislation_register.yaml
+    check_id: MON-006
+  - path: compliance/standards_watch.yaml
     check_id: MON-006
   - path: compliance/maintenance_monitor.yaml
     check_id: MON-006
@@ -125,6 +131,9 @@ schema_validation:
   - check_id: MON-009
     register: compliance/legislation_register.yaml
     schema: compliance/schemas/legislation_register.schema.json
+  - check_id: MON-009
+    register: compliance/standards_watch.yaml
+    schema: compliance/schemas/standards_watch.schema.json
 
 procedure_coverage:
   check_id: MON-010

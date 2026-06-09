@@ -1,6 +1,6 @@
 # Register Schemas
 
-**Version:** 1.3.0  
+**Version:** 1.4.0  
 **Date:** 2026-06-08  
 **Owner:** ISMS Lead  
 **Purpose:** Field definitions for machine-readable YAML registers and human register tables.
@@ -21,6 +21,7 @@
 | `compliance/health_check_history.yaml` | 1.0.0 | ISMS Lead |
 | `compliance/frameworks_register.yaml` | 1.0.0 | ISMS Lead |
 | `compliance/legislation_register.yaml` | 1.0.0 | DPO / Legal |
+| `compliance/standards_watch.yaml` | 1.0.0 | ISMS Lead / AI Lead |
 
 ---
 
@@ -163,7 +164,8 @@ Machine-readable schemas (Draft 2020-12) live in `compliance/schemas/`:
 | `maintenance_monitor.schema.json` | `compliance/maintenance_monitor.yaml` |
 | `frameworks_register.schema.json` | `compliance/frameworks_register.yaml` |
 | `legislation_register.schema.json` | `compliance/legislation_register.yaml` |
+| `standards_watch.schema.json` | `compliance/standards_watch.yaml` |
 
-`compliance_health_check.py` performs lightweight structural validation (MON-009) for all ten register/schema pairs without requiring the `jsonschema` package. Procedure coverage (MON-010) ensures every `PROC-*.md` has matching cookbook and hymn sheet.
+`compliance_health_check.py` performs lightweight structural validation (MON-009) for all eleven register/schema pairs without requiring the `jsonschema` package. Procedure coverage (MON-010) ensures every `PROC-*.md` has matching cookbook and hymn sheet.
 
 **Next review:** 2026-09-06

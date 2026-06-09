@@ -37,6 +37,7 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 | ACT-012 | Expand BCP restore tests (all P0 DBs) | Operations | 2027-06-07 | P2 | Open | 🎯 |
 | ACT-013 | First PROC-AI-003 AI security threat assessment (per model) | AI Lead / Security Ops | 2026-12-31 | P1 | Open | 🎯 |
 | ACT-014 | First quarterly EU EUR-Lex delegated-act scan (EU AI Act secondary legislation) | AI Lead / DPO | 2026-09-30 | P2 | Open | 🎯 |
+| ACT-015 | First semi-annual harmonised standards and ETSI deliverable watch | AI Lead / ISMS Lead | 2026-12-31 | P2 | Open | 🎯 |
 
 ---
 
@@ -70,6 +71,8 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 - [../governance/INTERNAL-AUDIT-PROGRAMME.md](../governance/INTERNAL-AUDIT-PROGRAMME.md)
 - [TRANC3-REGISTER-BRIDGE.md](TRANC3-REGISTER-BRIDGE.md)
 - [EU-LEGISLATION-MONITORING.md](EU-LEGISLATION-MONITORING.md)
+- [HARMONISED-STANDARDS-MONITORING.md](HARMONISED-STANDARDS-MONITORING.md)
+- [ETSI-SAI-ALIGNMENT.md](ETSI-SAI-ALIGNMENT.md)
 - [EUR-LEX-ELI-REFERENCE.md](EUR-LEX-ELI-REFERENCE.md)
 - [../engineering/TRANC3-INTEGRATION-GUIDE.md](../engineering/TRANC3-INTEGRATION-GUIDE.md)
 

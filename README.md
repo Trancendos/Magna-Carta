@@ -60,6 +60,9 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [compliance/legislation_register.yaml](compliance/legislation_register.yaml) | Machine-readable legislation register (CELEX / ELI identifiers) |
 | [docs/compliance/EUR-LEX-ELI-REFERENCE.md](docs/compliance/EUR-LEX-ELI-REFERENCE.md) | EUR-Lex / ELI citation guide for EU acts |
 | [docs/compliance/EU-LEGISLATION-MONITORING.md](docs/compliance/EU-LEGISLATION-MONITORING.md) | Quarterly EU delegated-act monitoring workflow |
+| [docs/compliance/ETSI-SAI-ALIGNMENT.md](docs/compliance/ETSI-SAI-ALIGNMENT.md) | ETSI EN 304 223 Securing AI baseline alignment |
+| [docs/compliance/HARMONISED-STANDARDS-MONITORING.md](docs/compliance/HARMONISED-STANDARDS-MONITORING.md) | Semi-annual ETSI + CEN/CENELEC harmonised standards watch |
+| [compliance/standards_watch.yaml](compliance/standards_watch.yaml) | Machine-readable ETSI / harmonised standards register |
 | [docs/compliance/STANDARDS-REGISTER.md](docs/compliance/STANDARDS-REGISTER.md) | ISO, NIST, DEFSTAN, OWASP and framework standards |
 | [docs/compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md](docs/compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md) | Master catalogue (FW-001–FW-130, 112 frameworks) |
 | [docs/compliance/readiness/INDEX.md](docs/compliance/readiness/INDEX.md) | Grouped readiness docs (ISO, SOC, PCI, NIST, privacy, gov) |
@@ -96,7 +99,7 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [docs/governance/DOCUMENTATION-ARTIFACT-MODEL.md](docs/governance/DOCUMENTATION-ARTIFACT-MODEL.md) | Taxonomy: policies, cookbooks, bibles, hymn sheets, schemas |
 | [docs/governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md](docs/governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md) | Automated freshness monitoring and review cadence |
 | [docs/governance/REVIEWERS-REGISTER.md](docs/governance/REVIEWERS-REGISTER.md) | Reviewer roles, RACI, and escalation paths |
-| [docs/compliance/COMPLIANCE-ACTION-TRACKER.md](docs/compliance/COMPLIANCE-ACTION-TRACKER.md) | Open compliance actions (ACT-001–012) |
+| [docs/compliance/COMPLIANCE-ACTION-TRACKER.md](docs/compliance/COMPLIANCE-ACTION-TRACKER.md) | Open compliance actions (ACT-001–015) |
 | [docs/compliance/TRANC3-REGISTER-BRIDGE.md](docs/compliance/TRANC3-REGISTER-BRIDGE.md) | MC-001–MC-011 ↔ REQ-### / MC-RULE mapping (MC-011) |
 | [docs/compliance/RISK-REGISTER.md](docs/compliance/RISK-REGISTER.md) | Information security risk register |
 | [docs/compliance/SOC2-EVIDENCE-SCHEDULE.md](docs/compliance/SOC2-EVIDENCE-SCHEDULE.md) | SOC 2 Type II evidence catalogue |

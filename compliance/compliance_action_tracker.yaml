@@ -160,6 +160,16 @@ actions:
     source: "EU-LEGISLATION-MONITORING.md, legislation_register.yaml secondary_legislation_watch"
     evidence_target: "Completed quarterly scan record in EU-LEGISLATION-MONITORING §6; secondary_legislation_watch last_checked dates updated"
 
+  - action_id: ACT-015
+    title: "First semi-annual harmonised standards and ETSI deliverable watch"
+    owner: AI Lead / ISMS Lead
+    due_date: "2026-12-31"
+    status: Open
+    priority: P2
+    validation_type: external
+    source: "HARMONISED-STANDARDS-MONITORING.md, standards_watch.yaml, ETSI-SAI-ALIGNMENT.md"
+    evidence_target: "Completed semi-annual review in HARMONISED-STANDARDS-MONITORING §6; standards_watch.yaml review_date and harmonised_standards_watch last_checked updated"
+
 programme_milestones:
   - milestone_id: PM-001
     title: "COMPLIANCE-COVERAGE-REGISTER published"
@@ -189,7 +199,7 @@ programme_milestones:
     title: "Full JSON Schema coverage for YAML registers (MON-009)"
     completed_date: "2026-06-08"
     validation_type: programme
-    evidence: "compliance/schemas/*.schema.json (10 files), compliance/maintenance_monitor.yaml schema_validation"
+    evidence: "compliance/schemas/*.schema.json (11 files), compliance/maintenance_monitor.yaml schema_validation"
 
   - milestone_id: PM-006
     title: "Procedure coverage automation (MON-010) — 12 cookbooks + 12 hymn sheets"
@@ -216,10 +226,10 @@ programme_milestones:
     evidence: "docs/compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md, docs/compliance/readiness/, compliance/frameworks_register.yaml"
 
   - milestone_id: PM-010
-    title: "Layer 3 external validation backlog documented (ACT-001–ACT-014)"
+    title: "Layer 3 external validation backlog documented (ACT-001–ACT-015)"
     completed_date: "2026-06-08"
     validation_type: programme
-    evidence: "compliance/compliance_action_tracker.yaml actions ACT-001–ACT-014; STANDARDS-AND-FRAMEWORKS-REGISTER §10"
+    evidence: "compliance/compliance_action_tracker.yaml actions ACT-001–ACT-015; STANDARDS-AND-FRAMEWORKS-REGISTER §10"
 
   - milestone_id: PM-011
     title: "OWASP AI Exchange programme wave (threat model, PROC-AI-003, RISK-009–012)"
@@ -232,3 +242,9 @@ programme_milestones:
     completed_date: "2026-06-08"
     validation_type: programme
     evidence: "compliance/legislation_register.yaml, legislation_register.schema.json, EUR-LEX-ELI-REFERENCE.md, EU-LEGISLATION-MONITORING.md, ACT-014 opened"
+
+  - milestone_id: PM-013
+    title: "ETSI SAI / harmonised standards programme wave (EN 304 223 alignment, standards watch)"
+    completed_date: "2026-06-08"
+    validation_type: programme
+    evidence: "compliance/standards_watch.yaml, standards_watch.schema.json, ETSI-SAI-ALIGNMENT.md, HARMONISED-STANDARDS-MONITORING.md, STD-042/043, ACT-015 opened"
