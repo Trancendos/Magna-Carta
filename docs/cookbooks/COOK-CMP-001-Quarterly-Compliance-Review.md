@@ -33,7 +33,7 @@ Every 90 days, or within 14 days of a material regulatory change, pre-audit, or 
 |------|--------|----------|
 | 1 | Chair opens; confirm quorum | Minutes template |
 | 2 | Review COMPLIANCE-COVERAGE-REGISTER deltas | Update symbols if needed |
-| 3 | Legislation + obligations scan | LEGISLATION-REGISTER, OBLIGATIONS-REGISTER |
+| 3 | Legislation + obligations scan (UK + EU) | LEGISLATION-REGISTER, `legislation_register.yaml`, EU-LEGISLATION-MONITORING, OBLIGATIONS-REGISTER |
 | 4 | Standards + regulators review | STANDARDS-REGISTER, REGULATORS-OMBUDSMEN-REGISTER |
 | 5 | Systems register vs AS-BUILT drift | SYSTEMS-REGISTER |
 
@@ -51,7 +51,7 @@ Every 90 days, or within 14 days of a material regulatory change, pre-audit, or 
 
 | Step | Action | Artefact |
 |------|--------|----------|
-| 11 | Walk ACT-001–012; assign/close | compliance_action_tracker.yaml |
+| 11 | Walk ACT-001–014; assign/close | compliance_action_tracker.yaml |
 | 12 | Risk register top 5 | RISK-REGISTER |
 | 13 | Tranc3 bridge / ACT-009 status | TRANC3-REGISTER-BRIDGE |
 | 14 | Document decisions; set next review date | PROC-CMP-001 calendar |

@@ -45,6 +45,8 @@ Connor Domain                          Magna Carta Layer              Primary ar
                                        Town Hall / BoardRoom          config/townhall/
 
 2. Data & Compliance Management        Layer 4 — Compliance           LEGISLATION-REGISTER,
+                                       legislation_register.yaml,     EU-LEGISLATION-MONITORING,
+                                       EUR-LEX-ELI-REFERENCE
                                        Layer 2 — Privacy              GDPR-ALIGNMENT, POL-PRI-001
                                        Technical                      Ice Box, Cryptex, ROPA
 

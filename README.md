@@ -57,6 +57,9 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [docs/compliance/COMPLIANCE-BLUEPRINT.md](docs/compliance/COMPLIANCE-BLUEPRINT.md) | End-to-end compliance operating model |
 | [docs/compliance/OBLIGATIONS-REGISTER.md](docs/compliance/OBLIGATIONS-REGISTER.md) | Regulatory and contractual obligations register |
 | [docs/compliance/LEGISLATION-REGISTER.md](docs/compliance/LEGISLATION-REGISTER.md) | UK/EU legislation applicability |
+| [compliance/legislation_register.yaml](compliance/legislation_register.yaml) | Machine-readable legislation register (CELEX / ELI identifiers) |
+| [docs/compliance/EUR-LEX-ELI-REFERENCE.md](docs/compliance/EUR-LEX-ELI-REFERENCE.md) | EUR-Lex / ELI citation guide for EU acts |
+| [docs/compliance/EU-LEGISLATION-MONITORING.md](docs/compliance/EU-LEGISLATION-MONITORING.md) | Quarterly EU delegated-act monitoring workflow |
 | [docs/compliance/STANDARDS-REGISTER.md](docs/compliance/STANDARDS-REGISTER.md) | ISO, NIST, DEFSTAN, OWASP and framework standards |
 | [docs/compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md](docs/compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md) | Master catalogue (FW-001–FW-130, 112 frameworks) |
 | [docs/compliance/readiness/INDEX.md](docs/compliance/readiness/INDEX.md) | Grouped readiness docs (ISO, SOC, PCI, NIST, privacy, gov) |

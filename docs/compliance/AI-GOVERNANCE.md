@@ -59,15 +59,19 @@ AI systems within Tranc3 ISMS scope:
 
 ## 3. EU AI Act mapping
 
-| Article | Requirement | Implementation | Gap |
-|---------|-------------|----------------|-----|
-| Art. 5 | Prohibited practices | Blocklist in model cards | Formal review pending |
-| Art. 9 | Risk management | `classify_risk()` runtime | Annex III assessment incomplete |
-| Art. 13 | Transparency | Model cards published | — |
-| Art. 14 | Human oversight | High-risk → manual review | Workflow informal |
-| Art. 15 | Accuracy & robustness | Fairness metrics defined | **Unmeasured** — needs dataset |
-| Art. 50 | Limited-risk transparency | AI-labelled responses | — |
-| Art. 16–17 | High-risk obligations | N/A unless tier escalated | — |
+**Canonical act:** Regulation (EU) 2024/1689 — CELEX `32024R1689`, ELI [eli/reg/2024/1689/oj/eng](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng).  
+**Register:** LEG-006 in [LEGISLATION-REGISTER.md](LEGISLATION-REGISTER.md) / `compliance/legislation_register.yaml`.  
+**EU change tracking:** [EU-LEGISLATION-MONITORING.md](EU-LEGISLATION-MONITORING.md) (delegated/implementing acts; ACT-014).
+
+| Article | EUR-Lex | Requirement | Implementation | Gap |
+|---------|---------|-------------|----------------|-----|
+| Art. 5 | [link](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_5) | Prohibited practices | Blocklist in model cards | Formal review pending |
+| Art. 9 | [link](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_9) | Risk management | `classify_risk()` runtime | Annex III assessment incomplete |
+| Art. 13 | [link](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_13) | Transparency | Model cards published | — |
+| Art. 14 | [link](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_14) | Human oversight | High-risk → manual review | Workflow informal |
+| Art. 15 | [link](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_15) | Accuracy & robustness | Fairness metrics defined | **Unmeasured** — needs dataset |
+| Art. 50 | [link](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_50) | Limited-risk transparency | AI-labelled responses | — |
+| Art. 16–17 | — | High-risk obligations | N/A unless tier escalated | — |
 
 ---
 

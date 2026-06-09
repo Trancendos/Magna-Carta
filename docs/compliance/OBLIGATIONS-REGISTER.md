@@ -75,14 +75,18 @@ Identify → Map to control → Implement → Monitor → Evidence → Review �
 
 ### 4.2 AI and emerging technology
 
-| OBL-ID | Source | Obligation | Control(s) | Evidence | Owner | Status |
-|--------|--------|------------|------------|----------|-------|--------|
-| OBL-020 | EU AI Act Art. 13 | Transparency to deployers | Model cards API | `/compliance/ai/model-cards` | AI Lead | ✅ |
-| OBL-021 | EU AI Act Art. 50 | Mark AI-generated content | ai_governance rule | Magna Carta config | AI Lead | ✅ |
-| OBL-022 | EU AI Act Art. 9 | Risk management system | AI-GOVERNANCE §4 | Risk classify runtime | AI Lead | ✅ |
-| OBL-023 | EU AI Act Art. 14 | Human oversight (high-risk) | §8 human agency | Review workflow | AI Lead | ✅ |
-| OBL-024 | EU AI Act Art. 5 | No prohibited practices | Blocklist in model cards | ai_governance.py | AI Lead | ✅ |
-| OBL-025 | ISO 42001 (target) | AI MS continual improvement | GENAI-MATURITY-ASSESSMENT | Assessment record 2026-06-07 | AI Lead | ✅ |
+**Canonical EU source:** Regulation (EU) 2024/1689 — CELEX `32024R1689`, ELI [eli/reg/2024/1689/oj/eng](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng). Per-article EUR-Lex anchors: `compliance/legislation_register.yaml` → LEG-006 `article_anchors`.
+
+| OBL-ID | Source | EUR-Lex anchor | Obligation | Control(s) | Evidence | Owner | Status |
+|--------|--------|----------------|------------|------------|----------|-------|--------|
+| OBL-020 | EU AI Act Art. 13 | [Art. 13](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_13) | Transparency to deployers | Model cards API | `/compliance/ai/model-cards` | AI Lead | ✅ |
+| OBL-021 | EU AI Act Art. 50 | [Art. 50](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_50) | Mark AI-generated content | ai_governance rule | Magna Carta config | AI Lead | ✅ |
+| OBL-022 | EU AI Act Art. 9 | [Art. 9](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_9) | Risk management system | AI-GOVERNANCE §4 | Risk classify runtime | AI Lead | ✅ |
+| OBL-023 | EU AI Act Art. 14 | [Art. 14](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_14) | Human oversight (high-risk) | §8 human agency | Review workflow | AI Lead | ✅ |
+| OBL-024 | EU AI Act Art. 5 | [Art. 5](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_5) | No prohibited practices | Blocklist in model cards | ai_governance.py | AI Lead | ✅ |
+| OBL-025 | ISO 42001 (target) | — | AI MS continual improvement | GENAI-MATURITY-ASSESSMENT | Assessment record 2026-06-07 | AI Lead | ✅ |
+
+**EU GDPR (LEG-003):** OBL-001–008 apply equivalently for EU data subjects; authoritative text CELEX `32016R0679`, ELI [eli/reg/2016/679/oj/eng](https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng).
 
 ### 4.3 Information security
 
@@ -155,7 +159,7 @@ Identify → Map to control → Implement → Monitor → Evidence → Review �
 
 | Step | Action | Tool / artefact |
 |------|--------|-----------------|
-| 1 | Monitor sources (ICO, EU AI Office, DSIT, industry bodies) | LEGISLATION-REGISTER watch list |
+| 1 | Monitor sources (ICO, DSIT, industry bodies; **EUR-Lex** for EU acts) | [LEGISLATION-REGISTER.md](LEGISLATION-REGISTER.md), [EU-LEGISLATION-MONITORING.md](EU-LEGISLATION-MONITORING.md), `legislation_register.yaml` |
 | 2 | Triage impact (DPO + ISMS + AI Lead within 10 business days) | Change log below |
 | 3 | Map new/changed obligations to this register | New OBL-ID rows |
 | 4 | Update policies/procedures/controls | Policy index, PROC-* |
@@ -172,6 +176,7 @@ Identify → Map to control → Implement → Monitor → Evidence → Review �
 | 2026-06-07 | Phase 3 comprehensive programme | Registers, governance, PECR, Companies Act, BCP evidence | OBL-003/062/063/081/110–113 upgraded | Supplier DPA register, PIR, AI Committee | ✅ |
 | 2026-06-07 | Phase 4 evidence & assurance programme | Action tracker, risk register, SOC2 schedule, audit programme | MC-010; ACT-001–012 opened | COMPLIANCE-ACTION-TRACKER, INTERNAL-AUDIT-PROGRAMME | ✅ |
 | 2026-06-07 | Phase 5 Tranc3 integration bridge | MC↔REQ bridge, integration guide, CI programme, template index | MC-011; ACT-006 local copy verified | TRANC3-REGISTER-BRIDGE, TRANC3-INTEGRATION-GUIDE | ✅ |
+| 2026-06-08 | EUR-Lex / ELI programme wave | Machine-readable legislation register; EU delegated-act watch | PM-012; ACT-014 opened; OBL-020–024 EUR-Lex anchors | legislation_register.yaml, EUR-LEX-ELI-REFERENCE, EU-LEGISLATION-MONITORING | ✅ |
 
 ---
 
@@ -219,7 +224,7 @@ Manual spreadsheet maintenance is acceptable at current scale. As obligations gr
 - Policy-to-regulation mapping
 - Case/incident management integration
 
-Until tooling is adopted, this markdown register + LEGISLATION-REGISTER + `register.yaml` constitute the system of record.
+Until tooling is adopted, this markdown register + [LEGISLATION-REGISTER.md](LEGISLATION-REGISTER.md) + `compliance/legislation_register.yaml` + `register.yaml` constitute the system of record.
 
 ---
 

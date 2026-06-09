@@ -62,6 +62,10 @@ required_files:
     check_id: MON-007
   - path: docs/compliance/AI-SECURITY-THREAT-MODEL.md
     check_id: MON-007
+  - path: docs/compliance/EUR-LEX-ELI-REFERENCE.md
+    check_id: MON-007
+  - path: docs/compliance/EU-LEGISLATION-MONITORING.md
+    check_id: MON-007
 
 yaml_registers:
   - path: compliance/compliance_action_tracker.yaml
@@ -79,6 +83,8 @@ yaml_registers:
   - path: compliance/health_check_history.yaml
     check_id: MON-006
   - path: compliance/frameworks_register.yaml
+    check_id: MON-006
+  - path: compliance/legislation_register.yaml
     check_id: MON-006
   - path: compliance/maintenance_monitor.yaml
     check_id: MON-006
@@ -116,6 +122,9 @@ schema_validation:
   - check_id: MON-009
     register: compliance/frameworks_register.yaml
     schema: compliance/schemas/frameworks_register.schema.json
+  - check_id: MON-009
+    register: compliance/legislation_register.yaml
+    schema: compliance/schemas/legislation_register.schema.json
 
 procedure_coverage:
   check_id: MON-010

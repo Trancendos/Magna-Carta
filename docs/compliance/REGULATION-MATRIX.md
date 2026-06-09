@@ -59,7 +59,7 @@
 
 | Framework | Applicability | Status | Evidence |
 |-----------|---------------|--------|----------|
-| EU AI Act | ✅ (deploy in EU) | ✅ Programme | `AI_GOVERNANCE.md`, model cards, MC-RULE-004 |
+| EU AI Act | ✅ (deploy in EU) | ✅ Programme | [AI-GOVERNANCE.md](AI-GOVERNANCE.md), model cards, MC-RULE-004; CELEX `32024R1689` — [legislation_register.yaml](../../compliance/legislation_register.yaml), [EUR-LEX-ELI-REFERENCE.md](EUR-LEX-ELI-REFERENCE.md) |
 | ISO/IEC 42001:2023 | ⚠️ Target | ✅ Programme | AI governance module, GENAI-MATURITY |
 | NIST AI RMF 1.0 | ⚠️ Reference | ✅ Mapped | AI-GOVERNANCE.md |
 | UK AI White Paper / DSIT | ⚠️ Reference | ✅ Programme | [UK-AI-LEGISLATION-MONITORING.md](UK-AI-LEGISLATION-MONITORING.md) |
@@ -136,7 +136,7 @@ Customer-requested assurance frameworks (CSA STAR, GxP, ISO family, PCI family, 
 | [readiness/INDEX.md](readiness/INDEX.md) | Grouped readiness docs by domain |
 | `compliance/frameworks_register.yaml` | Machine-readable mirror (MON-009 validated) |
 
-Programme milestone **PM-009** (2026-06-08) closed Layer 2 catalogue coverage. External certification and signed evidence remain Layer 3 (**ACT-001–ACT-012**).
+Programme milestone **PM-009** (2026-06-08) closed Layer 2 catalogue coverage. External certification and signed evidence remain Layer 3 (**ACT-001–ACT-014**).
 
 ---
 

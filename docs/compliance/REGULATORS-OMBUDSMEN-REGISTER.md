@@ -13,8 +13,8 @@
 | REG-ID | Authority | Jurisdiction | Scope for Trancendos | Engagement type | Contact / portal | Status |
 |--------|-----------|--------------|----------------------|-----------------|------------------|--------|
 | REG-001 | **ICO** (Information Commissioner's Office) | UK | UK GDPR, PECR, breach notification | Registration, guidance, breach report | [ico.org.uk](https://ico.org.uk) | ✅ Programme — fee payment 🎯 (ACT-003) |
-| REG-002 | **EU DPAs** (lead supervisory authority TBD) | EU | EU GDPR for EU data subjects | Cooperation, DPIA consultation | Per establishment | Monitor — establish on EU entity |
-| REG-003 | **DSIT / EU AI Office** | UK / EU | AI Act conformity, GPAI | Future conformity assessment | Monitor | ✅ Programme — UK-AI-LEGISLATION-MONITORING |
+| REG-002 | **EU DPAs** (lead supervisory authority TBD) | EU | EU GDPR for EU data subjects | Cooperation, DPIA consultation | [EUR-Lex CELEX 32016R0679](https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng) | Monitor — establish on EU entity |
+| REG-003 | **DSIT / EU AI Office** | UK / EU | AI Act conformity, GPAI | Future conformity assessment | [EUR-Lex CELEX 32024R1689](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng); [EU-LEGISLATION-MONITORING.md](EU-LEGISLATION-MONITORING.md) | ✅ Programme — UK-AI-LEGISLATION-MONITORING + ACT-014 |
 | REG-004 | **FCA** (Financial Conduct Authority) | UK | Supplier to regulated firms; not authorised | Advisory if serving FCA-regulated customers | [fca.org.uk](https://www.fca.org.uk) | ✅ Programme — FCA-ALIGNMENT |
 | REG-005 | **NCSC** (National Cyber Security Centre) | UK | Security guidance, incident coordination | Advisory, CiSP optional | [ncsc.gov.uk](https://www.ncsc.gov.uk) | Advisory only |
 | REG-006 | **CMA** (Competition and Markets Authority) | UK | Consumer protection, digital markets | Monitor DMA / DMC Act | Monitor | Watch list |

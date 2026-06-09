@@ -37,5 +37,7 @@ Tracks UK AI policy and legislation evolution (DSIT, ICO, sector regulators) so 
 ## 4. Related documents
 
 - [LEGISLATION-REGISTER.md](LEGISLATION-REGISTER.md)
+- [EU-LEGISLATION-MONITORING.md](EU-LEGISLATION-MONITORING.md) — parallel quarterly workflow for EU EUR-Lex / delegated acts
+- [EUR-LEX-ELI-REFERENCE.md](EUR-LEX-ELI-REFERENCE.md)
 - [AI-GOVERNANCE.md](AI-GOVERNANCE.md)
 - [PROC-CMP-001](../procedures/PROC-CMP-001-Compliance-Review.md)

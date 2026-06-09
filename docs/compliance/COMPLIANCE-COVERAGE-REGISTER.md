@@ -1,7 +1,7 @@
 # Compliance Coverage Register — Honest Status
 
-**Version:** 1.0.0  
-**Date:** 2026-06-07  
+**Version:** 1.1.0  
+**Date:** 2026-06-08  
 **Owner:** ISMS Lead / DPO  
 **Purpose:** Single source of truth for every ⚠️, 📋, and ❌ in the compliance programme — why it is not operationally ✅, what programme artefact covers future scenarios, and what blocks external validation.
 
@@ -59,10 +59,11 @@
 
 | Item | Matrix status | Honest state | Why not operational ✅ | Programme coverage | Blocker / next step |
 |------|---------------|--------------|------------------------|-------------------|---------------------|
-| EU AI Act | ✅ Programme | ✅ Programme | High-risk conformity assessment if in scope | AI-GOVERNANCE, model cards | Monitor delegated acts |
+| EU AI Act | ✅ Programme | ✅ Programme | High-risk conformity assessment if in scope | AI-GOVERNANCE, model cards, [legislation_register.yaml](../../compliance/legislation_register.yaml) | ACT-014 quarterly EUR-Lex scan |
 | ISO 42001 | ⚠️ Target | ✅ Programme | No ISO 42001 certificate | GENAI-MATURITY, POL-AI-001 | Target 2027 |
 | NIST AI RMF | ✅ Mapped | ✅ Programme | Self-assessment only | AI-GOVERNANCE.md | Annual refresh |
 | UK AI legislation | 📋 Monitor | ✅ Programme | Bill not final; no statutory duties yet | [UK-AI-LEGISLATION-MONITORING.md](UK-AI-LEGISLATION-MONITORING.md) | Quarterly LEGISLATION-REGISTER scan |
+| EU legislation (EUR-Lex / ELI) | ✅ Programme | ✅ Programme | Delegated acts not yet scanned operationally | [EU-LEGISLATION-MONITORING.md](EU-LEGISLATION-MONITORING.md), [EUR-LEX-ELI-REFERENCE.md](EUR-LEX-ELI-REFERENCE.md) | ACT-014 first quarterly scan |
 | Algorithmic transparency | ⚠️ | ✅ Programme / 🎯 measure | Bias run not executed | PROC-AI-002, model cards | ACT-004 |
 | AI security (OWASP AI Exchange) | ✅ Programme | ✅ Programme / 🎯 assess | First threat assessment not executed | OWASP-AI-EXCHANGE-ALIGNMENT, AI-SECURITY-THREAT-MODEL, PROC-AI-003 | ACT-013 |
 | US AI fallback transfer | ⚠️ | ⚠️ Partial | SUP-004 DPA unsigned | TIA template, ROPA entry | ACT-010 |
@@ -133,6 +134,8 @@ All items require parties outside documentation-only work:
 | ACT-010 | SUP-004 DPA or disable | Legal negotiation | DPO / AI Lead |
 | ACT-011 | First internal audit | Scheduled Q4 2026 | ISMS Lead |
 | ACT-012 | BCP all P0 DBs | Drill schedule through 2027 | Operations |
+| ACT-013 | First PROC-AI-003 threat assessment | Operational test cycle | AI Lead / Security Ops |
+| ACT-014 | First EU EUR-Lex delegated-act scan | Quarterly monitoring not yet executed | AI Lead / DPO |
 
 **Nothing blocks** further programme documentation — completed in this register's linked artefacts.
 
@@ -165,7 +168,7 @@ All items require parties outside documentation-only work:
 | **Bible** | MAGNACARTA-GOVERNANCE-BIBLE | ✅ Programme (v1) | Expand as procedures mature |
 | **Cookbooks** | 13 cookbooks + INDEX (all PROC-*) | ✅ Programme | Operational drills not evidenced 🎯 |
 | **Hymn sheets** | 13 hymn sheets + INDEX (all PROC-*) | ✅ Programme | Named signatories in production 🎯 |
-| **Schemas** | REGISTER-SCHEMAS + 8 JSON schemas (MON-009) | ✅ Programme | Schema drift on new fields — monitor via health check |
+| **Schemas** | REGISTER-SCHEMAS + 10 JSON schemas (MON-009) | ✅ Programme | Schema drift on new fields — monitor via health check |
 | **Standards** | STANDARDS-REGISTER | ✅ Programme | Not external certification |
 | **Regulators / ombudsmen** | REGULATORS-OMBUDSMEN-REGISTER | ✅ Programme | Contact verification 🎯 |
 | **Systems** | SYSTEMS-REGISTER | ✅ Programme | Production monitoring hooks 🎯 |
@@ -177,7 +180,7 @@ All items require parties outside documentation-only work:
 | **Evidence templates** | Fairness test + internal audit report | ✅ Programme | ACT-004, ACT-011 execution 🎯 |
 | **ASVS gap tracker** | ASVS-GAP-CHECKLIST | ✅ Programme | Pen test / remediation evidence 🎯 |
 
-**Still missing (honest backlog):** Named individuals in REVIEWERS-REGISTER; operational evidence that cookbooks were exercised (drills, tickets); ACT-001–012 external closure; sector-specific runbooks beyond ICO/FOS/PECR starters.
+**Still missing (honest backlog):** Named individuals in REVIEWERS-REGISTER; operational evidence that cookbooks were exercised (drills, tickets); ACT-001–014 external closure; sector-specific runbooks beyond ICO/FOS/PECR starters.
 
 ### 8.3 Framework catalogue wave (2026-06-08)
 
@@ -188,7 +191,19 @@ All items require parties outside documentation-only work:
 | frameworks_register.yaml + schema (MON-009) | ✅ Programme |
 | PM-009 / PM-010 programme milestones | ✅ Programme |
 
-**Honest gap:** Layer 3 external validation (certificates, authorisations, signed BAAs, pen test, drills) — see ACT-001–ACT-012.
+**Honest gap:** Layer 3 external validation (certificates, authorisations, signed BAAs, pen test, drills) — see ACT-001–ACT-014.
+
+### 8.4 EUR-Lex / ELI programme wave (2026-06-08)
+
+| Milestone | Status |
+|-----------|--------|
+| legislation_register.yaml + schema (LEG-001–010, WATCH-001–006) | ✅ Programme |
+| EUR-LEX-ELI-REFERENCE.md (CELEX / ELI citation guide) | ✅ Programme |
+| EU-LEGISLATION-MONITORING.md (quarterly delegated-act workflow) | ✅ Programme |
+| OBLIGATIONS-REGISTER EUR-Lex anchors (OBL-020–024) | ✅ Programme |
+| PM-012 / ACT-014 opened | ✅ Programme / 🎯 first scan |
+
+**Honest gap:** First quarterly EUR-Lex delegated-act scan not yet executed (ACT-014 due 2026-09-30).
 
 ---
 
@@ -198,7 +213,7 @@ All items require parties outside documentation-only work:
 |-------|------------------------|--------|
 | Programme (layer 2) | Every applicable/future row has owner doc + artefact taxonomy | **Achieved** (full cookbook/hymn/schema coverage; local monitor) |
 | Maintenance (layer 2b) | Weekly local health check logged; quarterly PROC-CMP-001 | First weekly run + Q3 review 2026-09-06 |
-| Operations (layer 3) | ACT-001–012 closed with evidence | 2026–2027 |
+| Operations (layer 3) | ACT-001–014 closed with evidence | 2026–2027 |
 | External assurance | ISO 27001, SOC 2, ICO live | Q1–Q2 2027 |
 
 ---

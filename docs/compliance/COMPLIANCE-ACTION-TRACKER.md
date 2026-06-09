@@ -1,6 +1,6 @@
 # Compliance Action Tracker
 
-**Version:** 1.0.0  
+**Version:** 1.1.0  
 **Date:** 2026-06-08  
 **Owner:** ISMS Lead  
 **Machine-readable:** [compliance/compliance_action_tracker.yaml](../../compliance/compliance_action_tracker.yaml)  
@@ -36,6 +36,7 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 | ACT-011 | First internal audit (ISO programme) | ISMS Lead | 2026-12-31 | P2 | Open | 🎯 |
 | ACT-012 | Expand BCP restore tests (all P0 DBs) | Operations | 2027-06-07 | P2 | Open | 🎯 |
 | ACT-013 | First PROC-AI-003 AI security threat assessment (per model) | AI Lead / Security Ops | 2026-12-31 | P1 | Open | 🎯 |
+| ACT-014 | First quarterly EU EUR-Lex delegated-act scan (EU AI Act secondary legislation) | AI Lead / DPO | 2026-09-30 | P2 | Open | 🎯 |
 
 ---
 
@@ -68,6 +69,8 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 - [SOC2-EVIDENCE-SCHEDULE.md](SOC2-EVIDENCE-SCHEDULE.md)
 - [../governance/INTERNAL-AUDIT-PROGRAMME.md](../governance/INTERNAL-AUDIT-PROGRAMME.md)
 - [TRANC3-REGISTER-BRIDGE.md](TRANC3-REGISTER-BRIDGE.md)
+- [EU-LEGISLATION-MONITORING.md](EU-LEGISLATION-MONITORING.md)
+- [EUR-LEX-ELI-REFERENCE.md](EUR-LEX-ELI-REFERENCE.md)
 - [../engineering/TRANC3-INTEGRATION-GUIDE.md](../engineering/TRANC3-INTEGRATION-GUIDE.md)
 
 **Next review:** 2026-09-06 (PROC-CMP-001)

@@ -8,14 +8,14 @@
 
 - [ ] `python3 scripts/compliance_health_check.py` run — failures assigned
 - [ ] COMPLIANCE-COVERAGE-REGISTER reviewed for symbol changes
-- [ ] ACT-001–012 status exported
+- [ ] ACT-001–014 status exported
 - [ ] Participants invited (ISMS, DPO, Eng, SecOps, AI, CAB)
 - [ ] MeetingRoom booked
 
 ## During meeting
 
 - [ ] DEFSTAN / register score discussed
-- [ ] Legislation + obligations registers current
+- [ ] Legislation + obligations registers current (incl. EU EUR-Lex scan / ACT-014)
 - [ ] STANDARDS-REGISTER + REGULATORS register reviewed
 - [ ] SYSTEMS-REGISTER matches AS-BUILT
 - [ ] ISO SOA gaps updated

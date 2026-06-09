@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/legislation_register.schema.json",
+  "title": "Legislation Register",
+  "type": "object",
+  "required": ["meta", "active_legislation", "watch_list"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" },
+        "procedure": { "type": "string" },
+        "markdown_index": { "type": "string" },
+        "eli_reference": { "type": "string" }
+      }
+    },
+    "active_legislation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["legislation_id", "name", "jurisdiction", "status", "review_date"],
+        "properties": {
+          "legislation_id": { "type": "string", "pattern": "^LEG-[0-9]{3}$" },
+          "name": { "type": "string" },
+          "short_name": { "type": "string" },
+          "jurisdiction": {
+            "type": "string",
+            "enum": ["UK", "EU", "US", "Multi"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["Compliant", "Programme", "Watch", "N/A"]
+          },
+          "celex": { "type": "string" },
+          "eli_uri": { "type": "string", "format": "uri" },
+          "oj_reference": { "type": "string" },
+          "consolidated_text_uri": { "type": "string", "format": "uri" },
+          "uk_legislation_uri": { "type": "string", "format": "uri" },
+          "compliance_owner": { "type": "string" },
+          "obligations": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "article_anchors": { "type": "object" },
+          "review_date": { "type": "string", "format": "date" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "watch_list": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["watch_id", "name", "jurisdiction", "review_date"],
+        "properties": {
+          "watch_id": { "type": "string", "pattern": "^WATCH-[0-9]{3}$" },
+          "name": { "type": "string" },
+          "jurisdiction": { "type": "string" },
+          "review_date": { "type": "string", "format": "date" }
+        }
+      }
+    },
+    "secondary_legislation_watch": { "type": "object" },
+    "monitoring_sources": { "type": "array" }
+  }
+}
