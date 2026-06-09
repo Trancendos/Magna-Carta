@@ -57,11 +57,15 @@ If activated:
 
 ## 5. AI / LLM testing (PT-AI)
 
-Align with [PROC-AI-002](../procedures/PROC-AI-002-Fairness-Bias-Testing.md) and OWASP LLM Top 10:
+Align with [PROC-AI-003](../procedures/PROC-AI-003-AI-Security-Threat-Assessment.md), [AI-SECURITY-THREAT-MODEL.md](../compliance/AI-SECURITY-THREAT-MODEL.md), and OWASP GenAI LLM Top 10 (STD-038):
 
-- Prompt injection and jailbreak attempts
-- Data exfiltration via tool calling
+- Prompt injection and jailbreak attempts (direct and indirect / RAG)
+- Data exfiltration via tool calling and agentic chains (lethal trifecta scenarios)
 - Model denial-of-wallet (cost abuse) — coordinate with rate limits
+- System prompt and augmentation data leakage
+- Supply-chain / API fallback path (SUP-004) when in scope
+
+**Pre-requisite:** PROC-AI-003 assessment identifies which TM-AI-### threats warrant offensive validation.
 
 ---
 

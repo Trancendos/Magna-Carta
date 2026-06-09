@@ -62,6 +62,8 @@ Status symbols match [COMPLIANCE-COVERAGE-REGISTER.md](COMPLIANCE-COVERAGE-REGIS
 | STD-034 | ISO 9001 | N/A | DEFSTAN substitutes for QA |
 | STD-035 | ITIL 4 | Programme ✅ | Town Hall ITSM |
 | STD-036 | PRINCE2 7 | Programme ✅ | BoardRoom stage gates |
+| STD-037 | OWASP AI Exchange | Adopted ✅ | [OWASP-AI-EXCHANGE-ALIGNMENT.md](OWASP-AI-EXCHANGE-ALIGNMENT.md) |
+| STD-038 | OWASP GenAI / LLM Top 10 | Mapped ✅ | OWASP-AI-EXCHANGE-ALIGNMENT, PEN-TEST-FUTURE-SCOPE-ANNEX §5 |
 
 ---
 
@@ -78,6 +80,7 @@ Status symbols match [COMPLIANCE-COVERAGE-REGISTER.md](COMPLIANCE-COVERAGE-REGIS
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-06-08 | STD-037/038 — OWASP AI Exchange + GenAI LLM Top 10 mapping (PM-011) | ISMS Lead |
 | 2026-06-08 | v2.0 — cross-reference to master FW catalogue (PM-009) | ISMS Lead |
 | 2026-06-07 | Initial standards register (artifact model wave) | ISMS Lead |
 

@@ -110,7 +110,7 @@ All artefacts are subject to [COMPLIANCE-MAINTENANCE-PROGRAMME.md](COMPLIANCE-MA
 | Category | Status (2026-06-08) | Notes |
 |----------|---------------------|-------|
 | Policies | ✅ 9 policies | BoardRoom approval 🎯 |
-| Procedures | ✅ 12 procedures | — |
+| Procedures | ✅ 13 procedures | — |
 | Cookbooks | ✅ 12 + INDEX (MON-010) | Operational drills not evidenced 🎯 |
 | Bibles | ✅ 3 + INDEX (gov, privacy, security) | Expand as domains mature |
 | Hymn sheets | ✅ 12 + INDEX (MON-010) | Named signatories in production 🎯 |

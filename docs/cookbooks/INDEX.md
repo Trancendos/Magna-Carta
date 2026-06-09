@@ -17,10 +17,11 @@ Operational playbooks — scenario-driven step-by-step guides. Each cookbook map
 | COOK-VUL-001 | [Vulnerability response](COOK-VUL-001-Vulnerability-Response.md) | PROC-VUL-001 | Security Ops | ✅ Active |
 | COOK-BCP-001 | [Restore drill](COOK-BCP-001-Restore-Drill.md) | PROC-BCP-001 | Operations | ✅ Active |
 | COOK-AI-002 | [Fairness & bias test run](COOK-AI-002-Fairness-Bias-Test.md) | PROC-AI-002 | AI Governance | ✅ Active |
+| COOK-AI-003 | [AI security threat assessment](COOK-AI-003-AI-Security-Threat-Assessment.md) | PROC-AI-003 | AI Lead / Security Ops | ✅ Active |
 | COOK-TRN-001 | [Policy attestation](COOK-TRN-001-Policy-Attestation.md) | PROC-TRN-001 | HR / ISMS | ✅ Active |
 | COOK-HR-001 | [Staff lifecycle](COOK-HR-001-Staff-Lifecycle.md) | PROC-HR-001 | HR / ISMS | ✅ Active |
 | COOK-CAPA-001 | [Corrective action](COOK-CAPA-001-Corrective-Action.md) | PROC-CAPA-001 | ISMS Lead | ✅ Active |
 
-**Coverage:** 12 cookbooks for 12 procedures (100% programme coverage).
+**Coverage:** 13 cookbooks for 13 procedures (100% programme coverage).
 
 **Related:** [DOCUMENTATION-ARTIFACT-MODEL.md](../governance/DOCUMENTATION-ARTIFACT-MODEL.md) · Town Hall `cookbook.md` template (Tranc3)

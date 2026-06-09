@@ -250,6 +250,7 @@ Index: [docs/policies/INDEX.md](docs/policies/INDEX.md)
 | PROC-BCP-001 | Backup & Restore | POL-OPS-003 |
 | PROC-CMP-001 | Compliance Review | All |
 | PROC-AI-002 | Fairness & Bias Testing | POL-AI-001 |
+| PROC-AI-003 | AI Security Threat Assessment | POL-AI-001, POL-SEC-001 |
 | PROC-CHG-002 | Post-Implementation Review | POL-OPS-002 |
 | PROC-TRN-001 | Security Awareness & Attestation | POL-SEC-001, POL-SEC-002 |
 

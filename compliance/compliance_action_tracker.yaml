@@ -140,6 +140,16 @@ actions:
     source: "BCP-RESTORE-TEST-LOG.md"
     evidence_target: "Additional BCP-RT-### entries for vault and Forgejo"
 
+  - action_id: ACT-013
+    title: "First PROC-AI-003 AI security threat assessment per registered model"
+    owner: AI Lead / Security Ops
+    due_date: "2026-12-31"
+    status: Open
+    priority: P1
+    validation_type: external
+    source: "OWASP-AI-EXCHANGE-ALIGNMENT, AI-SECURITY-THREAT-MODEL, RISK-009–012"
+    evidence_target: "Completed HYMN-AI-003 checklists and assessment records per model (luminous, turings_hub, mlflow_experiments)"
+
 programme_milestones:
   - milestone_id: PM-001
     title: "COMPLIANCE-COVERAGE-REGISTER published"
@@ -200,3 +210,9 @@ programme_milestones:
     completed_date: "2026-06-08"
     validation_type: programme
     evidence: "compliance/compliance_action_tracker.yaml actions ACT-001–ACT-012; STANDARDS-AND-FRAMEWORKS-REGISTER §10"
+
+  - milestone_id: PM-011
+    title: "OWASP AI Exchange programme wave (threat model, PROC-AI-003, RISK-009–012)"
+    completed_date: "2026-06-08"
+    validation_type: programme
+    evidence: "docs/compliance/OWASP-AI-EXCHANGE-ALIGNMENT.md, AI-SECURITY-THREAT-MODEL.md, PROC-AI-003/COOK-AI-003/HYMN-AI-003, STD-037/038, compliance/risk_register.yaml RISK-009–012"

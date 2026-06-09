@@ -35,6 +35,25 @@ AI systems within Tranc3 ISMS scope:
 | HIPAA (US PHI) | ✅ Programme | [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md), MC-008 |
 | FCA Handbook (UK) | ✅ Programme | [FCA-ALIGNMENT.md](FCA-ALIGNMENT.md), MC-009 |
 | GDPR Art. 22 | ✅ Active | Model cards, human review |
+| OWASP AI Exchange | ✅ Adopted | [OWASP-AI-EXCHANGE-ALIGNMENT.md](OWASP-AI-EXCHANGE-ALIGNMENT.md), STD-037 |
+| OWASP GenAI LLM Top 10 | ✅ Mapped | [AI-SECURITY-THREAT-MODEL.md](AI-SECURITY-THREAT-MODEL.md), PT-AI scope |
+
+---
+
+## 2a. AI security (OWASP AI Exchange)
+
+**Principle:** AI security = threats to AI-specific assets + conventional IT security (existing ISMS).
+
+| Topic | Artefact |
+|-------|----------|
+| Threat model | [AI-SECURITY-THREAT-MODEL.md](AI-SECURITY-THREAT-MODEL.md) (TM-AI-001–011) |
+| Alignment mapping | [OWASP-AI-EXCHANGE-ALIGNMENT.md](OWASP-AI-EXCHANGE-ALIGNMENT.md) |
+| Assessment procedure | [PROC-AI-003](../procedures/PROC-AI-003-AI-Security-Threat-Assessment.md) |
+| Zero-model-trust | Assume prompt injection can succeed; limit blast radius |
+| Agentic controls | Least model privilege; lethal trifecta mitigation; human oversight §8 |
+| Risks | RISK-009–012 in [RISK-REGISTER.md](RISK-REGISTER.md) |
+
+**Operational validation:** ACT-013 — first PROC-AI-003 run per registered model (Q4 2026).
 
 ---
 
@@ -90,7 +109,7 @@ Design → Register → Risk classify → Deploy → Monitor → Incident → Re
 |----------|--------|----------|
 | **GOVERN** | ✅ | AI policy, registry, incident log, Magna Carta MC-001–009 |
 | **MAP** | ✅ Programme | Risk tiers, EU AI Act §3 mapping, model cards, prohibited-use blocklist |
-| **MEASURE** | ✅ Programme | [PROC-AI-002](../procedures/PROC-AI-002-Fairness-Bias-Testing.md) defined; **first measurement run** 🎯 Q3 2026 |
+| **MEASURE** | ✅ Programme | [PROC-AI-002](../procedures/PROC-AI-002-Fairness-Bias-Testing.md) fairness; [PROC-AI-003](../procedures/PROC-AI-003-AI-Security-Threat-Assessment.md) security — **first runs** 🎯 Q3–Q4 2026 |
 | **MANAGE** | ✅ Programme | Incident API, PROC-IR-001, PROC-CMP-001, action register §9 |
 
 ---
@@ -130,6 +149,7 @@ See [config/magna_carta_config.json](../../config/magna_carta_config.json).
 | Action | Priority | Owner | Target |
 |--------|----------|-------|--------|
 | Execute first PROC-AI-002 bias measurement run | High | AI Engineering | Q3 2026 |
+| Execute first PROC-AI-003 security threat assessment (ACT-013) | High | AI Lead / Security Ops | Q4 2026 |
 | ~~Board-approve POL-AI-001~~ | — | Executive | ✅ 2026-06-07 |
 | Complete Annex III assessment | Medium | DPO + AI Lead | Q4 2026 |
 | ISO 42001 gap assessment | Medium | ISMS Lead | Q1 2027 |
@@ -145,6 +165,9 @@ See [config/magna_carta_config.json](../../config/magna_carta_config.json).
 - [GENAI-MATURITY-ASSESSMENT.md](GENAI-MATURITY-ASSESSMENT.md)
 - [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md)
 - [FCA-ALIGNMENT.md](FCA-ALIGNMENT.md)
+- [OWASP-AI-EXCHANGE-ALIGNMENT.md](OWASP-AI-EXCHANGE-ALIGNMENT.md)
+- [AI-SECURITY-THREAT-MODEL.md](AI-SECURITY-THREAT-MODEL.md)
+- [PROC-AI-003](../procedures/PROC-AI-003-AI-Security-Threat-Assessment.md)
 - Tranc3 `src/compliance/ai_governance.py`
 - Tranc3 `src/compliance/magna_carta.py` (runtime hooks)
 

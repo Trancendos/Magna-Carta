@@ -17,11 +17,12 @@ One-page checklists for aligned execution. Print or paste into incident/complian
 | HYMN-VUL-001 | [Vulnerability triage checklist](HYMN-VUL-001-Vuln-Triage-Checklist.md) | PROC-VUL-001 | ✅ Active |
 | HYMN-BCP-001 | [Restore drill checklist](HYMN-BCP-001-Restore-Drill-Checklist.md) | PROC-BCP-001 | ✅ Active |
 | HYMN-AI-002 | [Fairness test checklist](HYMN-AI-002-Fairness-Test-Checklist.md) | PROC-AI-002 | ✅ Active |
+| HYMN-AI-003 | [AI security threat assessment checklist](HYMN-AI-003-AI-Security-Threat-Assessment-Checklist.md) | PROC-AI-003 | ✅ Active |
 | HYMN-TRN-001 | [Attestation checklist](HYMN-TRN-001-Attestation-Checklist.md) | PROC-TRN-001 | ✅ Active |
 | HYMN-HR-001 | [On/offboarding checklist](HYMN-HR-001-OnOffboard-Checklist.md) | PROC-HR-001 | ✅ Active |
 | HYMN-CAPA-001 | [CAPA checklist](HYMN-CAPA-001-CAPA-Checklist.md) | PROC-CAPA-001 | ✅ Active |
 
-**Coverage:** 12 hymn sheets for 12 procedures (100% programme coverage).
+**Coverage:** 13 hymn sheets for 13 procedures (100% programme coverage).
 
 **Definition:** "Hymn sheet" = everyone sings from the same sheet — no improvisation on critical steps.
 

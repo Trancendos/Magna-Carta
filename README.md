@@ -21,8 +21,8 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | Compliance Blueprint | 1.0.0 | ✅ Active |
 | Architecture Blueprint | 1.0.0 | ✅ Active |
 | Policy Library | 1.0.0 | ✅ Authored (9 policies; BoardRoom approval 🎯) |
-| Procedure Library | 1.0.0 | ✅ Active (12 procedures) |
-| Documentation artefact model | 1.1.0 | ✅ Full cookbook/hymn coverage (12/12 procedures) |
+| Procedure Library | 1.0.0 | ✅ Active (13 procedures) |
+| Documentation artefact model | 1.1.0 | ✅ Full cookbook/hymn coverage (13/13 procedures) |
 | Compliance maintenance monitor | 1.1.0 | ✅ Local weekly health check (no cloud CI) |
 | Governance artefacts | 1.0.0 | ✅ Draft charter, RACI, audit programme (operational use 🎯) |
 | Evidence & assurance programme | 1.0.0 | ✅ MC-010 authored (pen test / attestations / audits 🎯) |
@@ -125,7 +125,7 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | Document | Purpose |
 |----------|---------|
 | [docs/policies/INDEX.md](docs/policies/INDEX.md) | Policy library index (9 policies) |
-| [docs/procedures/INDEX.md](docs/procedures/INDEX.md) | Procedure library index (12 procedures) |
+| [docs/procedures/INDEX.md](docs/procedures/INDEX.md) | Procedure library index (13 procedures) |
 | [docs/templates/TEMPLATE-DPA-UK-GDPR.md](docs/templates/TEMPLATE-DPA-UK-GDPR.md) | UK GDPR processor DPA template |
 | [docs/templates/TEMPLATE-BAA-HIPAA.md](docs/templates/TEMPLATE-BAA-HIPAA.md) | HIPAA business associate agreement template |
 | [docs/templates/TEMPLATE-SCC-ANNEX.md](docs/templates/TEMPLATE-SCC-ANNEX.md) | Standard contractual clauses annex template |
@@ -248,7 +248,7 @@ magna-carta/
     │   └── POL-*.md (9 policies)
     └── procedures/
         ├── INDEX.md
-        └── PROC-*.md (12 procedures)
+        └── PROC-*.md (13 procedures)
 ```
 
 ## Relationship to Tranc3

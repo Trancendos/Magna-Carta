@@ -64,6 +64,7 @@
 | NIST AI RMF | ✅ Mapped | ✅ Programme | Self-assessment only | AI-GOVERNANCE.md | Annual refresh |
 | UK AI legislation | 📋 Monitor | ✅ Programme | Bill not final; no statutory duties yet | [UK-AI-LEGISLATION-MONITORING.md](UK-AI-LEGISLATION-MONITORING.md) | Quarterly LEGISLATION-REGISTER scan |
 | Algorithmic transparency | ⚠️ | ✅ Programme / 🎯 measure | Bias run not executed | PROC-AI-002, model cards | ACT-004 |
+| AI security (OWASP AI Exchange) | ✅ Programme | ✅ Programme / 🎯 assess | First threat assessment not executed | OWASP-AI-EXCHANGE-ALIGNMENT, AI-SECURITY-THREAT-MODEL, PROC-AI-003 | ACT-013 |
 | US AI fallback transfer | ⚠️ | ⚠️ Partial | SUP-004 DPA unsigned | TIA template, ROPA entry | ACT-010 |
 
 ---
@@ -162,8 +163,8 @@ All items require parties outside documentation-only work:
 |-------------------|-----------|--------|------------|
 | **Model** | DOCUMENTATION-ARTIFACT-MODEL | ✅ Programme | — |
 | **Bible** | MAGNACARTA-GOVERNANCE-BIBLE | ✅ Programme (v1) | Expand as procedures mature |
-| **Cookbooks** | 12 cookbooks + INDEX (all PROC-*) | ✅ Programme | Operational drills not evidenced 🎯 |
-| **Hymn sheets** | 12 hymn sheets + INDEX (all PROC-*) | ✅ Programme | Named signatories in production 🎯 |
+| **Cookbooks** | 13 cookbooks + INDEX (all PROC-*) | ✅ Programme | Operational drills not evidenced 🎯 |
+| **Hymn sheets** | 13 hymn sheets + INDEX (all PROC-*) | ✅ Programme | Named signatories in production 🎯 |
 | **Schemas** | REGISTER-SCHEMAS + 8 JSON schemas (MON-009) | ✅ Programme | Schema drift on new fields — monitor via health check |
 | **Standards** | STANDARDS-REGISTER | ✅ Programme | Not external certification |
 | **Regulators / ombudsmen** | REGULATORS-OMBUDSMEN-REGISTER | ✅ Programme | Contact verification 🎯 |

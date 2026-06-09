@@ -1,7 +1,7 @@
 # Information Security Risk Treatment Plan
 
 **Version:** 1.0.0  
-**Date:** 2026-06-07  
+**Date:** 2026-06-08  
 **Owner:** ISMS Lead  
 **Source register:** [compliance/risk_register.yaml](../../compliance/risk_register.yaml)  
 **Status:** ✅ Programme — operational treatment evidence via ACT items
@@ -26,6 +26,10 @@ Formalises ISO 27001 risk treatment for risks in the Magna Carta risk register. 
 | RISK-006 | Magna Carta not enforced in prod | Mitigate | TRANC3-INTEGRATION-GUIDE, MC-011 | Platform Eng | ACT-009 🎯 |
 | RISK-007 | Policy attestation gaps | Mitigate | PROC-TRN-001, attestation register | HR / ISMS | ACT-007 🎯 |
 | RISK-008 | Certification delay affects sales | Mitigate | SOC2/ISO programmes | ISMS Lead | ACT-008, Q2 2027 🎯 |
+| RISK-009 | AI inference integrity/confidentiality failure | Mitigate | PROC-AI-003, AI-SECURITY-THREAT-MODEL, MC-RULE-004 | AI Lead / Security Ops | ACT-013 🎯 |
+| RISK-010 | AI training data poisoning or leakage | Mitigate | PROC-AI-003; data provenance controls | AI Lead | ACT-013 🎯 |
+| RISK-011 | AI model IP or supply-chain compromise | Mitigate | PROC-AI-003; supplier register; rate limits | AI Lead / Security Ops | ACT-013 🎯 |
+| RISK-012 | AI availability abuse | Mitigate | Rate limits; cost caps; MC-RULE-005 | Platform Eng | ACT-013 🎯 |
 
 ---
 

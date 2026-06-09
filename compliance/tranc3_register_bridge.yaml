@@ -99,12 +99,13 @@ bridges:
       - POL-AI-001
     procedures:
       - PROC-AI-002
+      - PROC-AI-003
     tranc3_paths:
       - src/compliance/ai_governance.py
     obligations:
       - OBL-025
       - OBL-090
-    integration_notes: "ACT-004 — first fairness measurement run"
+    integration_notes: "ACT-004 — first fairness measurement run; ACT-013 — first AI security threat assessment"
 
   - mc_id: MC-006
     title: "Policy and Procedure Library"

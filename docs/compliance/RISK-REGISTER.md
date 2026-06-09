@@ -1,7 +1,7 @@
 # Risk Register
 
 **Version:** 1.0.0  
-**Date:** 2026-06-07  
+**Date:** 2026-06-08  
 **Owner:** ISMS Lead  
 **Machine-readable:** [compliance/risk_register.yaml](../../compliance/risk_register.yaml)  
 **Review:** Quarterly (PROC-CMP-001) · Annual management review
@@ -32,6 +32,10 @@
 | RISK-006 | Magna Carta runtime not enforced | 3 | 3 | 9 | Mitigate | magna_carta_config.json; MC-004 | 🎯 ACT-009 Tranc3 hook |
 | RISK-007 | Policy attestation gaps | 3 | 3 | 9 | Mitigate | PROC-TRN-001; attestation register | 🎯 ACT-007 cycle |
 | RISK-008 | Certification delay affects sales | 3 | 3 | 9 | Mitigate | ISO/SOC2 programmes; evidence schedules | 🎯 Q1–Q2 2027 audits |
+| RISK-009 | AI inference integrity/confidentiality failure | 4 | 4 | 16 | Mitigate | PROC-AI-003; zero-model-trust; MC-RULE-004 | 🎯 ACT-013 |
+| RISK-010 | AI training/fine-tune data poisoning or leakage | 3 | 4 | 12 | Mitigate | Data provenance; access control; PROC-AI-003 | 🎯 ACT-013 |
+| RISK-011 | AI model IP extraction or supply-chain compromise | 3 | 3 | 9 | Mitigate | Supplier register; rate limits; PROC-AI-003 | 🎯 ACT-013 |
+| RISK-012 | AI availability abuse (denial-of-wallet) | 3 | 3 | 9 | Mitigate | Rate limits; cost caps; MC-RULE-005 | 🎯 ACT-013 |
 
 ---
 
@@ -39,7 +43,7 @@
 
 | Treatment | Count |
 |-----------|-------|
-| Mitigate | 8 |
+| Mitigate | 12 |
 | Accept | 0 |
 | Transfer | 0 |
 | Avoid | 0 |

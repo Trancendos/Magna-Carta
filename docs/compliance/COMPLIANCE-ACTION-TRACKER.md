@@ -1,7 +1,7 @@
 # Compliance Action Tracker
 
 **Version:** 1.0.0  
-**Date:** 2026-06-07  
+**Date:** 2026-06-08  
 **Owner:** ISMS Lead  
 **Machine-readable:** [compliance/compliance_action_tracker.yaml](../../compliance/compliance_action_tracker.yaml)  
 **Procedure:** [PROC-CMP-001](../procedures/PROC-CMP-001-Compliance-Review.md)
@@ -35,6 +35,7 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 | ACT-010 | SUP-004 US AI fallback DPA or disable decision | DPO / AI Lead | 2026-10-31 | P2 | Open | 🎯 |
 | ACT-011 | First internal audit (ISO programme) | ISMS Lead | 2026-12-31 | P2 | Open | 🎯 |
 | ACT-012 | Expand BCP restore tests (all P0 DBs) | Operations | 2027-06-07 | P2 | Open | 🎯 |
+| ACT-013 | First PROC-AI-003 AI security threat assessment (per model) | AI Lead / Security Ops | 2026-12-31 | P1 | Open | 🎯 |
 
 ---
 

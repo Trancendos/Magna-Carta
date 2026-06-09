@@ -37,6 +37,7 @@ Canonical reference for **information security operations** — access control, 
 | BCP / restore | PROC-BCP-001 | COOK-BCP-001 | HYMN-BCP-001 |
 | CAPA | PROC-CAPA-001 | COOK-CAPA-001 | HYMN-CAPA-001 |
 | HR lifecycle | PROC-HR-001 | COOK-HR-001 | HYMN-HR-001 |
+| AI security | PROC-AI-003 | COOK-AI-003 | HYMN-AI-003 |
 
 ---
 
@@ -47,6 +48,8 @@ Canonical reference for **information security operations** — access control, 
 | ISO 27001 | STANDARDS-REGISTER STD-001 | ISO27001-ALIGNMENT.md |
 | OWASP Top 10 | STD-007 | PROC-VUL-001, pen-test programme |
 | OWASP ASVS L2 | STD-008 | [ASVS-GAP-CHECKLIST.md](../compliance/ASVS-GAP-CHECKLIST.md) |
+| OWASP AI Exchange | STD-037 | [OWASP-AI-EXCHANGE-ALIGNMENT.md](../compliance/OWASP-AI-EXCHANGE-ALIGNMENT.md), [AI-SECURITY-THREAT-MODEL.md](../compliance/AI-SECURITY-THREAT-MODEL.md) |
+| OWASP GenAI LLM Top 10 | STD-038 | PT-AI scope; PROC-AI-003 |
 | DEFSTAN (Tranc3) | Tranc3 register | CI gate SYS-033 |
 
 ---
@@ -83,6 +86,7 @@ See [SYSTEMS-REGISTER.md](../compliance/SYSTEMS-REGISTER.md) — P0: SYS-001 (Tr
 | Penetration test | Annual | PEN-TEST-LOG.md (ACT-005) |
 | BCP restore drill | Semi-annual | BCP-RESTORE-TEST-LOG.md |
 | ASVS gap review | Annual | ASVS-GAP-CHECKLIST.md |
+| AI security threat assessment | Annual per model | PROC-AI-003 (ACT-013) |
 
 ---
 

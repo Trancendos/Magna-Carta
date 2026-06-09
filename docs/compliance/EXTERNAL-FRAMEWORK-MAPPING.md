@@ -168,6 +168,26 @@ If Trancendos processes **research data** (human subjects, clinical trials, expo
 
 ---
 
+## 11. OWASP AI Exchange → Magna Carta (security layer)
+
+Source: [OWASP AI Exchange — AI Security Overview](https://owaspai.org/docs/ai_security_overview/) (CC0). Primary mapping: [OWASP-AI-EXCHANGE-ALIGNMENT.md](OWASP-AI-EXCHANGE-ALIGNMENT.md).
+
+| Exchange concept | Magna Carta expression |
+|------------------|------------------------|
+| **G.U.A.R.D** (Govern, Understand, Adapt, Risk evidence, Document) | AI-GOVERNANCE; PROC-AI-003; risk register RISK-009–012; model cards |
+| AI-specific assets (data, model IP, prompts, I/O) | AI-SECURITY-THREAT-MODEL §4–5; supplier register; Vault |
+| Three surfaces (dev-time, inference, runtime conventional) | PROC-AI-003 §4; PROC-VUL-001; pen-test PT-CORE + PT-AI |
+| Six impacts (disclose ×3, deceive, disrupt ×2) | RISK-009–012; incident response PROC-IR-001 |
+| Zero-model-trust | Assume prompt injection can succeed; blast-radius controls |
+| Agentic AI (lethal trifecta) | AI-SECURITY-THREAT-MODEL §6; tool allowlists; human oversight |
+| OWASP GenAI LLM Top 10 | Awareness + PT-AI red-team scenarios (STD-038) |
+
+**Complements (does not replace):** Connor five-domain ethics/governance mapping (§3–8), PROC-AI-002 fairness track, conventional OWASP Top 10 (STD-007).
+
+**Operational validation:** ACT-013 — first PROC-AI-003 assessment per registered model.
+
+---
+
 ## 12. Implementation workflow (four steps)
 
 Adapted from Connor framework adoption steps:
@@ -191,5 +211,7 @@ Adapted from Connor framework adoption steps:
 - [REGULATION-MATRIX.md](REGULATION-MATRIX.md)
 - [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md)
 - [FCA-ALIGNMENT.md](FCA-ALIGNMENT.md)
+- [OWASP-AI-EXCHANGE-ALIGNMENT.md](OWASP-AI-EXCHANGE-ALIGNMENT.md)
+- [AI-SECURITY-THREAT-MODEL.md](AI-SECURITY-THREAT-MODEL.md)
 
 **Next review:** 2026-12-07

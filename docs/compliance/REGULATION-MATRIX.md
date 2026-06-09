@@ -46,6 +46,8 @@
 | CIS Controls v8 | ⚠️ Reference | ⚠️ Partial | — | IAM, logging, vuln mgmt implemented |
 | OWASP Top 10 (2021) | ✅ | ✅ | Active | Penetration tests, hardening |
 | OWASP ASVS L2 | ⚠️ Target | ⚠️ Partial | — | Auth, validation, logging strong |
+| OWASP AI Exchange | ✅ | ✅ Programme | — | [OWASP-AI-EXCHANGE-ALIGNMENT.md](OWASP-AI-EXCHANGE-ALIGNMENT.md), PROC-AI-003 |
+| OWASP GenAI LLM Top 10 | ⚠️ Reference | ✅ Mapped | — | PT-AI scope; AI-SECURITY-THREAT-MODEL |
 | PCI DSS v4.0 | ❌ N/A | ✅ Programme (position) | — | No CHD; [PCI-DSS-POSITION.md](PCI-DSS-POSITION.md) |
 | HIPAA | ⚠️ US PHI boundary | ✅ Programme | 🎯 Tier C on customer path | [HIPAA-ALIGNMENT.md](HIPAA-ALIGNMENT.md), MC-008, MC-RULE-009 |
 | FedRAMP | ❌ N/A | ✅ Programme (future) | — | [FEDRAMP-READINESS.md](FEDRAMP-READINESS.md) |
@@ -62,6 +64,7 @@
 | NIST AI RMF 1.0 | ⚠️ Reference | ✅ Mapped | AI-GOVERNANCE.md |
 | UK AI White Paper / DSIT | ⚠️ Reference | ✅ Programme | [UK-AI-LEGISLATION-MONITORING.md](UK-AI-LEGISLATION-MONITORING.md) |
 | Algorithmic transparency | ⚠️ | ✅ Programme | Model cards; bias measurement operational target |
+| AI security (OWASP AI Exchange) | ✅ | ✅ Programme / 🎯 assess | OWASP-AI-EXCHANGE-ALIGNMENT, PROC-AI-003 | ACT-013 first assessment |
 | Connor GenAI Governance Framework v1.0 | ✅ Reference | ✅ Mapped | [EXTERNAL-FRAMEWORK-MAPPING.md](EXTERNAL-FRAMEWORK-MAPPING.md), [GENAI-MATURITY-ASSESSMENT.md](GENAI-MATURITY-ASSESSMENT.md) |
 | Google AI Principles | ✅ Reference | ✅ Mapped | [AI-GOVERNANCE.md](AI-GOVERNANCE.md) §11 |
 

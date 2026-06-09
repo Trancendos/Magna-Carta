@@ -1,7 +1,7 @@
 # Procedure Library Index
 
 **Version:** 1.0.0  
-**Date:** 2026-06-07  
+**Date:** 2026-06-08  
 **Owner:** ISMS Lead
 
 ---
@@ -18,6 +18,7 @@
 | [PROC-BCP-001](PROC-BCP-001-Backup-Restore.md) | Backup & Restore | POL-OPS-003 | Operations |
 | [PROC-CMP-001](PROC-CMP-001-Compliance-Review.md) | Compliance Review | All | ISMS Lead |
 | [PROC-AI-002](PROC-AI-002-Fairness-Bias-Testing.md) | Fairness & Bias Testing | POL-AI-001 | AI Lead |
+| [PROC-AI-003](PROC-AI-003-AI-Security-Threat-Assessment.md) | AI Security Threat Assessment | POL-AI-001, POL-SEC-001 | AI Lead / Security Ops |
 | [PROC-CHG-002](PROC-CHG-002-Post-Implementation-Review.md) | Post-Implementation Review | POL-OPS-002 | CAB |
 | [PROC-TRN-001](PROC-TRN-001-Security-Awareness-Attestation.md) | Security Awareness & Attestation | POL-SEC-001, POL-SEC-002 | HR / ISMS |
 | [PROC-HR-001](PROC-HR-001-Staff-Lifecycle.md) | Staff Lifecycle (screening / offboarding) | POL-SEC-001, POL-SEC-002 | HR / ISMS |
@@ -37,6 +38,7 @@
 | PROC-BCP-001 | Scheduled backup; disaster declaration |
 | PROC-CMP-001 | Quarterly calendar |
 | PROC-AI-002 | Model change; annual fairness cycle; high-risk AI feature launch |
+| PROC-AI-003 | Model change; annual security assessment; new agentic routes; post-AI incident |
 | PROC-CHG-002 | Major production change closure (CAB) |
 | PROC-TRN-001 | Onboarding; annual refresh; policy version change |
 | PROC-HR-001 | Joiner / mover / leaver; screening before privileged access |

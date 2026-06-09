@@ -58,6 +58,10 @@ required_files:
     check_id: MON-007
   - path: docs/templates/TEMPLATE-INTERNAL-AUDIT-REPORT.md
     check_id: MON-007
+  - path: docs/compliance/OWASP-AI-EXCHANGE-ALIGNMENT.md
+    check_id: MON-007
+  - path: docs/compliance/AI-SECURITY-THREAT-MODEL.md
+    check_id: MON-007
 
 yaml_registers:
   - path: compliance/compliance_action_tracker.yaml
