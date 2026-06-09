@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/readiness_automation_register.schema.json",
+  "title": "Readiness Automation Register",
+  "type": "object",
+  "required": ["meta", "items"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated", "layer"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" },
+        "layer": { "type": "string" },
+        "target_percent": { "type": "number" }
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item_id", "title", "status", "executor"],
+        "properties": {
+          "item_id": { "type": "string", "pattern": "^(AUTO|SYS)-[0-9]{3}$" },
+          "title": { "type": "string" },
+          "category": { "type": "string" },
+          "executor": { "type": "string", "enum": ["system", "agent"] },
+          "status": {
+            "type": "string",
+            "enum": ["implemented", "partial", "pending", "not_applicable"]
+          },
+          "verification": { "type": "string" },
+          "evidence": { "type": "string" }
+        }
+      }
+    }
+  }
+}

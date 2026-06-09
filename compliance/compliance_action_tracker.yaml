@@ -6,10 +6,14 @@
 # Updated: quarterly via PROC-CMP-001
 
 meta:
-  register_version: "1.0.0"
+  register_version: "1.1.0"
   owner: "ISMS Lead"
   last_updated: "2026-06-09"
   programme_layer_percent: 100
+  automation_systems_readiness_note: >
+    Layer B percent is scored by scripts/readiness_automation_score.py from
+    compliance/readiness_automation_register.yaml. Actions with executor owner
+    are Layer C go-live gates and do not reduce automation readiness percent.
   review_cycle: "quarterly"
   procedure: "docs/procedures/PROC-CMP-001-Compliance-Review.md"
 
@@ -27,6 +31,7 @@ actions:
     status: Open
     priority: P0
     validation_type: external
+    executor: owner
     source: "OBL-003, supplier_dpa_register SUP-003"
     evidence_target: "Signed DPA on file; SUP-003 dpa_status → Signed"
 
@@ -37,6 +42,7 @@ actions:
     status: Open
     priority: P0
     validation_type: external
+    executor: owner
     source: "HIPAA-ALIGNMENT §4, MC-008"
     evidence_target: "Per-integration signed agreements on customer onboarding"
 
@@ -47,6 +53,7 @@ actions:
     status: Open
     priority: P1
     validation_type: external
+    executor: owner
     source: "ICO-REGISTRATION.md, OBL-110"
     evidence_target: "ICO-REGISTRATION.md updated with registration number"
 
@@ -58,6 +65,7 @@ actions:
     closed_date: "2026-06-09"
     priority: P1
     validation_type: external
+    executor: owner
     source: "PROC-AI-002, MC-005"
     evidence_target: "Fairness test report in evidence folder; GENAI-MATURITY updated"
     evidence_ref: "docs/evidence/reports/FTR-2026-001-baseline-fairness.md (EEV-001)"
@@ -72,6 +80,7 @@ actions:
     status: Open
     priority: P1
     validation_type: external
+    executor: owner
     source: "PEN-TEST-PROGRAMME.md, PROC-VUL-001"
     evidence_target: "PEN-TEST-LOG.md entry with executive summary and remediation"
 
@@ -82,6 +91,7 @@ actions:
     status: In progress
     priority: P1
     validation_type: external
+    executor: owner
     source: "TRANC3-HIPAA-COPY-REMEDIATION.md"
     evidence_target: "Merged Tranc3 PR; marketing audit sign-off"
     notes: "Local clone verified 2026-06-07 — Tier A wording in all five files; no hipaa compliant/strict hipaa matches. Upstream Tranc3 PR open/merge remains external validation."
@@ -93,6 +103,7 @@ actions:
     status: Open
     priority: P2
     validation_type: external
+    executor: owner
     source: "POLICY-ATTESTATION-REGISTER.md, PROC-TRN-001"
     evidence_target: "100% privileged-role attestation logged"
 
@@ -103,6 +114,7 @@ actions:
     status: Open
     priority: P1
     validation_type: external
+    executor: owner
     source: "SOC2-EVIDENCE-SCHEDULE.md"
     evidence_target: "Six-month continuous evidence per schedule"
 
@@ -113,6 +125,7 @@ actions:
     status: Open
     priority: P2
     validation_type: external
+    executor: owner
     source: "MC-004 notes"
     evidence_target: "MAGNA_CARTA_ENABLED=true in staging; audit log samples"
 
@@ -123,6 +136,7 @@ actions:
     status: Open
     priority: P2
     validation_type: external
+    executor: owner
     source: "supplier_dpa_register SUP-004"
     evidence_target: "Signed SCC DPA or documented disable decision"
 
@@ -134,6 +148,7 @@ actions:
     closed_date: "2026-06-09"
     priority: P2
     validation_type: external
+    executor: owner
     source: "ISO27001-ALIGNMENT, MC-010"
     evidence_target: "Internal audit report with findings and CAPA"
     evidence_ref: "docs/evidence/reports/IA-2026-01-baseline-internal-audit.md (EEV-002)"
@@ -148,6 +163,7 @@ actions:
     status: Open
     priority: P2
     validation_type: external
+    executor: owner
     source: "BCP-RESTORE-TEST-LOG.md"
     evidence_target: "Additional BCP-RT-### entries for vault and Forgejo"
 
@@ -159,6 +175,7 @@ actions:
     closed_date: "2026-06-09"
     priority: P1
     validation_type: external
+    executor: owner
     source: "OWASP-AI-EXCHANGE-ALIGNMENT, AI-SECURITY-THREAT-MODEL, RISK-009–012"
     evidence_target: "Completed HYMN-AI-003 checklists and assessment records per model (luminous, turings_hub, mlflow_experiments)"
     evidence_ref: "docs/evidence/proc-ai-003/AST-2026-001 through AST-2026-003 (EEV-003–005)"
@@ -174,6 +191,7 @@ actions:
     closed_date: "2026-06-09"
     priority: P2
     validation_type: external
+    executor: owner
     source: "EU-LEGISLATION-MONITORING.md, legislation_register.yaml secondary_legislation_watch"
     evidence_target: "Completed quarterly scan record in EU-LEGISLATION-MONITORING §6; secondary_legislation_watch last_checked dates updated"
     evidence_ref: "EU-LEGISLATION-MONITORING.md §6 SCAN-2026-Q2-01 (EEV-006)"
@@ -189,6 +207,7 @@ actions:
     closed_date: "2026-06-09"
     priority: P2
     validation_type: external
+    executor: owner
     source: "HARMONISED-STANDARDS-MONITORING.md, standards_watch.yaml, ETSI-SAI-ALIGNMENT.md"
     evidence_target: "Completed semi-annual review in HARMONISED-STANDARDS-MONITORING §6; standards_watch.yaml review_date and harmonised_standards_watch last_checked updated"
     evidence_ref: "HARMONISED-STANDARDS-MONITORING.md §6 WATCH-2026-H1-01; ETSI-EN-304-223-GAP-CHECKLIST.md (EEV-007, EEV-008)"
@@ -203,6 +222,7 @@ actions:
     status: Open
     priority: P2
     validation_type: external
+    executor: owner
     source: "docs/job-descriptions/INDEX.md, REVIEWERS-REGISTER"
     evidence_target: "HRIS records for ISMS Lead, DPO, CISO, CAB Chair, and department PROC owners"
 
@@ -213,6 +233,7 @@ actions:
     status: Open
     priority: P2
     validation_type: external
+    executor: owner
     source: "PROC-BLD-001, BUILDING-BIBLE"
     evidence_target: "Signed FRA report on file; actions logged in premises register"
 
@@ -223,6 +244,7 @@ actions:
     status: Open
     priority: P2
     validation_type: external
+    executor: owner
     source: "PROC-PAY-001, PAYROLL-BIBLE"
     evidence_target: "Payroll provider contract; HMRC RTI submission confirmation"
 
@@ -233,6 +255,7 @@ actions:
     status: Open
     priority: P2
     validation_type: external
+    executor: owner
     source: "PROC-HSE-001, HEALTH-SAFETY-BIBLE"
     evidence_target: "Named H&S lead in HRIS; tabletop drill minutes in evidence folder"
 
@@ -341,3 +364,13 @@ programme_milestones:
     completed_date: "2026-06-09"
     validation_type: programme
     evidence: "docs/compliance/COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md, COMPLIANCE-MATURITY-AND-BENCHMARK.md v1.1"
+
+  - milestone_id: PM-018
+    title: "Layer B automation & systems readiness — registers, scripts, Aikido framework"
+    completed_date: "2026-06-09"
+    validation_type: programme
+    evidence: >
+      compliance/readiness_automation_register.yaml, security_testing_register.yaml,
+      certification_evidence_register.yaml, scripts/readiness_automation_score.py,
+      scripts/run_security_testing.py, scripts/dpa_readiness_check.py,
+      docs/compliance/COMPLIANCE-READINESS-MODEL.md, AIKIDO-SECURITY-TESTING-FRAMEWORK.md

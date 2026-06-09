@@ -20,7 +20,8 @@
       "required": ["default_max_age_days"],
       "properties": {
         "default_max_age_days": { "type": "integer", "minimum": 1 },
-        "strict_exit_on_error": { "type": "boolean" }
+        "strict_exit_on_error": { "type": "boolean" },
+        "readiness_mode": { "type": "boolean" }
       }
     },
     "required_files": {

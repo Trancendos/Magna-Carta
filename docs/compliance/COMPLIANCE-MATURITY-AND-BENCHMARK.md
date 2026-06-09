@@ -1,6 +1,6 @@
 # Compliance Maturity & External Benchmark
 
-**Version:** 1.1.0  
+**Version:** 1.2.0  
 **Date:** 2026-06-09  
 **Owner:** ISMS Lead  
 **Purpose:** Honest completion percentages, Vanta-class CCM comparison, and what cannot be closed inside this repository alone.
@@ -11,9 +11,12 @@
 
 | Layer | What it measures | Honest % (2026-06-09) |
 |-------|------------------|------------------------|
-| **Layer 2 — Programme** | Policies, procedures, bibles, registers, mappings, local monitors | **100%** ✅ |
-| **Layer 3 — Operational** | Signed contracts, fees paid, drills executed, certs obtained, production enforcement | **~42%** 🎯 |
-| **End-to-end assurance** | Weighted blend (programme without ops is not certification) | **~58%** |
+| **Layer A — Programme** | Policies, procedures, bibles, registers, mappings, local monitors | **100%** ✅ |
+| **Layer B — Automation & systems** | Scripts, registers, gates, templates, cert vault slots — agent-verifiable | **100%** ✅ (run `scripts/readiness_automation_score.py`) |
+| **Layer C — Owner go-live gates** | ICO fee, signed DPAs, HRIS names, external pen test, cert uploads | **Open** (not scored; see action tracker `executor: owner`) |
+| **End-to-end assurance** | Programme + automation + live operations | **~58%** 🎯 |
+
+See [COMPLIANCE-READINESS-MODEL.md](COMPLIANCE-READINESS-MODEL.md) for the A/B/C split. **Layer B is the agent scope; Layer C is yours at go-live.**
 
 **We claim 100% programme (in-repo).** We do **not** claim 100% operational or certification. Inventory: [COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md](COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md).
 

@@ -1,0 +1,92 @@
+---
+# Security testing register — continuous (Layer B) vs annual external (Layer C)
+# Owner: Security Ops
+# Framework: docs/compliance/AIKIDO-SECURITY-TESTING-FRAMEWORK.md
+
+meta:
+  register_version: "1.0.0"
+  owner: "Security Ops"
+  last_updated: "2026-06-09"
+  review_cycle: "quarterly"
+
+schema:
+  test_id: "SEC-### unique identifier"
+  layer: "continuous | annual_external"
+  status: "configured | active | pending_connection | owner_gate"
+
+channels:
+  - test_id: SEC-001
+    name: "Aikido MCP — SAST and secrets feed"
+    layer: continuous
+    tool: aikido_full_scan
+    mcp_server: Aikido
+    status: pending_connection
+    frequency: "on_change_and_weekly"
+    scope:
+      - "Repository source (Python, YAML, shell, markdown with code fences)"
+    remediation_procedure: docs/procedures/PROC-VUL-001-Vulnerability-Management.md
+    notes: >
+      Connect Aikido MCP in Cursor for live feed. Local fallback: SEC-002.
+      Status pending_connection until MCP authenticated; does not block readiness.
+
+  - test_id: SEC-002
+    name: "Local security testing script"
+    layer: continuous
+    tool: scripts/run_security_testing.py
+    status: configured
+    frequency: "weekly_and_pre_release"
+    checks:
+      - high_entropy_secret_patterns
+      - private_key_pem_blocks
+      - aws_access_key_id_pattern
+      - committed_env_files
+      - dangerous_shell_patterns
+    remediation_procedure: docs/procedures/PROC-VUL-001-Vulnerability-Management.md
+
+  - test_id: SEC-003
+    name: "Compliance health — security-related MON checks"
+    layer: continuous
+    tool: scripts/compliance_health_check.py
+    status: active
+    frequency: weekly
+    checks:
+      - MON-014
+      - MON-016
+      - ASVS_gap_checklist_present
+
+  - test_id: SEC-004
+    name: "OWASP AI threat assessments (PROC-AI-003)"
+    layer: continuous
+    tool: docs/evidence/proc-ai-003/
+    status: active
+    frequency: "on_model_change"
+    evidence_refs:
+      - AST-2026-001
+      - AST-2026-002
+      - AST-2026-003
+
+  - test_id: SEC-005
+    name: "Annual external penetration test"
+    layer: annual_external
+    tool: third_party_crest_check
+    status: owner_gate
+    frequency: annual
+    owner_action: ACT-005
+    programme_doc: docs/evidence/PEN-TEST-PROGRAMME.md
+    evidence_slot: docs/evidence/certifications/
+    notes: "Owner commissions; upload report to certification vault when complete"
+
+integration:
+  aikido:
+    mcp_tools:
+      - aikido_full_scan
+      - aikido_issues_list
+      - aikido_ignore_issue
+    local_runner: scripts/run_security_testing.py
+    when_mcp_unavailable: "Run SEC-002; log pending_connection in readiness score"
+
+  compliance_frameworks:
+    - OWASP ASVS — docs/compliance/ASVS-GAP-CHECKLIST.md
+    - OWASP AI Exchange — docs/compliance/OWASP-AI-EXCHANGE-ALIGNMENT.md
+    - PROC-VUL-001 — vulnerability management
+    - HYMN-VUL-001 — triage checklist

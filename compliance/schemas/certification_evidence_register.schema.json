@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/certification_evidence_register.schema.json",
+  "title": "Certification Evidence Register",
+  "type": "object",
+  "required": ["meta", "slots"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated", "evidence_root"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" },
+        "evidence_root": { "type": "string" }
+      }
+    },
+    "slots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["cert_id", "title", "status"],
+        "properties": {
+          "cert_id": { "type": "string", "pattern": "^CERT-[0-9]{3}$" },
+          "title": { "type": "string" },
+          "type": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["pending_upload", "uploaded", "verified", "expired", "not_applicable"]
+          },
+          "expected_filename_pattern": { "type": "string" }
+        }
+      }
+    }
+  }
+}

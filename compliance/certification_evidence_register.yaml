@@ -1,0 +1,92 @@
+---
+# Certification & external audit evidence vault register
+# Owner: ISMS Lead
+# Drop zone: docs/evidence/certifications/
+# Layer B: register + folder structure. Layer C: owner uploads files.
+
+meta:
+  register_version: "1.0.0"
+  owner: "ISMS Lead"
+  last_updated: "2026-06-09"
+  review_cycle: "quarterly"
+  evidence_root: docs/evidence/certifications
+
+schema:
+  cert_id: "CERT-### unique identifier"
+  status: "pending_upload | uploaded | verified | expired | not_applicable"
+
+slots:
+  - cert_id: CERT-001
+    title: "ICO data protection fee confirmation"
+    type: regulatory
+    owner_action: ACT-003
+    expected_filename_pattern: "ico-fee-*"
+    status: pending_upload
+    notes: "Upload screenshot or ICO registration letter when fee paid"
+
+  - cert_id: CERT-002
+    title: "Signed PSP DPA (SUP-003)"
+    type: contractual
+    owner_action: ACT-001
+    expected_filename_pattern: "dpa-psp-*"
+    status: pending_upload
+
+  - cert_id: CERT-003
+    title: "Health connector BAA/DPA template execution (SUP-005)"
+    type: contractual
+    owner_action: ACT-002
+    expected_filename_pattern: "baa-health-*"
+    status: pending_upload
+
+  - cert_id: CERT-004
+    title: "Annual external penetration test report"
+    type: assurance
+    owner_action: ACT-005
+    expected_filename_pattern: "pentest-*"
+    status: pending_upload
+    programme_ref: docs/evidence/PEN-TEST-PROGRAMME.md
+
+  - cert_id: CERT-005
+    title: "SOC 2 Type II auditor report"
+    type: assurance
+    owner_action: ACT-008
+    expected_filename_pattern: "soc2-*"
+    status: pending_upload
+
+  - cert_id: CERT-006
+    title: "ISO 27001 certificate (when obtained)"
+    type: assurance
+    owner_action: null
+    expected_filename_pattern: "iso27001-*"
+    status: not_applicable
+    notes: "Slot reserved for future certification"
+
+  - cert_id: CERT-007
+    title: "Premises fire risk assessment (signed)"
+    type: operational
+    owner_action: ACT-017
+    expected_filename_pattern: "fra-premises-*"
+    status: pending_upload
+
+  - cert_id: CERT-008
+    title: "Payroll provider contract / HMRC RTI confirmation"
+    type: operational
+    owner_action: ACT-018
+    expected_filename_pattern: "payroll-rti-*"
+    status: pending_upload
+
+  - cert_id: CERT-009
+    title: "RIDDOR reporting drill minutes"
+    type: operational
+    owner_action: ACT-019
+    expected_filename_pattern: "riddor-drill-*"
+    status: pending_upload
+    template: docs/templates/TEMPLATE-RIDDOR-DRILL-MINUTES.md
+
+analysis:
+  enabled: true
+  script: scripts/readiness_automation_score.py
+  on_upload:
+    - "Match filename to expected_filename_pattern"
+    - "Set status uploaded and recorded_at"
+    - "Optional: agent reviews metadata when user attaches cert in chat"

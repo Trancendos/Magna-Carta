@@ -22,8 +22,33 @@ echo "Date: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo
 
 python3 scripts/compliance_health_check.py --report --weekly-report --log --operator "${USER:-local}"
+health_exit=$?
 
-exit_code=$?
+echo
+echo "=== Layer B automation readiness ==="
+python3 scripts/readiness_automation_score.py --report
+readiness_exit=$?
+
+echo
+echo "=== DPA system readiness ==="
+python3 scripts/dpa_readiness_check.py --report
+dpa_exit=$?
+
+echo
+echo "=== Security testing (SEC-002 local scan) ==="
+python3 scripts/run_security_testing.py --report
+security_exit=$?
+
+exit_code=$health_exit
+if [[ $readiness_exit -ne 0 ]]; then
+  exit_code=$readiness_exit
+fi
+if [[ $dpa_exit -ne 0 ]]; then
+  exit_code=$dpa_exit
+fi
+if [[ $security_exit -ne 0 ]]; then
+  exit_code=$security_exit
+fi
 if [[ $exit_code -eq 0 ]]; then
   echo
   echo "OK — weekly health check complete (logged)."

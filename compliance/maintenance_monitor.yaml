@@ -4,7 +4,7 @@
 # Human-readable: docs/governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md
 
 meta:
-  register_version: "1.1.0"
+  register_version: "1.2.0"
   owner: "ISMS Lead"
   last_updated: "2026-06-09"
   review_cycle: "quarterly"
@@ -12,6 +12,7 @@ meta:
 settings:
   default_max_age_days: 120
   strict_exit_on_error: true
+  readiness_mode: true
 
 required_files:
   - path: docs/compliance/COMPLIANCE-COVERAGE-REGISTER.md
@@ -74,6 +75,16 @@ required_files:
     check_id: MON-007
   - path: docs/compliance/EXTERNAL-ACTION-EXECUTION-GUIDE.md
     check_id: MON-007
+  - path: docs/compliance/COMPLIANCE-READINESS-MODEL.md
+    check_id: MON-007
+  - path: docs/compliance/AIKIDO-SECURITY-TESTING-FRAMEWORK.md
+    check_id: MON-007
+  - path: scripts/readiness_automation_score.py
+    check_id: MON-007
+  - path: scripts/dpa_readiness_check.py
+    check_id: MON-007
+  - path: scripts/run_security_testing.py
+    check_id: MON-007
 
 yaml_registers:
   - path: compliance/compliance_action_tracker.yaml
@@ -105,6 +116,12 @@ yaml_registers:
   - path: compliance/framework_triggers.yaml
     check_id: MON-006
   - path: compliance/framework_implementation_catalog.yaml
+    check_id: MON-006
+  - path: compliance/readiness_automation_register.yaml
+    check_id: MON-006
+  - path: compliance/security_testing_register.yaml
+    check_id: MON-006
+  - path: compliance/certification_evidence_register.yaml
     check_id: MON-006
 
 proactive_monitoring:
@@ -148,6 +165,7 @@ supplier_dpa_gates:
   critical_tiers: ["Critical"]
   blocked_dpa_status: ["Template issued", "In negotiation"]
   trigger_supplier_map: compliance/framework_triggers.yaml
+  readiness_mode_severity: info
 
 evidence_recurrence:
   check_id: MON-015
@@ -231,6 +249,15 @@ schema_validation:
   - check_id: MON-009
     register: compliance/framework_implementation_catalog.yaml
     schema: compliance/schemas/framework_implementation_catalog.schema.json
+  - check_id: MON-009
+    register: compliance/readiness_automation_register.yaml
+    schema: compliance/schemas/readiness_automation_register.schema.json
+  - check_id: MON-009
+    register: compliance/security_testing_register.yaml
+    schema: compliance/schemas/security_testing_register.schema.json
+  - check_id: MON-009
+    register: compliance/certification_evidence_register.yaml
+    schema: compliance/schemas/certification_evidence_register.schema.json
 
 procedure_coverage:
   check_id: MON-010

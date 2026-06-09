@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/security_testing_register.schema.json",
+  "title": "Security Testing Register",
+  "type": "object",
+  "required": ["meta", "channels"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" }
+      }
+    },
+    "channels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["test_id", "name", "layer", "status"],
+        "properties": {
+          "test_id": { "type": "string", "pattern": "^SEC-[0-9]{3}$" },
+          "name": { "type": "string" },
+          "layer": { "type": "string", "enum": ["continuous", "annual_external"] },
+          "status": {
+            "type": "string",
+            "enum": ["configured", "active", "pending_connection", "owner_gate"]
+          }
+        }
+      }
+    }
+  }
+}

@@ -523,11 +523,37 @@ def check_framework_readiness_docs(cfg: dict, findings: list[Finding]) -> None:
             )
 
 
+def _readiness_mode_active(cfg: dict) -> bool:
+    """Pre-go-live: production profiles disabled — DPA gates are informational."""
+    settings = cfg.get("settings", {})
+    if settings.get("readiness_mode"):
+        return True
+    runtime_rel = (
+        cfg.get("proactive_monitoring", {}).get("runtime_config")
+        or cfg.get("enforcement_alignment", {}).get("runtime_config")
+        or "config/magna_carta_config.json"
+    )
+    config_path = ROOT / runtime_rel
+    if not config_path.is_file():
+        return True
+    with config_path.open(encoding="utf-8") as f:
+        runtime = json.load(f)
+    profiles = runtime.get("profiles", {})
+    payments = str(profiles.get("PAYMENTS_LIVE", "disabled")).lower()
+    hipaa = str(profiles.get("HIPAA_PROFILE", "disabled")).lower()
+    return payments != "enabled" and hipaa != "enabled"
+
+
 def check_supplier_dpa_gates(cfg: dict, findings: list[Finding]) -> None:
     block = cfg.get("supplier_dpa_gates", {})
     if not block:
         return
     cid = block.get("check_id", "MON-014")
+    severity = (
+        block.get("readiness_mode_severity", "info")
+        if _readiness_mode_active(cfg)
+        else "warning"
+    )
     data = _load_yaml(block["register"])
     critical = set(block.get("critical_tiers", ["Critical"]))
     blocked = set(block.get("blocked_dpa_status", []))
@@ -537,12 +563,17 @@ def check_supplier_dpa_gates(cfg: dict, findings: list[Finding]) -> None:
         if sup.get("dpa_status") not in blocked:
             continue
         sid = sup.get("supplier_id", "?")
+        suffix = (
+            " — informational until PAYMENTS_LIVE/HIPAA_PROFILE enabled"
+            if severity == "info"
+            else " — gate before production scope"
+        )
         findings.append(
             Finding(
                 cid,
-                "warning",
+                severity,
                 f"Critical supplier {sid} ({sup.get('name')}) DPA status "
-                f"'{sup.get('dpa_status')}' — gate before production scope",
+                f"'{sup.get('dpa_status')}'{suffix}",
             )
         )
 

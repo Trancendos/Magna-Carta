@@ -1,6 +1,6 @@
 # Register Schemas
 
-**Version:** 1.5.0  
+**Version:** 1.6.0  
 **Date:** 2026-06-09  
 **Owner:** ISMS Lead  
 **Purpose:** Field definitions for machine-readable YAML registers and human register tables.
@@ -26,6 +26,9 @@
 | `compliance/proactive_signals.yaml` | 1.1.0 | ISMS Lead |
 | `compliance/framework_triggers.yaml` | 1.1.0 | ISMS Lead |
 | `compliance/framework_implementation_catalog.yaml` | 1.0.0 | ISMS Lead |
+| `compliance/readiness_automation_register.yaml` | 1.0.0 | ISMS Lead |
+| `compliance/security_testing_register.yaml` | 1.0.0 | Security Ops |
+| `compliance/certification_evidence_register.yaml` | 1.0.0 | ISMS Lead |
 
 ---
 
@@ -53,8 +56,52 @@ meta:
 | `status` | enum | yes | Open, In progress, Blocked, Closed |
 | `priority` | enum | yes | P0–P3 |
 | `validation_type` | enum | yes | programme, external |
+| `executor` | enum | no | `owner` (Layer C gate) or `system` (Layer B automation) |
 | `source` | string | no | Traceability |
 | `evidence_target` | string | no | Definition of done |
+
+---
+
+## 3a. readiness_automation_register.yaml (Layer B)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `item_id` | string | yes | `AUTO-###` or `SYS-###` |
+| `title` | string | yes | Control title |
+| `category` | string | no | monitoring, privacy, security, etc. |
+| `executor` | enum | yes | `system` or `agent` (never `owner` for scored items) |
+| `status` | enum | yes | implemented, partial, pending, not_applicable |
+| `verification` | string | yes | Repo path to script or artefact |
+| `evidence` | string | no | Secondary evidence path |
+| `maps_owner_action` | string | no | Linked `ACT-###` (Layer C) |
+
+Scored by: `scripts/readiness_automation_score.py`
+
+---
+
+## 3b. security_testing_register.yaml
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `sec_id` | string | yes | `SEC-###` |
+| `title` | string | yes | Control title |
+| `layer` | enum | yes | B (continuous) or C (owner gate) |
+| `status` | enum | yes | implemented, pending_connection, owner_gate |
+| `tool` | string | no | Aikido, local scan, external pen test |
+| `verification` | string | no | Script or MCP path |
+
+---
+
+## 3c. certification_evidence_register.yaml
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `cert_id` | string | yes | `CERT-###` |
+| `title` | string | yes | Certificate or audit report slot |
+| `status` | enum | yes | pending_upload, uploaded, not_applicable |
+| `expected_filename_pattern` | string | no | Glob for `docs/evidence/certifications/` |
+
+Uploads are Layer C; slots and README are Layer B.
 
 ---
 

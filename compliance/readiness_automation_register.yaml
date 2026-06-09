@@ -1,0 +1,174 @@
+---
+# Automation & systems readiness register — Layer B (agent-verifiable)
+# Owner: ISMS Lead
+# Human-readable: docs/compliance/COMPLIANCE-READINESS-MODEL.md
+# Scored by: scripts/readiness_automation_score.py
+
+meta:
+  register_version: "1.0.0"
+  owner: "ISMS Lead"
+  last_updated: "2026-06-09"
+  review_cycle: "quarterly"
+  layer: "automation_systems_readiness"
+  target_percent: 100
+
+schema:
+  item_id: "SYS-### or AUTO-### unique identifier"
+  status: "implemented | partial | pending | not_applicable"
+  executor: "system | agent — never owner for scoring items"
+  verification: "script path or MON-### check"
+
+items:
+  - item_id: AUTO-001
+    title: "Compliance documentation health check (MON-001–018)"
+    category: monitoring
+    executor: system
+    status: implemented
+    verification: scripts/compliance_health_check.py
+    evidence: compliance/maintenance_monitor.yaml
+
+  - item_id: AUTO-002
+    title: "Weekly health check wrapper and history log"
+    category: monitoring
+    executor: system
+    status: implemented
+    verification: scripts/weekly_compliance_health.sh
+    evidence: compliance/health_check_history.yaml
+
+  - item_id: AUTO-003
+    title: "Automation readiness score reporter"
+    category: monitoring
+    executor: system
+    status: implemented
+    verification: scripts/readiness_automation_score.py
+    evidence: compliance/readiness_automation_register.yaml
+
+  - item_id: AUTO-004
+    title: "DPA readiness check (templates, register, gates)"
+    category: privacy
+    executor: system
+    status: implemented
+    verification: scripts/dpa_readiness_check.py
+    evidence: compliance/supplier_dpa_register.yaml
+
+  - item_id: AUTO-005
+    title: "Security testing framework (local + Aikido integration path)"
+    category: security
+    executor: system
+    status: implemented
+    verification: scripts/run_security_testing.py
+    evidence: compliance/security_testing_register.yaml
+
+  - item_id: AUTO-006
+    title: "Certification evidence vault and register"
+    category: assurance
+    executor: system
+    status: implemented
+    verification: compliance/certification_evidence_register.yaml
+    evidence: docs/evidence/certifications/README.md
+
+  - item_id: AUTO-007
+    title: "Policy attestation cycle register and PROC-TRN-001 triad"
+    category: governance
+    executor: system
+    status: implemented
+    verification: compliance/policy_attestation_register.yaml
+    evidence: docs/procedures/PROC-TRN-001-Security-Awareness-Attestation.md
+
+  - item_id: AUTO-008
+    title: "Supplier DPA register with production gate (MON-014)"
+    category: procurement
+    executor: system
+    status: implemented
+    verification: scripts/compliance_health_check.py
+    notes: "Warning severity in readiness_mode when PAYMENTS_LIVE/HIPAA disabled"
+
+  - item_id: AUTO-009
+    title: "Magna Carta runtime config profiles and enforcement alignment"
+    category: production_controls
+    executor: system
+    status: implemented
+    verification: config/magna_carta_config.json
+    evidence: compliance/maintenance_monitor.yaml
+
+  - item_id: AUTO-010
+    title: "Execution evidence recurrence schedule"
+    category: assurance
+    executor: system
+    status: implemented
+    verification: compliance/execution_evidence_register.yaml
+    evidence: compliance/maintenance_monitor.yaml
+
+  - item_id: SYS-016
+    title: "Role coverage — job descriptions and reviewers register"
+    category: hr
+    executor: system
+    status: implemented
+    verification: docs/job-descriptions/INDEX.md
+    evidence: docs/governance/REVIEWERS-REGISTER.md
+    maps_owner_action: ACT-016
+    notes: "Assume HRIS names filled; system readiness = JD library + register"
+
+  - item_id: SYS-017
+    title: "Premises compliance pack (building regulations)"
+    category: facilities
+    executor: system
+    status: implemented
+    verification: docs/procedures/PROC-BLD-001-Building-Regulations-Premises.md
+    evidence: docs/bibles/BUILDING-BIBLE.md
+    maps_owner_action: ACT-017
+
+  - item_id: SYS-018
+    title: "Payroll administration pack and readiness register"
+    category: finance
+    executor: system
+    status: implemented
+    verification: docs/procedures/PROC-PAY-001-Payroll-Compensation-Administration.md
+    evidence: docs/bibles/PAYROLL-BIBLE.md
+    maps_owner_action: ACT-018
+
+  - item_id: SYS-019
+    title: "Health & safety pack and RIDDOR drill template"
+    category: health_safety
+    executor: system
+    status: implemented
+    verification: docs/procedures/PROC-HSE-001-Workplace-Health-Safety.md
+    evidence: docs/templates/TEMPLATE-RIDDOR-DRILL-MINUTES.md
+    maps_owner_action: ACT-019
+
+  - item_id: AUTO-011
+    title: "Pen test programme documentation (annual scope — not execution)"
+    category: security
+    executor: system
+    status: implemented
+    verification: docs/evidence/PEN-TEST-PROGRAMME.md
+    maps_owner_action: ACT-005
+    notes: "Programme ready; external test is owner gate"
+
+  - item_id: AUTO-012
+    title: "Internal audit programme and baseline report template"
+    category: assurance
+    executor: system
+    status: implemented
+    verification: docs/evidence/reports/IA-2026-01-baseline-internal-audit.md
+    notes: "Independent auditor engagement is owner gate"
+
+  - item_id: AUTO-013
+    title: "Framework triggers and proactive signals monitoring"
+    category: monitoring
+    executor: system
+    status: implemented
+    verification: compliance/framework_triggers.yaml
+    evidence: compliance/proactive_signals.yaml
+
+owner_gates_excluded_from_score:
+  description: >
+    Actions with executor owner in compliance_action_tracker.yaml are Layer C.
+    They do not reduce automation readiness percent.
+  examples:
+    - ACT-001
+    - ACT-002
+    - ACT-003
+    - ACT-005
+    - ACT-007
+    - ACT-008
