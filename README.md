@@ -1,8 +1,16 @@
-# Magna Carta — Foundation Document Framework
+# Infinity Network — Magna Carta
 
-The **Trancendos Magna Carta** is the governance and compliance foundation for the Tranc3 platform. It unifies policies, procedures, regulatory alignment, architectural controls, and operational blueprints into a single auditable framework.
+**Infinity Network — Magna Carta** is the governance and compliance programme for applications built within the **Infinity Network**, harmonising with **Trancendos Universe — The Foundation** (the master generic platform template).
 
-This repository is the **canonical documentation home** for Magna Carta. Runtime enforcement hooks live in [Tranc3](https://github.com/Trancendos/Tranc3) (`src/compliance/magna_carta.py`).
+This repository is the **canonical documentation home** for Magna Carta. It unifies policies, procedures, regulatory alignment, architectural controls, and **zero-cost Layer B automation** into a single auditable framework.
+
+| Layer | What it is |
+|-------|------------|
+| **Trancendos Universe — The Foundation** | Master template for any new platform (“The Master”) |
+| **Infinity Network — Magna Carta** | This repo — compliance for all Infinity Network apps |
+| **App Frameworks** | Deployable products: Tranc3, Trance-One, T2ance, Spark, Void, … |
+
+Runtime enforcement for the **Tranc3 App Framework** lives in the [Tranc3](https://github.com/Trancendos/Tranc3) app repo (`src/compliance/magna_carta.py`). See [docs/architecture/TRANCENDOS-UNIVERSE-AND-INFINITY-NETWORK.md](docs/architecture/TRANCENDOS-UNIVERSE-AND-INFINITY-NETWORK.md).
 
 ## Status legend
 
@@ -11,7 +19,7 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | ✅ **Programme artefact** | Policy, procedure, register, or alignment document **exists in this repo** and is maintained (documentation programme — not operational certification) |
 | 🎯 **Operational validation pending** | Board approval, signed contract, certification audit, fee payment, drill, observation window, or production enforcement not yet demonstrated |
 
-**Three layers:** (1) Tranc3 platform controls in code · (2) Magna Carta documentation in this repo · (3) validated operations and external assurance. ✅ marks layer 2 only unless stated otherwise. See [docs/00-EXECUTIVE-SUMMARY.md](docs/00-EXECUTIVE-SUMMARY.md#maturity-model-read-this-first).
+**Three layers:** (1) Trancendos Universe / App Framework controls in code · (2) Magna Carta documentation in this repo · (3) validated operations and external assurance. ✅ marks layer 2 only unless stated otherwise. See [docs/00-EXECUTIVE-SUMMARY.md](docs/00-EXECUTIVE-SUMMARY.md#maturity-model-read-this-first).
 
 ## Programme status
 
@@ -28,15 +36,15 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | Compliance maintenance monitor | 1.1.0 | ✅ Local weekly health check (no cloud CI) |
 | Governance artefacts | 1.0.0 | ✅ Draft charter, RACI, audit programme (operational use 🎯) |
 | Evidence & assurance programme | 1.0.0 | ✅ MC-010 authored (pen test / attestations / audits 🎯) |
-| Tranc3 integration bridge | 1.0.0 | ✅ MC-011 authored (staging enablement / enforcement 🎯) |
+| Infinity App (Tranc3) bridge | 1.0.0 | ✅ MC-011 authored (staging enablement / enforcement 🎯) |
 | Supplier DPA register | 1.0.0 | ✅ Register exists (**signed DPAs incomplete** 🎯) |
-| Tranc3 Integration Config | 1.0.0 | ✅ Spec ready; production enablement 🎯 |
+| Infinity App (Tranc3) integration config | 1.0.0 | ✅ Spec ready; production enablement 🎯 |
 | ISO 27001 certification | — | 🎯 SOA drafted; org controls partial; external audit pending |
 | SOC 2 Type II | — | 🎯 TSC mapped; 6-month observation window not started |
 | ICO registration (fee paid) | — | 🎯 Programme documented; live number pending |
 | HIPAA Tier C attestation | — | 🎯 BAA programme; per-customer BAAs pending |
 
-**Platform baseline:** Tranc3 v2.1.0-rc1 (as of 2026-05-22)  
+**Platform baseline:** Tranc3 App Framework v2.1.0-rc1 (as of 2026-05-22)  
 **Owner:** Trancendos Platform Engineering  
 **Classification:** UNCLASSIFIED — PUBLIC
 
@@ -54,7 +62,7 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 
 | Document | Purpose |
 |----------|---------|
-| [docs/compliance/REGULATION-MATRIX.md](docs/compliance/REGULATION-MATRIX.md) | All regulations mapped to Tranc3 controls |
+| [docs/compliance/REGULATION-MATRIX.md](docs/compliance/REGULATION-MATRIX.md) | All regulations mapped to Infinity Network / Trancendos Universe controls |
 | [docs/compliance/COMPLIANCE-COVERAGE-REGISTER.md](docs/compliance/COMPLIANCE-COVERAGE-REGISTER.md) | Honest ⚠️/📋/❌ status — why not operational ✅ |
 | [docs/compliance/COMPLIANCE-BLUEPRINT.md](docs/compliance/COMPLIANCE-BLUEPRINT.md) | End-to-end compliance operating model |
 | [docs/compliance/OBLIGATIONS-REGISTER.md](docs/compliance/OBLIGATIONS-REGISTER.md) | Regulatory and contractual obligations register |

@@ -6,7 +6,7 @@
 
 ## 1. Purpose
 
-Establish Trancendos requirements for protecting information assets across the Tranc3 platform and supporting systems.
+Establish Trancendos requirements for protecting information assets across Trancendos Universe, Infinity Network applications, and supporting systems.
 
 ## 2. Scope
 

@@ -1,0 +1,2 @@
+# Magna Carta compliance scripts — Layer B automation (zero-cost local tooling)
+PyYAML>=6.0

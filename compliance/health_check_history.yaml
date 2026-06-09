@@ -1,7 +1,7 @@
 meta:
   register_version: 1.0.0
   owner: ISMS Lead
-  last_updated: '2026-06-08'
+  last_updated: '2026-06-09'
   review_cycle: quarterly
   cadence_days: 7
   procedure: docs/governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md
@@ -15,3 +15,18 @@ runs:
   - check_id: MON-008
     severity: warning
     message: No weekly health check logged yet — run scripts/weekly_compliance_health.sh
+- timestamp: '2026-06-09T23:14:30Z'
+  operator: ubuntu
+  errors: 0
+  warnings: 0
+  exit_code: 0
+  findings:
+  - check_id: MON-014
+    severity: info
+    message: Critical supplier SUP-003 (Authorised Payment Service Provider (PSP))
+      DPA status 'Template issued' — informational until PAYMENTS_LIVE/HIPAA_PROFILE
+      enabled
+  - check_id: MON-014
+    severity: info
+    message: Critical supplier SUP-005 (Health platform connectors (Sync-Bot)) DPA
+      status 'Template issued' — informational until PAYMENTS_LIVE/HIPAA_PROFILE enabled

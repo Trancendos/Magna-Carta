@@ -1,6 +1,6 @@
 # Register Schemas
 
-**Version:** 1.6.0  
+**Version:** 1.7.0  
 **Date:** 2026-06-09  
 **Owner:** ISMS Lead  
 **Purpose:** Field definitions for machine-readable YAML registers and human register tables.
@@ -29,6 +29,8 @@
 | `compliance/readiness_automation_register.yaml` | 1.0.0 | ISMS Lead |
 | `compliance/security_testing_register.yaml` | 1.0.0 | Security Ops |
 | `compliance/certification_evidence_register.yaml` | 1.0.0 | ISMS Lead |
+| `compliance/zero_cost_tooling_register.yaml` | 1.0.0 | Security Ops |
+| `compliance/infinity_app_frameworks_register.yaml` | 1.0.0 | Platform Architecture |
 
 ---
 
@@ -102,6 +104,40 @@ Scored by: `scripts/readiness_automation_score.py`
 | `expected_filename_pattern` | string | no | Glob for `docs/evidence/certifications/` |
 
 Uploads are Layer C; slots and README are Layer B.
+
+---
+
+## 3d. zero_cost_tooling_register.yaml
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `tool_id` | string | yes | `ZCT-###` |
+| `name` | string | yes | Tool display name |
+| `cost_model` | enum | yes | `free_oss`, `free_tier_no_cc`, `free_local_script` |
+| `mandatory` | boolean | yes | `true` if Layer B depends on it |
+| `path` | string | no | Repo path for local scripts |
+| `invoked_by` | string | no | Wrapper script (e.g. OSS bundle) |
+| `install` | string | no | Install instructions for optional OSS |
+| `dependency` | string | no | Runtime deps (python3, PyYAML, etc.) |
+
+Scored by: `scripts/zero_cost_tooling_check.py`  
+Human-readable: [ZERO-COST-SECURITY-TOOLING.md](../compliance/ZERO-COST-SECURITY-TOOLING.md)
+
+---
+
+## 3e. infinity_app_frameworks_register.yaml
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `app_id` | string | yes | Lowercase slug (`tranc3`, `spark`, …) |
+| `display_name` | string | yes | App Framework display name |
+| `status` | enum | yes | `active`, `planned`, `deprecated` |
+| `bridge_register` | string | no | Path to Magna Carta ↔ app DEFSTAN bridge YAML |
+| `integration_guide` | string | no | Relative path to integration doc |
+| `runtime_notes` | string | no | Where enforcement code lives |
+| `role` | string | no | Short description of framework purpose |
+
+Parent hierarchy: [TRANCENDOS-UNIVERSE-AND-INFINITY-NETWORK.md](../architecture/TRANCENDOS-UNIVERSE-AND-INFINITY-NETWORK.md)
 
 ---
 
@@ -238,6 +274,11 @@ Machine-readable schemas (Draft 2020-12) live in `compliance/schemas/`:
 | `proactive_signals.schema.json` | `compliance/proactive_signals.yaml` |
 | `framework_triggers.schema.json` | `compliance/framework_triggers.yaml` |
 | `framework_implementation_catalog.schema.json` | `compliance/framework_implementation_catalog.yaml` |
+| `readiness_automation_register.schema.json` | `compliance/readiness_automation_register.yaml` |
+| `security_testing_register.schema.json` | `compliance/security_testing_register.yaml` |
+| `certification_evidence_register.schema.json` | `compliance/certification_evidence_register.yaml` |
+| `zero_cost_tooling_register.schema.json` | `compliance/zero_cost_tooling_register.yaml` |
+| `infinity_app_frameworks_register.schema.json` | `compliance/infinity_app_frameworks_register.yaml` |
 
 `compliance_health_check.py` performs lightweight structural validation (MON-009) for all register/schema pairs without requiring the `jsonschema` package. Procedure coverage (MON-010) ensures every `PROC-*.md` has matching cookbook and hymn sheet. Framework implementation coverage (MON-018) ensures every in-scope framework has catalog and trigger wiring.
 

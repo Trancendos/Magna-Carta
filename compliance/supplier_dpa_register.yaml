@@ -23,7 +23,7 @@ schema:
 
 suppliers:
   - supplier_id: SUP-001
-    name: "Self-hosted Tranc3 stack"
+    name: "Self-hosted Tranc3 App Framework stack"
     category: "Platform (first-party)"
     data_processed: "All platform PII/PHI per deployment scope"
     risk_tier: Critical

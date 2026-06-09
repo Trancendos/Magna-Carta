@@ -54,7 +54,7 @@ magna_carta_register.yaml     ──►    compliance/register.yaml (DEFSTAN)
 | MC-008 | HIPAA Alignment Programme | — | MC-RULE-009 | `src/entities/platform.py` |
 | MC-009 | FCA Alignment Programme | — | — | `src/compliance/ai_governance.py` |
 | MC-010 | Evidence & Assurance Programme | — | — | `scripts/soc2_evidence_collector.py` |
-| MC-011 | Tranc3 Integration Bridge | — | — | This document |
+| MC-011 | Infinity App Bridge (Tranc3) | — | — | This document |
 
 Full detail: [tranc3_register_bridge.yaml](../../compliance/tranc3_register_bridge.yaml).
 

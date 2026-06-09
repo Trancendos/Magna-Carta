@@ -17,7 +17,7 @@
 7. Risk register and open waivers
 8. Legislation register scan ([LEGISLATION-REGISTER.md](../compliance/LEGISLATION-REGISTER.md), `compliance/legislation_register.yaml`); **EU EUR-Lex quarterly scan** ([EU-LEGISLATION-MONITORING.md](../compliance/EU-LEGISLATION-MONITORING.md), ACT-014); **harmonised / ETSI standards semi-annual watch** ([HARMONISED-STANDARDS-MONITORING.md](../compliance/HARMONISED-STANDARDS-MONITORING.md), `compliance/standards_watch.yaml`, ACT-015); regulators/ombudsmen ([REGULATORS-OMBUDSMEN-REGISTER.md](../compliance/REGULATORS-OMBUDSMEN-REGISTER.md))
 9. Pen test / vuln programme status
-10. Tranc3 integration bridge status (`tranc3_register_bridge.yaml`, ACT-009 staging)
+10. Infinity App (Tranc3) bridge status (`tranc3_register_bridge.yaml`, ACT-009 staging)
 11. Documentation health: confirm weekly `./scripts/weekly_compliance_health.sh` ran (see [COMPLIANCE-HEALTH-LOG.md](../evidence/COMPLIANCE-HEALTH-LOG.md)); run `python3 scripts/compliance_health_check.py --report` if needed; review [COMPLIANCE-MAINTENANCE-PROGRAMME.md](../governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md)
 12. Actions and owners
 

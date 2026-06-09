@@ -1,18 +1,23 @@
-# Tranc3 Integration Guide — Magna Carta Runtime
+# Infinity App (Tranc3) Integration Guide — Magna Carta Runtime
 
-> **Superseded:** Use [INFINITY-APP-TRANC3-INTEGRATION-GUIDE.md](INFINITY-APP-TRANC3-INTEGRATION-GUIDE.md) for canonical Infinity Network / Tranc3 App Framework integration steps.
-
-**Version:** 1.0.0  
-**Date:** 2026-06-07  
+**Version:** 1.1.0  
+**Date:** 2026-06-09  
 **Owner:** Platform Engineering  
 **Register:** MC-011  
-**Action:** ACT-009
+**Action:** ACT-009  
+**App framework:** Tranc3 (under [Infinity Network — Magna Carta](../../README.md))  
+**Foundation:** [Trancendos Universe — The Foundation](../architecture/TRANCENDOS-UNIVERSE-AND-INFINITY-NETWORK.md)
 
 ---
 
 ## 1. Purpose
 
-Step-by-step guide to enable Magna Carta runtime rules in Tranc3 staging and wire the compliance register bridge. Documentation lives in Magna Carta; enforcement lives in Tranc3.
+Step-by-step guide to enable **Infinity Network — Magna Carta** runtime rules in the **Tranc3 App Framework** staging environment and wire the compliance register bridge.
+
+| Layer | Location |
+|-------|----------|
+| Governance programme | This repository (Magna Carta) |
+| Runtime enforcement | [Tranc3](https://github.com/Trancendos/Tranc3) app repo (`src/compliance/magna_carta.py`) |
 
 | Symbol | Meaning |
 |--------|---------|
@@ -23,8 +28,8 @@ Step-by-step guide to enable Magna Carta runtime rules in Tranc3 staging and wir
 
 ## 2. Prerequisites
 
-- Tranc3 checkout (v2.1.0-rc1 or later)
-- Magna Carta repo cloned adjacent or submodule-mounted
+- Tranc3 App Framework checkout (v2.1.0-rc1 or later)
+- Infinity Network — Magna Carta repo cloned adjacent or submodule-mounted
 - Staging environment with audit logging enabled
 
 ---
@@ -50,9 +55,9 @@ MAGNA_CARTA_REGISTER_PATH=/path/to/magna-carta/compliance/magna_carta_register.y
 |------|------|
 | `config/magna_carta_config.json` | Nine runtime rules (MC-RULE-001–009) |
 | `compliance/magna_carta_register.yaml` | MC-001–MC-011 programme evidence |
-| `compliance/tranc3_register_bridge.yaml` | MC ↔ REQ mapping |
+| `compliance/tranc3_register_bridge.yaml` | MC ↔ Tranc3 App DEFSTAN mapping |
 
-Copy or mount from Magna Carta — do not fork rule definitions in Tranc3.
+Copy or mount from Magna Carta — do not fork rule definitions in the Tranc3 app repo.
 
 ---
 
@@ -136,6 +141,8 @@ Local verification (2026-06-07): ✅ Tier A wording present in all five remediat
 
 ## 8. Related documents
 
+- [TRANCENDOS-UNIVERSE-AND-INFINITY-NETWORK.md](../architecture/TRANCENDOS-UNIVERSE-AND-INFINITY-NETWORK.md)
+- [infinity_app_frameworks_register.yaml](../../compliance/infinity_app_frameworks_register.yaml)
 - [TRANC3-REGISTER-BRIDGE.md](../compliance/TRANC3-REGISTER-BRIDGE.md)
 - [TRANC3-HIPAA-COPY-REMEDIATION.md](TRANC3-HIPAA-COPY-REMEDIATION.md)
 - [COMPLIANCE-ACTION-TRACKER.md](../compliance/COMPLIANCE-ACTION-TRACKER.md) — ACT-006, ACT-009

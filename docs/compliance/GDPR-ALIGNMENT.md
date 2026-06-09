@@ -3,7 +3,7 @@
 **Version:** 1.0.0  
 **Date:** 2026-06-07  
 **Owner:** Data Protection Officer (DPO)  
-**Scope:** Tranc3 platform and Trancendos-operated processing activities  
+**Scope:** Infinity Network applications and Trancendos-operated processing activities  
 **Certification context:** Supports ISO 27001 A.5.34 and SOC 2 Privacy criteria
 
 ---

@@ -1,0 +1,54 @@
+---
+# Infinity Network — application framework catalogue
+# Parent: Trancendos Universe (The Foundation)
+# Compliance layer: Infinity Network — Magna Carta (this repository)
+
+meta:
+  register_version: "1.0.0"
+  owner: "Platform Architecture"
+  last_updated: "2026-06-09"
+  review_cycle: "quarterly"
+  foundation: "Trancendos Universe — The Foundation"
+  compliance_programme: "Infinity Network — Magna Carta"
+
+schema:
+  app_id: "lowercase slug (tranc3, spark, …)"
+  status: "active | planned | deprecated"
+  bridge_register: "path to MC ↔ app DEFSTAN bridge YAML"
+
+frameworks:
+  - app_id: tranc3
+    display_name: "Tranc3 App Framework"
+    status: active
+    role: "Primary AI/self-hosted application under Infinity Network"
+    bridge_register: compliance/tranc3_register_bridge.yaml
+    integration_guide: docs/engineering/INFINITY-APP-TRANC3-INTEGRATION-GUIDE.md
+    runtime_notes: "magna_carta.py enforcement lives in Tranc3 app repo — not in Magna Carta docs repo"
+
+  - app_id: trance-one
+    display_name: "Trance-One App Framework"
+    status: planned
+    bridge_register: null
+    integration_guide: null
+    runtime_notes: "Bridge TBD when codebase stabilises"
+
+  - app_id: t2ance
+    display_name: "T2ance App Framework"
+    status: planned
+    bridge_register: null
+    integration_guide: null
+    runtime_notes: "Bridge TBD"
+
+  - app_id: spark
+    display_name: "Spark App Framework"
+    status: planned
+    bridge_register: null
+    integration_guide: null
+    runtime_notes: "Bridge TBD"
+
+  - app_id: void
+    display_name: "Void App Framework"
+    status: planned
+    bridge_register: null
+    integration_guide: null
+    runtime_notes: "Bridge TBD"

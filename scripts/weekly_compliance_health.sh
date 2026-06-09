@@ -39,6 +39,11 @@ echo "=== Security testing (SEC-002 local scan) ==="
 python3 scripts/run_security_testing.py --report
 security_exit=$?
 
+echo
+echo "=== Zero-cost tooling register (ZCT-001–011) ==="
+python3 scripts/zero_cost_tooling_check.py --report
+zct_exit=$?
+
 exit_code=$health_exit
 if [[ $readiness_exit -ne 0 ]]; then
   exit_code=$readiness_exit
@@ -48,6 +53,9 @@ if [[ $dpa_exit -ne 0 ]]; then
 fi
 if [[ $security_exit -ne 0 ]]; then
   exit_code=$security_exit
+fi
+if [[ $zct_exit -ne 0 ]]; then
+  exit_code=$zct_exit
 fi
 if [[ $exit_code -eq 0 ]]; then
   echo
