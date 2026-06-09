@@ -49,6 +49,8 @@ AI systems within Tranc3 ISMS scope:
 | Threat model | [AI-SECURITY-THREAT-MODEL.md](AI-SECURITY-THREAT-MODEL.md) (TM-AI-001–011) |
 | Alignment mapping | [OWASP-AI-EXCHANGE-ALIGNMENT.md](OWASP-AI-EXCHANGE-ALIGNMENT.md) |
 | Assessment procedure | [PROC-AI-003](../procedures/PROC-AI-003-AI-Security-Threat-Assessment.md) |
+| Scoping matrix (Answers/Connects/Acts) | [AI-SECURITY-SCOPING-MATRIX.md](AI-SECURITY-SCOPING-MATRIX.md) |
+| Input / Model / Output assurance | PROC-AI-003 §4.5; scoping matrix control grid |
 | Zero-model-trust | Assume prompt injection can succeed; limit blast radius |
 | Agentic controls | Least model privilege; lethal trifecta mitigation; human oversight §8 |
 | Risks | RISK-009–012 in [RISK-REGISTER.md](RISK-REGISTER.md) |

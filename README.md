@@ -21,8 +21,10 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | Compliance Blueprint | 1.0.0 | ✅ Active |
 | Architecture Blueprint | 1.0.0 | ✅ Active |
 | Policy Library | 1.0.0 | ✅ Authored (9 policies; BoardRoom approval 🎯) |
-| Procedure Library | 1.0.0 | ✅ Active (13 procedures) |
-| Documentation artefact model | 1.1.0 | ✅ Full cookbook/hymn coverage (13/13 procedures) |
+| Procedure Library | 1.1.0 | ✅ Active (25 procedures) |
+| Documentation artefact model | 1.2.0 | ✅ Full cookbook/hymn coverage (25/25 procedures) |
+| Department bibles & job descriptions | 1.0.0 | ✅ 16 bibles, 13 role JDs (appointments in HRIS 🎯) |
+| Compliance maturity benchmark | 1.0.0 | ✅ Honest % and Vanta-class comparison |
 | Compliance maintenance monitor | 1.1.0 | ✅ Local weekly health check (no cloud CI) |
 | Governance artefacts | 1.0.0 | ✅ Draft charter, RACI, audit programme (operational use 🎯) |
 | Evidence & assurance programme | 1.0.0 | ✅ MC-010 authored (pen test / attestations / audits 🎯) |
@@ -70,6 +72,8 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [docs/compliance/SYSTEMS-REGISTER.md](docs/compliance/SYSTEMS-REGISTER.md) | Governance and compliance systems (Town Hall, registers, CI) |
 | [docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md](docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md) | Third-party GenAI/compliance frameworks → Magna Carta |
 | [docs/compliance/GENAI-MATURITY-ASSESSMENT.md](docs/compliance/GENAI-MATURITY-ASSESSMENT.md) | GenAI governance maturity self-assessment |
+| [docs/compliance/COMPLIANCE-MATURITY-AND-BENCHMARK.md](docs/compliance/COMPLIANCE-MATURITY-AND-BENCHMARK.md) | Honest completion %, Vanta-class CCM comparison |
+| [docs/compliance/AI-SECURITY-SCOPING-MATRIX.md](docs/compliance/AI-SECURITY-SCOPING-MATRIX.md) | AI Answers/Connects/Acts tiers and Input/Model/Output grid |
 
 ### Framework alignments
 
@@ -121,7 +125,9 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 
 | Document | Purpose |
 |----------|---------|
+| [docs/bibles/INDEX.md](docs/bibles/INDEX.md) | Bible library (16 domain bibles + governance/privacy/security) |
 | [docs/bibles/MAGNACARTA-GOVERNANCE-BIBLE.md](docs/bibles/MAGNACARTA-GOVERNANCE-BIBLE.md) | Governance encyclopaedia — how everything fits together |
+| [docs/job-descriptions/INDEX.md](docs/job-descriptions/INDEX.md) | Role definitions for ISMS, DPO, departmental PROC owners |
 | [docs/cookbooks/INDEX.md](docs/cookbooks/INDEX.md) | Step-by-step operational playbooks |
 | [docs/hymn-sheets/INDEX.md](docs/hymn-sheets/INDEX.md) | Printable checklists for reviews and incidents |
 | [docs/schemas/REGISTER-SCHEMAS.md](docs/schemas/REGISTER-SCHEMAS.md) | YAML/Markdown register field schemas |
@@ -131,7 +137,7 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | Document | Purpose |
 |----------|---------|
 | [docs/policies/INDEX.md](docs/policies/INDEX.md) | Policy library index (9 policies) |
-| [docs/procedures/INDEX.md](docs/procedures/INDEX.md) | Procedure library index (13 procedures) |
+| [docs/procedures/INDEX.md](docs/procedures/INDEX.md) | Procedure library index (25 procedures) |
 | [docs/templates/TEMPLATE-DPA-UK-GDPR.md](docs/templates/TEMPLATE-DPA-UK-GDPR.md) | UK GDPR processor DPA template |
 | [docs/templates/TEMPLATE-BAA-HIPAA.md](docs/templates/TEMPLATE-BAA-HIPAA.md) | HIPAA business associate agreement template |
 | [docs/templates/TEMPLATE-SCC-ANNEX.md](docs/templates/TEMPLATE-SCC-ANNEX.md) | Standard contractual clauses annex template |
@@ -218,11 +224,17 @@ magna-carta/
     │   ├── SOC2-EVIDENCE-SCHEDULE.md
     │   ├── TRANC3-REGISTER-BRIDGE.md
     │   ├── COMPLIANCE-COVERAGE-REGISTER.md
+    │   ├── COMPLIANCE-MATURITY-AND-BENCHMARK.md
+    │   ├── AI-SECURITY-SCOPING-MATRIX.md
     │   ├── STANDARDS-REGISTER.md
     │   ├── REGULATORS-OMBUDSMEN-REGISTER.md
     │   └── SYSTEMS-REGISTER.md
     ├── bibles/
-    │   └── MAGNACARTA-GOVERNANCE-BIBLE.md
+    │   ├── INDEX.md
+    │   └── *-BIBLE.md (16 domain bibles)
+    ├── job-descriptions/
+    │   ├── INDEX.md
+    │   └── JD-*.md (13 roles)
     ├── cookbooks/
     │   ├── INDEX.md
     │   └── COOK-*.md
@@ -258,7 +270,7 @@ magna-carta/
     │   └── POL-*.md (9 policies)
     └── procedures/
         ├── INDEX.md
-        └── PROC-*.md (13 procedures)
+        └── PROC-*.md (25 procedures)
 ```
 
 ## Relationship to Tranc3

@@ -75,6 +75,18 @@ If the model invokes tools, retains session memory, or chains agents:
 2. Confirm at least one leg is broken by design
 3. Document human-in-the-loop gates for irreversible actions
 
+### 4.5 Input / Model / Output assurance grid
+
+Use [AI-SECURITY-SCOPING-MATRIX.md](../compliance/AI-SECURITY-SCOPING-MATRIX.md) to classify the deployment tier (**Answers** → **Connects** → **Acts**) and apply cumulative controls.
+
+| Assurance layer | Minimum controls | PROC-AI-003 evidence |
+|-----------------|------------------|----------------------|
+| **Input** | Prompt injection resistance; indirect injection review for RAG; PII/sensitive input filtering; rate limits | §4.2 checks; TM-AI-003, TM-AI-004 |
+| **Model** | Training data provenance; weight/vendor integrity; access to experiment stores; behaviour integrity monitoring | §4.1 checks; TM-AI-001, TM-AI-002, TM-AI-005 |
+| **Output** | Schema validation; policy filters; high-risk human review; logging without secret leakage | §4.2 checks; TM-AI-005, TM-AI-006, TM-AI-007 |
+
+**Tier escalation rule:** If capability moves from Answers to Connects or Acts, re-run PROC-AI-003 before production promotion and update the model card security annex.
+
 ---
 
 ## 5. Six impacts checklist

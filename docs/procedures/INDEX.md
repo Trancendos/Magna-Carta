@@ -23,6 +23,20 @@
 | [PROC-TRN-001](PROC-TRN-001-Security-Awareness-Attestation.md) | Security Awareness & Attestation | POL-SEC-001, POL-SEC-002 | HR / ISMS |
 | [PROC-HR-001](PROC-HR-001-Staff-Lifecycle.md) | Staff Lifecycle (screening / offboarding) | POL-SEC-001, POL-SEC-002 | HR / ISMS |
 | [PROC-CAPA-001](PROC-CAPA-001-Corrective-Action.md) | Corrective & Preventive Action | POL-SEC-001, POL-OPS-001 | ISMS Lead |
+| [PROC-HSE-001](PROC-HSE-001-Workplace-Health-Safety.md) | Workplace Health & Safety | POL-SEC-001 | H&S Lead |
+| [PROC-FIN-001](PROC-FIN-001-Financial-Controls-Reporting.md) | Financial Controls & Reporting | Companies Act / FCA (perimeter) | Finance Controller |
+| [PROC-PRM-001](PROC-PRM-001-Procurement-Supplier-Engagement.md) | Procurement & Supplier Engagement | POL-SUP-001 | Procurement |
+| [PROC-LEG-001](PROC-LEG-001-Legal-Contract-Management.md) | Legal & Contract Management | Templates | Legal |
+| [PROC-IP-001](PROC-IP-001-Intellectual-Property-Management.md) | Intellectual Property Management | — | Legal / Engineering |
+| [PROC-PAY-001](PROC-PAY-001-Payroll-Compensation-Administration.md) | Payroll & Compensation | — | Finance / HR |
+| [PROC-BLD-001](PROC-BLD-001-Building-Regulations-Premises.md) | Building Regulations & Premises | — | Facilities |
+| [PROC-IT-001](PROC-IT-001-IT-Service-Management.md) | IT Service Management | POL-SEC-001 | IT Ops |
+| [PROC-WLB-001](PROC-WLB-001-Employee-Wellbeing.md) | Employee Wellbeing | — | HR |
+| [PROC-MHL-001](PROC-MHL-001-Mental-Health-Psychological-Safety.md) | Mental Health & Psychological Safety | — | HR |
+| [PROC-UMG-001](PROC-UMG-001-Platform-User-Administration.md) | Platform User Administration | POL-SEC-001 | IT / Product |
+| [PROC-DAT-001](PROC-DAT-001-Enterprise-Data-Management.md) | Enterprise Data Management | POL-PRI-001 | DPO / Data Gov |
+
+**Department bibles:** [bibles/INDEX.md](../bibles/INDEX.md) · **Job descriptions:** [job-descriptions/INDEX.md](../job-descriptions/INDEX.md)
 
 ---
 
@@ -43,6 +57,18 @@
 | PROC-TRN-001 | Onboarding; annual refresh; policy version change |
 | PROC-HR-001 | Joiner / mover / leaver; screening before privileged access |
 | PROC-CAPA-001 | Audit finding; pen test; incident; compliance gap |
+| PROC-HSE-001 | Incident; annual H&S review; new site / homeworking policy |
+| PROC-FIN-001 | Month-end; audit; material control change |
+| PROC-PRM-001 | New supplier; contract renewal; spend threshold breach |
+| PROC-LEG-001 | Contract intake; litigation hold; regulatory notice |
+| PROC-IP-001 | New product; OSS dependency; employee invention |
+| PROC-PAY-001 | Payroll run; compensation change; RTI submission |
+| PROC-BLD-001 | Premises change; fire drill; accessibility review |
+| PROC-IT-001 | Service request; patch cycle; SaaS onboarding |
+| PROC-WLB-001 | Wellbeing programme review; ER case |
+| PROC-MHL-001 | Psychological risk assessment; critical incident |
+| PROC-UMG-001 | Tenant admin change; privileged user grant |
+| PROC-DAT-001 | Retention review; data quality issue; archive project |
 
 ---
 

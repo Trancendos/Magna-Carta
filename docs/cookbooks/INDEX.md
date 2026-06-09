@@ -21,7 +21,19 @@ Operational playbooks — scenario-driven step-by-step guides. Each cookbook map
 | COOK-TRN-001 | [Policy attestation](COOK-TRN-001-Policy-Attestation.md) | PROC-TRN-001 | HR / ISMS | ✅ Active |
 | COOK-HR-001 | [Staff lifecycle](COOK-HR-001-Staff-Lifecycle.md) | PROC-HR-001 | HR / ISMS | ✅ Active |
 | COOK-CAPA-001 | [Corrective action](COOK-CAPA-001-Corrective-Action.md) | PROC-CAPA-001 | ISMS Lead | ✅ Active |
+| COOK-HSE-001 | [Workplace health & safety](COOK-HSE-001-Workplace-Health-Safety.md) | PROC-HSE-001 | H&S Lead | ✅ Active |
+| COOK-FIN-001 | [Financial controls](COOK-FIN-001-Financial-Controls-Reporting.md) | PROC-FIN-001 | Finance | ✅ Active |
+| COOK-PRM-001 | [Procurement](COOK-PRM-001-Procurement-Supplier-Engagement.md) | PROC-PRM-001 | Procurement | ✅ Active |
+| COOK-LEG-001 | [Legal & contracts](COOK-LEG-001-Legal-Contract-Management.md) | PROC-LEG-001 | Legal | ✅ Active |
+| COOK-IP-001 | [Intellectual property](COOK-IP-001-Intellectual-Property-Management.md) | PROC-IP-001 | Legal | ✅ Active |
+| COOK-PAY-001 | [Payroll](COOK-PAY-001-Payroll-Compensation-Administration.md) | PROC-PAY-001 | Finance / HR | ✅ Active |
+| COOK-BLD-001 | [Building & premises](COOK-BLD-001-Building-Regulations-Premises.md) | PROC-BLD-001 | Facilities | ✅ Active |
+| COOK-IT-001 | [IT service management](COOK-IT-001-IT-Service-Management.md) | PROC-IT-001 | IT Ops | ✅ Active |
+| COOK-WLB-001 | [Employee wellbeing](COOK-WLB-001-Employee-Wellbeing.md) | PROC-WLB-001 | HR | ✅ Active |
+| COOK-MHL-001 | [Mental health](COOK-MHL-001-Mental-Health-Psychological-Safety.md) | PROC-MHL-001 | HR | ✅ Active |
+| COOK-UMG-001 | [Platform user admin](COOK-UMG-001-Platform-User-Administration.md) | PROC-UMG-001 | IT / Product | ✅ Active |
+| COOK-DAT-001 | [Enterprise data management](COOK-DAT-001-Enterprise-Data-Management.md) | PROC-DAT-001 | DPO | ✅ Active |
 
-**Coverage:** 13 cookbooks for 13 procedures (100% programme coverage).
+**Coverage:** 25 cookbooks for 25 procedures (100% programme coverage).
 
 **Related:** [DOCUMENTATION-ARTIFACT-MODEL.md](../governance/DOCUMENTATION-ARTIFACT-MODEL.md) · Town Hall `cookbook.md` template (Tranc3)

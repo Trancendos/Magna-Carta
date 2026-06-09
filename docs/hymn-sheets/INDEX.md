@@ -21,8 +21,20 @@ One-page checklists for aligned execution. Print or paste into incident/complian
 | HYMN-TRN-001 | [Attestation checklist](HYMN-TRN-001-Attestation-Checklist.md) | PROC-TRN-001 | ✅ Active |
 | HYMN-HR-001 | [On/offboarding checklist](HYMN-HR-001-OnOffboard-Checklist.md) | PROC-HR-001 | ✅ Active |
 | HYMN-CAPA-001 | [CAPA checklist](HYMN-CAPA-001-CAPA-Checklist.md) | PROC-CAPA-001 | ✅ Active |
+| HYMN-HSE-001 | [H&S checklist](HYMN-HSE-001-Workplace-Health-Safety-Checklist.md) | PROC-HSE-001 | ✅ Active |
+| HYMN-FIN-001 | [Financial controls checklist](HYMN-FIN-001-Financial-Controls-Reporting-Checklist.md) | PROC-FIN-001 | ✅ Active |
+| HYMN-PRM-001 | [Procurement checklist](HYMN-PRM-001-Procurement-Supplier-Engagement-Checklist.md) | PROC-PRM-001 | ✅ Active |
+| HYMN-LEG-001 | [Legal checklist](HYMN-LEG-001-Legal-Contract-Management-Checklist.md) | PROC-LEG-001 | ✅ Active |
+| HYMN-IP-001 | [IP checklist](HYMN-IP-001-Intellectual-Property-Management-Checklist.md) | PROC-IP-001 | ✅ Active |
+| HYMN-PAY-001 | [Payroll checklist](HYMN-PAY-001-Payroll-Compensation-Administration-Checklist.md) | PROC-PAY-001 | ✅ Active |
+| HYMN-BLD-001 | [Building checklist](HYMN-BLD-001-Building-Regulations-Premises-Checklist.md) | PROC-BLD-001 | ✅ Active |
+| HYMN-IT-001 | [ITSM checklist](HYMN-IT-001-IT-Service-Management-Checklist.md) | PROC-IT-001 | ✅ Active |
+| HYMN-WLB-001 | [Wellbeing checklist](HYMN-WLB-001-Employee-Wellbeing-Checklist.md) | PROC-WLB-001 | ✅ Active |
+| HYMN-MHL-001 | [Mental health checklist](HYMN-MHL-001-Mental-Health-Psychological-Safety-Checklist.md) | PROC-MHL-001 | ✅ Active |
+| HYMN-UMG-001 | [User admin checklist](HYMN-UMG-001-Platform-User-Administration-Checklist.md) | PROC-UMG-001 | ✅ Active |
+| HYMN-DAT-001 | [Data management checklist](HYMN-DAT-001-Enterprise-Data-Management-Checklist.md) | PROC-DAT-001 | ✅ Active |
 
-**Coverage:** 13 hymn sheets for 13 procedures (100% programme coverage).
+**Coverage:** 25 hymn sheets for 25 procedures (100% programme coverage).
 
 **Definition:** "Hymn sheet" = everyone sings from the same sheet — no improvisation on critical steps.
 

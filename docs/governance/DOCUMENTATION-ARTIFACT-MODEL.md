@@ -1,7 +1,7 @@
 # Documentation Artifact Model
 
-**Version:** 1.1.0  
-**Date:** 2026-06-08  
+**Version:** 1.2.0  
+**Date:** 2026-06-09  
 **Owner:** ISMS Lead  
 **Purpose:** Define every documentation category in Magna Carta — what it is, where it lives, who maintains it, and how it is monitored.
 
@@ -27,6 +27,7 @@ Magna Carta **layer 2** (this repository) is strong on policies, procedures, ali
 | **Cookbooks** | Scenario playbooks — *do this now* | `docs/cookbooks/` | `townhall/templates/cookbook.md` | Ops / ISMS |
 | **Bibles** | Canonical reference — *how the system works* | `docs/bibles/` | `frameworks.yaml` (bibles-guides) | ISMS Lead |
 | **Hymn sheets** | One-page aligned checklists | `docs/hymn-sheets/` | — | Procedure owner |
+| **Job descriptions** | Role definitions for PROC owners and ISMS | `docs/job-descriptions/` | HRIS (when live) | HR / ISMS Lead |
 | **Schemas** | Field definitions for registers/YAML | `docs/schemas/` | Obligation schema in OBLIGATIONS-REGISTER §3 | ISMS Lead |
 | **Standards** | External normative references | [STANDARDS-REGISTER.md](../compliance/STANDARDS-REGISTER.md) | DEFSTAN in CI | ISMS Lead |
 | **Regulators** | Supervisory authorities we engage | [REGULATORS-OMBUDSMEN-REGISTER.md](../compliance/REGULATORS-OMBUDSMEN-REGISTER.md) | — | DPO / Legal |
@@ -107,13 +108,14 @@ All artefacts are subject to [COMPLIANCE-MAINTENANCE-PROGRAMME.md](COMPLIANCE-MA
 
 ## 7. Completeness checklist (artifact model)
 
-| Category | Status (2026-06-08) | Notes |
+| Category | Status (2026-06-09) | Notes |
 |----------|---------------------|-------|
 | Policies | ✅ 9 policies | BoardRoom approval 🎯 |
-| Procedures | ✅ 13 procedures | — |
-| Cookbooks | ✅ 12 + INDEX (MON-010) | Operational drills not evidenced 🎯 |
-| Bibles | ✅ 3 + INDEX (gov, privacy, security) | Expand as domains mature |
-| Hymn sheets | ✅ 12 + INDEX (MON-010) | Named signatories in production 🎯 |
+| Procedures | ✅ 25 procedures | Department PROC wave (HSE, FIN, PRM, LEG, IP, PAY, BLD, IT, WLB, MHL, UMG, DAT) |
+| Cookbooks | ✅ 25 + INDEX (MON-010) | Operational drills not evidenced 🎯 |
+| Bibles | ✅ 16 + INDEX | Gov, privacy, security + 13 departmental domains |
+| Hymn sheets | ✅ 25 + INDEX (MON-010) | Named signatories in production 🎯 |
+| Job descriptions | ✅ 13 + INDEX | Templates until HRIS appointments 🎯 |
 | Schemas | ✅ REGISTER-SCHEMAS + 9 JSON schemas | MON-009 validates all YAML registers |
 | Runbooks | ✅ 2 + INDEX | Ombudsman, PECR deployment |
 | Evidence templates | ✅ 7 (incl. fairness + internal audit) | Execution pending ACT-004, ACT-011 🎯 |

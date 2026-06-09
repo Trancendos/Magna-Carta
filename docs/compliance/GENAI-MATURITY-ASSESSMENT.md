@@ -233,8 +233,26 @@ Store completed assessments in Town Hall MeetingRooms / compliance evidence fold
 
 ---
 
+## 10.3 Responsible AI dimensions (cross-check)
+
+When scoring Domain 5 (model risk & safety), cross-reference these eight dimensions against [AI-SECURITY-SCOPING-MATRIX.md](AI-SECURITY-SCOPING-MATRIX.md) and PROC-AI-003 §4.5:
+
+| Dimension | Primary evidence |
+|-----------|------------------|
+| Transparency & explainability | Model cards; AI-labelled outputs (Art. 50) |
+| Fairness & bias | PROC-AI-002; fairness metrics in model cards |
+| Privacy & data governance | POL-PRI-001; training data provenance |
+| Security & robustness | PROC-AI-003; OWASP AI Exchange mapping |
+| Accountability & oversight | RACI; AI committee charter; human review §8 |
+| Safety & harm prevention | Risk tiering; prohibited use blocklist |
+| Environmental & resource use | Cost caps; rate limits (TM-AI-008) |
+| Societal & stakeholder impact | Ethics framework; customer comms |
+
+---
+
 ## 11. Related documents
 
+- [AI-SECURITY-SCOPING-MATRIX.md](AI-SECURITY-SCOPING-MATRIX.md)
 - [EXTERNAL-FRAMEWORK-MAPPING.md](EXTERNAL-FRAMEWORK-MAPPING.md)
 - [AI-GOVERNANCE.md](AI-GOVERNANCE.md)
 - [PROC-CMP-001](../procedures/PROC-CMP-001-Compliance-Review.md)
