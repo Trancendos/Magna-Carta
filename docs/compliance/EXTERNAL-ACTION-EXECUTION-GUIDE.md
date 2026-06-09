@@ -1,6 +1,6 @@
 # External Action Execution Guide
 
-**Version:** 1.0.0  
+**Version:** 1.1.0  
 **Date:** 2026-06-09  
 **Owner:** ISMS Lead  
 **Machine-readable:** [compliance/execution_evidence_register.yaml](../../compliance/execution_evidence_register.yaml) → `external_action_packages`  
@@ -10,7 +10,7 @@
 
 ## 1. Purpose
 
-Playbooks for **ACT-001–ACT-012** items that cannot close from repository work alone. Each section defines prerequisites, step-by-step execution, evidence to collect, and how to close the action in `compliance_action_tracker.yaml`.
+Playbooks for **ACT-001–ACT-019** items that cannot close from repository work alone. Each section defines prerequisites, step-by-step execution, evidence to collect, and how to close the action in `compliance_action_tracker.yaml`.
 
 | Symbol | Meaning |
 |--------|---------|
@@ -251,6 +251,90 @@ Playbooks for **ACT-001–ACT-012** items that cannot close from repository work
 5. Close ACT-012 when all P0 databases have successful annual restore entries.
 
 **Evidence target:** BCP-RT-### entries for vault and Forgejo.
+
+---
+
+### 3.13 HRIS role appointments (ACT-016)
+
+| Field | Value |
+|-------|-------|
+| Owner | HR / Executive |
+| Priority | P2 |
+| Source | `docs/job-descriptions/INDEX.md` |
+
+**Prerequisites:** ✅ 13 job descriptions and template in repo.
+
+**Steps:**
+
+1. Executive confirms appointees for ISMS Lead, DPO, CISO, CAB Chair, and department PROC owners.
+2. Create or update HRIS records; link to `docs/job-descriptions/JD-*.md` role IDs.
+3. Update `REVIEWERS-REGISTER` with named individuals (internal doc, not PII in git).
+4. Close ACT-016 when all 13 roles have live HRIS appointments.
+
+**Evidence target:** HRIS export or internal roster reference; REVIEWERS-REGISTER updated.
+
+---
+
+### 3.14 Premises fire risk assessment (ACT-017)
+
+| Field | Value |
+|-------|-------|
+| Owner | Facilities / H&S |
+| Priority | P2 |
+| Source | PROC-BLD-001, BUILDING-BIBLE |
+
+**Prerequisites:** ✅ Building regulations procedure and bible in repo.
+
+**Steps:**
+
+1. Identify all occupied premises; commission competent assessor or use qualified internal assessor.
+2. Complete FRA per Regulatory Reform (Fire Safety) Order 2005.
+3. Log actions; store signed FRA off-repo (facilities file).
+4. Close ACT-017 when FRA signed and action plan assigned.
+
+**Evidence target:** FRA reference ID in PROC-BLD-001 review minutes.
+
+---
+
+### 3.15 Payroll provider and RTI (ACT-018)
+
+| Field | Value |
+|-------|-------|
+| Owner | Finance |
+| Priority | P2 |
+| Source | PROC-PAY-001, PAYROLL-BIBLE |
+
+**Prerequisites:** ✅ Payroll procedure and bible in repo.
+
+**Steps:**
+
+1. Select and contract payroll provider (or confirm in-house capability).
+2. Register as employer with HMRC; configure RTI (FPS/EPS).
+3. Run parallel payroll cycle; verify first live RTI submission.
+4. Close ACT-018 on successful RTI confirmation.
+
+**Evidence target:** Provider contract ref; HMRC submission confirmation (internal).
+
+---
+
+### 3.16 H&S officer and RIDDOR drill (ACT-019)
+
+| Field | Value |
+|-------|-------|
+| Owner | HR / H&S |
+| Priority | P2 |
+| Source | PROC-HSE-001, HEALTH-SAFETY-BIBLE |
+
+**Prerequisites:** ✅ H&S procedure and bible in repo.
+
+**Steps:**
+
+1. Appoint named H&S officer (or competent person); record in HRIS (links ACT-016).
+2. Schedule tabletop RIDDOR reporting drill with HR and management.
+3. Document drill minutes in `docs/evidence/` (sanitised scenario only).
+4. Close ACT-019 when officer named and drill completed.
+
+**Evidence target:** Drill minutes; H&S lead named in HRIS.
 
 ---
 

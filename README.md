@@ -73,6 +73,7 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md](docs/compliance/EXTERNAL-FRAMEWORK-MAPPING.md) | Third-party GenAI/compliance frameworks → Magna Carta |
 | [docs/compliance/GENAI-MATURITY-ASSESSMENT.md](docs/compliance/GENAI-MATURITY-ASSESSMENT.md) | GenAI governance maturity self-assessment |
 | [docs/compliance/COMPLIANCE-MATURITY-AND-BENCHMARK.md](docs/compliance/COMPLIANCE-MATURITY-AND-BENCHMARK.md) | Honest completion %, Vanta-class CCM comparison |
+| [docs/compliance/COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md](docs/compliance/COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md) | Programme layer 100% inventory (in-repo artefacts) |
 | [docs/compliance/AI-SECURITY-SCOPING-MATRIX.md](docs/compliance/AI-SECURITY-SCOPING-MATRIX.md) | AI Answers/Connects/Acts tiers and Input/Model/Output grid |
 
 ### Framework alignments

@@ -1,6 +1,6 @@
 # Compliance Coverage Register — Honest Status
 
-**Version:** 1.2.0  
+**Version:** 1.3.0  
 **Date:** 2026-06-09  
 **Owner:** ISMS Lead / DPO  
 **Purpose:** Single source of truth for every ⚠️, 📋, and ❌ in the compliance programme — why it is not operationally ✅, what programme artefact covers future scenarios, and what blocks external validation.
@@ -164,8 +164,8 @@ Programme baselines closed 2026-06-09 (PM-014): ACT-004, ACT-011, ACT-013, ACT-0
 |-------------------|-----------|--------|------------|
 | **Model** | DOCUMENTATION-ARTIFACT-MODEL | ✅ Programme | — |
 | **Bible** | MAGNACARTA-GOVERNANCE-BIBLE | ✅ Programme (v1) | Expand as procedures mature |
-| **Cookbooks** | 13 cookbooks + INDEX (all PROC-*) | ✅ Programme | Operational drills not evidenced 🎯 |
-| **Hymn sheets** | 13 hymn sheets + INDEX (all PROC-*) | ✅ Programme | Named signatories in production 🎯 |
+| **Cookbooks** | 25 cookbooks + INDEX (all PROC-*) | ✅ Programme | Operational drills not evidenced 🎯 |
+| **Hymn sheets** | 25 hymn sheets + INDEX (all PROC-*) | ✅ Programme | Named signatories in production 🎯 |
 | **Schemas** | REGISTER-SCHEMAS + 12 JSON schemas (MON-009) | ✅ Programme | Schema drift on new fields — monitor via health check |
 | **Standards** | STANDARDS-REGISTER | ✅ Programme | Not external certification |
 | **Regulators / ombudsmen** | REGULATORS-OMBUDSMEN-REGISTER | ✅ Programme | Contact verification 🎯 |
@@ -174,11 +174,12 @@ Programme baselines closed 2026-06-09 (PM-014): ACT-004, ACT-011, ACT-013, ACT-0
 | **Maintenance** | COMPLIANCE-MAINTENANCE-PROGRAMME v1.1 | ✅ Programme | First weekly local run logged 🎯 |
 | **Automation** | weekly_compliance_health.sh + health_check_history.yaml | ✅ Programme | Optional local cron on ISMS machine 🎯 |
 | **Runbooks** | RUN-OMB-001, RUN-PECR-001 + INDEX | ✅ Programme | Live escalation tickets 🎯 |
-| **Domain bibles** | PRIVACY-BIBLE, SECURITY-BIBLE + INDEX | ✅ Programme | Tranc3 upstream sync 🎯 |
+| **Domain bibles** | 16 bibles (governance, privacy, security, 12 departments) + INDEX | ✅ Programme | Tranc3 upstream sync 🎯 |
+| **Job descriptions** | 13 roles + template + INDEX | ✅ Programme | HRIS appointments 🎯 ACT-016 |
 | **Evidence templates** | Fairness test + internal audit report | ✅ Programme | Baseline reports filed (EEV-001–002); recurring cycles 🎯 |
 | **ASVS gap tracker** | ASVS-GAP-CHECKLIST | ✅ Programme | Pen test / remediation evidence 🎯 |
 
-**Still missing (honest backlog):** Named individuals in REVIEWERS-REGISTER; operational evidence that cookbooks were exercised (drills, tickets); ACT-001–003, ACT-005–010, ACT-012 external closure; sector-specific runbooks beyond ICO/FOS/PECR starters.
+**Still missing (honest backlog — operational only):** Named individuals in REVIEWERS-REGISTER and HRIS (ACT-016); operational evidence that cookbooks were exercised (drills, tickets); ACT-001–003, ACT-005–010, ACT-012, ACT-016–019 external closure; sector-specific runbooks beyond ICO/FOS/PECR starters. **Programme layer for documentation artefacts: 100%** — see [COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md](COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md).
 
 ### 8.3 Framework catalogue wave (2026-06-08 → 2026-06-09)
 
@@ -233,13 +234,27 @@ Programme baselines closed 2026-06-09 (PM-014): ACT-004, ACT-011, ACT-013, ACT-0
 
 **Honest gap:** Closed baselines are programme evidence, not external certification. Recurring monitoring, pen test (ACT-005), and vendor/legal actions remain 🎯.
 
+### 8.7 Department packs & programme completion wave (2026-06-09)
+
+| Milestone | Status |
+|-----------|--------|
+| 12 department bibles + HR-BIBLE (16 total) | ✅ Programme |
+| PROC/COOK/HYMN for HSE, FIN, PRM, LEG, IP, PAY, BLD, IT, WLB, MHL, UMG, DAT | ✅ Programme |
+| Job description library (13 roles + template) | ✅ Programme |
+| AI-SECURITY-SCOPING-MATRIX + maturity benchmark update | ✅ Programme |
+| COMPLIANCE-PROGRAMME-COMPLETION-REGISTER (programme 100% inventory) | ✅ Programme |
+| PM-015 / PM-016 / PM-017 programme milestones | ✅ Programme |
+| ACT-016–019 operational actions (HRIS, FRA, payroll RTI, H&S) | ✅ Programme / 🎯 execution |
+
+**Honest gap:** Programme documentation is **100%** for in-repo scope. Operational appointments, premises assessments, and live payroll remain 🎯.
+
 ---
 
 ## 9. Path to comprehensive ✅ (summary)
 
 | Layer | What “done” looks like | Target |
 |-------|------------------------|--------|
-| Programme (layer 2) | Every applicable/future row has owner doc + artefact taxonomy | **Achieved** (full cookbook/hymn/schema coverage; local monitor) |
+| Programme (layer 2) | Every applicable/future row has owner doc + artefact taxonomy | **100% achieved** — [COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md](COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md) |
 | Maintenance (layer 2b) | Weekly local health check logged; quarterly PROC-CMP-001 | First weekly run + Q3 review 2026-09-06 |
 | Operations (layer 3) | Open ACT-001–003, ACT-005–010, ACT-012 closed with evidence; baselines for ACT-004/011/013/014/015 done | 2026–2027 |
 | External assurance | ISO 27001, SOC 2, ICO live | Q1–Q2 2027 |

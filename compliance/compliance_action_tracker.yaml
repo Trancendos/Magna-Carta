@@ -9,6 +9,7 @@ meta:
   register_version: "1.0.0"
   owner: "ISMS Lead"
   last_updated: "2026-06-09"
+  programme_layer_percent: 100
   review_cycle: "quarterly"
   procedure: "docs/procedures/PROC-CMP-001-Compliance-Review.md"
 
@@ -195,6 +196,46 @@ actions:
       First semi-annual watch baseline closed 2026-06-09. OJEU harmonised standard adoption and
       EN edition changes remain monitored; next semi-annual due 2026-12-31.
 
+  - action_id: ACT-016
+    title: "Appoint named individuals to 13 defined roles in HRIS"
+    owner: HR / Executive
+    due_date: "2026-09-30"
+    status: Open
+    priority: P2
+    validation_type: external
+    source: "docs/job-descriptions/INDEX.md, REVIEWERS-REGISTER"
+    evidence_target: "HRIS records for ISMS Lead, DPO, CISO, CAB Chair, and department PROC owners"
+
+  - action_id: ACT-017
+    title: "Complete premises fire risk assessment (FRA)"
+    owner: Facilities / H&S
+    due_date: "2026-10-31"
+    status: Open
+    priority: P2
+    validation_type: external
+    source: "PROC-BLD-001, BUILDING-BIBLE"
+    evidence_target: "Signed FRA report on file; actions logged in premises register"
+
+  - action_id: ACT-018
+    title: "Activate payroll provider and live RTI reporting"
+    owner: Finance
+    due_date: "2026-12-31"
+    status: Open
+    priority: P2
+    validation_type: external
+    source: "PROC-PAY-001, PAYROLL-BIBLE"
+    evidence_target: "Payroll provider contract; HMRC RTI submission confirmation"
+
+  - action_id: ACT-019
+    title: "Name H&S officer and execute RIDDOR reporting drill"
+    owner: HR / H&S
+    due_date: "2026-09-30"
+    status: Open
+    priority: P2
+    validation_type: external
+    source: "PROC-HSE-001, HEALTH-SAFETY-BIBLE"
+    evidence_target: "Named H&S lead in HRIS; tabletop drill minutes in evidence folder"
+
 programme_milestones:
   - milestone_id: PM-001
     title: "COMPLIANCE-COVERAGE-REGISTER published"
@@ -227,7 +268,7 @@ programme_milestones:
     evidence: "compliance/schemas/*.schema.json (11 files), compliance/maintenance_monitor.yaml schema_validation"
 
   - milestone_id: PM-006
-    title: "Procedure coverage automation (MON-010) — 12 cookbooks + 12 hymn sheets"
+    title: "Procedure coverage automation (MON-010) — 25 cookbooks + 25 hymn sheets"
     completed_date: "2026-06-08"
     validation_type: programme
     evidence: "docs/cookbooks/, docs/hymn-sheets/, scripts/compliance_health_check.py check_procedure_coverage"
@@ -282,3 +323,21 @@ programme_milestones:
       compliance/execution_evidence_register.yaml (EEV-001–008), docs/evidence/reports/,
       docs/evidence/proc-ai-003/, ETSI-EN-304-223-GAP-CHECKLIST.md,
       EXTERNAL-ACTION-EXECUTION-GUIDE.md; ACT-004/011/013/014/015 closed as programme baselines
+
+  - milestone_id: PM-015
+    title: "Department packs — 12 domains (bible + PROC/COOK/HYMN) + HR-BIBLE"
+    completed_date: "2026-06-09"
+    validation_type: programme
+    evidence: "docs/bibles/*-BIBLE.md (16), docs/procedures/PROC-{HSE,FIN,PRM,LEG,IP,PAY,BLD,IT,WLB,MHL,UMG,DAT}-001"
+
+  - milestone_id: PM-016
+    title: "Job description library — 13 roles + template"
+    completed_date: "2026-06-09"
+    validation_type: programme
+    evidence: "docs/job-descriptions/, docs/templates/TEMPLATE-JOB-DESCRIPTION.md, scripts/generate_job_descriptions.py"
+
+  - milestone_id: PM-017
+    title: "Programme layer 100% — completion register and ACT-016–019 operational backlog"
+    completed_date: "2026-06-09"
+    validation_type: programme
+    evidence: "docs/compliance/COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md, COMPLIANCE-MATURITY-AND-BENCHMARK.md v1.1"

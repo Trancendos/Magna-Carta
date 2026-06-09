@@ -1,6 +1,6 @@
 # Compliance Maturity & External Benchmark
 
-**Version:** 1.0.0  
+**Version:** 1.1.0  
 **Date:** 2026-06-09  
 **Owner:** ISMS Lead  
 **Purpose:** Honest completion percentages, Vanta-class CCM comparison, and what cannot be closed inside this repository alone.
@@ -11,11 +11,11 @@
 
 | Layer | What it measures | Honest % (2026-06-09) |
 |-------|------------------|------------------------|
-| **Layer 2 — Programme** | Policies, procedures, bibles, registers, mappings, local monitors | **~82%** |
-| **Layer 3 — Operational** | Signed contracts, fees paid, drills executed, certs obtained, production enforcement | **~42%** |
+| **Layer 2 — Programme** | Policies, procedures, bibles, registers, mappings, local monitors | **100%** ✅ |
+| **Layer 3 — Operational** | Signed contracts, fees paid, drills executed, certs obtained, production enforcement | **~42%** 🎯 |
 | **End-to-end assurance** | Weighted blend (programme without ops is not certification) | **~58%** |
 
-**We do not claim 100%.** Programme artefacts can be ✅ while operational validation remains 🎯.
+**We claim 100% programme (in-repo).** We do **not** claim 100% operational or certification. Inventory: [COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md](COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md).
 
 ---
 
@@ -23,26 +23,26 @@
 
 | Domain | Bible | Procedure triad | Policies linked | Programme % | Operational blocker |
 |--------|-------|-----------------|-----------------|-------------|---------------------|
-| Governance | BIB-GOV-001 ✅ | PROC-CMP-001 ✅ | All | 90% | BoardRoom approvals 🎯 |
-| Privacy | BIB-PRI-001 ✅ | PROC-DSR-001 ✅ | POL-PRI-001 ✅ | 88% | ICO fee, live PECR UI 🎯 |
-| Security | BIB-SEC-001 ✅ | PROC-IR/IAM/VUL ✅ | POL-SEC-* ✅ | 85% | Pen test, MDM 🎯 |
-| AI | AI-GOVERNANCE ✅ | PROC-AI-002/003 ✅ | POL-AI-001 ✅ | 80% | Board AI policy approval 🎯 |
-| HR | HR-BIBLE ✅ | PROC-HR-001 ✅ | POL-SEC-* ✅ | 75% | HRIS + screening vendor 🎯 |
-| Health & Safety | HSE-BIBLE ✅ | PROC-HSE-001 ✅ | POL-SEC-001 (interim) | 70% | H&S officer named; RIDDOR drill 🎯 |
-| Finance | FINANCE-BIBLE ✅ | PROC-FIN-001 ✅ | COMPANIES-ACT alignment | 68% | External accountant sign-off 🎯 |
-| Procurement | PROCUREMENT-BIBLE ✅ | PROC-PRM-001 ✅ | POL-SUP-001 ✅ | 72% | Signed supplier DPAs 🎯 |
-| Legal | LEGAL-BIBLE ✅ | PROC-LEG-001 ✅ | Templates ✅ | 70% | Contract playbook in CLM 🎯 |
-| Intellectual Property | IP-BIBLE ✅ | PROC-IP-001 ✅ | — | 65% | IP register in legal system 🎯 |
-| Payroll | PAYROLL-BIBLE ✅ | PROC-PAY-001 ✅ | — | 60% | Payroll provider + RTI live 🎯 |
-| Building Regulations | BUILDING-BIBLE ✅ | PROC-BLD-001 ✅ | — | 62% | Premises survey / FRA 🎯 |
-| IT | IT-BIBLE ✅ | PROC-IT-001 ✅ | POL-SEC-001 ✅ | 78% | ITSM tickets in production 🎯 |
-| Wellbeing | WELLBEING-BIBLE ✅ | PROC-WLB-001 ✅ | — | 58% | Wellbeing programme launch 🎯 |
-| Mental Health | MENTAL-HEALTH-BIBLE ✅ | PROC-MHL-001 ✅ | — | 58% | MH first aiders trained 🎯 |
-| User Management | USER-MANAGEMENT-BIBLE ✅ | PROC-UMG-001 ✅ | POL-SEC-001 ✅ | 75% | Tranc3 admin SOP in prod 🎯 |
-| Data Management | DATA-MANAGEMENT-BIBLE ✅ | PROC-DAT-001 ✅ | POL-PRI-001 ✅ | 76% | Data steward roster 🎯 |
-| Framework catalogue | 127 FW register ✅ | Catalog + triggers ✅ | — | 92% | External cert audits 🎯 |
+| Governance | BIB-GOV-001 ✅ | PROC-CMP-001 ✅ | All | 100% | BoardRoom approvals 🎯 |
+| Privacy | BIB-PRI-001 ✅ | PROC-DSR-001 ✅ | POL-PRI-001 ✅ | 100% | ICO fee, live PECR UI 🎯 |
+| Security | BIB-SEC-001 ✅ | PROC-IR/IAM/VUL ✅ | POL-SEC-* ✅ | 100% | Pen test, MDM 🎯 |
+| AI | AI-GOVERNANCE ✅ | PROC-AI-002/003 ✅ | POL-AI-001 ✅ | 100% | Board AI policy approval 🎯 |
+| HR | HR-BIBLE ✅ | PROC-HR-001 ✅ | POL-SEC-* ✅ | 100% | HRIS + screening vendor 🎯 ACT-016 |
+| Health & Safety | HSE-BIBLE ✅ | PROC-HSE-001 ✅ | POL-SEC-001 (interim) | 100% | H&S officer; RIDDOR drill 🎯 ACT-019 |
+| Finance | FINANCE-BIBLE ✅ | PROC-FIN-001 ✅ | COMPANIES-ACT alignment | 100% | External accountant sign-off 🎯 |
+| Procurement | PROCUREMENT-BIBLE ✅ | PROC-PRM-001 ✅ | POL-SUP-001 ✅ | 100% | Signed supplier DPAs 🎯 ACT-001/002 |
+| Legal | LEGAL-BIBLE ✅ | PROC-LEG-001 ✅ | Templates ✅ | 100% | Contract playbook in CLM 🎯 |
+| Intellectual Property | IP-BIBLE ✅ | PROC-IP-001 ✅ | — | 100% | IP register in legal system 🎯 |
+| Payroll | PAYROLL-BIBLE ✅ | PROC-PAY-001 ✅ | — | 100% | Payroll provider + RTI live 🎯 ACT-018 |
+| Building Regulations | BUILDING-BIBLE ✅ | PROC-BLD-001 ✅ | — | 100% | Premises survey / FRA 🎯 ACT-017 |
+| IT | IT-BIBLE ✅ | PROC-IT-001 ✅ | POL-SEC-001 ✅ | 100% | ITSM tickets in production 🎯 |
+| Wellbeing | WELLBEING-BIBLE ✅ | PROC-WLB-001 ✅ | — | 100% | Wellbeing programme launch 🎯 |
+| Mental Health | MENTAL-HEALTH-BIBLE ✅ | PROC-MHL-001 ✅ | — | 100% | MH first aiders trained 🎯 |
+| User Management | USER-MANAGEMENT-BIBLE ✅ | PROC-UMG-001 ✅ | POL-SEC-001 ✅ | 100% | Tranc3 admin SOP in prod 🎯 ACT-009 |
+| Data Management | DATA-MANAGEMENT-BIBLE ✅ | PROC-DAT-001 ✅ | POL-PRI-001 ✅ | 100% | Data steward roster 🎯 |
+| Framework catalogue | 127 FW register ✅ | Catalog + triggers ✅ | — | 100% | External cert audits 🎯 |
 
-**Department pack wave:** adds bibles + PROC/COOK/HYMN for domains previously mapping-only.
+**Department pack wave (PM-015):** All domains now have bible + PROC/COOK/HYMN at programme 100%. Operational gaps tracked in ACT-016–019.
 
 ---
 
@@ -82,7 +82,7 @@
 
 ### Honest positioning
 
-Magna Carta at **~82% programme / ~42% operational** is comparable to a **well-documented pre-Vanta startup** that has invested in GRC structure but not yet wired integrations or completed audit windows. It is **not** a substitute for a CCM SaaS unless integrations are built (ACT-009 Tranc3 enforce, HRIS, IdP, cloud APIs).
+Magna Carta at **100% programme / ~42% operational** is comparable to a **fully documented pre-Vanta organisation** that has completed GRC structure in git but not yet wired integrations or completed audit windows. It is **not** a substitute for a CCM SaaS unless integrations are built (ACT-009 Tranc3 enforce, HRIS ACT-016, IdP, cloud APIs).
 
 ---
 
@@ -100,10 +100,11 @@ Magna Carta at **~82% programme / ~42% operational** is comparable to a **well-d
 | ACT-011 | ISO 27001 external certification | ISMS | CB audit |
 | ACT-012 | BCP drills all P0 DBs | Operations | Executed restores |
 | ACT-013 | PROC-AI-003 recurring evidence | AI Lead | Quarterly cycles |
-| — | HR screening vendor + HRIS | HR | Commercial contract |
+| ACT-016 | HRIS appointments (13 roles) | HR / Executive | Live HR records |
+| ACT-017 | Premises fire risk assessment | Facilities / H&S | On-site assessment |
+| ACT-018 | Payroll provider + RTI live | Finance | HMRC live reporting |
+| ACT-019 | H&S officer named + RIDDOR drill | HR / H&S | Training + drill log |
 | — | MDM / endpoint DLP | IT | Tooling rollout |
-| — | Building fire risk assessment | Facilities | On-site assessment |
-| — | Payroll provider RTI | Finance | HMRC live reporting |
 
 Full tracker: [COMPLIANCE-ACTION-TRACKER.md](COMPLIANCE-ACTION-TRACKER.md)
 
@@ -125,4 +126,4 @@ Full tracker: [COMPLIANCE-ACTION-TRACKER.md](COMPLIANCE-ACTION-TRACKER.md)
 | Update percentages in this doc | Quarterly (PROC-CMP-001) | 2026-09-30 |
 | Re-benchmark vs CCM market | Annual | 2027-06-09 |
 
-**Related:** [COMPLIANCE-COVERAGE-REGISTER.md](COMPLIANCE-COVERAGE-REGISTER.md) · [DOCUMENTATION-ARTIFACT-MODEL.md](../governance/DOCUMENTATION-ARTIFACT-MODEL.md)
+**Related:** [COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md](COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md) · [COMPLIANCE-COVERAGE-REGISTER.md](COMPLIANCE-COVERAGE-REGISTER.md) · [DOCUMENTATION-ARTIFACT-MODEL.md](../governance/DOCUMENTATION-ARTIFACT-MODEL.md)

@@ -1,6 +1,6 @@
 # Compliance Action Tracker
 
-**Version:** 1.2.0  
+**Version:** 1.3.0  
 **Date:** 2026-06-09  
 **Owner:** ISMS Lead  
 **Machine-readable:** [compliance/compliance_action_tracker.yaml](../../compliance/compliance_action_tracker.yaml)  
@@ -33,6 +33,10 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 | ACT-009 | magna_carta.py request-boundary enforcement | Platform Engineering | 2026-09-30 | P2 | Open | 🎯 |
 | ACT-010 | SUP-004 US AI fallback DPA or disable decision | DPO / AI Lead | 2026-10-31 | P2 | Open | 🎯 |
 | ACT-012 | Expand BCP restore tests (all P0 DBs) | Operations | 2027-06-07 | P2 | Open | 🎯 |
+| ACT-016 | Appoint named individuals to 13 defined roles in HRIS | HR / Executive | 2026-09-30 | P2 | Open | 🎯 |
+| ACT-017 | Complete premises fire risk assessment (FRA) | Facilities / H&S | 2026-10-31 | P2 | Open | 🎯 |
+| ACT-018 | Activate payroll provider and live RTI reporting | Finance | 2026-12-31 | P2 | Open | 🎯 |
+| ACT-019 | Name H&S officer and execute RIDDOR reporting drill | HR / H&S | 2026-09-30 | P2 | Open | 🎯 |
 
 ---
 
@@ -53,6 +57,9 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 | ID | Title | Closed | Notes |
 |----|-------|--------|-------|
 | PM-014 | Execution evidence wave (baseline ACT closures, external-action playbooks) | 2026-06-09 | `execution_evidence_register.yaml`, [EXTERNAL-ACTION-EXECUTION-GUIDE.md](EXTERNAL-ACTION-EXECUTION-GUIDE.md) |
+| PM-015 | Department packs (12 domains + HR bible) | 2026-06-09 | 16 bibles, 25 PROC/COOK/HYMN triads |
+| PM-016 | Job description library (13 roles) | 2026-06-09 | `docs/job-descriptions/` |
+| PM-017 | Programme layer 100% completion register | 2026-06-09 | [COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md](COMPLIANCE-PROGRAMME-COMPLETION-REGISTER.md) |
 | — | Phase 3 supplier DPA register | 2026-06-07 | ✅ Programme; signed DPAs remain 🎯 |
 | — | POL-AI-001 authored (framework) | 2026-06-07 | ✅ Programme; BoardRoom approval 🎯 |
 | — | BCP baseline restore test BCP-RT-001 | 2026-06-07 | ✅ Programme baseline; annual repeat 🎯 |
@@ -63,7 +70,7 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 
 ## 5. External validation playbook
 
-Open 🎯 actions (ACT-001–003, ACT-005, ACT-007–010, ACT-012) use step-by-step playbooks in [EXTERNAL-ACTION-EXECUTION-GUIDE.md](EXTERNAL-ACTION-EXECUTION-GUIDE.md). Machine-readable packages: `compliance/execution_evidence_register.yaml` → `external_action_packages`.
+Open 🎯 actions (ACT-001–003, ACT-005, ACT-007–010, ACT-012, ACT-016–019) use step-by-step playbooks in [EXTERNAL-ACTION-EXECUTION-GUIDE.md](EXTERNAL-ACTION-EXECUTION-GUIDE.md). Machine-readable packages: `compliance/execution_evidence_register.yaml` → `external_action_packages`.
 
 ---
 
