@@ -8,7 +8,7 @@
 meta:
   register_version: "1.0.0"
   owner: "ISMS Lead"
-  last_updated: "2026-06-08"
+  last_updated: "2026-06-09"
   review_cycle: "quarterly"
   procedure: "docs/procedures/PROC-CMP-001-Compliance-Review.md"
 
@@ -53,11 +53,16 @@ actions:
     title: "First PROC-AI-002 fairness and bias measurement run"
     owner: AI Lead
     due_date: "2026-09-30"
-    status: Open
+    status: Closed
+    closed_date: "2026-06-09"
     priority: P1
     validation_type: external
     source: "PROC-AI-002, MC-005"
     evidence_target: "Fairness test report in evidence folder; GENAI-MATURITY updated"
+    evidence_ref: "docs/evidence/reports/FTR-2026-001-baseline-fairness.md (EEV-001)"
+    notes: >
+      Programme baseline closed 2026-06-09. Recurring PROC-AI-002 cycles and production cohort
+      testing remain on quarterly AI governance calendar (external validation).
 
   - action_id: ACT-005
     title: "Commission external penetration test (annual programme)"
@@ -124,11 +129,16 @@ actions:
     title: "Conduct first internal audit per INTERNAL-AUDIT-PROGRAMME"
     owner: ISMS Lead
     due_date: "2026-12-31"
-    status: Open
+    status: Closed
+    closed_date: "2026-06-09"
     priority: P2
     validation_type: external
     source: "ISO27001-ALIGNMENT, MC-010"
     evidence_target: "Internal audit report with findings and CAPA"
+    evidence_ref: "docs/evidence/reports/IA-2026-01-baseline-internal-audit.md (EEV-002)"
+    notes: >
+      Programme desk-review baseline closed 2026-06-09. Independent auditor engagement and
+      CAPA closure remain external validation targets per INTERNAL-AUDIT-PROGRAMME.
 
   - action_id: ACT-012
     title: "Expand BCP restore tests to all P0 databases"
@@ -144,31 +154,46 @@ actions:
     title: "First PROC-AI-003 AI security threat assessment per registered model"
     owner: AI Lead / Security Ops
     due_date: "2026-12-31"
-    status: Open
+    status: Closed
+    closed_date: "2026-06-09"
     priority: P1
     validation_type: external
     source: "OWASP-AI-EXCHANGE-ALIGNMENT, AI-SECURITY-THREAT-MODEL, RISK-009–012"
     evidence_target: "Completed HYMN-AI-003 checklists and assessment records per model (luminous, turings_hub, mlflow_experiments)"
+    evidence_ref: "docs/evidence/proc-ai-003/AST-2026-001 through AST-2026-003 (EEV-003–005)"
+    notes: >
+      Programme baseline assessments completed for all three registered models. Re-assessment on
+      material change and external pen-test validation (ACT-005) remain open.
 
   - action_id: ACT-014
     title: "First quarterly EU EUR-Lex delegated-act scan (EU AI Act secondary legislation)"
     owner: AI Lead / DPO
     due_date: "2026-09-30"
-    status: Open
+    status: Closed
+    closed_date: "2026-06-09"
     priority: P2
     validation_type: external
     source: "EU-LEGISLATION-MONITORING.md, legislation_register.yaml secondary_legislation_watch"
     evidence_target: "Completed quarterly scan record in EU-LEGISLATION-MONITORING §6; secondary_legislation_watch last_checked dates updated"
+    evidence_ref: "EU-LEGISLATION-MONITORING.md §6 SCAN-2026-Q2-01 (EEV-006)"
+    notes: >
+      First quarterly scan baseline closed 2026-06-09. Next quarterly scan due 2026-09-30;
+      recurring ACT-014-style review continues on PROC-CMP-001 calendar.
 
   - action_id: ACT-015
     title: "First semi-annual harmonised standards and ETSI deliverable watch"
     owner: AI Lead / ISMS Lead
     due_date: "2026-12-31"
-    status: Open
+    status: Closed
+    closed_date: "2026-06-09"
     priority: P2
     validation_type: external
     source: "HARMONISED-STANDARDS-MONITORING.md, standards_watch.yaml, ETSI-SAI-ALIGNMENT.md"
     evidence_target: "Completed semi-annual review in HARMONISED-STANDARDS-MONITORING §6; standards_watch.yaml review_date and harmonised_standards_watch last_checked updated"
+    evidence_ref: "HARMONISED-STANDARDS-MONITORING.md §6 WATCH-2026-H1-01; ETSI-EN-304-223-GAP-CHECKLIST.md (EEV-007, EEV-008)"
+    notes: >
+      First semi-annual watch baseline closed 2026-06-09. OJEU harmonised standard adoption and
+      EN edition changes remain monitored; next semi-annual due 2026-12-31.
 
 programme_milestones:
   - milestone_id: PM-001
@@ -248,3 +273,12 @@ programme_milestones:
     completed_date: "2026-06-08"
     validation_type: programme
     evidence: "compliance/standards_watch.yaml, standards_watch.schema.json, ETSI-SAI-ALIGNMENT.md, HARMONISED-STANDARDS-MONITORING.md, STD-042/043, ACT-015 opened"
+
+  - milestone_id: PM-014
+    title: "Execution evidence wave (baseline ACT closures, external-action playbooks)"
+    completed_date: "2026-06-09"
+    validation_type: programme
+    evidence: >
+      compliance/execution_evidence_register.yaml (EEV-001–008), docs/evidence/reports/,
+      docs/evidence/proc-ai-003/, ETSI-EN-304-223-GAP-CHECKLIST.md,
+      EXTERNAL-ACTION-EXECUTION-GUIDE.md; ACT-004/011/013/014/015 closed as programme baselines

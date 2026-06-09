@@ -4,7 +4,7 @@
 **Date:** 2026-06-08  
 **Owner:** ISMS Lead  
 **Review cycle:** Quarterly (PROC-CMP-001)  
-**Purpose:** Curated list of standards actively adopted or targeted by Magna Carta (STD-IDs). For the full customer-requested catalogue (112 frameworks, FW-001–FW-130), see [STANDARDS-AND-FRAMEWORKS-REGISTER.md](STANDARDS-AND-FRAMEWORKS-REGISTER.md) and `compliance/frameworks_register.yaml`.
+**Purpose:** Curated list of standards actively adopted or targeted by Magna Carta (STD-IDs). For the full customer-requested catalogue (114 frameworks, FW-001–FW-132), see [STANDARDS-AND-FRAMEWORKS-REGISTER.md](STANDARDS-AND-FRAMEWORKS-REGISTER.md) and `compliance/frameworks_register.yaml`. Baseline execution evidence: `compliance/execution_evidence_register.yaml`.
 
 ---
 
@@ -83,6 +83,7 @@ Status symbols match [COMPLIANCE-COVERAGE-REGISTER.md](COMPLIANCE-COVERAGE-REGIS
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-06-09 | Cross-reference execution_evidence_register.yaml; FW catalogue count 114 (PM-014) | ISMS Lead |
 | 2026-06-08 | STD-042/043 — ETSI EN 304 223 alignment + harmonised standards watch; standards_watch.yaml (PM-013) | ISMS Lead |
 | 2026-06-08 | STD-039 — EUR-Lex / ELI monitoring standard; legislation_register.yaml (PM-012) | ISMS Lead |
 | 2026-06-08 | STD-037/038 — OWASP AI Exchange + GenAI LLM Top 10 mapping (PM-011) | ISMS Lead |

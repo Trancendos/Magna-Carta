@@ -1,7 +1,7 @@
 # Standards & Frameworks Register — Master Catalogue
 
-**Version:** 1.0.0  
-**Date:** 2026-06-08  
+**Version:** 1.1.0  
+**Date:** 2026-06-09  
 **Owner:** ISMS Lead / DPO  
 **Review cycle:** Quarterly (PROC-CMP-001)  
 **Purpose:** Canonical inventory of every external standard, certification, regulation, and assurance framework requested for Magna Carta coverage — with honest applicability and programme status.
@@ -165,7 +165,18 @@
 
 ---
 
-## 8. Global privacy laws
+## 8. AI security and technical standards
+
+| FW-ID | Framework | Applicability | Programme | Cert 🎯 | Readiness doc |
+|-------|-----------|---------------|-----------|---------|---------------|
+| FW-131 | ETSI EN 304 223 (Securing AI baseline) | ⚠️ Reference | ✅ Programme | — | [ETSI-SAI-ALIGNMENT.md](ETSI-SAI-ALIGNMENT.md), [ETSI-EN-304-223-GAP-CHECKLIST.md](ETSI-EN-304-223-GAP-CHECKLIST.md) |
+| FW-132 | OWASP AI Exchange | ✅ Applicable | ✅ Programme | — | [OWASP-AI-EXCHANGE-ALIGNMENT.md](OWASP-AI-EXCHANGE-ALIGNMENT.md), PROC-AI-003 |
+
+*Baseline evidence:* `compliance/execution_evidence_register.yaml` (EEV-003–008, PM-014).
+
+---
+
+## 9. Global privacy laws
 
 | FW-ID | Framework | Applicability | Programme | Cert 🎯 | Readiness doc |
 |-------|-----------|---------------|-----------|---------|---------------|
@@ -193,7 +204,7 @@
 
 ---
 
-## 9. Summary statistics (2026-06-08)
+## 10. Summary statistics (2026-06-09)
 
 | Category | Count | ✅ Programme | 📋 Readiness | ❌ N/A |
 |----------|-------|-------------|-------------|--------|
@@ -204,27 +215,29 @@
 | US gov | 20 | 3 | 16 | 1 |
 | Intl assurance | 26 | 1 | 24 | 1 |
 | EU / industry | 9 | 0 | 9 | 0 |
+| AI security | 2 | 2 | 0 | 0 |
 | Privacy | 21 | 4 | 15 | 2 |
-| **Total** | **112** | **17** | **86** | **9** |
+| **Total** | **114** | **19** | **86** | **9** |
 
 *Note: User list deduplicated (e.g. ISO 20000 once). Vendor catalogues (KY3P, ProcessUnity, Pinakes, PiTuKri) are readiness-mapped for questionnaire response, not certification targets.*
 
 ---
 
-## 10. Layer activation guide
+## 11. Layer activation guide
 
 | Layer | What "started" means | Current state |
 |-------|---------------------|---------------|
 | **Layer 1** Tranc3 platform | Runtime controls, CI gates, registers in code | Operational in Tranc3 upstream |
 | **Layer 2** Magna Carta programme | This register + policies + procedures + readiness groups | ✅ **Complete for catalogue** — PM-009 |
-| **Layer 3** External validation | SOC report, ISO cert, signed BAAs, pen test, drills | Open: ACT-001–ACT-012 |
+| **Layer 3** External validation | SOC report, ISO cert, signed BAAs, pen test, drills | Open: ACT-001–003, ACT-005–010, ACT-012; baselines ACT-004/011/013/014/015 closed |
 
 ---
 
-## 11. Change log
+## 12. Change log
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-06-09 | FW-131 (ETSI EN 304 223), FW-132 (OWASP AI Exchange); execution evidence cross-ref (PM-014) | ISMS Lead |
 | 2026-06-08 | Master catalogue (FW-001–FW-130) + readiness index linkage | ISMS Lead |
 
 **Next review:** 2026-09-06

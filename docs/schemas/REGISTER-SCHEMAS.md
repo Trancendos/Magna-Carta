@@ -1,7 +1,7 @@
 # Register Schemas
 
-**Version:** 1.4.0  
-**Date:** 2026-06-08  
+**Version:** 1.5.0  
+**Date:** 2026-06-09  
 **Owner:** ISMS Lead  
 **Purpose:** Field definitions for machine-readable YAML registers and human register tables.
 
@@ -22,6 +22,7 @@
 | `compliance/frameworks_register.yaml` | 1.0.0 | ISMS Lead |
 | `compliance/legislation_register.yaml` | 1.0.0 | DPO / Legal |
 | `compliance/standards_watch.yaml` | 1.0.0 | ISMS Lead / AI Lead |
+| `compliance/execution_evidence_register.yaml` | 1.0.0 | ISMS Lead |
 
 ---
 
@@ -111,7 +112,25 @@ Human-readable master: [STANDARDS-AND-FRAMEWORKS-REGISTER.md](../compliance/STAN
 
 ---
 
-## 8. maintenance_monitor.yaml
+## 8. execution_evidence_register.yaml
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `evidence_id` | string | yes | `EEV-###` |
+| `title` | string | yes | Short description |
+| `evidence_type` | enum | yes | assessment, audit, scan, test_report, playbook |
+| `validation_tier` | enum | yes | programme_baseline, external |
+| `linked_action` | string | no | `ACT-###` when applicable |
+| `artefact` | string | yes | Relative path to evidence file |
+| `completed_date` | date | yes | ISO date |
+| `owner` | string | yes | Role or named owner |
+| `notes` | string | no | Baseline vs external validation scope |
+
+Human-readable playbooks: [EXTERNAL-ACTION-EXECUTION-GUIDE.md](../compliance/EXTERNAL-ACTION-EXECUTION-GUIDE.md)
+
+---
+
+## 9. maintenance_monitor.yaml
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -123,7 +142,7 @@ Human-readable master: [STANDARDS-AND-FRAMEWORKS-REGISTER.md](../compliance/STAN
 
 ---
 
-## 9. Human register tables (markdown)
+## 10. Human register tables (markdown)
 
 Standard columns used across Magna Carta registers:
 
@@ -139,7 +158,7 @@ Obligation extended schema: [OBLIGATIONS-REGISTER.md](../compliance/OBLIGATIONS-
 
 ---
 
-## 10. Validation
+## 11. Validation
 
 Run schema-adjacent checks:
 
@@ -165,7 +184,8 @@ Machine-readable schemas (Draft 2020-12) live in `compliance/schemas/`:
 | `frameworks_register.schema.json` | `compliance/frameworks_register.yaml` |
 | `legislation_register.schema.json` | `compliance/legislation_register.yaml` |
 | `standards_watch.schema.json` | `compliance/standards_watch.yaml` |
+| `execution_evidence_register.schema.json` | `compliance/execution_evidence_register.yaml` |
 
-`compliance_health_check.py` performs lightweight structural validation (MON-009) for all eleven register/schema pairs without requiring the `jsonschema` package. Procedure coverage (MON-010) ensures every `PROC-*.md` has matching cookbook and hymn sheet.
+`compliance_health_check.py` performs lightweight structural validation (MON-009) for all twelve register/schema pairs without requiring the `jsonschema` package. Procedure coverage (MON-010) ensures every `PROC-*.md` has matching cookbook and hymn sheet.
 
 **Next review:** 2026-09-06

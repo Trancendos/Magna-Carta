@@ -29,6 +29,7 @@ ISMS Lead (chair), DPO, Platform Engineering lead, Security Ops, AI Lead (if AI 
 
 - Meeting minutes in Town Hall MeetingRooms
 - Updated [COMPLIANCE-ACTION-TRACKER.md](../compliance/COMPLIANCE-ACTION-TRACKER.md) (`compliance/compliance_action_tracker.yaml`)
+- Execution evidence and external-action playbooks reviewed ([EXTERNAL-ACTION-EXECUTION-GUIDE.md](../compliance/EXTERNAL-ACTION-EXECUTION-GUIDE.md), `compliance/execution_evidence_register.yaml`)
 - Register.yaml updates merged within 2 weeks
 
 ## 2. Annual review

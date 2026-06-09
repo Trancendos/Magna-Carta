@@ -9,7 +9,7 @@
 meta:
   register_version: "1.0.0"
   owner: "DPO / Legal"
-  last_updated: "2026-06-08"
+  last_updated: "2026-06-09"
   review_cycle: "quarterly"
   procedure: "docs/procedures/PROC-CMP-001-Compliance-Review.md"
   markdown_index: "docs/compliance/LEGISLATION-REGISTER.md"
@@ -199,19 +199,19 @@ secondary_legislation_watch:
   items:
     - topic: "High-risk AI system requirements (Annex III sectors)"
       status: monitor
-      last_checked: "2026-06-08"
+      last_checked: "2026-06-09"
       programme_impact: "May affect OBL-022, OBL-023 if tier escalates"
     - topic: "GPAI model obligations and codes of practice"
       status: monitor
-      last_checked: "2026-06-08"
+      last_checked: "2026-06-09"
       programme_impact: "Model cards, transparency (OBL-020, OBL-021)"
     - topic: "Conformity assessment and notified bodies"
       status: monitor
-      last_checked: "2026-06-08"
+      last_checked: "2026-06-09"
       programme_impact: "Future external validation if high-risk in scope"
     - topic: "Penalties and enforcement procedures"
       status: monitor
-      last_checked: "2026-06-08"
+      last_checked: "2026-06-09"
       programme_impact: "REG-003 engagement planning"
 
 monitoring_sources:

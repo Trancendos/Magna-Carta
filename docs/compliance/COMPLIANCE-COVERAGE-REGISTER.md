@@ -1,7 +1,7 @@
 # Compliance Coverage Register — Honest Status
 
-**Version:** 1.1.0  
-**Date:** 2026-06-08  
+**Version:** 1.2.0  
+**Date:** 2026-06-09  
 **Owner:** ISMS Lead / DPO  
 **Purpose:** Single source of truth for every ⚠️, 📋, and ❌ in the compliance programme — why it is not operationally ✅, what programme artefact covers future scenarios, and what blocks external validation.
 
@@ -63,11 +63,11 @@
 | ISO 42001 | ⚠️ Target | ✅ Programme | No ISO 42001 certificate | GENAI-MATURITY, POL-AI-001 | Target 2027 |
 | NIST AI RMF | ✅ Mapped | ✅ Programme | Self-assessment only | AI-GOVERNANCE.md | Annual refresh |
 | UK AI legislation | 📋 Monitor | ✅ Programme | Bill not final; no statutory duties yet | [UK-AI-LEGISLATION-MONITORING.md](UK-AI-LEGISLATION-MONITORING.md) | Quarterly LEGISLATION-REGISTER scan |
-| EU legislation (EUR-Lex / ELI) | ✅ Programme | ✅ Programme | Delegated acts not yet scanned operationally | [EU-LEGISLATION-MONITORING.md](EU-LEGISLATION-MONITORING.md), [EUR-LEX-ELI-REFERENCE.md](EUR-LEX-ELI-REFERENCE.md) | ACT-014 first quarterly scan |
-| Algorithmic transparency | ⚠️ | ✅ Programme / 🎯 measure | Bias run not executed | PROC-AI-002, model cards | ACT-004 |
-| AI security (OWASP AI Exchange) | ✅ Programme | ✅ Programme / 🎯 assess | First threat assessment not executed | OWASP-AI-EXCHANGE-ALIGNMENT, AI-SECURITY-THREAT-MODEL, PROC-AI-003 | ACT-013 |
-| ETSI EN 304 223 (Securing AI) | ✅ Programme | ✅ Programme / 🎯 watch | Not EU harmonised; no presumption of conformity | [ETSI-SAI-ALIGNMENT.md](ETSI-SAI-ALIGNMENT.md), `standards_watch.yaml` | ACT-015 semi-annual watch |
-| EU harmonised standards (JTC21) | ✅ Programme | ✅ Programme / 🎯 watch | prEN 18286 and Art. 9 drafts not OJEU-listed | [HARMONISED-STANDARDS-MONITORING.md](HARMONISED-STANDARDS-MONITORING.md) | ACT-015; cross-ref ACT-014 |
+| EU legislation (EUR-Lex / ELI) | ✅ Programme | ✅ Programme / 🎯 recurring | First quarterly scan baseline completed 2026-06-09 (SCAN-2026-Q2-01, EEV-006) | [EU-LEGISLATION-MONITORING.md](EU-LEGISLATION-MONITORING.md), [EUR-LEX-ELI-REFERENCE.md](EUR-LEX-ELI-REFERENCE.md) | Next scan 2026-09-30 (ACT-014 recurring) |
+| Algorithmic transparency | ⚠️ | ✅ Programme / 🎯 recurring | Baseline fairness run completed 2026-06-09 (FTR-2026-001, EEV-001); production cohort testing ongoing | PROC-AI-002, model cards | Quarterly PROC-AI-002 cycles |
+| AI security (OWASP AI Exchange) | ✅ Programme | ✅ Programme / 🎯 recurring | Baseline PROC-AI-003 per model completed 2026-06-09 (AST-2026-001–003, EEV-003–005); pen test remains 🎯 | OWASP-AI-EXCHANGE-ALIGNMENT, AI-SECURITY-THREAT-MODEL, PROC-AI-003 | ACT-005; annual PROC-AI-003 refresh |
+| ETSI EN 304 223 (Securing AI) | ✅ Programme | ✅ Programme / 🎯 recurring | Gap checklist baseline completed 2026-06-09 (EEV-008); not OJEU harmonised | [ETSI-SAI-ALIGNMENT.md](ETSI-SAI-ALIGNMENT.md), [ETSI-EN-304-223-GAP-CHECKLIST.md](ETSI-EN-304-223-GAP-CHECKLIST.md) | Semi-annual watch (ACT-015 recurring) |
+| EU harmonised standards (JTC21) | ✅ Programme | ✅ Programme / 🎯 recurring | First semi-annual watch baseline completed 2026-06-09 (WATCH-2026-H1-01, EEV-007) | [HARMONISED-STANDARDS-MONITORING.md](HARMONISED-STANDARDS-MONITORING.md) | Next watch 2026-12-31 |
 | US AI fallback transfer | ⚠️ | ⚠️ Partial | SUP-004 DPA unsigned | TIA template, ROPA entry | ACT-010 |
 
 ---
@@ -82,7 +82,7 @@
 | Malware (Wazuh) | Planned observability stack | PROC-VUL-001, DEFSTAN | Ops deployment |
 | HA / resilience | Partial; BCP drills incomplete | PROC-BCP-001, BCP log | ACT-012 all P0 DBs |
 | Risk treatment plan | Risks in register; no formal RTP doc | [RISK-TREATMENT-PLAN.md](RISK-TREATMENT-PLAN.md) | ISMS sign-off quarterly |
-| Internal audit | Scheduled Q4 2026 | INTERNAL-AUDIT-PROGRAMME | ACT-011 |
+| Internal audit | Baseline completed 2026-06-09 (IA-2026-01, EEV-002); annual cycle continues | INTERNAL-AUDIT-PROGRAMME | Next internal audit per programme calendar |
 | Management review | Template only | MANAGEMENT-REVIEW-TEMPLATE | First annual session |
 | Corrective action (CAPA) | Informal via CAB + IR | [PROC-CAPA-001](../procedures/PROC-CAPA-001-Corrective-Action.md) | Link to audit findings |
 
@@ -120,27 +120,22 @@
 
 ## 7. Open actions (external validation only)
 
-All items require parties outside documentation-only work:
+Programme baselines closed 2026-06-09 (PM-014): ACT-004, ACT-011, ACT-013, ACT-014, ACT-015 — evidence in `compliance/execution_evidence_register.yaml` (EEV-001–008). Remaining items require parties outside documentation-only work:
 
 | ID | Item | Why still open | Owner |
 |----|------|----------------|-------|
 | ACT-001 | Signed PSP DPA | Legal countersignature | Legal / Procurement |
 | ACT-002 | Health connector BAA/DPA | Per-customer legal | Legal / DPO |
 | ACT-003 | ICO fee + registration number | Fee payment + portal | DPO |
-| ACT-004 | First bias/fairness run | Operational test cycle | AI Lead |
 | ACT-005 | External pen test | Vendor contract + budget | Security Ops |
-| ACT-006 | Tranc3 HIPAA copy PR | Upstream merge | Platform Engineering |
+| ACT-006 | Tranc3 HIPAA copy PR | Upstream merge (local verified) | Platform Engineering |
 | ACT-007 | Policy attestation cycle | HR rollout | HR / ISMS |
 | ACT-008 | SOC 2 observation window | Clock not started | ISMS Lead |
 | ACT-009 | magna_carta.py enforcement | Tranc3 staging code | Platform Engineering |
 | ACT-010 | SUP-004 DPA or disable | Legal negotiation | DPO / AI Lead |
-| ACT-011 | First internal audit | Scheduled Q4 2026 | ISMS Lead |
 | ACT-012 | BCP all P0 DBs | Drill schedule through 2027 | Operations |
-| ACT-013 | First PROC-AI-003 threat assessment | Operational test cycle | AI Lead / Security Ops |
-| ACT-014 | First EU EUR-Lex delegated-act scan | Quarterly monitoring not yet executed | AI Lead / DPO |
-| ACT-015 | First harmonised / ETSI standards watch | Semi-annual monitoring not yet executed | AI Lead / ISMS Lead |
 
-**Nothing blocks** further programme documentation — completed in this register's linked artefacts.
+**Playbooks:** [EXTERNAL-ACTION-EXECUTION-GUIDE.md](EXTERNAL-ACTION-EXECUTION-GUIDE.md) · Machine-readable packages in `execution_evidence_register.yaml` → `external_action_packages`.
 
 ---
 
@@ -171,7 +166,7 @@ All items require parties outside documentation-only work:
 | **Bible** | MAGNACARTA-GOVERNANCE-BIBLE | ✅ Programme (v1) | Expand as procedures mature |
 | **Cookbooks** | 13 cookbooks + INDEX (all PROC-*) | ✅ Programme | Operational drills not evidenced 🎯 |
 | **Hymn sheets** | 13 hymn sheets + INDEX (all PROC-*) | ✅ Programme | Named signatories in production 🎯 |
-| **Schemas** | REGISTER-SCHEMAS + 11 JSON schemas (MON-009) | ✅ Programme | Schema drift on new fields — monitor via health check |
+| **Schemas** | REGISTER-SCHEMAS + 12 JSON schemas (MON-009) | ✅ Programme | Schema drift on new fields — monitor via health check |
 | **Standards** | STANDARDS-REGISTER | ✅ Programme | Not external certification |
 | **Regulators / ombudsmen** | REGULATORS-OMBUDSMEN-REGISTER | ✅ Programme | Contact verification 🎯 |
 | **Systems** | SYSTEMS-REGISTER | ✅ Programme | Production monitoring hooks 🎯 |
@@ -180,21 +175,21 @@ All items require parties outside documentation-only work:
 | **Automation** | weekly_compliance_health.sh + health_check_history.yaml | ✅ Programme | Optional local cron on ISMS machine 🎯 |
 | **Runbooks** | RUN-OMB-001, RUN-PECR-001 + INDEX | ✅ Programme | Live escalation tickets 🎯 |
 | **Domain bibles** | PRIVACY-BIBLE, SECURITY-BIBLE + INDEX | ✅ Programme | Tranc3 upstream sync 🎯 |
-| **Evidence templates** | Fairness test + internal audit report | ✅ Programme | ACT-004, ACT-011 execution 🎯 |
+| **Evidence templates** | Fairness test + internal audit report | ✅ Programme | Baseline reports filed (EEV-001–002); recurring cycles 🎯 |
 | **ASVS gap tracker** | ASVS-GAP-CHECKLIST | ✅ Programme | Pen test / remediation evidence 🎯 |
 
-**Still missing (honest backlog):** Named individuals in REVIEWERS-REGISTER; operational evidence that cookbooks were exercised (drills, tickets); ACT-001–015 external closure; sector-specific runbooks beyond ICO/FOS/PECR starters.
+**Still missing (honest backlog):** Named individuals in REVIEWERS-REGISTER; operational evidence that cookbooks were exercised (drills, tickets); ACT-001–003, ACT-005–010, ACT-012 external closure; sector-specific runbooks beyond ICO/FOS/PECR starters.
 
 ### 8.3 Framework catalogue wave (2026-06-08)
 
 | Milestone | Status |
 |-----------|--------|
-| STANDARDS-AND-FRAMEWORKS-REGISTER (FW-001–FW-130) | ✅ Programme |
+| STANDARDS-AND-FRAMEWORKS-REGISTER (FW-001–FW-132) | ✅ Programme |
 | Readiness groups (ISO, SOC, PCI, NIST, US gov, intl, privacy, industry) | ✅ Programme |
 | frameworks_register.yaml + schema (MON-009) | ✅ Programme |
 | PM-009 / PM-010 programme milestones | ✅ Programme |
 
-**Honest gap:** Layer 3 external validation (certificates, authorisations, signed BAAs, pen test, drills) — see ACT-001–ACT-015.
+**Honest gap:** Layer 3 external validation (certificates, authorisations, signed BAAs, pen test, drills) — see open ACT-001–003, ACT-005–010, ACT-012.
 
 ### 8.4 EUR-Lex / ELI programme wave (2026-06-08)
 
@@ -204,9 +199,9 @@ All items require parties outside documentation-only work:
 | EUR-LEX-ELI-REFERENCE.md (CELEX / ELI citation guide) | ✅ Programme |
 | EU-LEGISLATION-MONITORING.md (quarterly delegated-act workflow) | ✅ Programme |
 | OBLIGATIONS-REGISTER EUR-Lex anchors (OBL-020–024) | ✅ Programme |
-| PM-012 / ACT-014 opened | ✅ Programme / 🎯 first scan |
+| PM-012 / ACT-014 baseline scan | ✅ Programme / 🎯 recurring |
 
-**Honest gap:** First quarterly EUR-Lex delegated-act scan not yet executed (ACT-014 due 2026-09-30).
+**Honest gap:** First quarterly scan baseline completed 2026-06-09 (SCAN-2026-Q2-01). Next quarterly scan due 2026-09-30.
 
 ### 8.5 ETSI SAI / harmonised standards wave (2026-06-08)
 
@@ -216,9 +211,24 @@ All items require parties outside documentation-only work:
 | ETSI-SAI-ALIGNMENT.md (EN 304 223 ↔ OWASP / PROC-AI-003) | ✅ Programme |
 | HARMONISED-STANDARDS-MONITORING.md (semi-annual workflow) | ✅ Programme |
 | STD-042 / STD-043 in STANDARDS-REGISTER | ✅ Programme |
-| PM-013 / ACT-015 opened | ✅ Programme / 🎯 first watch |
+| PM-013 / ACT-015 baseline watch | ✅ Programme / 🎯 recurring |
+| ETSI EN 304 223 gap checklist (EEV-008) | ✅ Programme baseline | — |
 
-**Honest gap:** EN 304 223 is a reference standard only — not OJEU harmonised. First semi-annual standards watch not yet executed (ACT-015 due 2026-12-31).
+**Honest gap:** EN 304 223 is a reference standard only — not OJEU harmonised. First semi-annual watch baseline completed 2026-06-09 (WATCH-2026-H1-01). Next watch due 2026-12-31.
+
+### 8.6 Execution evidence wave (2026-06-09)
+
+| Milestone | Status |
+|-----------|--------|
+| execution_evidence_register.yaml + schema (EEV-001–008) | ✅ Programme |
+| Baseline fairness report (FTR-2026-001) | ✅ Programme baseline |
+| Baseline internal audit (IA-2026-01) | ✅ Programme baseline |
+| PROC-AI-003 assessments (AST-2026-001–003) | ✅ Programme baseline |
+| ETSI EN 304 223 gap checklist | ✅ Programme baseline |
+| EXTERNAL-ACTION-EXECUTION-GUIDE.md (ACT-001–012 playbooks) | ✅ Programme |
+| PM-014 programme milestone | ✅ Programme |
+
+**Honest gap:** Closed baselines are programme evidence, not external certification. Recurring monitoring, pen test (ACT-005), and vendor/legal actions remain 🎯.
 
 ---
 
@@ -228,7 +238,7 @@ All items require parties outside documentation-only work:
 |-------|------------------------|--------|
 | Programme (layer 2) | Every applicable/future row has owner doc + artefact taxonomy | **Achieved** (full cookbook/hymn/schema coverage; local monitor) |
 | Maintenance (layer 2b) | Weekly local health check logged; quarterly PROC-CMP-001 | First weekly run + Q3 review 2026-09-06 |
-| Operations (layer 3) | ACT-001–014 closed with evidence | 2026–2027 |
+| Operations (layer 3) | Open ACT-001–003, ACT-005–010, ACT-012 closed with evidence; baselines for ACT-004/011/013/014/015 done | 2026–2027 |
 | External assurance | ISO 27001, SOC 2, ICO live | Q1–Q2 2027 |
 
 ---

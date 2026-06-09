@@ -8,7 +8,7 @@
 meta:
   register_version: "1.0.0"
   owner: "ISMS Lead / AI Lead"
-  last_updated: "2026-06-08"
+  last_updated: "2026-06-09"
   review_cycle: "semiannual"
   procedure: "docs/procedures/PROC-CMP-001-Compliance-Review.md"
   markdown_index: "docs/compliance/HARMONISED-STANDARDS-MONITORING.md"
@@ -119,22 +119,22 @@ harmonised_standards_watch:
     - topic: "Quality management system for AI (Art. 17)"
       draft: "prEN 18286"
       status: monitor
-      last_checked: "2026-06-08"
+      last_checked: "2026-06-09"
       programme_impact: "Future QMS evidence if high-risk tier; ISO 42001 gap assessment"
     - topic: "Risk management system (Art. 9)"
       draft: "under JTC21 development"
       status: monitor
-      last_checked: "2026-06-08"
+      last_checked: "2026-06-09"
       programme_impact: "May refine PROC-AI-003 and risk register RISK-009–012"
     - topic: "Cybersecurity for AI (ETSI EN 304 223 track)"
       draft: "ETSI EN 304 223 V2.1.1"
       status: monitor
-      last_checked: "2026-06-08"
+      last_checked: "2026-06-09"
       programme_impact: "Reference alignment via ETSI-SAI-ALIGNMENT; watch for OJEU harmonisation"
     - topic: "GPAI model obligations (codes of practice / standards)"
       draft: "various; EUR-Lex delegated acts"
       status: monitor
-      last_checked: "2026-06-08"
+      last_checked: "2026-06-09"
       programme_impact: "Cross-ref ACT-014 EUR-Lex scan; model cards OBL-020–021"
 
 monitoring_sources:

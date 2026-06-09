@@ -1,7 +1,7 @@
 # Harmonised Standards Monitoring
 
-**Version:** 1.0.0  
-**Date:** 2026-06-08  
+**Version:** 1.1.0  
+**Date:** 2026-06-09  
 **Owner:** ISMS Lead / AI Lead  
 **Status:** ✅ Programme — structured ETSI + CEN/CENELEC watch (replaces ad-hoc standards checks)
 
@@ -55,7 +55,7 @@ YAML: `standards_watch.yaml` → `harmonised_standards_watch`.
 ## 4. Semi-annual review workflow (ACT-015)
 
 **Cadence:** Semi-annual, aligned with PROC-CMP-001 (offset from quarterly EUR-Lex scan).  
-**First run due:** 2026-12-31 (see ACT-015).
+**First baseline run:** 2026-06-09 (WATCH-2026-H1-01 — ACT-015 closed as programme baseline). **Next semi-annual run:** 2026-12-31.
 
 ### Step 1 — ETSI deliverable check (20 min)
 
@@ -103,14 +103,16 @@ Also in `standards_watch.yaml` → `monitoring_sources`.
 
 ## 6. Review log (operational)
 
-| Date | Reviewer | Summary | Next due |
-|------|----------|---------|----------|
-| 2026-06-08 | Programme | Initial register; EN 304 223 V2.1.1 recorded; harmonised watch seeded | 2026-12-31 🎯 ACT-015 |
+| Watch ID | Date | Reviewer | Summary | Next due |
+|----------|------|----------|---------|----------|
+| WATCH-2026-H1-01 | 2026-06-09 | AI Lead / ISMS Lead | EN 304 223 V2.1.1 unchanged. JTC21 drafts monitored; no OJEU harmonised AI security standard listed. ETSI gap checklist completed (EEV-008). | 2026-12-31 |
+| — | 2026-06-08 | Programme | Initial register; EN 304 223 V2.1.1 recorded; harmonised watch seeded | 2026-12-31 |
 
 ---
 
 ## 7. Related documents
 
+- [ETSI-EN-304-223-GAP-CHECKLIST.md](ETSI-EN-304-223-GAP-CHECKLIST.md) — EEV-008
 - [ETSI-SAI-ALIGNMENT.md](ETSI-SAI-ALIGNMENT.md)
 - [EU-LEGISLATION-MONITORING.md](EU-LEGISLATION-MONITORING.md)
 - [STANDARDS-REGISTER.md](STANDARDS-REGISTER.md) — STD-042, STD-043

@@ -6,7 +6,7 @@
 meta:
   register_version: "1.0.0"
   owner: "ISMS Lead"
-  last_updated: "2026-06-08"
+  last_updated: "2026-06-09"
   review_cycle: "quarterly"
 
 settings:
@@ -70,6 +70,10 @@ required_files:
     check_id: MON-007
   - path: docs/compliance/HARMONISED-STANDARDS-MONITORING.md
     check_id: MON-007
+  - path: docs/compliance/ETSI-EN-304-223-GAP-CHECKLIST.md
+    check_id: MON-007
+  - path: docs/compliance/EXTERNAL-ACTION-EXECUTION-GUIDE.md
+    check_id: MON-007
 
 yaml_registers:
   - path: compliance/compliance_action_tracker.yaml
@@ -91,6 +95,8 @@ yaml_registers:
   - path: compliance/legislation_register.yaml
     check_id: MON-006
   - path: compliance/standards_watch.yaml
+    check_id: MON-006
+  - path: compliance/execution_evidence_register.yaml
     check_id: MON-006
   - path: compliance/maintenance_monitor.yaml
     check_id: MON-006
@@ -134,6 +140,9 @@ schema_validation:
   - check_id: MON-009
     register: compliance/standards_watch.yaml
     schema: compliance/schemas/standards_watch.schema.json
+  - check_id: MON-009
+    register: compliance/execution_evidence_register.yaml
+    schema: compliance/schemas/execution_evidence_register.schema.json
 
 procedure_coverage:
   check_id: MON-010

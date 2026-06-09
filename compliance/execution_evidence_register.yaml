@@ -1,0 +1,146 @@
+---
+# Execution Evidence Register — baseline programme runs and external-action packages
+# Generated: 2026-06-09 (execution wave PM-014)
+# Owner: ISMS Lead
+# Human-readable: docs/compliance/EXTERNAL-ACTION-EXECUTION-GUIDE.md
+# Procedure: docs/procedures/PROC-CMP-001-Compliance-Review.md
+
+meta:
+  register_version: "1.0.0"
+  owner: "ISMS Lead"
+  last_updated: "2026-06-09"
+  review_cycle: "quarterly"
+  procedure: "docs/procedures/PROC-CMP-001-Compliance-Review.md"
+  action_tracker: "compliance/compliance_action_tracker.yaml"
+
+schema:
+  evidence_id: "EEV-### unique identifier"
+  evidence_type: "assessment | audit | scan | test_report | playbook"
+  validation_tier: "programme_baseline | external"
+  linked_action: "ACT-### when applicable"
+
+records:
+  - evidence_id: EEV-001
+    title: "Baseline PROC-AI-002 fairness test (limited-risk models)"
+    evidence_type: test_report
+    validation_tier: programme_baseline
+    linked_action: ACT-004
+    artefact: "docs/evidence/reports/FTR-2026-001-baseline-fairness.md"
+    completed_date: "2026-06-09"
+    owner: "AI Lead"
+    notes: >
+      Desk-based baseline using synthetic cohorts; not a production fairness certification.
+      Recurring PROC-AI-002 cycles remain on quarterly AI governance calendar.
+
+  - evidence_id: EEV-002
+    title: "Baseline ISO 27001 internal audit (desk review)"
+    evidence_type: audit
+    validation_tier: programme_baseline
+    linked_action: ACT-011
+    artefact: "docs/evidence/reports/IA-2026-01-baseline-internal-audit.md"
+    completed_date: "2026-06-09"
+    owner: "ISMS Lead"
+    notes: >
+      Programme self-assessment against Annex A sample; independent auditor engagement
+      and CAPA closure remain external validation targets.
+
+  - evidence_id: EEV-003
+    title: "PROC-AI-003 threat assessment — luminous"
+    evidence_type: assessment
+    validation_tier: programme_baseline
+    linked_action: ACT-013
+    artefact: "docs/evidence/proc-ai-003/AST-2026-001-luminous.md"
+    completed_date: "2026-06-09"
+    owner: "AI Lead / Security Ops"
+    model_id: luminous
+
+  - evidence_id: EEV-004
+    title: "PROC-AI-003 threat assessment — turings_hub"
+    evidence_type: assessment
+    validation_tier: programme_baseline
+    linked_action: ACT-013
+    artefact: "docs/evidence/proc-ai-003/AST-2026-002-turings_hub.md"
+    completed_date: "2026-06-09"
+    owner: "AI Lead / Security Ops"
+    model_id: turings_hub
+
+  - evidence_id: EEV-005
+    title: "PROC-AI-003 threat assessment — mlflow_experiments"
+    evidence_type: assessment
+    validation_tier: programme_baseline
+    linked_action: ACT-013
+    artefact: "docs/evidence/proc-ai-003/AST-2026-003-mlflow_experiments.md"
+    completed_date: "2026-06-09"
+    owner: "AI Lead / Security Ops"
+    model_id: mlflow_experiments
+
+  - evidence_id: EEV-006
+    title: "First quarterly EUR-Lex delegated-act scan (EU AI Act)"
+    evidence_type: scan
+    validation_tier: programme_baseline
+    linked_action: ACT-014
+    artefact: "docs/compliance/EU-LEGISLATION-MONITORING.md"
+    artefact_section: "§6 Review log — SCAN-2026-Q2-01"
+    completed_date: "2026-06-09"
+    owner: "AI Lead / DPO"
+    notes: >
+      No OJ-published delegated acts under CELEX 32024R1689 at scan date; GPAI Code of
+      Practice published Jul 2025 (monitor). High-risk deadline 2 Aug 2026 — track Omnibus.
+
+  - evidence_id: EEV-007
+    title: "First semi-annual harmonised standards and ETSI watch (baseline)"
+    evidence_type: scan
+    validation_tier: programme_baseline
+    linked_action: ACT-015
+    artefact: "docs/compliance/HARMONISED-STANDARDS-MONITORING.md"
+    artefact_section: "§6 Review log — WATCH-2026-H1-01"
+    completed_date: "2026-06-09"
+    owner: "AI Lead / ISMS Lead"
+    notes: >
+      EN 304 223 V2.1.1 unchanged; JTC21 drafts monitored; no OJEU harmonised AI security
+      standard listed. Next semi-annual due 2026-12-31.
+
+  - evidence_id: EEV-008
+    title: "ETSI EN 304 223 programme gap checklist (baseline)"
+    evidence_type: assessment
+    validation_tier: programme_baseline
+    linked_action: ACT-015
+    artefact: "docs/compliance/ETSI-EN-304-223-GAP-CHECKLIST.md"
+    completed_date: "2026-06-09"
+    owner: "AI Lead / CISO"
+
+external_action_packages:
+  description: >
+    Playbooks for actions that cannot close from repository work alone. Each package
+    links to EXTERNAL-ACTION-EXECUTION-GUIDE.md sections.
+  items:
+    - action_id: ACT-001
+      playbook_section: "§3.1 SUP-003 PSP DPA"
+      status: open
+    - action_id: ACT-002
+      playbook_section: "§3.2 SUP-005 health connector BAA/DPA"
+      status: open
+    - action_id: ACT-003
+      playbook_section: "§3.3 ICO registration"
+      status: open
+    - action_id: ACT-005
+      playbook_section: "§3.4 External penetration test"
+      status: open
+    - action_id: ACT-006
+      playbook_section: "§3.5 Tranc3 HIPAA Tier A PR"
+      status: in_progress
+    - action_id: ACT-007
+      playbook_section: "§3.6 Policy attestation cycle"
+      status: open
+    - action_id: ACT-008
+      playbook_section: "§3.7 SOC 2 Type II observation"
+      status: open
+    - action_id: ACT-009
+      playbook_section: "§3.8 magna_carta.py boundary enforcement"
+      status: open
+    - action_id: ACT-010
+      playbook_section: "§3.9 SUP-004 US AI fallback"
+      status: open
+    - action_id: ACT-012
+      playbook_section: "§3.10 BCP restore tests (P0 databases)"
+      status: open

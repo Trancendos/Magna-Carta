@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/execution_evidence_register.schema.json",
+  "title": "Execution Evidence Register",
+  "type": "object",
+  "required": ["meta", "records"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" },
+        "procedure": { "type": "string" },
+        "action_tracker": { "type": "string" }
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "evidence_id",
+          "title",
+          "evidence_type",
+          "validation_tier",
+          "artefact",
+          "completed_date",
+          "owner"
+        ],
+        "properties": {
+          "evidence_id": { "type": "string", "pattern": "^EEV-[0-9]{3}$" },
+          "title": { "type": "string" },
+          "evidence_type": {
+            "type": "string",
+            "enum": ["assessment", "audit", "scan", "test_report", "playbook"]
+          },
+          "validation_tier": {
+            "type": "string",
+            "enum": ["programme_baseline", "external"]
+          },
+          "linked_action": { "type": "string", "pattern": "^ACT-[0-9]{3}$" },
+          "artefact": { "type": "string" },
+          "artefact_section": { "type": "string" },
+          "completed_date": { "type": "string", "format": "date" },
+          "owner": { "type": "string" },
+          "model_id": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "external_action_packages": { "type": "object" }
+  }
+}

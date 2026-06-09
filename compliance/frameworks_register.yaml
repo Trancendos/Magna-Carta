@@ -2,11 +2,11 @@
 meta:
   register_version: 1.0.0
   owner: ISMS Lead
-  last_updated: '2026-06-08'
+  last_updated: '2026-06-09'
   review_cycle: quarterly
   procedure: docs/procedures/PROC-CMP-001-Compliance-Review.md
   human_readable: docs/compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md
-  framework_count: 112
+  framework_count: 114
 schema:
   framework_id: FW-### unique identifier
   name: Framework or regulation name
@@ -692,3 +692,15 @@ frameworks:
   applicability: not_applicable
   programme_status: programme
   readiness_doc: docs/compliance/POPIA-READINESS.md
+- framework_id: FW-131
+  name: ETSI EN 304 223 (Securing AI baseline)
+  category: eu_industry
+  applicability: reference
+  programme_status: programme
+  readiness_doc: docs/compliance/ETSI-SAI-ALIGNMENT.md
+- framework_id: FW-132
+  name: OWASP AI Exchange
+  category: eu_industry
+  applicability: applicable
+  programme_status: programme
+  readiness_doc: docs/compliance/OWASP-AI-EXCHANGE-ALIGNMENT.md

@@ -1,7 +1,7 @@
 # ETSI SAI Alignment (EN 304 223)
 
-**Version:** 1.0.0  
-**Date:** 2026-06-08  
+**Version:** 1.1.0  
+**Date:** 2026-06-09  
 **Owner:** AI Lead / CISO  
 **Source:** [ETSI EN 304 223](https://www.etsi.org/deliver/etsi_en/304200_304299/304223/) (TC SAI, V2.1.1)  
 **Review cycle:** Semi-annual (with AI-GOVERNANCE and PROC-CMP-001)
@@ -91,7 +91,9 @@ Use PROC-AI-003 as the operational assessment vehicle:
 3. Record outcome in model card security annex; link to ACT-013 evidence.
 4. Escalate material gaps to CAPA per PROC-CAPA-001.
 
-**First assessment cycle:** ACT-013 (due 2026-12-31).
+**Baseline checklist:** [ETSI-EN-304-223-GAP-CHECKLIST.md](ETSI-EN-304-223-GAP-CHECKLIST.md) — first programme assessment completed 2026-06-09 (EEV-008; ACT-015 baseline closed). Per-model PROC-AI-003 records: `docs/evidence/proc-ai-003/AST-2026-001` through `AST-2026-003` (EEV-003–005; ACT-013 closed as programme baseline).
+
+**Re-assessment:** On material model or infrastructure change; cross-ref semi-annual watch (ACT-015 recurring) and external pen test (ACT-005).
 
 ---
 
@@ -101,8 +103,11 @@ Use PROC-AI-003 as the operational assessment vehicle:
 - [AI-SECURITY-THREAT-MODEL.md](AI-SECURITY-THREAT-MODEL.md)
 - [PROC-AI-003](../procedures/PROC-AI-003-AI-Security-Threat-Assessment.md)
 - [HARMONISED-STANDARDS-MONITORING.md](HARMONISED-STANDARDS-MONITORING.md)
+- [ETSI-EN-304-223-GAP-CHECKLIST.md](ETSI-EN-304-223-GAP-CHECKLIST.md)
 - [EU-LEGISLATION-MONITORING.md](EU-LEGISLATION-MONITORING.md)
+- [EXTERNAL-ACTION-EXECUTION-GUIDE.md](EXTERNAL-ACTION-EXECUTION-GUIDE.md)
 - `compliance/standards_watch.yaml`
+- `compliance/execution_evidence_register.yaml`
 
 ---
 
@@ -111,5 +116,6 @@ Use PROC-AI-003 as the operational assessment vehicle:
 | Date | Change | Author |
 |------|--------|--------|
 | 2026-06-08 | Initial ETSI SAI alignment (PM-013 programme wave) | ISMS Lead |
+| 2026-06-09 | First gap checklist baseline; ACT-013/015 programme closures (PM-014) | ISMS Lead |
 
 **Next review:** 2026-12-08 (PROC-CMP-001 semi-annual window)

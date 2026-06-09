@@ -1,7 +1,7 @@
 # EU Legislation Monitoring Register
 
-**Version:** 1.0.0  
-**Date:** 2026-06-08  
+**Version:** 1.1.0  
+**Date:** 2026-06-09  
 **Owner:** DPO / AI Lead  
 **Status:** ✅ Programme — structured EUR-Lex monitoring (replaces ad-hoc EU scans)
 
@@ -47,7 +47,7 @@ Full metadata: `compliance/legislation_register.yaml` → `active_legislation`.
 ## 4. Quarterly review workflow (ACT-014)
 
 **Cadence:** Quarterly, aligned with PROC-CMP-001 (same window as UK legislation scan).  
-**First run due:** 2026-09-30 (see ACT-014).
+**First baseline run:** 2026-06-09 (SCAN-2026-Q2-01 — ACT-014 closed as programme baseline). **Next quarterly run:** 2026-09-30.
 
 ### Step 1 — Parent act check (15 min)
 
@@ -104,7 +104,18 @@ Citation standards: [EUR-LEX-ELI-REFERENCE.md](EUR-LEX-ELI-REFERENCE.md).
 
 ---
 
-## 6. Escalation
+## 6. Review log (operational)
+
+| Scan ID | Date | Reviewer | Summary | Next due |
+|---------|------|----------|---------|----------|
+| SCAN-2026-Q2-01 | 2026-06-09 | AI Lead / DPO | No OJ-published delegated acts under CELEX 32024R1689 at scan date. GPAI Code of Practice published Jul 2025 — monitor. High-risk deadline 2 Aug 2026 — track Digital Omnibus proposals. `secondary_legislation_watch` last_checked → 2026-06-09. | 2026-09-30 |
+| — | 2026-06-08 | Programme | Initial register seeded | 2026-09-30 🎯 |
+
+**Evidence:** EEV-006 · [execution_evidence_register.yaml](../../compliance/execution_evidence_register.yaml)
+
+---
+
+## 7. Escalation
 
 | Severity | Example | Action | Timeline |
 |----------|---------|--------|----------|
@@ -114,7 +125,7 @@ Citation standards: [EUR-LEX-ELI-REFERENCE.md](EUR-LEX-ELI-REFERENCE.md).
 
 ---
 
-## 7. Related documents
+## 8. Related documents
 
 - [LEGISLATION-REGISTER.md](LEGISLATION-REGISTER.md)
 - [OBLIGATIONS-REGISTER.md](OBLIGATIONS-REGISTER.md) §5
