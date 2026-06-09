@@ -1,110 +1,407 @@
----
-# Proactive scope signals — machine-readable deployment/operator flags
-# Drives framework_triggers.yaml and MON-016 enforcement alignment checks.
-# Owner: ISMS Lead / Platform Engineering
-# No separate human doc required; health check validates consistency.
-
 meta:
-  register_version: "1.0.0"
-  owner: "ISMS Lead"
-  last_updated: "2026-06-09"
-  review_cycle: "quarterly"
-  runtime_config: "config/magna_carta_config.json"
-  trigger_register: "compliance/framework_triggers.yaml"
-
+  register_version: 1.1.0
+  owner: ISMS Lead
+  last_updated: '2026-06-09'
+  review_cycle: quarterly
+  runtime_config: config/magna_carta_config.json
+  trigger_register: compliance/framework_triggers.yaml
 schema:
-  signal_id: "SIG-XXX-### unique identifier"
-  state: "inactive | active | unknown"
-  detection: "ordered list of sources; first match wins"
-
+  signal_id: SIG-XXX-### unique identifier
+  state: inactive | active | unknown
 signals:
-  - signal_id: SIG-HIPAA-001
-    name: "HIPAA health data profile"
-    description: "US PHI processing or wellbeing connectors enabled"
-    default_state: inactive
-    detection:
-      - source: config
-        path: config/magna_carta_config.json
-        json_path: profiles.HIPAA_PROFILE
-        active_values: ["enabled", "true", "1"]
-      - source: env
-        variable: HIPAA_PROFILE
-        active_values: ["enabled", "true", "1"]
-
-  - signal_id: SIG-CCPA-001
-    name: "California consumer data scope"
-    description: "Processing personal information of California residents"
-    default_state: inactive
-    detection:
-      - source: config
-        path: config/magna_carta_config.json
-        json_path: profiles.CCPA_SCOPE
-        active_values: ["enabled", "true", "1"]
-      - source: env
-        variable: CCPA_SCOPE
-        active_values: ["enabled", "true", "1"]
-
-  - signal_id: SIG-PCI-001
-    name: "Cardholder data environment"
-    description: "Platform stores, processes, or transmits cardholder data"
-    default_state: inactive
-    detection:
-      - source: config
-        path: config/magna_carta_config.json
-        json_path: profiles.PCI_SCOPE
-        active_values: ["enabled", "true", "1"]
-      - source: env
-        variable: PCI_SCOPE
-        active_values: ["enabled", "true", "1"]
-
-  - signal_id: SIG-FEDRAMP-001
-    name: "US federal government workload"
-    description: "FedRAMP-authorised or federal-agency deployment scope"
-    default_state: inactive
-    detection:
-      - source: config
-        path: config/magna_carta_config.json
-        json_path: profiles.FEDRAMP_SCOPE
-        active_values: ["enabled", "true", "1"]
-      - source: env
-        variable: FEDRAMP_SCOPE
-        active_values: ["enabled", "true", "1"]
-
-  - signal_id: SIG-LGPD-001
-    name: "Brazil data subject scope"
-    description: "Processing personal data of individuals in Brazil"
-    default_state: inactive
-    detection:
-      - source: config
-        path: config/magna_carta_config.json
-        json_path: profiles.LGPD_SCOPE
-        active_values: ["enabled", "true", "1"]
-      - source: env
-        variable: LGPD_SCOPE
-        active_values: ["enabled", "true", "1"]
-
-  - signal_id: SIG-AI-US-001
-    name: "US AI inference fallback"
-    description: "Optional US-hosted AI sub-processor enabled (SUP-004)"
-    default_state: inactive
-    detection:
-      - source: config
-        path: config/magna_carta_config.json
-        json_path: profiles.US_AI_FALLBACK
-        active_values: ["enabled", "true", "1"]
-      - source: env
-        variable: US_AI_FALLBACK
-        active_values: ["enabled", "true", "1"]
-
-  - signal_id: SIG-PAYMENTS-001
-    name: "Production payment routing"
-    description: "Live PSP payment routing (not sandbox)"
-    default_state: inactive
-    detection:
-      - source: config
-        path: config/magna_carta_config.json
-        json_path: profiles.PAYMENTS_LIVE
-        active_values: ["enabled", "true", "1"]
-      - source: env
-        variable: PAYMENTS_LIVE
-        active_values: ["enabled", "true", "1"]
+- signal_id: SIG-CORE-001
+  name: Platform baseline
+  description: Scope signal for Platform baseline
+  default_state: active
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.CORE_PLATFORM
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: CORE_PLATFORM
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-GDPR-001
+  name: UK/EU GDPR scope
+  description: Scope signal for UK/EU GDPR scope
+  default_state: active
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.GDPR_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: GDPR_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-AI-001
+  name: AI governance scope
+  description: Scope signal for AI governance scope
+  default_state: active
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.AI_GOVERNANCE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: AI_GOVERNANCE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-PECR-001
+  name: UK PECR / ePrivacy
+  description: Scope signal for UK PECR / ePrivacy
+  default_state: active
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.PECR_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: PECR_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-ISO-001
+  name: ISO certification pursuit
+  description: Scope signal for ISO certification pursuit
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.ISO_CERTIFICATION_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: ISO_CERTIFICATION_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-SOC-001
+  name: SOC assurance track
+  description: Scope signal for SOC assurance track
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.SOC_AUDIT_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: SOC_AUDIT_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-NIST-001
+  name: NIST family baseline
+  description: Scope signal for NIST family baseline
+  default_state: active
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.NIST_BASELINE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: NIST_BASELINE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-GLOBAL-PRIVACY-001
+  name: International privacy pack
+  description: Scope signal for International privacy pack
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.GLOBAL_PRIVACY_PACK
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: GLOBAL_PRIVACY_PACK
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-INTL-ASSURANCE-001
+  name: International assurance bids
+  description: Scope signal for International assurance bids
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.INTL_ASSURANCE_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: INTL_ASSURANCE_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-US-GOV-001
+  name: US government readiness
+  description: Scope signal for US government readiness
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.US_GOV_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: US_GOV_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-EU-INDUSTRY-001
+  name: EU industry sector
+  description: Scope signal for EU industry sector
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.EU_INDUSTRY_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: EU_INDUSTRY_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-PCI-001
+  name: Cardholder data environment
+  description: Scope signal for Cardholder data environment
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.PCI_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: PCI_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-HIPAA-001
+  name: HIPAA health data profile
+  description: Scope signal for HIPAA health data profile
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.HIPAA_PROFILE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: HIPAA_PROFILE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-CCPA-001
+  name: California consumer data scope
+  description: Scope signal for California consumer data scope
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.CCPA_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: CCPA_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-FEDRAMP-001
+  name: US federal government workload
+  description: Scope signal for US federal government workload
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.FEDRAMP_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: FEDRAMP_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-LGPD-001
+  name: Brazil data subject scope
+  description: Scope signal for Brazil data subject scope
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.LGPD_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: LGPD_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-POPIA-001
+  name: South Africa POPIA
+  description: Scope signal for South Africa POPIA
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.POPIA_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: POPIA_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-AI-US-001
+  name: US AI inference fallback
+  description: Scope signal for US AI inference fallback
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.US_AI_FALLBACK
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: US_AI_FALLBACK
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-PAYMENTS-001
+  name: Production payment routing
+  description: Scope signal for Production payment routing
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.PAYMENTS_LIVE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: PAYMENTS_LIVE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-DORA-001
+  name: DORA financial sector
+  description: Scope signal for DORA financial sector
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.DORA_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: DORA_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-NHS-001
+  name: NHS DSPT / health UK
+  description: Scope signal for NHS DSPT / health UK
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.NHS_DSPT_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: NHS_DSPT_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+- signal_id: SIG-CMMC-001
+  name: CMMC defense contractors
+  description: Scope signal for CMMC defense contractors
+  default_state: inactive
+  detection:
+  - source: config
+    path: config/magna_carta_config.json
+    json_path: profiles.CMMC_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'
+  - source: env
+    variable: CMMC_SCOPE
+    active_values:
+    - enabled
+    - 'true'
+    - '1'

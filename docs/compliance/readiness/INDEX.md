@@ -15,6 +15,16 @@
 
 **Honesty rule:** Programme ✅ in these documents means policies, procedures, registers, and mapping exist in Magna Carta (layer 2). External certification, government authorisation, or customer-specific attestation is layer 3 and requires operational evidence.
 
+**Implementation automation:** Per-framework implementation mapping (signal, trigger, auto-checks, config profile) lives in [`compliance/framework_implementation_catalog.yaml`](../../../compliance/framework_implementation_catalog.yaml). Scope signals and group triggers are in `compliance/proactive_signals.yaml` and `compliance/framework_triggers.yaml`. MON-018 in `scripts/compliance_health_check.py` verifies catalog ↔ register ↔ trigger alignment.
+
+---
+
+## Not applicable (position statements)
+
+| Document | Purpose |
+|----------|---------|
+| [NOT-APPLICABLE-POSITION.md](NOT-APPLICABLE-POSITION.md) | Formal NA rationale for frameworks marked `not_applicable` in the register (e.g. ITAR, EAR-only, sector-specific regimes outside current scope) |
+
 ---
 
 ## Grouped readiness documents

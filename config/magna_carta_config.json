@@ -4,8 +4,8 @@
     "version": "1.0.0",
     "platform": "Tranc3 / Trancendos",
     "owner": "Trancendos Platform Engineering",
-    "classification": "UNCLASSIFIED — PUBLIC",
-    "last_updated": "2026-06-07",
+    "classification": "UNCLASSIFIED \u2014 PUBLIC",
+    "last_updated": "2026-06-09",
     "review_cycle": "quarterly",
     "documentation_repo": "https://github.com/Trancendos/magna-carta",
     "register_path": "compliance/magna_carta_register.yaml"
@@ -25,7 +25,22 @@
     "FEDRAMP_SCOPE": "disabled",
     "LGPD_SCOPE": "disabled",
     "US_AI_FALLBACK": "disabled",
-    "PAYMENTS_LIVE": "disabled"
+    "PAYMENTS_LIVE": "disabled",
+    "CORE_PLATFORM": "enabled",
+    "GDPR_SCOPE": "enabled",
+    "AI_GOVERNANCE": "enabled",
+    "PECR_SCOPE": "enabled",
+    "ISO_CERTIFICATION_SCOPE": "disabled",
+    "SOC_AUDIT_SCOPE": "disabled",
+    "NIST_BASELINE": "enabled",
+    "GLOBAL_PRIVACY_PACK": "disabled",
+    "INTL_ASSURANCE_SCOPE": "disabled",
+    "US_GOV_SCOPE": "disabled",
+    "EU_INDUSTRY_SCOPE": "disabled",
+    "POPIA_SCOPE": "disabled",
+    "DORA_SCOPE": "disabled",
+    "NHS_DSPT_SCOPE": "disabled",
+    "CMMC_SCOPE": "disabled"
   },
   "rules": [
     {
@@ -38,8 +53,17 @@
       "severity": "high",
       "enabled": true,
       "scope": {
-        "paths": ["/api/*", "/townhall/*", "/vault/*"],
-        "exclude_paths": ["/health", "/metrics", "/docs", "/openapi.json"]
+        "paths": [
+          "/api/*",
+          "/townhall/*",
+          "/vault/*"
+        ],
+        "exclude_paths": [
+          "/health",
+          "/metrics",
+          "/docs",
+          "/openapi.json"
+        ]
       },
       "checks": [
         "jwt_present",
@@ -88,9 +112,15 @@
         "violation_logged"
       ],
       "tiers": {
-        "free": { "requests_per_hour": 100 },
-        "pro": { "requests_per_hour": 1000 },
-        "business": { "requests_per_hour": 10000 }
+        "free": {
+          "requests_per_hour": 100
+        },
+        "pro": {
+          "requests_per_hour": 1000
+        },
+        "business": {
+          "requests_per_hour": 10000
+        }
       }
     },
     {
@@ -104,7 +134,11 @@
       "severity": "high",
       "enabled": true,
       "scope": {
-        "paths": ["/ai/*", "/infinity-ai/*", "/model-router/*"]
+        "paths": [
+          "/ai/*",
+          "/infinity-ai/*",
+          "/model-router/*"
+        ]
       },
       "checks": [
         "model_registered",
@@ -210,11 +244,15 @@
       "description": "When HIPAA_PROFILE is enabled, PHI must use encrypted storage, US residency, BAA coverage, blocked external AI egress, and tiered marketing claims.",
       "policy_ref": "docs/compliance/HIPAA-ALIGNMENT.md",
       "magna_carta_ref": "MC-008",
-      "hipaa_ref": "45 CFR §164.312",
+      "hipaa_ref": "45 CFR \u00a7164.312",
       "severity": "high",
       "enabled": true,
       "scope": {
-        "paths": ["/sync/*", "/wellbeing/*", "/health/*"],
+        "paths": [
+          "/sync/*",
+          "/wellbeing/*",
+          "/health/*"
+        ],
         "profile_flag": "HIPAA_PROFILE=enabled"
       },
       "checks": [

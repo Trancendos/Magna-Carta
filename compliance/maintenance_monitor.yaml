@@ -104,6 +104,8 @@ yaml_registers:
     check_id: MON-006
   - path: compliance/framework_triggers.yaml
     check_id: MON-006
+  - path: compliance/framework_implementation_catalog.yaml
+    check_id: MON-006
 
 proactive_monitoring:
   signals_register: compliance/proactive_signals.yaml
@@ -164,6 +166,20 @@ trigger_integrity:
   signals_register: compliance/proactive_signals.yaml
   frameworks_register: compliance/frameworks_register.yaml
 
+framework_implementation:
+  check_id: MON-018
+  catalog: compliance/framework_implementation_catalog.yaml
+  frameworks_register: compliance/frameworks_register.yaml
+  triggers_register: compliance/framework_triggers.yaml
+  signals_register: compliance/proactive_signals.yaml
+  items_key: frameworks
+  entries_key: entries
+  require_coverage_for_applicability:
+    - applicable
+    - conditional
+  exclude_status:
+    - not_applicable
+
 weekly_cadence:
   check_id: MON-008
   max_gap_days: 7
@@ -212,6 +228,9 @@ schema_validation:
   - check_id: MON-009
     register: compliance/framework_triggers.yaml
     schema: compliance/schemas/framework_triggers.schema.json
+  - check_id: MON-009
+    register: compliance/framework_implementation_catalog.yaml
+    schema: compliance/schemas/framework_implementation_catalog.schema.json
 
 procedure_coverage:
   check_id: MON-010

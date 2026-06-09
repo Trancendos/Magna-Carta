@@ -21,7 +21,7 @@
 | ❌ N/A | — | Not applicable today (justification recorded) |
 | 🎯 | — | External certification or validation target date |
 
-**Machine-readable mirror:** `compliance/frameworks_register.yaml` (MON-009 validated).
+**Machine-readable mirrors:** `compliance/frameworks_register.yaml` (MON-009), `compliance/framework_implementation_catalog.yaml` (MON-009 / MON-018), `compliance/framework_triggers.yaml`, `compliance/proactive_signals.yaml`.
 
 ---
 
@@ -204,7 +204,31 @@
 
 ---
 
-## 10. Summary statistics (2026-06-09)
+## 10. Matrix-only and extended catalogue (FW-133–FW-145)
+
+Frameworks previously referenced only in [REGULATION-MATRIX.md](REGULATION-MATRIX.md) or assurance matrices — now fully registered with proactive trigger wiring:
+
+| FW-ID | Framework | Applicability | Programme | Cert 🎯 | Readiness doc |
+|-------|-----------|---------------|-----------|---------|---------------|
+| FW-133 | EU AI Act (2024/1689) | ✅ Applicable | ✅ Programme | — | [AI-GOVERNANCE.md](AI-GOVERNANCE.md) |
+| FW-134 | UK PECR | ✅ Applicable | ✅ Programme | — | [PECR-ALIGNMENT.md](PECR-ALIGNMENT.md) |
+| FW-135 | CIS Controls v8 | 📚 Reference | ✅ Programme | — | readiness/NIST-FAMILY-READINESS |
+| FW-136 | OWASP Top 10 (2021) | ✅ Applicable | ✅ Programme | — | [REGULATION-MATRIX.md](REGULATION-MATRIX.md) |
+| FW-137 | OWASP ASVS Level 2 | ⚠️ Conditional | ✅ Programme | — | [ASVS-GAP-CHECKLIST.md](ASVS-GAP-CHECKLIST.md) |
+| FW-138 | NIST AI RMF 1.0 | ✅ Applicable | ✅ Programme | — | [AI-GOVERNANCE.md](AI-GOVERNANCE.md) |
+| FW-139 | ITIL 4 | ✅ Applicable | ✅ Programme | — | [REGULATION-MATRIX.md](REGULATION-MATRIX.md) |
+| FW-140 | PRINCE2 7 | ✅ Applicable | ✅ Programme | — | [REGULATION-MATRIX.md](REGULATION-MATRIX.md) |
+| FW-141 | UK Research Integrity Concordat | 📚 Reference | ✅ Programme | — | [REGULATION-MATRIX.md](REGULATION-MATRIX.md) |
+| FW-142 | ISO/IEC 27002:2022 | ✅ Applicable | ✅ Programme | — | readiness/ISO-FAMILY-READINESS |
+| FW-143 | UK Companies Act 2006 (governance) | ✅ Applicable | ✅ Programme | — | [COMPANIES-ACT-ALIGNMENT.md](COMPANIES-ACT-ALIGNMENT.md) |
+| FW-144 | OWASP GenAI / LLM Top 10 | ✅ Applicable | ✅ Programme | — | [AI-SECURITY-THREAT-MODEL.md](AI-SECURITY-THREAT-MODEL.md) |
+| FW-145 | DEF STAN 05-138 (standalone) | ✅ Applicable | ✅ Programme | — | [DEFSTAN-ALIGNMENT.md](DEFSTAN-ALIGNMENT.md) |
+
+**Not-applicable position statements:** [readiness/NOT-APPLICABLE-POSITION.md](readiness/NOT-APPLICABLE-POSITION.md) (FW-011, FW-028, FW-058, FW-068).
+
+---
+
+## 11. Summary statistics (2026-06-09)
 
 | Category | Count | ✅ Programme | 📋 Readiness | ❌ N/A |
 |----------|-------|-------------|-------------|--------|
@@ -217,13 +241,13 @@
 | EU / industry | 9 | 0 | 9 | 0 |
 | AI security | 2 | 2 | 0 | 0 |
 | Privacy | 21 | 4 | 15 | 2 |
-| **Total** | **114** | **19** | **86** | **9** |
+| **Total** | **127** | **49** | **67** | **7** |
 
-*Note: User list deduplicated (e.g. ISO 20000 once). Vendor catalogues (KY3P, ProcessUnity, Pinakes, PiTuKri) are readiness-mapped for questionnaire response, not certification targets.*
+*Partial programme (4): ISO 27001 family gaps, SOC 2 Type II, PCI DSS, Cyber Essentials Plus path. Vendor catalogues (KY3P, ProcessUnity, Pinakes, PiTuKri) are readiness-mapped for questionnaire response, not certification targets. Implementation wiring validated by MON-018 against `compliance/framework_implementation_catalog.yaml`.*
 
 ---
 
-## 11. Layer activation guide
+## 12. Layer activation guide
 
 | Layer | What "started" means | Current state |
 |-------|---------------------|---------------|

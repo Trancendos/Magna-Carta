@@ -64,7 +64,7 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [docs/compliance/HARMONISED-STANDARDS-MONITORING.md](docs/compliance/HARMONISED-STANDARDS-MONITORING.md) | Semi-annual ETSI + CEN/CENELEC harmonised standards watch |
 | [compliance/standards_watch.yaml](compliance/standards_watch.yaml) | Machine-readable ETSI / harmonised standards register |
 | [docs/compliance/STANDARDS-REGISTER.md](docs/compliance/STANDARDS-REGISTER.md) | ISO, NIST, DEFSTAN, OWASP and framework standards |
-| [docs/compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md](docs/compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md) | Master catalogue (FW-001–FW-130, 112 frameworks) |
+| [docs/compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md](docs/compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md) | Master catalogue (FW-001–FW-145, 127 frameworks) |
 | [docs/compliance/readiness/INDEX.md](docs/compliance/readiness/INDEX.md) | Grouped readiness docs (ISO, SOC, PCI, NIST, privacy, gov) |
 | [docs/compliance/REGULATORS-OMBUDSMEN-REGISTER.md](docs/compliance/REGULATORS-OMBUDSMEN-REGISTER.md) | Regulators, supervisory authorities, ombudsmen |
 | [docs/compliance/SYSTEMS-REGISTER.md](docs/compliance/SYSTEMS-REGISTER.md) | Governance and compliance systems (Town Hall, registers, CI) |
@@ -156,6 +156,10 @@ This repository is the **canonical documentation home** for Magna Carta. Runtime
 | [compliance/risk_register.yaml](compliance/risk_register.yaml) | Machine-readable risk register |
 | [compliance/policy_attestation_register.yaml](compliance/policy_attestation_register.yaml) | Machine-readable policy attestation register |
 | [compliance/frameworks_register.yaml](compliance/frameworks_register.yaml) | Machine-readable frameworks catalogue (MON-009) |
+| [compliance/framework_implementation_catalog.yaml](compliance/framework_implementation_catalog.yaml) | Per-framework implementation tier, signal, and trigger (MON-018) |
+| [compliance/proactive_signals.yaml](compliance/proactive_signals.yaml) | Scope signals for optional/conditional frameworks |
+| [compliance/framework_triggers.yaml](compliance/framework_triggers.yaml) | Enforcement and scan wiring when signals activate |
+| [scripts/generate_framework_implementation.py](scripts/generate_framework_implementation.py) | Regenerate catalog, signals, and triggers from register |
 | [compliance/maintenance_monitor.yaml](compliance/maintenance_monitor.yaml) | Documentation health monitor configuration |
 | [compliance/health_check_history.yaml](compliance/health_check_history.yaml) | Append-only weekly health check run log |
 | [scripts/compliance_health_check.py](scripts/compliance_health_check.py) | Automated drift, staleness, and link checker |

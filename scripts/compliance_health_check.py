@@ -653,6 +653,125 @@ def check_enforcement_alignment(cfg: dict, findings: list[Finding]) -> None:
                 )
 
 
+def check_framework_implementation_coverage(cfg: dict, findings: list[Finding]) -> None:
+    """Ensure every in-scope framework has catalog + trigger wiring (MON-018)."""
+    block = cfg.get("framework_implementation", {})
+    if not block:
+        return
+    cid = block.get("check_id", "MON-018")
+    catalog = _load_yaml(block["catalog"])
+    frameworks = _load_yaml(block["frameworks_register"])
+    triggers = _load_yaml(block["triggers_register"])
+    signals = _load_yaml(block["signals_register"])
+
+    framework_list = frameworks.get(block.get("items_key", "frameworks"), [])
+    framework_by_id = {f["framework_id"]: f for f in framework_list if "framework_id" in f}
+    catalog_entries = catalog.get(block.get("entries_key", "entries"), [])
+    catalog_by_id = {e["framework_id"]: e for e in catalog_entries if "framework_id" in e}
+    signal_ids = {s.get("signal_id") for s in signals.get("signals", [])}
+    trigger_by_id = {t["trigger_id"]: t for t in triggers.get("triggers", []) if "trigger_id" in t}
+    trigger_coverage: dict[str, set[str]] = {}
+    for trig in triggers.get("triggers", []):
+        tid = trig.get("trigger_id")
+        for fid in trig.get("framework_ids", []):
+            trigger_coverage.setdefault(fid, set()).add(tid)
+
+    require_applicability = set(
+        block.get("require_coverage_for_applicability", ["applicable", "conditional"])
+    )
+    exclude_status = set(block.get("exclude_status", ["not_applicable"]))
+    expected_count = catalog.get("meta", {}).get("entry_count")
+    if expected_count is not None and expected_count != len(framework_list):
+        findings.append(
+            Finding(
+                cid,
+                "error",
+                f"Catalog entry_count {expected_count} != frameworks_register "
+                f"({len(framework_list)})",
+            )
+        )
+
+    for fid, fw in framework_by_id.items():
+        if fid not in catalog_by_id:
+            findings.append(
+                Finding(cid, "error", f"Framework {fid} missing from implementation catalog")
+            )
+            continue
+        entry = catalog_by_id[fid]
+        if entry.get("name") != fw.get("name"):
+            findings.append(
+                Finding(
+                    cid,
+                    "warning",
+                    f"Framework {fid} catalog name drift: "
+                    f"'{entry.get('name')}' vs register '{fw.get('name')}'",
+                )
+            )
+
+    for fid, fw in framework_by_id.items():
+        applicability = fw.get("applicability", "")
+        status = fw.get("programme_status", "")
+        if applicability not in require_applicability or status in exclude_status:
+            continue
+        entry = catalog_by_id.get(fid)
+        if not entry:
+            continue
+        tier = entry.get("implementation_tier", "")
+        if tier == "excluded":
+            findings.append(
+                Finding(
+                    cid,
+                    "error",
+                    f"Framework {fid} is in-scope but catalog tier is excluded",
+                )
+            )
+            continue
+        sig = entry.get("signal_id")
+        trig = entry.get("trigger_id")
+        if not sig or not trig:
+            findings.append(
+                Finding(
+                    cid,
+                    "error",
+                    f"Framework {fid} missing signal_id or trigger_id in catalog",
+                )
+            )
+            continue
+        if sig not in signal_ids:
+            findings.append(
+                Finding(cid, "error", f"Framework {fid} catalog references unknown signal {sig}")
+            )
+        if trig not in trigger_by_id:
+            findings.append(
+                Finding(cid, "error", f"Framework {fid} catalog references unknown trigger {trig}")
+            )
+        covered_by = trigger_coverage.get(fid, set())
+        if trig not in covered_by:
+            findings.append(
+                Finding(
+                    cid,
+                    "error",
+                    f"Framework {fid} trigger {trig} not listed in trigger framework_ids",
+                )
+            )
+        trig_entry = trigger_by_id.get(trig)
+        if trig_entry and trig_entry.get("signal_id") != sig:
+            findings.append(
+                Finding(
+                    cid,
+                    "error",
+                    f"Framework {fid}: catalog signal {sig} != trigger {trig} signal "
+                    f"{trig_entry.get('signal_id')}",
+                )
+            )
+
+    for fid in catalog_by_id:
+        if fid not in framework_by_id:
+            findings.append(
+                Finding(cid, "error", f"Catalog entry {fid} not in frameworks_register")
+            )
+
+
 def check_trigger_integrity(cfg: dict, findings: list[Finding]) -> None:
     block = cfg.get("trigger_integrity", {})
     if not block:
@@ -686,7 +805,7 @@ def check_trigger_integrity(cfg: dict, findings: list[Finding]) -> None:
 
 
 def check_proactive_monitoring(cfg: dict, findings: list[Finding]) -> None:
-    """Run MON-011 through MON-017 from proactive_monitoring config."""
+    """Run MON-011 through MON-018 from proactive_monitoring config."""
     pm = cfg.get("proactive_monitoring", {})
     if not pm:
         return
@@ -697,6 +816,7 @@ def check_proactive_monitoring(cfg: dict, findings: list[Finding]) -> None:
     check_evidence_recurrence(cfg, findings)
     check_enforcement_alignment(cfg, findings)
     check_trigger_integrity(cfg, findings)
+    check_framework_implementation_coverage(cfg, findings)
 
 
 def check_cookbook_links(cfg: dict, findings: list[Finding]) -> None:

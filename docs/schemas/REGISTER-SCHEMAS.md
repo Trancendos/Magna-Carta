@@ -23,6 +23,9 @@
 | `compliance/legislation_register.yaml` | 1.0.0 | DPO / Legal |
 | `compliance/standards_watch.yaml` | 1.0.0 | ISMS Lead / AI Lead |
 | `compliance/execution_evidence_register.yaml` | 1.0.0 | ISMS Lead |
+| `compliance/proactive_signals.yaml` | 1.1.0 | ISMS Lead |
+| `compliance/framework_triggers.yaml` | 1.1.0 | ISMS Lead |
+| `compliance/framework_implementation_catalog.yaml` | 1.0.0 | ISMS Lead |
 
 ---
 
@@ -185,7 +188,10 @@ Machine-readable schemas (Draft 2020-12) live in `compliance/schemas/`:
 | `legislation_register.schema.json` | `compliance/legislation_register.yaml` |
 | `standards_watch.schema.json` | `compliance/standards_watch.yaml` |
 | `execution_evidence_register.schema.json` | `compliance/execution_evidence_register.yaml` |
+| `proactive_signals.schema.json` | `compliance/proactive_signals.yaml` |
+| `framework_triggers.schema.json` | `compliance/framework_triggers.yaml` |
+| `framework_implementation_catalog.schema.json` | `compliance/framework_implementation_catalog.yaml` |
 
-`compliance_health_check.py` performs lightweight structural validation (MON-009) for all twelve register/schema pairs without requiring the `jsonschema` package. Procedure coverage (MON-010) ensures every `PROC-*.md` has matching cookbook and hymn sheet.
+`compliance_health_check.py` performs lightweight structural validation (MON-009) for all register/schema pairs without requiring the `jsonschema` package. Procedure coverage (MON-010) ensures every `PROC-*.md` has matching cookbook and hymn sheet. Framework implementation coverage (MON-018) ensures every in-scope framework has catalog and trigger wiring.
 
 **Next review:** 2026-09-06

@@ -180,16 +180,19 @@ Programme baselines closed 2026-06-09 (PM-014): ACT-004, ACT-011, ACT-013, ACT-0
 
 **Still missing (honest backlog):** Named individuals in REVIEWERS-REGISTER; operational evidence that cookbooks were exercised (drills, tickets); ACT-001–003, ACT-005–010, ACT-012 external closure; sector-specific runbooks beyond ICO/FOS/PECR starters.
 
-### 8.3 Framework catalogue wave (2026-06-08)
+### 8.3 Framework catalogue wave (2026-06-08 → 2026-06-09)
 
 | Milestone | Status |
 |-----------|--------|
-| STANDARDS-AND-FRAMEWORKS-REGISTER (FW-001–FW-132) | ✅ Programme |
+| STANDARDS-AND-FRAMEWORKS-REGISTER (FW-001–FW-145, 127 entries) | ✅ Programme |
 | Readiness groups (ISO, SOC, PCI, NIST, US gov, intl, privacy, industry) | ✅ Programme |
 | frameworks_register.yaml + schema (MON-009) | ✅ Programme |
+| framework_implementation_catalog.yaml + MON-018 trigger wiring | ✅ Programme |
+| proactive_signals.yaml (22 scope signals) + framework_triggers.yaml (22 groups) | ✅ Programme |
+| generate_framework_implementation.py (catalog regen) | ✅ Programme |
 | PM-009 / PM-010 programme milestones | ✅ Programme |
 
-**Honest gap:** Layer 3 external validation (certificates, authorisations, signed BAAs, pen test, drills) — see open ACT-001–003, ACT-005–010, ACT-012.
+**Honest gap:** Layer 3 external validation (certificates, authorisations, signed BAAs, pen test, drills) — see open ACT-001–003, ACT-005–010, ACT-012. Scope signals default **off** until operators enable profiles in `config/magna_carta_config.json`.
 
 ### 8.4 EUR-Lex / ELI programme wave (2026-06-08)
 

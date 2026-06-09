@@ -54,8 +54,16 @@ This is **not** operational certification monitoring — see ACT-001–012 for l
 | MON-006 | YAML registers parseable | error | Fix syntax |
 | MON-007 | Programme milestone docs exist (artifact model) | warning | Create missing artefact |
 | MON-008 | Last logged health check within 7 days | warning | Run weekly script |
-| MON-009 | YAML registers match JSON Schema structure (8 pairs) | error | Fix register fields |
+| MON-009 | YAML registers match JSON Schema structure | error | Fix register fields |
 | MON-010 | Every PROC-* has COOK-* and HYMN-* | error | Create missing cookbook/hymn sheet |
+| MON-011 | Legislation register review dates current | error | Update `legislation_register.yaml` |
+| MON-012 | Standards watch review dates current | error | Update `standards_watch.yaml` |
+| MON-013 | Framework readiness_doc exists on disk | error | Add or restore readiness doc |
+| MON-014 | Critical supplier DPA gates before production | warning | Close DPA negotiation |
+| MON-015 | Recurring execution evidence not overdue | error | Run evidence item / update schedule |
+| MON-016 | Active scope signals match enforcement profile | error | Align `magna_carta_config.json` |
+| MON-017 | Trigger ↔ signal ↔ framework integrity | error | Fix `framework_triggers.yaml` |
+| MON-018 | Implementation catalog covers in-scope frameworks | error | Regen catalog / fix triggers |
 
 Full config: `compliance/maintenance_monitor.yaml`
 

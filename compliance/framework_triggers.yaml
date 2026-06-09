@@ -1,149 +1,477 @@
----
-# Framework scope triggers — auto-activate protections when signals fire
-# Pattern inspired by Drata/Vanta continuous control monitoring (local, zero SaaS cost).
-# Owner: ISMS Lead
-# Consumed by: scripts/compliance_health_check.py (MON-016, MON-017)
-
 meta:
-  register_version: "1.0.0"
-  owner: "ISMS Lead"
-  last_updated: "2026-06-09"
-  review_cycle: "quarterly"
-  signals_register: "compliance/proactive_signals.yaml"
-  frameworks_register: "compliance/frameworks_register.yaml"
-  runtime_config: "config/magna_carta_config.json"
-
-schema:
-  trigger_id: "TRG-XXX-###"
-  signal_id: "SIG-XXX-### from proactive_signals.yaml"
-  on_activate: "required protections when signal is active"
-
+  register_version: 1.1.0
+  owner: ISMS Lead
+  last_updated: '2026-06-09'
+  review_cycle: quarterly
+  signals_register: compliance/proactive_signals.yaml
+  frameworks_register: compliance/frameworks_register.yaml
+  implementation_catalog: compliance/framework_implementation_catalog.yaml
+  runtime_config: config/magna_carta_config.json
 defaults:
   enforcement_mode: advisory
   fail_closed_on_violation: false
-  description: >
-    Safe default — optional frameworks remain programme/readiness until an operator
-    enables a scope signal. Health check escalates to error when signal is active but
-    enforcement profile does not match on_activate requirements.
-
+  description: Safe default — optional frameworks remain programme until an operator enables a scope signal. Health check
+    escalates when signal is active but enforcement profile does not match on_activate requirements.
 triggers:
-  - trigger_id: TRG-HIPAA-001
-    signal_id: SIG-HIPAA-001
-    framework_ids: [FW-062]
-    on_activate:
-      enforcement_mode: enforce
-      fail_closed_on_violation: true
-      rules_required_enabled: [MC-RULE-009]
-      supplier_dpa_required: [SUP-005]
-      linked_actions_must_not_be: open
-      linked_actions: [ACT-002, ACT-006]
-      programme_status_expect: programme
-    scan_checks:
-      - check_id: MON-016
-        severity: error
-      - check_id: MON-014
-        severity: error
-
-  - trigger_id: TRG-CCPA-001
-    signal_id: SIG-CCPA-001
-    framework_ids: [FW-112]
-    on_activate:
-      enforcement_mode: enforce
-      fail_closed_on_violation: true
-      rules_required_enabled: [MC-RULE-002, MC-RULE-008]
-      readiness_doc: docs/compliance/CCPA-CPRA-ALIGNMENT.md
-      programme_status_expect: programme
-    scan_checks:
-      - check_id: MON-016
-        severity: error
-
-  - trigger_id: TRG-PCI-001
-    signal_id: SIG-PCI-001
-    framework_ids: [FW-030]
-    on_activate:
-      enforcement_mode: enforce
-      fail_closed_on_violation: true
-      rules_required_enabled: [MC-RULE-001, MC-RULE-002, MC-RULE-006]
-      supplier_dpa_required: [SUP-003]
-      linked_actions: [ACT-001]
-      programme_status_expect: partial
-    scan_checks:
-      - check_id: MON-016
-        severity: error
-      - check_id: MON-014
-        severity: error
-
-  - trigger_id: TRG-FEDRAMP-001
-    signal_id: SIG-FEDRAMP-001
-    framework_ids: [FW-050]
-    on_activate:
-      enforcement_mode: enforce
-      fail_closed_on_violation: true
-      rules_required_enabled: [MC-RULE-001, MC-RULE-006, MC-RULE-007]
-      readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
-      programme_status_expect: programme
-    scan_checks:
-      - check_id: MON-016
-        severity: error
-
-  - trigger_id: TRG-LGPD-001
-    signal_id: SIG-LGPD-001
-    framework_ids: [FW-116]
-    on_activate:
-      enforcement_mode: enforce
-      fail_closed_on_violation: true
-      rules_required_enabled: [MC-RULE-002, MC-RULE-008]
-      readiness_doc: docs/compliance/LGPD-READINESS.md
-      programme_status_expect: programme
-    scan_checks:
-      - check_id: MON-016
-        severity: error
-
-  - trigger_id: TRG-AI-US-001
-    signal_id: SIG-AI-US-001
-    framework_ids: [FW-004, FW-112]
-    on_activate:
-      enforcement_mode: enforce
-      fail_closed_on_violation: true
-      rules_required_enabled: [MC-RULE-004, MC-RULE-005]
-      supplier_dpa_required: [SUP-004]
-      linked_actions: [ACT-010]
-      programme_status_expect: programme
-    scan_checks:
-      - check_id: MON-014
-        severity: error
-      - check_id: MON-016
-        severity: warning
-
-  - trigger_id: TRG-PAYMENTS-001
-    signal_id: SIG-PAYMENTS-001
-    framework_ids: [FW-030]
-    on_activate:
-      enforcement_mode: enforce
-      fail_closed_on_violation: true
-      supplier_dpa_required: [SUP-003]
-      linked_actions: [ACT-001]
-      rules_required_enabled: [MC-RULE-001, MC-RULE-006]
-    scan_checks:
-      - check_id: MON-014
-        severity: error
-
+- trigger_id: TRG-CORE-001
+  signal_id: SIG-CORE-001
+  framework_ids:
+  - FW-001
+  - FW-002
+  - FW-003
+  - FW-020
+  - FW-045
+  - FW-136
+  - FW-139
+  - FW-140
+  - FW-142
+  - FW-143
+  - FW-145
+  on_activate:
+    enforcement_mode: advisory
+    fail_closed_on_violation: false
+    programme_status_expect: programme
+    rules_required_enabled:
+    - MC-RULE-001
+    - MC-RULE-002
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-GDPR-001
+  signal_id: SIG-GDPR-001
+  framework_ids:
+  - FW-004
+  - FW-110
+  on_activate:
+    enforcement_mode: advisory
+    fail_closed_on_violation: false
+    programme_status_expect: programme
+    rules_required_enabled:
+    - MC-RULE-001
+    - MC-RULE-002
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-AI-001
+  signal_id: SIG-AI-001
+  framework_ids:
+  - FW-005
+  - FW-131
+  - FW-132
+  - FW-133
+  - FW-138
+  - FW-144
+  on_activate:
+    enforcement_mode: advisory
+    fail_closed_on_violation: false
+    programme_status_expect: programme
+    rules_required_enabled:
+    - MC-RULE-001
+    - MC-RULE-002
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-PECR-001
+  signal_id: SIG-PECR-001
+  framework_ids:
+  - FW-134
+  on_activate:
+    enforcement_mode: advisory
+    fail_closed_on_violation: false
+    programme_status_expect: programme
+    rules_required_enabled:
+    - MC-RULE-001
+    - MC-RULE-002
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-ISO-001
+  signal_id: SIG-ISO-001
+  framework_ids:
+  - FW-006
+  - FW-008
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled: &id001
+    - MC-RULE-001
+    - MC-RULE-002
+    - MC-RULE-006
+    programme_status_expect: programme
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-SOC-001
+  signal_id: SIG-SOC-001
+  framework_ids:
+  - FW-022
+  - FW-023
+  - FW-024
+  - FW-025
+  - FW-026
+  - FW-027
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled: *id001
+    programme_status_expect: programme
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-NIST-001
+  signal_id: SIG-NIST-001
+  framework_ids:
+  - FW-040
+  - FW-041
+  - FW-044
+  - FW-046
+  - FW-135
+  - FW-137
+  on_activate:
+    enforcement_mode: advisory
+    fail_closed_on_violation: false
+    programme_status_expect: programme
+    rules_required_enabled:
+    - MC-RULE-001
+    - MC-RULE-002
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-GLOBAL-PRIVACY-001
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  framework_ids:
+  - FW-111
+  - FW-113
+  - FW-114
+  - FW-115
+  - FW-117
+  - FW-118
+  - FW-119
+  - FW-120
+  - FW-121
+  - FW-122
+  - FW-123
+  - FW-124
+  - FW-125
+  - FW-126
+  - FW-127
+  - FW-128
+  - FW-129
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled: *id001
+    programme_status_expect: programme
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-INTL-ASSURANCE-001
+  signal_id: SIG-INTL-ASSURANCE-001
+  framework_ids:
+  - FW-070
+  - FW-071
+  - FW-072
+  - FW-073
+  - FW-074
+  - FW-075
+  - FW-076
+  - FW-077
+  - FW-078
+  - FW-079
+  - FW-080
+  - FW-081
+  - FW-082
+  - FW-083
+  - FW-084
+  - FW-085
+  - FW-086
+  - FW-087
+  - FW-088
+  - FW-089
+  - FW-090
+  - FW-091
+  - FW-092
+  - FW-093
+  - FW-094
+  - FW-095
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled: *id001
+    programme_status_expect: programme
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-US-GOV-001
+  signal_id: SIG-US-GOV-001
+  framework_ids:
+  - FW-060
+  - FW-062
+  - FW-066
+  - FW-069
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled: *id001
+    programme_status_expect: programme
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-EU-INDUSTRY-001
+  signal_id: SIG-EU-INDUSTRY-001
+  framework_ids:
+  - FW-100
+  - FW-101
+  - FW-102
+  - FW-103
+  - FW-104
+  - FW-105
+  - FW-106
+  - FW-107
+  - FW-108
+  - FW-141
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled: *id001
+    programme_status_expect: programme
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-PCI-001
+  signal_id: SIG-PCI-001
+  framework_ids:
+  - FW-030
+  - FW-031
+  - FW-032
+  - FW-033
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled:
+    - MC-RULE-001
+    - MC-RULE-002
+    - MC-RULE-006
+    programme_status_expect: partial
+    supplier_dpa_required:
+    - SUP-003
+    linked_actions:
+    - ACT-001
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-HIPAA-001
+  signal_id: SIG-HIPAA-001
+  framework_ids:
+  - FW-063
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled:
+    - MC-RULE-009
+    programme_status_expect: programme
+    supplier_dpa_required:
+    - SUP-005
+    linked_actions:
+    - ACT-002
+    - ACT-006
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-CCPA-001
+  signal_id: SIG-CCPA-001
+  framework_ids:
+  - FW-112
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled:
+    - MC-RULE-002
+    - MC-RULE-008
+    programme_status_expect: programme
+    readiness_doc: docs/compliance/CCPA-CPRA-ALIGNMENT.md
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-FEDRAMP-001
+  signal_id: SIG-FEDRAMP-001
+  framework_ids:
+  - FW-050
+  - FW-051
+  - FW-052
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled:
+    - MC-RULE-001
+    - MC-RULE-006
+    - MC-RULE-007
+    programme_status_expect: programme
+    readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-LGPD-001
+  signal_id: SIG-LGPD-001
+  framework_ids:
+  - FW-116
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled:
+    - MC-RULE-002
+    - MC-RULE-008
+    programme_status_expect: programme
+    readiness_doc: docs/compliance/LGPD-READINESS.md
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-POPIA-001
+  signal_id: SIG-POPIA-001
+  framework_ids:
+  - FW-130
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled: *id001
+    programme_status_expect: programme
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-AI-US-001
+  signal_id: SIG-AI-US-001
+  framework_ids:
+  - FW-004
+  - FW-112
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled:
+    - MC-RULE-004
+    - MC-RULE-005
+    programme_status_expect: programme
+    supplier_dpa_required:
+    - SUP-004
+    linked_actions:
+    - ACT-010
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-PAYMENTS-001
+  signal_id: SIG-PAYMENTS-001
+  framework_ids:
+  - FW-030
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    supplier_dpa_required:
+    - SUP-003
+    linked_actions:
+    - ACT-001
+    rules_required_enabled:
+    - MC-RULE-001
+    - MC-RULE-006
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-DORA-001
+  signal_id: SIG-DORA-001
+  framework_ids:
+  - FW-090
+  - FW-091
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled: *id001
+    programme_status_expect: programme
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-NHS-001
+  signal_id: SIG-NHS-001
+  framework_ids:
+  - FW-064
+  - FW-065
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled: *id001
+    programme_status_expect: programme
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
+- trigger_id: TRG-CMMC-001
+  signal_id: SIG-CMMC-001
+  framework_ids:
+  - FW-055
+  - FW-056
+  - FW-057
+  on_activate:
+    enforcement_mode: enforce
+    fail_closed_on_violation: true
+    rules_required_enabled: *id001
+    programme_status_expect: programme
+  scan_checks:
+  - check_id: MON-016
+    severity: error
+  - check_id: MON-018
+    severity: error
 proactive_scans:
-  description: >
-    Scheduled programme scans independent of scope signals. Health check enforces
-    recurrence via execution_evidence_register.recurrence_schedule.
+  description: Scheduled programme scans independent of scope signals. Health check enforces recurrence via execution_evidence_register.
   items:
-    - scan_id: SCAN-LEG-001
-      register: compliance/legislation_register.yaml
-      field: review_date
-      max_overdue_days: 0
-      check_id: MON-011
-      cadence_days: 90
-      linked_evidence: EEV-006
-    - scan_id: SCAN-STD-001
-      register: compliance/standards_watch.yaml
-      field: review_date
-      max_overdue_days: 0
-      check_id: MON-012
-      cadence_days: 180
-      linked_evidence: EEV-007
+  - scan_id: SCAN-LEG-001
+    register: compliance/legislation_register.yaml
+    field: review_date
+    max_overdue_days: 0
+    check_id: MON-011
+    cadence_days: 90
+    linked_evidence: EEV-006
+  - scan_id: SCAN-STD-001
+    register: compliance/standards_watch.yaml
+    field: review_date
+    max_overdue_days: 0
+    check_id: MON-012
+    cadence_days: 180
+    linked_evidence: EEV-007

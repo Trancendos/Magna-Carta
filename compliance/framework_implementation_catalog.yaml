@@ -1,0 +1,1538 @@
+meta:
+  register_version: 1.0.0
+  owner: ISMS Lead
+  last_updated: '2026-06-09'
+  review_cycle: quarterly
+  frameworks_register: compliance/frameworks_register.yaml
+  signals_register: compliance/proactive_signals.yaml
+  triggers_register: compliance/framework_triggers.yaml
+  entry_count: 127
+schema:
+  implementation_tier: baseline | signal_gated | reference | excluded
+  signal_id: SIG-XXX-### when scope-gated
+  trigger_id: TRG-XXX-### when scope-gated
+entries:
+- framework_id: FW-001
+  name: ISO/IEC 27001:2022
+  implementation_tier: signal_gated
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/ISO27001-ALIGNMENT.md
+  programme_status: partial
+  applicability: applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-002
+  name: ISO/IEC 27017
+  implementation_tier: signal_gated
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+  programme_status: partial
+  applicability: applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-003
+  name: ISO/IEC 27018
+  implementation_tier: signal_gated
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+  programme_status: partial
+  applicability: applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-004
+  name: ISO/IEC 27701
+  implementation_tier: signal_gated
+  signal_id: SIG-GDPR-001
+  trigger_id: TRG-GDPR-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: GDPR_SCOPE
+- framework_id: FW-005
+  name: ISO/IEC 42001
+  implementation_tier: signal_gated
+  signal_id: SIG-AI-001
+  trigger_id: TRG-AI-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/GENAI-MATURITY-ASSESSMENT.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: AI_GOVERNANCE
+- framework_id: FW-006
+  name: ISO 22301
+  implementation_tier: signal_gated
+  signal_id: SIG-ISO-001
+  trigger_id: TRG-ISO-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/procedures/PROC-BCP-001-Backup-Restore.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: ISO_CERTIFICATION_SCOPE
+- framework_id: FW-007
+  name: ISO 9001
+  implementation_tier: excluded
+  signal_id: null
+  trigger_id: null
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/DEFSTAN-ALIGNMENT.md
+  programme_status: not_applicable
+  applicability: not_applicable
+  config_profile: null
+- framework_id: FW-008
+  name: ISO/IEC 20000
+  implementation_tier: reference
+  signal_id: SIG-ISO-001
+  trigger_id: TRG-ISO-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+  programme_status: programme
+  applicability: reference
+  config_profile: ISO_CERTIFICATION_SCOPE
+- framework_id: FW-009
+  name: ISO 14001
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-010
+  name: ISO 45001
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-011
+  name: ISO 50001
+  implementation_tier: excluded
+  signal_id: null
+  trigger_id: null
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/NOT-APPLICABLE-POSITION.md
+  programme_status: not_applicable
+  applicability: not_applicable
+  config_profile: null
+- framework_id: FW-012
+  name: SNI ISO/IEC 27001
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-013
+  name: SNI ISO/IEC 27017
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-014
+  name: SNI ISO/IEC 27018
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-015
+  name: SNI ISO 9001
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-016
+  name: K-ISMS
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-020
+  name: SOC 2 Type II
+  implementation_tier: signal_gated
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/SOC2-ALIGNMENT.md
+  programme_status: partial
+  applicability: applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-021
+  name: SOC 1 Type II
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-022
+  name: SOC 3
+  implementation_tier: signal_gated
+  signal_id: SIG-SOC-001
+  trigger_id: TRG-SOC-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: SOC_AUDIT_SCOPE
+- framework_id: FW-023
+  name: CSA STAR
+  implementation_tier: signal_gated
+  signal_id: SIG-SOC-001
+  trigger_id: TRG-SOC-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: SOC_AUDIT_SCOPE
+- framework_id: FW-024
+  name: HITRUST CSF
+  implementation_tier: signal_gated
+  signal_id: SIG-SOC-001
+  trigger_id: TRG-SOC-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: SOC_AUDIT_SCOPE
+- framework_id: FW-025
+  name: KY3P
+  implementation_tier: signal_gated
+  signal_id: SIG-SOC-001
+  trigger_id: TRG-SOC-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: SOC_AUDIT_SCOPE
+- framework_id: FW-026
+  name: ProcessUnity
+  implementation_tier: signal_gated
+  signal_id: SIG-SOC-001
+  trigger_id: TRG-SOC-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: SOC_AUDIT_SCOPE
+- framework_id: FW-027
+  name: CyberVadis
+  implementation_tier: signal_gated
+  signal_id: SIG-SOC-001
+  trigger_id: TRG-SOC-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: SOC_AUDIT_SCOPE
+- framework_id: FW-028
+  name: Uptime Institute Tiers
+  implementation_tier: excluded
+  signal_id: null
+  trigger_id: null
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/NOT-APPLICABLE-POSITION.md
+  programme_status: not_applicable
+  applicability: not_applicable
+  config_profile: null
+- framework_id: FW-030
+  name: PCI DSS v4.0
+  implementation_tier: signal_gated
+  signal_id: SIG-PCI-001
+  trigger_id: TRG-PCI-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/PCI-DSS-POSITION.md
+  programme_status: programme
+  applicability: not_applicable
+  config_profile: PCI_SCOPE
+- framework_id: FW-031
+  name: PCI 3-D Secure
+  implementation_tier: signal_gated
+  signal_id: SIG-PCI-001
+  trigger_id: TRG-PCI-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/PCI-FAMILY-POSITION.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: PCI_SCOPE
+- framework_id: FW-032
+  name: PCI P2PE
+  implementation_tier: excluded
+  signal_id: null
+  trigger_id: null
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/PCI-FAMILY-POSITION.md
+  programme_status: not_applicable
+  applicability: not_applicable
+  config_profile: null
+- framework_id: FW-033
+  name: PCI PIN
+  implementation_tier: excluded
+  signal_id: null
+  trigger_id: null
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/PCI-FAMILY-POSITION.md
+  programme_status: not_applicable
+  applicability: not_applicable
+  config_profile: null
+- framework_id: FW-040
+  name: NIST Cybersecurity Framework 2.0
+  implementation_tier: reference
+  signal_id: SIG-NIST-001
+  trigger_id: TRG-NIST-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/NIST-CSF-ALIGNMENT.md
+  programme_status: programme
+  applicability: reference
+  config_profile: NIST_BASELINE
+- framework_id: FW-041
+  name: NIST SP 800-53 Rev 5
+  implementation_tier: reference
+  signal_id: SIG-NIST-001
+  trigger_id: TRG-NIST-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/NIST-FAMILY-READINESS.md
+  programme_status: programme
+  applicability: reference
+  config_profile: NIST_BASELINE
+- framework_id: FW-042
+  name: NIST SP 800-171 / 800-172
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/NIST-FAMILY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-043
+  name: NIST SP 800-162
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/NIST-FAMILY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-044
+  name: NIST SP 800-34
+  implementation_tier: reference
+  signal_id: SIG-NIST-001
+  trigger_id: TRG-NIST-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/procedures/PROC-BCP-001-Backup-Restore.md
+  programme_status: programme
+  applicability: reference
+  config_profile: NIST_BASELINE
+- framework_id: FW-045
+  name: NIST SP 800-64
+  implementation_tier: signal_gated
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/DEFSTAN-ALIGNMENT.md
+  programme_status: programme
+  applicability: applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-046
+  name: NIST Risk Management Framework
+  implementation_tier: reference
+  signal_id: SIG-NIST-001
+  trigger_id: TRG-NIST-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/NIST-FAMILY-READINESS.md
+  programme_status: programme
+  applicability: reference
+  config_profile: NIST_BASELINE
+- framework_id: FW-050
+  name: FedRAMP
+  implementation_tier: signal_gated
+  signal_id: SIG-FEDRAMP-001
+  trigger_id: TRG-FEDRAMP-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/FEDRAMP-READINESS.md
+  programme_status: programme
+  applicability: not_applicable
+  config_profile: FEDRAMP_SCOPE
+- framework_id: FW-051
+  name: GovRAMP
+  implementation_tier: signal_gated
+  signal_id: SIG-FEDRAMP-001
+  trigger_id: TRG-FEDRAMP-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: FEDRAMP_SCOPE
+- framework_id: FW-052
+  name: FISMA
+  implementation_tier: signal_gated
+  signal_id: SIG-FEDRAMP-001
+  trigger_id: TRG-FEDRAMP-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: FEDRAMP_SCOPE
+- framework_id: FW-053
+  name: CMMC 2.0
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/CMMC-READINESS.md
+  programme_status: programme
+  applicability: not_applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-054
+  name: DoD (general)
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-055
+  name: DoD Impact Level 2
+  implementation_tier: signal_gated
+  signal_id: SIG-CMMC-001
+  trigger_id: TRG-CMMC-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CMMC_SCOPE
+- framework_id: FW-056
+  name: DoD Impact Level 4
+  implementation_tier: signal_gated
+  signal_id: SIG-CMMC-001
+  trigger_id: TRG-CMMC-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CMMC_SCOPE
+- framework_id: FW-057
+  name: DoD Impact Level 5
+  implementation_tier: signal_gated
+  signal_id: SIG-CMMC-001
+  trigger_id: TRG-CMMC-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CMMC_SCOPE
+- framework_id: FW-058
+  name: DoD Impact Level 6
+  implementation_tier: excluded
+  signal_id: null
+  trigger_id: null
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/NOT-APPLICABLE-POSITION.md
+  programme_status: not_applicable
+  applicability: not_applicable
+  config_profile: null
+- framework_id: FW-059
+  name: DFARS / NIST 800-171 flow-down
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-060
+  name: FIPS 140-3
+  implementation_tier: signal_gated
+  signal_id: SIG-US-GOV-001
+  trigger_id: TRG-US-GOV-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: US_GOV_SCOPE
+- framework_id: FW-061
+  name: CJIS Security Policy
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-062
+  name: HIPAA Security Rule
+  implementation_tier: signal_gated
+  signal_id: SIG-US-GOV-001
+  trigger_id: TRG-US-GOV-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/HIPAA-ALIGNMENT.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: US_GOV_SCOPE
+- framework_id: FW-063
+  name: FERPA
+  implementation_tier: signal_gated
+  signal_id: SIG-HIPAA-001
+  trigger_id: TRG-HIPAA-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: HIPAA_PROFILE
+- framework_id: FW-064
+  name: IRS Publication 1075
+  implementation_tier: signal_gated
+  signal_id: SIG-NHS-001
+  trigger_id: TRG-NHS-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: NHS_DSPT_SCOPE
+- framework_id: FW-065
+  name: SEC Rule 17a-4(f)
+  implementation_tier: signal_gated
+  signal_id: SIG-NHS-001
+  trigger_id: TRG-NHS-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: NHS_DSPT_SCOPE
+- framework_id: FW-066
+  name: US CLOUD Act
+  implementation_tier: reference
+  signal_id: SIG-US-GOV-001
+  trigger_id: TRG-US-GOV
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/GDPR-ALIGNMENT.md
+  programme_status: programme
+  applicability: awareness
+  config_profile: US_GOV_SCOPE
+- framework_id: FW-067
+  name: US EAR
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-068
+  name: US ITAR
+  implementation_tier: excluded
+  signal_id: null
+  trigger_id: null
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/NOT-APPLICABLE-POSITION.md
+  programme_status: not_applicable
+  applicability: not_applicable
+  config_profile: null
+- framework_id: FW-069
+  name: VPAT / Section 508
+  implementation_tier: signal_gated
+  signal_id: SIG-US-GOV-001
+  trigger_id: TRG-US-GOV-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: US_GOV_SCOPE
+- framework_id: FW-070
+  name: IRAP
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-071
+  name: ISMAP
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-072
+  name: CSAP
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-073
+  name: CCCS Medium Assessment
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-074
+  name: CCCS PBHVA Assessment
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-075
+  name: Canada RPAA
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-076
+  name: UK Cyber Essentials Plus
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-077
+  name: UK G-Cloud
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-078
+  name: UK PASF
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-079
+  name: C5 (Germany BSI)
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-080
+  name: ENS High (Spain)
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-081
+  name: CCN CPSTIC (Spain)
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-082
+  name: CISPE Code of Conduct
+  implementation_tier: reference
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: programme
+  applicability: reference
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-083
+  name: DESC CSP (Saudi)
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-084
+  name: ASIP HDS (France)
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-085
+  name: MeitY
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-086
+  name: MTCS (Singapore)
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-087
+  name: NISC Japan
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-088
+  name: TISAX
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-089
+  name: NHS DSPT
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/NHS-DSPT-READINESS.md
+  programme_status: programme
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-090
+  name: MPA
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-091
+  name: ABS OSPAR
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-092
+  name: GNS (Germany)
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INTERNATIONAL-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-093
+  name: Pinakes
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-094
+  name: PiTuKri
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/SOC-AND-ASSURANCE-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-095
+  name: GSMA NESAS / SCAS
+  implementation_tier: signal_gated
+  signal_id: SIG-INTL-ASSURANCE-001
+  trigger_id: TRG-INTL-ASSURANCE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: INTL_ASSURANCE_SCOPE
+- framework_id: FW-100
+  name: DORA
+  implementation_tier: signal_gated
+  signal_id: SIG-EU-INDUSTRY-001
+  trigger_id: TRG-EU-INDUSTRY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: EU_INDUSTRY_SCOPE
+- framework_id: FW-101
+  name: FINMA
+  implementation_tier: signal_gated
+  signal_id: SIG-EU-INDUSTRY-001
+  trigger_id: TRG-EU-INDUSTRY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: EU_INDUSTRY_SCOPE
+- framework_id: FW-102
+  name: BIO Thema-uitwerking Clouddiensten
+  implementation_tier: signal_gated
+  signal_id: SIG-EU-INDUSTRY-001
+  trigger_id: TRG-EU-INDUSTRY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: EU_INDUSTRY_SCOPE
+- framework_id: FW-103
+  name: UAE IAR
+  implementation_tier: signal_gated
+  signal_id: SIG-EU-INDUSTRY-001
+  trigger_id: TRG-EU-INDUSTRY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: EU_INDUSTRY_SCOPE
+- framework_id: FW-104
+  name: FINTECH sector programmes
+  implementation_tier: signal_gated
+  signal_id: SIG-EU-INDUSTRY-001
+  trigger_id: TRG-EU-INDUSTRY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/FCA-ALIGNMENT.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: EU_INDUSTRY_SCOPE
+- framework_id: FW-105
+  name: Japan FISC
+  implementation_tier: signal_gated
+  signal_id: SIG-EU-INDUSTRY-001
+  trigger_id: TRG-EU-INDUSTRY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: EU_INDUSTRY_SCOPE
+- framework_id: FW-106
+  name: Japan Medical Information Guidelines
+  implementation_tier: signal_gated
+  signal_id: SIG-EU-INDUSTRY-001
+  trigger_id: TRG-EU-INDUSTRY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: EU_INDUSTRY_SCOPE
+- framework_id: FW-107
+  name: GxP (21 CFR Part 11 / EU Annex 11)
+  implementation_tier: signal_gated
+  signal_id: SIG-EU-INDUSTRY-001
+  trigger_id: TRG-EU-INDUSTRY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: EU_INDUSTRY_SCOPE
+- framework_id: FW-108
+  name: CE+ Framework
+  implementation_tier: reference
+  signal_id: SIG-EU-INDUSTRY-001
+  trigger_id: TRG-EU-INDUSTRY
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
+  programme_status: programme
+  applicability: reference
+  config_profile: EU_INDUSTRY_SCOPE
+- framework_id: FW-110
+  name: GDPR (EU/UK)
+  implementation_tier: signal_gated
+  signal_id: SIG-GDPR-001
+  trigger_id: TRG-GDPR-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/GDPR-ALIGNMENT.md
+  programme_status: programme
+  applicability: applicable
+  config_profile: GDPR_SCOPE
+- framework_id: FW-111
+  name: EU-U.S. Data Privacy Framework
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-112
+  name: CCPA / CPRA
+  implementation_tier: signal_gated
+  signal_id: SIG-CCPA-001
+  trigger_id: TRG-CCPA-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/CCPA-CPRA-ALIGNMENT.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: CCPA_SCOPE
+- framework_id: FW-113
+  name: Canada PIPEDA
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-114
+  name: Australia Privacy Act
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-115
+  name: Argentina PDPA
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-116
+  name: Brazil LGPD
+  implementation_tier: signal_gated
+  signal_id: SIG-LGPD-001
+  trigger_id: TRG-LGPD-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/LGPD-READINESS.md
+  programme_status: programme
+  applicability: not_applicable
+  config_profile: LGPD_SCOPE
+- framework_id: FW-117
+  name: Chile privacy law
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-118
+  name: Mexico LFPDPPP
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-119
+  name: Hong Kong PDPO
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-120
+  name: India DPDP Act
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-121
+  name: Indonesia PDP Law
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-122
+  name: Japan APPI
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-123
+  name: Korea PIPA
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-124
+  name: Malaysia PDPA
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-125
+  name: New Zealand Privacy Act
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-126
+  name: Philippines DPA
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-127
+  name: Singapore PDPA
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-128
+  name: Taiwan PDPA
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-129
+  name: Thailand PDPA
+  implementation_tier: signal_gated
+  signal_id: SIG-GLOBAL-PRIVACY-001
+  trigger_id: TRG-GLOBAL-PRIVACY-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/GLOBAL-PRIVACY-READINESS.md
+  programme_status: readiness
+  applicability: not_applicable
+  config_profile: GLOBAL_PRIVACY_PACK
+- framework_id: FW-130
+  name: South Africa POPIA
+  implementation_tier: signal_gated
+  signal_id: SIG-POPIA-001
+  trigger_id: TRG-POPIA-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/POPIA-READINESS.md
+  programme_status: programme
+  applicability: not_applicable
+  config_profile: POPIA_SCOPE
+- framework_id: FW-131
+  name: ETSI EN 304 223 (Securing AI baseline)
+  implementation_tier: reference
+  signal_id: SIG-AI-001
+  trigger_id: TRG-AI-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/ETSI-SAI-ALIGNMENT.md
+  programme_status: programme
+  applicability: reference
+  config_profile: AI_GOVERNANCE
+- framework_id: FW-132
+  name: OWASP AI Exchange
+  implementation_tier: signal_gated
+  signal_id: SIG-AI-001
+  trigger_id: TRG-AI-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/OWASP-AI-EXCHANGE-ALIGNMENT.md
+  programme_status: programme
+  applicability: applicable
+  config_profile: AI_GOVERNANCE
+- framework_id: FW-133
+  name: EU AI Act (2024/1689)
+  implementation_tier: signal_gated
+  signal_id: SIG-AI-001
+  trigger_id: TRG-AI-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/AI-GOVERNANCE.md
+  programme_status: programme
+  applicability: applicable
+  config_profile: AI_GOVERNANCE
+- framework_id: FW-134
+  name: UK PECR
+  implementation_tier: signal_gated
+  signal_id: SIG-PECR-001
+  trigger_id: TRG-PECR-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/PECR-ALIGNMENT.md
+  programme_status: programme
+  applicability: applicable
+  config_profile: PECR_SCOPE
+- framework_id: FW-135
+  name: CIS Controls v8
+  implementation_tier: reference
+  signal_id: SIG-NIST-001
+  trigger_id: TRG-NIST-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/NIST-FAMILY-READINESS.md
+  programme_status: programme
+  applicability: reference
+  config_profile: NIST_BASELINE
+- framework_id: FW-136
+  name: OWASP Top 10 (2021)
+  implementation_tier: signal_gated
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/REGULATION-MATRIX.md
+  programme_status: programme
+  applicability: applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-137
+  name: OWASP ASVS Level 2
+  implementation_tier: signal_gated
+  signal_id: SIG-NIST-001
+  trigger_id: TRG-NIST-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/ASVS-GAP-CHECKLIST.md
+  programme_status: programme
+  applicability: conditional
+  config_profile: NIST_BASELINE
+- framework_id: FW-138
+  name: NIST AI RMF 1.0
+  implementation_tier: signal_gated
+  signal_id: SIG-AI-001
+  trigger_id: TRG-AI-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/AI-GOVERNANCE.md
+  programme_status: programme
+  applicability: applicable
+  config_profile: AI_GOVERNANCE
+- framework_id: FW-139
+  name: ITIL 4
+  implementation_tier: signal_gated
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/REGULATION-MATRIX.md
+  programme_status: programme
+  applicability: applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-140
+  name: PRINCE2 7
+  implementation_tier: signal_gated
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/REGULATION-MATRIX.md
+  programme_status: programme
+  applicability: applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-141
+  name: UK Research Integrity Concordat
+  implementation_tier: reference
+  signal_id: SIG-EU-INDUSTRY-001
+  trigger_id: TRG-EU-INDUSTRY
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/REGULATION-MATRIX.md
+  programme_status: programme
+  applicability: reference
+  config_profile: EU_INDUSTRY_SCOPE
+- framework_id: FW-142
+  name: ISO/IEC 27002:2022
+  implementation_tier: signal_gated
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/readiness/ISO-FAMILY-READINESS.md
+  programme_status: programme
+  applicability: applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-143
+  name: UK Companies Act 2006 (governance)
+  implementation_tier: signal_gated
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/COMPANIES-ACT-ALIGNMENT.md
+  programme_status: programme
+  applicability: applicable
+  config_profile: CORE_PLATFORM
+- framework_id: FW-144
+  name: OWASP GenAI / LLM Top 10
+  implementation_tier: signal_gated
+  signal_id: SIG-AI-001
+  trigger_id: TRG-AI-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/AI-SECURITY-THREAT-MODEL.md
+  programme_status: programme
+  applicability: applicable
+  config_profile: AI_GOVERNANCE
+- framework_id: FW-145
+  name: DEF STAN 05-138 (standalone)
+  implementation_tier: signal_gated
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
+  auto_checks:
+  - MON-013
+  - MON-018
+  readiness_doc: docs/compliance/DEFSTAN-ALIGNMENT.md
+  programme_status: programme
+  applicability: applicable
+  config_profile: CORE_PLATFORM

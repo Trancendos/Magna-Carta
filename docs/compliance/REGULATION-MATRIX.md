@@ -132,9 +132,10 @@ Customer-requested assurance frameworks (CSA STAR, GxP, ISO family, PCI family, 
 
 | Artefact | Scope |
 |----------|-------|
-| [STANDARDS-AND-FRAMEWORKS-REGISTER.md](STANDARDS-AND-FRAMEWORKS-REGISTER.md) | Human master (FW-001–FW-130, 112 deduplicated entries) |
+| [STANDARDS-AND-FRAMEWORKS-REGISTER.md](STANDARDS-AND-FRAMEWORKS-REGISTER.md) | Human master (FW-001–FW-145, 127 entries) |
 | [readiness/INDEX.md](readiness/INDEX.md) | Grouped readiness docs by domain |
 | `compliance/frameworks_register.yaml` | Machine-readable mirror (MON-009 validated) |
+| `compliance/framework_implementation_catalog.yaml` | Per-framework implementation tier, signal, trigger (MON-018) |
 
 Programme milestone **PM-009** (2026-06-08) closed Layer 2 catalogue coverage. External certification and signed evidence remain Layer 3 (**ACT-001–ACT-015**).
 

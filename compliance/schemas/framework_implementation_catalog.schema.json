@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "magna-carta/framework_implementation_catalog.schema.json",
+  "title": "Framework Implementation Catalog",
+  "type": "object",
+  "required": ["meta", "entries"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["register_version", "owner", "last_updated", "entry_count"],
+      "properties": {
+        "register_version": { "type": "string" },
+        "owner": { "type": "string" },
+        "last_updated": { "type": "string", "format": "date" },
+        "review_cycle": { "type": "string" },
+        "frameworks_register": { "type": "string" },
+        "signals_register": { "type": "string" },
+        "triggers_register": { "type": "string" },
+        "entry_count": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "schema": { "type": "object" },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "framework_id",
+          "name",
+          "implementation_tier",
+          "auto_checks",
+          "programme_status",
+          "applicability"
+        ],
+        "properties": {
+          "framework_id": { "type": "string", "pattern": "^FW-[0-9]{3}$" },
+          "name": { "type": "string" },
+          "implementation_tier": {
+            "type": "string",
+            "enum": ["baseline", "signal_gated", "reference", "excluded"]
+          },
+          "signal_id": {
+            "type": ["string", "null"],
+            "pattern": "^SIG-[A-Z0-9]+-[0-9]{3}$"
+          },
+          "trigger_id": {
+            "type": ["string", "null"],
+            "pattern": "^TRG-[A-Z0-9]+-[0-9]{3}$"
+          },
+          "auto_checks": {
+            "type": "array",
+            "items": { "type": "string", "pattern": "^MON-[0-9]{3}$" }
+          },
+          "readiness_doc": { "type": ["string", "null"] },
+          "programme_status": { "type": "string" },
+          "applicability": { "type": "string" },
+          "config_profile": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}
