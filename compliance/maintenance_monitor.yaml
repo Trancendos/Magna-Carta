@@ -89,6 +89,14 @@ required_files:
     check_id: MON-007
   - path: scripts/run_oss_security_scans.sh
     check_id: MON-007
+  - path: scripts/install_zero_cost_security_stack.sh
+    check_id: MON-007
+  - path: scripts/run_layer_b_local_ci.sh
+    check_id: MON-007
+  - path: docs/compliance/LOCAL-CI-AND-OSS-SECURITY.md
+    check_id: MON-007
+  - path: requirements-oss.txt
+    check_id: MON-007
   - path: scripts/readiness_automation_score.py
     check_id: MON-007
   - path: scripts/dpa_readiness_check.py

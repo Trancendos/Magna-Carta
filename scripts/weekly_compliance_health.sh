@@ -40,9 +40,19 @@ python3 scripts/run_security_testing.py --report
 security_exit=$?
 
 echo
-echo "=== Zero-cost tooling register (ZCT-001–011) ==="
+echo "=== Zero-cost tooling register (ZCT-001–014) ==="
 python3 scripts/zero_cost_tooling_check.py --report
 zct_exit=$?
+
+echo
+echo "=== OSS security stack SEC-006 (free, Aikido alternative) ==="
+export PATH="$ROOT/.tools:${PATH}"
+if [[ -x "$ROOT/scripts/run_oss_security_scans.sh" ]]; then
+  "$ROOT/scripts/run_oss_security_scans.sh" || oss_exit=$?
+  oss_exit=${oss_exit:-0}
+else
+  oss_exit=0
+fi
 
 exit_code=$health_exit
 if [[ $readiness_exit -ne 0 ]]; then
@@ -56,6 +66,9 @@ if [[ $security_exit -ne 0 ]]; then
 fi
 if [[ $zct_exit -ne 0 ]]; then
   exit_code=$zct_exit
+fi
+if [[ ${oss_exit:-0} -ne 0 ]]; then
+  exit_code=$oss_exit
 fi
 if [[ $exit_code -eq 0 ]]; then
   echo

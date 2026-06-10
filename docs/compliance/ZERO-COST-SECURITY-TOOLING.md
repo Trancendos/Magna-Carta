@@ -1,6 +1,6 @@
 # Zero-Cost Security Tooling
 
-**Version:** 1.0.0  
+**Version:** 1.1.0  
 **Date:** 2026-06-09  
 **Owner:** Security Ops  
 **Register:** `compliance/zero_cost_tooling_register.yaml`  
@@ -15,8 +15,10 @@
 | Tier | Tools | Required? |
 |------|-------|-----------|
 | **Mandatory (always)** | `run_security_testing.py`, `compliance_health_check.py`, `zero_cost_tooling_check.py` | Yes |
-| **Optional OSS** | Gitleaks, Bandit, Semgrep community, pip-audit | No — run when installed |
-| **Optional free SaaS** | Aikido Free (no CC) via MCP | No — SEC-001 enhancement only |
+| **Recommended OSS (SEC-006)** | Gitleaks, Bandit, Semgrep community, pip-audit | No — 100% free; preferred over Aikido |
+| **Local CI (no cloud)** | `run_layer_b_local_ci.sh`, weekly cron | No — replaces GitHub Actions |
+| **Optional free SaaS** | Aikido Free (no CC) via MCP | No — deprioritised; use SEC-006 instead |
+| **Prohibited mandatory** | GitHub Actions, Aikido paid, metered cloud CI | Never for Layer B |
 | **Owner gate** | Annual external pen test | Layer C — ACT-005 |
 
 ---
@@ -29,9 +31,9 @@
 - SAST and secrets detection for **JavaScript, TypeScript, Python**
 - GitHub Action free tier focuses on **dependency/CVE** scanning; blocking on full SAST/IaC is **paid**
 
-**Conclusion for this programme:** Aikido is an **optional enhancement** (SEC-001). Layer B readiness does **not** require Aikido connection. Local SEC-002 is the mandatory zero-cost baseline.
+**Conclusion for this programme:** Aikido is an **optional, deprioritised enhancement** (SEC-001). The **recommended free alternative** is **SEC-006** (OSS stack: gitleaks, bandit, semgrep, pip-audit). Layer B readiness does **not** require Aikido. Local SEC-002 is the mandatory zero-cost baseline.
 
-Paid Aikido features are **not** in scope for mandatory tooling.
+Paid Aikido features and Aikido GitHub Action SAST gates are **not** in scope. **GitHub Actions** is **not** used for mandatory Layer B (minute limits and overage billing).
 
 ---
 
@@ -60,16 +62,27 @@ Paid Aikido features are **not** in scope for mandatory tooling.
 ## 4. Commands
 
 ```bash
+# One-time: install free OSS stack (Aikido alternative)
+./scripts/install_zero_cost_security_stack.sh
+
 # Mandatory — Layer B
 python3 scripts/run_security_testing.py --report
 python3 scripts/zero_cost_tooling_check.py --report
 
-# Optional OSS (skips tools not installed)
+# Recommended OSS (SEC-006)
 ./scripts/run_oss_security_scans.sh
 
-# Weekly bundle (includes all mandatory checks)
+# Full local CI (GitHub Actions alternative)
+./scripts/run_layer_b_local_ci.sh
+
+# Weekly bundle (includes mandatory + OSS when installed)
 ./scripts/weekly_compliance_health.sh
+
+# Optional: pre-commit hook (local only)
+./scripts/install_local_pre_commit_hook.sh
 ```
+
+See also: [LOCAL-CI-AND-OSS-SECURITY.md](LOCAL-CI-AND-OSS-SECURITY.md)
 
 ---
 

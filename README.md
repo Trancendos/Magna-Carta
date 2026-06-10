@@ -182,7 +182,10 @@ Runtime enforcement for the **Tranc3 App Framework** lives in the [Tranc3](https
 | [scripts/compliance_health_check.py](scripts/compliance_health_check.py) | Automated drift, staleness, and link checker |
 | [scripts/weekly_compliance_health.sh](scripts/weekly_compliance_health.sh) | Weekly wrapper (logs results; zero cloud CI cost) |
 | [scripts/zero_cost_tooling_check.py](scripts/zero_cost_tooling_check.py) | Verifies mandatory zero-cost tooling paths (ZCT) |
-| [scripts/run_oss_security_scans.sh](scripts/run_oss_security_scans.sh) | Optional OSS security scans (skip if not installed) |
+| [scripts/run_oss_security_scans.sh](scripts/run_oss_security_scans.sh) | OSS security stack SEC-006 (free Aikido alternative) |
+| [scripts/install_zero_cost_security_stack.sh](scripts/install_zero_cost_security_stack.sh) | Install gitleaks, bandit, semgrep, pip-audit (£0) |
+| [scripts/run_layer_b_local_ci.sh](scripts/run_layer_b_local_ci.sh) | Local Layer B CI — no GitHub Actions |
+| [docs/compliance/LOCAL-CI-AND-OSS-SECURITY.md](docs/compliance/LOCAL-CI-AND-OSS-SECURITY.md) | Local CI + OSS stack policy |
 | [compliance/zero_cost_tooling_register.yaml](compliance/zero_cost_tooling_register.yaml) | Machine-readable zero-cost tooling register |
 | [compliance/infinity_app_frameworks_register.yaml](compliance/infinity_app_frameworks_register.yaml) | Infinity Network app framework catalogue |
 | [scripts/install_local_weekly_cron.sh](scripts/install_local_weekly_cron.sh) | Optional local crontab installer (Mondays 08:00) |
@@ -191,8 +194,9 @@ Runtime enforcement for the **Tranc3 App Framework** lives in the [Tranc3](https
 
 ```bash
 pip install -r requirements.txt
+./scripts/install_zero_cost_security_stack.sh   # optional: OSS scanners (100% free)
+./scripts/run_layer_b_local_ci.sh             # local CI — no GitHub Actions
 python3 scripts/readiness_automation_score.py --report
-python3 scripts/zero_cost_tooling_check.py --report
 ./scripts/weekly_compliance_health.sh
 ```
 

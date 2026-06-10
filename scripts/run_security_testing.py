@@ -71,6 +71,31 @@ PATTERNS: list[tuple[str, str, re.Pattern[str]]] = [
         re.compile(r"AKIA[0-9A-Z]{16}"),
     ),
     (
+        "github_pat",
+        "error",
+        re.compile(r"ghp_[A-Za-z0-9]{36,}"),
+    ),
+    (
+        "github_oauth",
+        "error",
+        re.compile(r"gho_[A-Za-z0-9]{36,}"),
+    ),
+    (
+        "slack_token",
+        "error",
+        re.compile(r"xox[baprs]-[A-Za-z0-9-]{10,}"),
+    ),
+    (
+        "stripe_live_key",
+        "error",
+        re.compile(r"sk_live_[A-Za-z0-9]{20,}"),
+    ),
+    (
+        "jwt_like",
+        "warning",
+        re.compile(r"eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}"),
+    ),
+    (
         "high_entropy_secret",
         "warning",
         re.compile(
@@ -140,6 +165,10 @@ def scan_file(path: Path) -> list[SecurityFinding]:
                 if check == "high_entropy_secret" and "example" in line.lower():
                     continue
                 if check == "aws_access_key" and "AKIA" in line and "EXAMPLE" in line.upper():
+                    continue
+                if check == "jwt_like" and (
+                    "example" in line.lower() or "placeholder" in line.lower()
+                ):
                     continue
                 findings.append(
                     SecurityFinding(

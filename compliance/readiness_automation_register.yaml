@@ -162,13 +162,22 @@ items:
     evidence: compliance/proactive_signals.yaml
 
   - item_id: AUTO-014
-    title: "Zero-cost tooling register and verifier (ZCT-001–011)"
+    title: "Zero-cost tooling register and verifier (ZCT-001–014)"
     category: security
     executor: system
     status: implemented
     verification: scripts/zero_cost_tooling_check.py
     evidence: compliance/zero_cost_tooling_register.yaml
     notes: "Mandatory Layer B tools are £0/$0; Aikido Free is optional ZCT-011"
+
+  - item_id: AUTO-015
+    title: "OSS security stack and local CI (GitHub Actions alternative)"
+    category: security
+    executor: system
+    status: implemented
+    verification: scripts/run_layer_b_local_ci.sh
+    evidence: docs/compliance/LOCAL-CI-AND-OSS-SECURITY.md
+    notes: "SEC-006 OSS stack replaces Aikido for zero-cost SAST/secrets/CVE; no cloud CI"
 
 owner_gates_excluded_from_score:
   description: >

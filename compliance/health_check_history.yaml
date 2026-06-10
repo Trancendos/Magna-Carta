@@ -1,7 +1,7 @@
 meta:
   register_version: 1.0.0
   owner: ISMS Lead
-  last_updated: '2026-06-09'
+  last_updated: '2026-06-10'
   review_cycle: quarterly
   cadence_days: 7
   procedure: docs/governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md
@@ -46,6 +46,21 @@ runs:
     message: Critical supplier SUP-005 (Health platform connectors (Sync-Bot)) DPA
       status 'Template issued' — informational until PAYMENTS_LIVE/HIPAA_PROFILE enabled
 - timestamp: '2026-06-09T23:29:12Z'
+  operator: ubuntu
+  errors: 0
+  warnings: 0
+  exit_code: 0
+  findings:
+  - check_id: MON-014
+    severity: info
+    message: Critical supplier SUP-003 (Authorised Payment Service Provider (PSP))
+      DPA status 'Template issued' — informational until PAYMENTS_LIVE/HIPAA_PROFILE
+      enabled
+  - check_id: MON-014
+    severity: info
+    message: Critical supplier SUP-005 (Health platform connectors (Sync-Bot)) DPA
+      status 'Template issued' — informational until PAYMENTS_LIVE/HIPAA_PROFILE enabled
+- timestamp: '2026-06-10T06:27:36Z'
   operator: ubuntu
   errors: 0
   warnings: 0

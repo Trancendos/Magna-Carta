@@ -5,7 +5,7 @@
 # Aikido appendix: docs/compliance/AIKIDO-SECURITY-TESTING-FRAMEWORK.md
 
 meta:
-  register_version: "1.0.0"
+  register_version: "1.1.0"
   owner: "Security Ops"
   last_updated: "2026-06-09"
   review_cycle: "quarterly"
@@ -17,7 +17,7 @@ schema:
 
 channels:
   - test_id: SEC-001
-    name: "Aikido MCP — SAST and secrets feed (optional free tier)"
+    name: "Aikido MCP — SAST and secrets feed (optional, deprioritised)"
     layer: continuous
     tool: aikido_full_scan
     mcp_server: Aikido
@@ -30,8 +30,34 @@ channels:
       - "Repository source (Python, YAML, shell, markdown with code fences)"
     remediation_procedure: docs/procedures/PROC-VUL-001-Vulnerability-Management.md
     notes: >
-      Optional enhancement only. Aikido Free (no credit card) covers JS/TS/Python SAST/secrets.
-      Mandatory baseline is SEC-002 (zero-cost local script). pending_connection does not block Layer B.
+      Optional enhancement only; paid tiers and GitHub Action SAST gates are out of scope.
+      Recommended alternative: SEC-006 OSS stack (100% free, no account).
+      Mandatory baseline is SEC-002. pending_connection does not block Layer B.
+
+  - test_id: SEC-006
+    name: "OSS security stack — Aikido-free alternative"
+    layer: continuous
+    tool: scripts/run_oss_security_scans.sh
+    installer: scripts/install_zero_cost_security_stack.sh
+    cost_model: free_oss
+    zct_ids:
+      - ZCT-007
+      - ZCT-008
+      - ZCT-009
+      - ZCT-010
+      - ZCT-012
+    mandatory: false
+    status: configured
+    frequency: "weekly_and_pre_release"
+    tools:
+      - gitleaks
+      - bandit
+      - semgrep
+      - pip-audit
+    remediation_procedure: docs/procedures/PROC-VUL-001-Vulnerability-Management.md
+    notes: >
+      100% free open-source scanners. Install via install_zero_cost_security_stack.sh.
+      Skips gracefully when tools absent; SEC-002 still satisfies Layer B.
 
   - test_id: SEC-002
     name: "Local security testing script (mandatory zero-cost)"
@@ -85,15 +111,18 @@ channels:
 
 integration:
   zero_cost_policy: docs/compliance/ZERO-COST-SECURITY-TOOLING.md
+  local_ci_runner: scripts/run_layer_b_local_ci.sh
   zero_cost_register: compliance/zero_cost_tooling_register.yaml
-  optional_oss_runner: scripts/run_oss_security_scans.sh
+  oss_stack_runner: scripts/run_oss_security_scans.sh
+  oss_stack_installer: scripts/install_zero_cost_security_stack.sh
   aikido:
     mcp_tools:
       - aikido_full_scan
       - aikido_issues_list
       - aikido_ignore_issue
     local_runner: scripts/run_security_testing.py
-    when_mcp_unavailable: "Run SEC-002; SEC-001 pending_connection does not reduce Layer B %"
+    when_mcp_unavailable: "Run SEC-002 and SEC-006 OSS stack; SEC-001 pending_connection does not reduce Layer B %"
+    preferred_alternative: SEC-006
 
   compliance_frameworks:
     - OWASP ASVS — docs/compliance/ASVS-GAP-CHECKLIST.md

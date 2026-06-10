@@ -1,0 +1,8 @@
+# Optional OSS security stack — 100% free, no SaaS (Aikido-free alternative)
+# Install: ./scripts/install_zero_cost_security_stack.sh
+# Run: ./scripts/run_oss_security_scans.sh
+bandit>=1.7
+semgrep>=1.60
+pip-audit>=2.7
+# Transitive override: semgrep pins pyjwt~=2.12; 2.13+ fixes PYSEC-2026-175–179
+pyjwt>=2.13.0

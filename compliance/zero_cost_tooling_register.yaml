@@ -4,7 +4,7 @@
 # Human-readable: docs/compliance/ZERO-COST-SECURITY-TOOLING.md
 
 meta:
-  register_version: "1.0.0"
+  register_version: "1.1.0"
   owner: "Security Ops / ISMS Lead"
   last_updated: "2026-06-09"
   review_cycle: "quarterly"
@@ -97,7 +97,7 @@ tools:
     notes: "Dependency CVE check when requirements.txt present"
 
   - tool_id: ZCT-011
-    name: "Aikido Security — Free tier (optional)"
+    name: "Aikido Security — Free tier (optional, deprioritised)"
     cost_model: free_tier_no_cc
     mandatory: false
     mcp_server: Aikido
@@ -105,12 +105,43 @@ tools:
     limits: >
       Free plan: IDE/MCP SAST + secrets for JS/TS/Python; no credit card.
       Paid features (IaC block, full GitHub Action SAST gate) not required for Layer B.
-    notes: "Enhancement only; SEC-002 satisfies Layer B without Aikido"
+      Prefer SEC-006 OSS stack when avoiding any SaaS dependency or usage limits.
+    notes: "Enhancement only; SEC-002 + SEC-006 satisfy Layer B without Aikido"
+
+  - tool_id: ZCT-012
+    name: "OSS security stack installer"
+    cost_model: free_local_script
+    mandatory: false
+    path: scripts/install_zero_cost_security_stack.sh
+    dependency: "python3, pip, curl (for gitleaks binary)"
+    notes: "Installs bandit, semgrep, pip-audit, gitleaks — 100% free"
+
+  - tool_id: ZCT-013
+    name: "Layer B local CI runner (GitHub Actions alternative)"
+    cost_model: free_local_script
+    mandatory: false
+    path: scripts/run_layer_b_local_ci.sh
+    dependency: bash, python3
+    notes: "No cloud CI minutes; use instead of GitHub Actions for Layer B gates"
+
+  - tool_id: ZCT-014
+    name: "Local pre-commit hook installer"
+    cost_model: free_local_script
+    mandatory: false
+    path: scripts/install_local_pre_commit_hook.sh
+    dependency: git
+    notes: "Optional; runs run_layer_b_local_ci.sh before each commit"
 
 prohibited_mandatory:
+  - name: "GitHub Actions (mandatory Layer B)"
+    reason: >
+      Free tier minutes are limited; overage billing applies on private repos.
+      Use scripts/run_layer_b_local_ci.sh and weekly_compliance_health.sh instead.
   - name: "Vanta / Drata / Secureframe CCM"
     reason: "Paid SaaS — documented as comparison only in maturity benchmark"
   - name: "Annual external pen test"
     reason: "Layer C owner gate (ACT-005); programme doc only until commissioned"
   - name: "Aikido paid plan"
-    reason: "Not required; free tier or SEC-002 sufficient for Layer B"
+    reason: "Not required; SEC-006 OSS stack or SEC-002 sufficient for Layer B"
+  - name: "CodeSlick / cloud CI with metered minutes"
+    reason: "Metered SaaS — not used for mandatory Layer B in this programme"

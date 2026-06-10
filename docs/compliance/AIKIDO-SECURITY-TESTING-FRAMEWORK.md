@@ -6,7 +6,7 @@
 **Register:** `compliance/security_testing_register.yaml`  
 **Readiness model:** [COMPLIANCE-READINESS-MODEL.md](COMPLIANCE-READINESS-MODEL.md) (Layer B continuous; Layer C annual pen test)
 
-> **Primary policy:** [ZERO-COST-SECURITY-TOOLING.md](ZERO-COST-SECURITY-TOOLING.md) defines mandatory £0/$0 Layer B tooling. SEC-002 (local script) is required; Aikido (SEC-001) is an **optional free-tier enhancement** — not a blocker.
+> **Primary policy:** [ZERO-COST-SECURITY-TOOLING.md](ZERO-COST-SECURITY-TOOLING.md) defines mandatory £0/$0 Layer B tooling. SEC-002 (local script) is required. **SEC-006 OSS stack** is the recommended free alternative to Aikido. SEC-001 (Aikido MCP) is **optional and deprioritised** — not a blocker.
 
 ---
 

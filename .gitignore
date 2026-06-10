@@ -1,2 +1,9 @@
 # Local reference clone — not part of Magna Carta deliverable
 tranc3-repo/
+
+# Local OSS tool binaries (installed by install_zero_cost_security_stack.sh)
+.tools/
+
+# Python virtual environments
+.venv/
+venv/
