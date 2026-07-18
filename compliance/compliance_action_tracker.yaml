@@ -127,7 +127,19 @@ actions:
     validation_type: external
     executor: owner
     source: "MC-004 notes"
-    evidence_target: "MAGNA_CARTA_ENABLED=true in staging; audit log samples. Code + test coverage now exist (src/compliance/magna_carta.py, src/compliance/middleware.py, tests/test_magna_carta_compliance.py in Tranc3, Trancendos/Tranc3#286) - this action was previously titled/tracked as if the code itself were unimplemented, which was inaccurate. That test pass also found and fixed a real bug: enforcement.fail_closed_on_violation could never actually block a request in any configuration, because the engine's outcome dict never exposed a fail_closed flag for the middleware to read. Remaining gap is exactly what this action's evidence_target already said: a live staging run with MAGNA_CARTA_ENABLED=true and real audit log samples, which has not happened yet."
+    evidence_target: "MAGNA_CARTA_ENABLED=true in staging; audit log samples"
+    notes: >
+      Code + test coverage now exist (src/compliance/magna_carta.py,
+      src/compliance/middleware.py, tests/test_magna_carta_compliance.py in
+      Tranc3, Trancendos/Tranc3#286) - this action was previously
+      titled/tracked as if the code itself were unimplemented, which was
+      inaccurate. That test pass also found and fixed a real bug:
+      enforcement.fail_closed_on_violation could never actually block a
+      request in any configuration, because the engine's outcome dict never
+      exposed a fail_closed flag for the middleware to read. Remaining gap
+      is exactly what evidence_target already says above: a live staging
+      run with MAGNA_CARTA_ENABLED=true and real audit log samples, which
+      has not happened yet.
 
   - action_id: ACT-010
     title: "Resolve US AI fallback DPA negotiation or keep disabled (SUP-004)"
