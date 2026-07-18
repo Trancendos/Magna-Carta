@@ -30,7 +30,7 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 | ACT-006 | Tranc3 HIPAA Tier A copy remediation PR | Platform Engineering | 2026-07-15 | P1 | In progress | 🎯 (local ✅; upstream merge pending) |
 | ACT-007 | Policy attestation cycle (privileged roles) | HR / ISMS Lead | 2026-08-31 | P2 | Open | 🎯 |
 | ACT-008 | SOC 2 observation period evidence collection | ISMS Lead | 2026-10-01 | P1 | Open | 🎯 |
-| ACT-009 | magna_carta.py request-boundary enforcement | Platform Engineering | 2026-09-30 | P2 | Open | 🎯 |
+| ACT-009 | Validate magna_carta.py request-boundary enforcement in Tranc3 staging | Platform Engineering | 2026-09-30 | P2 | In progress | 🎯 (code + tests ✅ — [Tranc3#286](https://github.com/Trancendos/Tranc3/pull/286); staging run + audit log evidence pending) |
 | ACT-010 | SUP-004 US AI fallback DPA or disable decision | DPO / AI Lead | 2026-10-31 | P2 | Open | 🎯 |
 | ACT-012 | Expand BCP restore tests (all P0 DBs) | Operations | 2027-06-07 | P2 | Open | 🎯 |
 | ACT-016 | Appoint named individuals to 13 defined roles in HRIS | HR / Executive | 2026-09-30 | P2 | Open | 🎯 |
