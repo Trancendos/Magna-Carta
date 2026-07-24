@@ -439,3 +439,122 @@ requirements:
     last_reviewed: "2026-07-24"
     reviewer: "Trancendos"
     notes: "Audit found 6 in-repo routers (src/imind, src/vrar3d, src/resonate, src/artifactory, src/library, src/studio) with zero auth enforcement, including two unauthenticated delete endpoints, plus 65 files with wildcard CORS across workers/*/worker.py and main.py. Tracked as open remediation items, not fixed by this documentation pass."
+
+  - id: MC-016
+    standard: "Magna Carta / Legal Compliance"
+    title: "Legal Matrix"
+    description: "Per-Service/Solution/Application legal instrument and legislation-tracking posture — customer-facing terms, company registration status, and tracked legislation — beyond LEGAL-BIBLE.md's process-level scope."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/compliance/LEGAL-MATRIX.md
+        description: "Human-readable legal matrix"
+      - type: config
+        path: compliance/estate_protection_matrices.yaml
+        description: "Machine-readable register (legal section)"
+    maps_to:
+      - LEG-001
+      - LEG-008
+      - ISO27001 A.5.31
+    verification_method: document_review
+    last_reviewed: "2026-07-24"
+    reviewer: "Trancendos"
+    notes: "Confirmed real gaps: no external Terms of Service, Privacy Policy, or Cookie Policy exists in either repo (only an internal platform AUP and internal staff AUP). 'Trancendos Ltd' appears as an asserted trading name with no Companies House number, registered address, or incorporation date found anywhere. Both tracked as genuine open items requiring real legal input, not fabricated as resolved."
+
+  - id: MC-017
+    standard: "Magna Carta / FCA / Financial Regulation"
+    title: "Financial Matrix"
+    description: "Per-Service/Solution/Application UK FCA and global financial-regulation posture, adding entity-level detail to the existing MC-009 FCA Alignment Programme."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/compliance/FINANCIAL-MATRIX.md
+        description: "Human-readable financial matrix"
+      - type: config
+        path: compliance/estate_protection_matrices.yaml
+        description: "Machine-readable register (financial section)"
+    maps_to:
+      - MC-009
+      - LEG-010
+      - SUP-003
+    verification_method: document_review
+    last_reviewed: "2026-07-24"
+    reviewer: "Trancendos"
+    notes: "Confirms MC-009's existing finding (Trancendos operates outside direct FCA authorisation) at entity level. workers/ledger-service/worker.py is a generic audit hash-chain, not a financial ledger — flagged to prevent future confusion. SUP-003 PSP DPA remains unsigned ('Template issued'), same open item as ACT-001, not duplicated as new."
+
+  - id: MC-018
+    standard: "Magna Carta / Data Governance"
+    title: "Knowledge Matrix"
+    description: "Per-Service/Solution/Application federated knowledge-sharing, data classification, sensitivity, and retention posture, beyond DATA-MANAGEMENT-BIBLE.md and PRIVACY-BIBLE.md's process-level scope."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/compliance/KNOWLEDGE-MATRIX.md
+        description: "Human-readable knowledge matrix"
+      - type: config
+        path: compliance/estate_protection_matrices.yaml
+        description: "Machine-readable register (knowledge section)"
+    maps_to:
+      - REQ-IA-006
+      - ISO27001 A.5.12
+    verification_method: code_review
+    last_reviewed: "2026-07-24"
+    reviewer: "Trancendos"
+    notes: "Central finding: The Library (src/library/knowledge_base.py, Tranc3), the platform's designated knowledge-base entity, has no classification, sensitivity, or retention fields at all — a real, previously-undocumented gap. A working DataClassification pattern already exists elsewhere (src/nanoservices/daas_stream/daas_stream.py) but is not applied to The Library. Tracked as an open engineering follow-up, not fixed by this documentation pass."
+
+  - id: MC-019
+    standard: "Magna Carta / Revenue Governance"
+    title: "Revenue Matrix"
+    description: "Per-Service/Solution/Application passive-income, revenue-generating-strategy, and monetisation-technique posture, grounded in the real src/monetisation/billing.py revenue engine."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/compliance/REVENUE-MATRIX.md
+        description: "Human-readable revenue matrix"
+      - type: config
+        path: compliance/estate_protection_matrices.yaml
+        description: "Machine-readable register (revenue section)"
+    maps_to:
+      - MC-002
+    verification_method: code_review
+    last_reviewed: "2026-07-24"
+    reviewer: "Trancendos"
+    notes: "SaaS subscription billing (Stripe, free/pro-GBP29/business-GBP149 tiers) and RevenueTracker's 12-stream engine (incl. the Arcadian Exchange 2.5% marketplace fee) are real, well-built code. Corrected per review (charliecreates, P1): PassiveRevenueEngine has no persistence (resets to zero on every process restart) and Stripe defaults to free-only mode without a real STRIPE_SECRET_KEY, so no stream's current earning status can be verified from source code alone. Do not represent any of the 12 as confirmed active revenue in product copy."
+
+  - id: MC-020
+    standard: "Magna Carta / Taxation"
+    title: "Taxation Matrix"
+    description: "Per-Service/Solution/Application tax and cost framework compliance — VAT, corporation tax, and reliefs — separating real code capability from actual filed/registered tax status."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/compliance/TAXATION-MATRIX.md
+        description: "Human-readable taxation matrix"
+      - type: config
+        path: compliance/estate_protection_matrices.yaml
+        description: "Machine-readable register (taxation section)"
+    maps_to:
+      - LEG-008
+    verification_method: document_review
+    last_reviewed: "2026-07-24"
+    reviewer: "Trancendos"
+    notes: "TaxMonitor (src/monetisation/billing.py) has real UK/EU VAT rate logic and a working VIES validation API call. Corrected per review (coderabbitai): 2 hardcoded constants are stale, not simply 'correct' as an earlier version of this note claimed — UK_VAT_THRESHOLD_GBP (85000) is below the real £90,000 threshold effective 2024-04-01, and EU_VAT_RATES['FI'] (0.24) is below Finland's real 25.5% rate effective 2024-09-01. Separately, no VAT registration number, UTR, or evidence of an actual R&D/AIA/Patent Box/SEIS-EIS claim was found anywhere. Code capability must not be conflated with actual tax compliance; every real-world registration/filing item is tracked as requiring a real accountant, not self-certified here."
+
+  - id: MC-021
+    standard: "Magna Carta / Zero-Cost Architecture"
+    title: "Zero-Cost Matrix"
+    description: "Per-Service/Solution/Application/AI zero-cost architecture adherence, grounded in the real, executable scripts/zero_cost_audit.py and src/zero_cost/registry.py."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/compliance/ZERO-COST-MATRIX.md
+        description: "Human-readable zero-cost matrix"
+      - type: config
+        path: compliance/estate_protection_matrices.yaml
+        description: "Machine-readable register (zero_cost section)"
+    maps_to:
+      - MC-002
+    verification_method: automated_scan
+    last_reviewed: "2026-07-24"
+    reviewer: "Trancendos"
+    notes: "Live audit run 2026-07-24: 30 approved self-hosted providers, 5 correctly blocked-paid providers, 0 rotation-chain validation errors. Corrected per review (charliecreates, P1): the script's own overall exit code is 1 (FAIL), not PASS as an earlier version of this note stated — the JSON body's internal status field covers chain validation only. The audit script's own doc-presence check fails: docs/ZERO_COST_VENDOR_MATRIX.md is missing from Tranc3, which is what drives the real exit code."

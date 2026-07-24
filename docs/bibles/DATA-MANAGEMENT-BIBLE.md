@@ -54,6 +54,7 @@ Trigger → PROC-DAT-001 → COOK-DAT-001 → HYMN-DAT-001 → Evidence → PROC
 | Maturity % | [COMPLIANCE-MATURITY-AND-BENCHMARK.md](../compliance/COMPLIANCE-MATURITY-AND-BENCHMARK.md) |
 | RACI | [RACI-MATRIX.md](../governance/RACI-MATRIX.md) |
 | Job descriptions | [job-descriptions/INDEX.md](../job-descriptions/INDEX.md) |
+| Per-Service/Solution/Application/AI knowledge/classification/retention posture | [KNOWLEDGE-MATRIX.md](../compliance/KNOWLEDGE-MATRIX.md) (MC-018) |
 
 ---
 

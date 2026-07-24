@@ -54,6 +54,7 @@ Trigger → PROC-LEG-001 → COOK-LEG-001 → HYMN-LEG-001 → Evidence → PROC
 | Maturity % | [COMPLIANCE-MATURITY-AND-BENCHMARK.md](../compliance/COMPLIANCE-MATURITY-AND-BENCHMARK.md) |
 | RACI | [RACI-MATRIX.md](../governance/RACI-MATRIX.md) |
 | Job descriptions | [job-descriptions/INDEX.md](../job-descriptions/INDEX.md) |
+| Per-Service/Solution/Application/AI legal posture | [LEGAL-MATRIX.md](../compliance/LEGAL-MATRIX.md) (MC-016) |
 
 ---
 
