@@ -13,7 +13,7 @@
 
 Tracks, per encryption surface (in-transit, at-rest, secrets/signing), whether the correct protocol is actually applied — grounded in a direct code/config audit of the Tranc3 implementation rather than an assumed posture. This matrix is the encryption-specific sibling of the [Security Matrix](SECURITY-MATRIX.md) (MC-015); overlapping findings are cross-referenced, not duplicated.
 
-**Honesty note (per this framework's own rule, REGULATION-MATRIX.md §5):** do not claim encryption coverage in product copy unless the corresponding row is ✅ with evidence. Several rows below are ❌ or ⚠️ deliberately, because that is what the code audit found.
+**Honesty note (per this framework's own rule, REGULATION-MATRIX.md §6):** do not claim encryption coverage in product copy unless the corresponding row is ✅ with evidence. Several rows below are ❌ or ⚠️ deliberately, because that is what the code audit found.
 
 ---
 

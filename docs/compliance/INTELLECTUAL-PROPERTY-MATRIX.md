@@ -18,7 +18,7 @@ Tracks, per entity, two distinct IP questions the existing [IP-BIBLE.md](../bibl
 
 This matrix does **not** duplicate the [License Compliance Matrix](LICENSE-COMPLIANCE-MATRIX.md) (MC-012), which already covers open-source *dependency* licensing — that is an inbound-obligation question, not an ownership question, and its findings are cross-referenced rather than repeated here.
 
-**Honesty note (per this framework's own rule, REGULATION-MATRIX.md §5):** do not claim IP clearance in product copy unless the corresponding row is ✅ with evidence.
+**Honesty note (per this framework's own rule, REGULATION-MATRIX.md §6):** do not claim IP clearance in product copy unless the corresponding row is ✅ with evidence.
 
 ---
 
@@ -40,7 +40,7 @@ This matrix does **not** duplicate the [License Compliance Matrix](LICENSE-COMPL
 |---|---|---|
 | Is Tranc3's application code (the 43-entity platform, `src/`, `workers/`) Trancendos-owned work product? | ✅ | Developed under Trancendos-controlled repositories (`Trancendos/Tranc3`, `Trancendos/CranBania`, `Trancendos/magna-carta`, `Trancendos/InfinityStyles`); no external contractor IP-assignment gap identified in this scan |
 | Are the 43 platform entity names (The Spark, Luminous, Infinity, tAimra, etc. — `PLATFORM_ENTITIES.md`) protectable as Trancendos brand/trademark assets? | 🎯 | No formal trademark search or registration has been performed for any of the 43 names as of this scan — this is a genuine open item, not a completed control. Recommend prioritizing the platform's most externally-visible names (Trancendos itself, "Infinity", "Luminous") if commercial trademark registration is ever pursued |
-| Do personality profile JSONs (`src/personality/profiles/*.json` — character voice, backstory, traits) constitute original creative work owned by Trancendos? | ✅ | Authored in-house per [PERSONALITY-ARCHETYPES.md](../governance/PERSONALITY-ARCHETYPES.md); no third-party character licensing involved |
+| Do personality profile JSONs (`src/personality/profiles/*.json` — character voice, backstory, traits) constitute original creative work owned by Trancendos? | ✅ | Authored in-house per [PERSONALITY-ARCHETYPES.md](https://github.com/Trancendos/Tranc3/blob/main/docs/governance/PERSONALITY-ARCHETYPES.md) (Tranc3 repo — no local copy in this repo); no third-party character licensing involved |
 | Does AI-generated code/content (produced by Claude Code / other assistants working in this repo) create an ownership ambiguity? | ⚠️ | Current mainstream position (US Copyright Office guidance, UK CDPA 1988 s.9(3) computer-generated works provision) treats AI-assisted code with meaningful human direction/selection as ordinarily eligible for ownership by the directing party — but this has not been the subject of a specific legal opinion for this estate. Treated as a watch item, not a settled ✅, pending that opinion if commercial exposure increases |
 
 ---
@@ -49,7 +49,7 @@ This matrix does **not** duplicate the [License Compliance Matrix](LICENSE-COMPL
 
 | Entity / Asset | Risk | Assessment |
 |---|---|---|
-| **Sashas Photo Studio** | ⚠️ Naming | Deliberately spelled without an apostrophe (`CLAUDE.md` naming rule: "no apostrophe — canonical; not 'Sasha's Photo Studio'") — this appears to be an intentional distinguishing choice already, which reduces (but does not eliminate) confusability risk against any third-party "Sasha's" mark. No trademark clearance search has been run to confirm no conflicting registered mark exists in any target jurisdiction |
+| **Sashas Photo Studio** | ⚠️ Naming | Deliberately spelled without an apostrophe per [CLAUDE.md naming rule](https://github.com/Trancendos/Tranc3/blob/main/CLAUDE.md): "no apostrophe — canonical; not 'Sasha's Photo Studio'" — this appears to be an intentional distinguishing choice already, which reduces (but does not eliminate) confusability risk against any third-party "Sasha's" mark. No trademark clearance search has been run to confirm no conflicting registered mark exists in any target jurisdiction |
 | **TateKing** | 📋 Not assessed | Common personal-name-style brand; no clearance search performed |
 | **The Nexus / Nexus-Prime** | 📋 Not assessed | Generic term, lower collision risk, but not searched |
 | Third-party recommended-foundation names used in product copy (n8n, Outline, Vault, ComfyUI, etc. — `CLAUDE.md`'s Recommended Open Source Foundations table) | ✅ | These are referenced by their own project names as integration targets, not re-branded as Trancendos originals — nominative use, not a trademark risk, provided marketing copy never implies endorsement by those projects. No instance of implied endorsement found in this scan |

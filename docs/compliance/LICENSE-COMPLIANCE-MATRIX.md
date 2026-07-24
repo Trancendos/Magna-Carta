@@ -19,7 +19,7 @@ Tracks the open-source, third-party, and AI-model licenses this estate depends o
 
 This is a distinct concern from [REGULATION-MATRIX.md](REGULATION-MATRIX.md) (regulatory/legal compliance) and [IP-BIBLE.md](../bibles/IP-BIBLE.md) (this estate's *own* IP ownership) — this matrix is about the licenses *this estate consumes* from others.
 
-**Honesty note, per this framework's own rule (REGULATION-MATRIX.md §5):** do not claim license clearance in product copy unless the corresponding row below is ✅ with evidence.
+**Honesty note, per this framework's own rule (REGULATION-MATRIX.md §6):** do not claim license clearance in product copy unless the corresponding row below is ✅ with evidence.
 
 ---
 

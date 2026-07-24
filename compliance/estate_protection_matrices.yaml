@@ -21,7 +21,7 @@ meta:
     confirmed_gap: "❌ — Confirmed conflict or gap, remediation required"
     external_action: "🎯 — Requires an external/owner action this framework cannot self-certify"
   honesty_note: >
-    Per REGULATION-MATRIX.md §5: do not claim compliance/clearance in product
+    Per REGULATION-MATRIX.md §6: do not claim compliance/clearance in product
     copy unless the corresponding row is verified_clear with evidence.
 
 license_compliance:

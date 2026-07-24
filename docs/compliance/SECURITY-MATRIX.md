@@ -13,7 +13,7 @@
 
 Tracks, per Service/Solution/Application, whether the correct **non-cryptographic** protections are actually in place — authentication/authorization coverage, CORS configuration, and route-level access control — grounded in a direct code audit rather than an assumed posture. Encryption-specific findings (TLS, at-rest, secrets) live in the sibling [Encryption Matrix](ENCRYPTION-MATRIX.md) (MC-014) and are not repeated here.
 
-**Honesty note (per this framework's own rule, REGULATION-MATRIX.md §5):** do not claim security coverage in product copy unless the corresponding row is ✅ with evidence. Several rows below are deliberately ❌, because that is what the code audit found — many of these gaps were already flagged individually in the per-entity doc-pack series (`docs/services/*/README.md` in Tranc3) but had not been consolidated into one cross-entity view until this matrix.
+**Honesty note (per this framework's own rule, REGULATION-MATRIX.md §6):** do not claim security coverage in product copy unless the corresponding row is ✅ with evidence. Several rows below are deliberately ❌, because that is what the code audit found — many of these gaps were already flagged individually in the per-entity doc-pack series (`docs/services/*/README.md` in Tranc3) but had not been consolidated into one cross-entity view until this matrix.
 
 ---
 
