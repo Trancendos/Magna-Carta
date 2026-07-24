@@ -9,7 +9,7 @@
 meta:
   register_version: "1.0.0"
   owner: "Platform Engineering / ISMS Lead"
-  last_updated: "2026-06-07"
+  last_updated: "2026-07-24"
   review_cycle: "quarterly"
   magna_carta_register: "compliance/magna_carta_register.yaml"
   tranc3_register: "compliance/register.yaml"
@@ -237,7 +237,8 @@ bridges:
 
   - mc_id: MC-016
     title: "Legal Matrix"
-    tranc3_requirements:
+    tranc3_requirements: []
+    legislation_refs:
       - LEG-001
       - LEG-008
     magna_carta_paths:
@@ -250,7 +251,8 @@ bridges:
 
   - mc_id: MC-017
     title: "Financial Matrix"
-    tranc3_requirements:
+    tranc3_requirements: []
+    legislation_refs:
       - LEG-010
     magna_carta_paths:
       - docs/compliance/FINANCIAL-MATRIX.md
@@ -274,7 +276,8 @@ bridges:
 
   - mc_id: MC-019
     title: "Revenue Matrix"
-    tranc3_requirements:
+    tranc3_requirements: []
+    related_mc_ids:
       - MC-002
     magna_carta_paths:
       - docs/compliance/REVENUE-MATRIX.md
@@ -285,7 +288,8 @@ bridges:
 
   - mc_id: MC-020
     title: "Taxation Matrix"
-    tranc3_requirements:
+    tranc3_requirements: []
+    legislation_refs:
       - LEG-008
     magna_carta_paths:
       - docs/compliance/TAXATION-MATRIX.md
@@ -296,7 +300,8 @@ bridges:
 
   - mc_id: MC-021
     title: "Zero-Cost Matrix"
-    tranc3_requirements:
+    tranc3_requirements: []
+    related_mc_ids:
       - MC-002
     magna_carta_paths:
       - docs/compliance/ZERO-COST-MATRIX.md

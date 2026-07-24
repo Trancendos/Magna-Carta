@@ -59,14 +59,17 @@ magna_carta_register.yaml     ──►    compliance/register.yaml (DEFSTAN)
 | MC-013 | Intellectual Property Matrix | REQ-IA-006 | — | `PLATFORM_ENTITIES.md` |
 | MC-014 | Encryption Matrix | REQ-IA-001 | — | `docker-compose.production.yml` |
 | MC-015 | Security Matrix | REQ-IA-001 | — | `src/security/middleware.py` |
-| MC-016 | Legal Matrix | LEG-001/008 | — | `docs/governance/ACCEPTABLE-USE-POLICY.md` |
-| MC-017 | Financial Matrix | LEG-010 | — | `src/monetisation/billing.py` |
+| MC-016 | Legal Matrix | —[^legislation-refs] | — | `docs/governance/ACCEPTABLE-USE-POLICY.md` |
+| MC-017 | Financial Matrix | —[^legislation-refs] | — | `src/monetisation/billing.py` |
 | MC-018 | Knowledge Matrix | REQ-IA-006 | — | `src/library/knowledge_base.py` |
-| MC-019 | Revenue Matrix | MC-002 | — | `src/monetisation/billing.py` |
-| MC-020 | Taxation Matrix | LEG-008 | — | `src/monetisation/billing.py` |
-| MC-021 | Zero-Cost Matrix | MC-002 | — | `src/zero_cost/registry.py` |
+| MC-019 | Revenue Matrix | —[^related-mc] | — | `src/monetisation/billing.py` |
+| MC-020 | Taxation Matrix | —[^legislation-refs] | — | `src/monetisation/billing.py` |
+| MC-021 | Zero-Cost Matrix | —[^related-mc] | — | `src/zero_cost/registry.py` |
 
 Full detail: [tranc3_register_bridge.yaml](../../compliance/tranc3_register_bridge.yaml).
+
+[^legislation-refs]: No Tranc3 DEFSTAN `REQ-###` requirement exists yet for this matrix's scope — `tranc3_requirements` is correctly empty (`[]`), matching the same pattern as MC-006/007/008/009/010/011. The relevant cross-reference is instead recorded in `tranc3_register_bridge.yaml`'s `legislation_refs` field (Magna Carta `legislation_register.yaml` entries), not conflated with the `REQ-###` namespace.
+[^related-mc]: No Tranc3 DEFSTAN `REQ-###` requirement exists yet for this matrix's scope. The cross-reference is recorded in `tranc3_register_bridge.yaml`'s `related_mc_ids` field (a Magna Carta-internal `MC-###` reference), kept in its own field rather than the `tranc3_requirements` list to avoid mixing two different identifier namespaces.
 
 ---
 

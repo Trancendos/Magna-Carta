@@ -83,7 +83,7 @@ This is a real, substantive legislation register — not something this matrix n
 |---|---|---|
 | Royal Bank of Arcadia / Arcadian Exchange | Financial services regulation | See [Financial Matrix](FINANCIAL-MATRIX.md) (MC-017) — not duplicated here |
 | Sashas Photo Studio | Generated-image copyright/training-data provenance | See [INTELLECTUAL-PROPERTY-MATRIX.md](INTELLECTUAL-PROPERTY-MATRIX.md) §4 — not duplicated here |
-| Every entity processing personal data | UK/EU GDPR (LEG-001/002/003) | ✅ Programme-level coverage via `docs/compliance/GDPR-ALIGNMENT.md`; per-entity enforcement not individually audited in this pass |
+| Every entity processing personal data | UK/EU GDPR (LEG-001/002/003) | ⚠️ Programme-level coverage is real and verified via `docs/compliance/GDPR-ALIGNMENT.md`; per-entity enforcement has not been individually audited in this pass — do not read the programme-level ✅ as per-entity verification |
 
 All other entities carry no distinct legal exposure beyond the estate-wide baseline (LEG-001–010) — a deliberate scoping choice, matching the pattern used in the Intellectual Property Matrix.
 

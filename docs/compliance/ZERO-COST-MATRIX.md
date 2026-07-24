@@ -33,22 +33,25 @@ Tracks, per Service/Solution/Application/AI, whether the platform's zero-cost ar
 
 Ran `python3 scripts/zero_cost_audit.py` against Tranc3 on 2026-07-24. This script is real and executable — not a proposed control — and validates `src/zero_cost/registry.py`'s provider registry and rotation-chain configuration.
 
+**Overall command result: ❌ FAIL (exit code 1)** — the JSON body's own `"status": "PASS"` field describes rotation-chain structural validation only, not the script's overall outcome. The script separately checks for `docs/ZERO_COST_VENDOR_MATRIX.md`, and its actual process exit code is `1` when that file is missing (confirmed by running the script and checking `$?` directly, not just reading the JSON body). Reporting this matrix's headline result as "PASS" would misstate what the command actually returns — corrected here per review.
+
 | Metric | Value | Assessment |
 |---|---|---|
 | Registry version | `2026-06` | — |
 | Approved self-hosted providers | 30 | ✅ |
 | Approved free-tier providers | 0 | 📋 all providers are currently bucketed as self-hosted or blocked-paid; no distinct free-tier-only bucket populated |
 | Blocked-paid providers | 5 (`openai`, `anthropic`, `azure-openai`, `gpt4`, `claude-api-paid`) | ✅ correctly blocked — these five are the exact paid AI APIs the zero-cost mandate exists to avoid |
-| Rotation-chain validation errors | 0 | ✅ all 5 defined chains (`embeddings_default`, `image_default`, `stt_default`, `zero_cost_cloud`, `zero_cost_full`) pass structural validation |
-| Script's own doc check | `WARN: docs/ZERO_COST_VENDOR_MATRIX.md missing` | ❌ the audit script expects this file at Tranc3's repo root and it does not exist — a real, currently-failing check, not a hypothetical gap |
+| Rotation-chain structural validation | 0 errors | ✅ all 5 defined chains (`embeddings_default`, `image_default`, `stt_default`, `zero_cost_cloud`, `zero_cost_full`) pass structural validation — this is the narrow condition the JSON body's `"status"` field actually measures |
+| Script's own doc-presence check | `WARN: docs/ZERO_COST_VENDOR_MATRIX.md missing` | ❌ the audit script expects this file at Tranc3's repo root and it does not exist — this is what drives the script's real exit code 1 |
+| **Overall script exit status** | **`1` (FAIL)** | ❌ do not report this audit as passing until the missing doc is created — chain validation passing is necessary but not sufficient for the script's own definition of success |
 
-**Action:** create `docs/ZERO_COST_VENDOR_MATRIX.md` in Tranc3 (the script's own expected path) so the audit's own doc-presence check passes; this is a genuine, currently-red item, not fabricated for this matrix.
+**Action:** create `docs/ZERO_COST_VENDOR_MATRIX.md` in Tranc3 (the script's own expected path) so the audit actually exits 0; this is a genuine, currently-red item, not fabricated for this matrix.
 
 ---
 
 ## 4. Approved self-hosted / zero-cost providers (real registry contents)
 
-Full list from `approved_self_hosted` in `src/zero_cost/registry.py`, grouped by category — representative sample, not abbreviated to protect accuracy:
+All 30 entries from `approved_self_hosted` in `src/zero_cost/registry.py` are listed below, grouped by category (verified by counting: 3+8+2+1+3+1+5+2+4+1 = 30, matching §3's `approved_self_hosted_count`) — this is the exhaustive list, not an illustrative sample:
 
 | Category | Providers | License / cost basis |
 |---|---|---|

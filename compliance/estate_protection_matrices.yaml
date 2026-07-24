@@ -312,9 +312,21 @@ knowledge:
 revenue:
   mc_id: MC-019
   human_readable: docs/compliance/REVENUE-MATRIX.md
+  no_persistence_caveat:
+    status: confirmed_gap
+    note: >
+      PassiveRevenueEngine._revenue initializes to 0.0 for every stream on
+      every process instantiation (no database/file persistence). Every
+      "current status" claim below is code-capability-confirmed only, not
+      a verified production earning status — corrected per review
+      (charliecreates, P1) from an earlier version that wrongly asserted
+      specific streams were "live" or "zero balance" based on this
+      zero-initialization, which is a property of any fresh instance
+      regardless of real earnings.
   saas_tiers:
-    status: verified_clear
+    status: verified_caveat
     path: src/monetisation/billing.py
+    note: "Code capability confirmed; whether STRIPE_SECRET_KEY and real price IDs are actually set in production is not verifiable from source code (Stripe defaults to 'free-only mode' when unset)"
     tiers:
       free: {price_gbp: 0, req_per_hour: 100}
       pro: {price_gbp: 29, req_per_hour: 1000}
@@ -322,36 +334,52 @@ revenue:
       enterprise: {price_gbp: null, req_per_hour: -1, note: "per-negotiation, not a published tier"}
   revenue_streams:
     total_defined: 12
-    active_or_earning:
+    status: verified_caveat
+    note: "All 12 streams carry the same status: code capability confirmed, live-earning status not independently verifiable given no_persistence_caveat above"
+    streams:
       - saas_subscriptions
-      - marketplace_fees
-    zero_balance:
-      - affiliate_commissions
-      - github_sponsors
-      - kofi_tips
-      - certification_fees
-      - ad_revenue
-    not_verified_live:
       - api_metering
       - personality_packs
       - white_label_licenses
+      - affiliate_commissions
+      - github_sponsors
+      - kofi_tips
+      - marketplace_fees
       - data_insights
+      - certification_fees
+      - ad_revenue
       - consulting
     mentioned_but_not_implemented:
       - nft_digital_assets
       # NOT a key in RevenueTracker.STREAMS (verified: only 12 keys exist,
-      # matching total_defined below) — this appears only in the class's
+      # matching total_defined above) — this appears only in the class's
       # own docstring as a "future" idea, never actually implemented.
   action_items:
-    - "Activate zero-balance streams per RevenueTracker's own strategy recommendations (GitHub Sponsors, affiliate programmes)"
+    - "Wire RevenueTracker to a persistent store so status claims become independently verifiable"
+    - "Confirm STRIPE_SECRET_KEY is genuinely set in the production deployment environment"
 
 taxation:
   mc_id: MC-020
   human_readable: docs/compliance/TAXATION-MATRIX.md
   tax_monitor_code:
-    status: verified_clear
+    status: confirmed_gap
     path: src/monetisation/billing.py
-    note: "Real UK 20%/EU VAT-OSS per-country rate logic, real VIES API validation call, Stripe Tax integration"
+    note: >
+      Real UK/EU VAT-OSS rate logic and real VIES API validation call, but
+      2 constants are stale as of this review: UK_VAT_THRESHOLD_GBP is
+      85000, while HMRC raised the actual threshold to £90,000 effective
+      1 April 2024; EU_VAT_RATES["FI"] is 0.24, while Finland raised its
+      standard rate to 25.5% effective 1 September 2024. Corrected per
+      review (coderabbitai) from an earlier version that claimed these
+      values were simply "correct."
+    uk_vat_threshold_gbp:
+      code_value: 85000
+      current_real_value: 90000
+      effective_date: "2024-04-01"
+    eu_vat_rate_fi:
+      code_value: 0.24
+      current_real_value: 0.255
+      effective_date: "2024-09-01"
   actual_registration_status:
     uk_vat_registration:
       status: external_action
@@ -392,10 +420,19 @@ zero_cost:
     blocked_paid_count: 5
     blocked_paid_providers: ["openai", "anthropic", "azure-openai", "gpt4", "claude-api-paid"]
     rotation_chain_validation_errors: 0
-    status: PASS
+    chain_validation_status: PASS
+    overall_script_exit_status: FAIL
+    overall_exit_code: 1
+    note: >
+      The JSON body's own "status": "PASS" field describes rotation-chain
+      structural validation only. The script's actual process exit code is
+      1 (confirmed by checking $? directly, not just the JSON body) because
+      it separately requires docs/ZERO_COST_VENDOR_MATRIX.md to exist.
+      Corrected per review (charliecreates, P1) from an earlier version
+      that reported this audit's overall status as PASS.
   doc_presence_check:
     status: confirmed_gap
-    note: "Audit script's own check for docs/ZERO_COST_VENDOR_MATRIX.md fails — file missing from Tranc3"
+    note: "Audit script's own check for docs/ZERO_COST_VENDOR_MATRIX.md fails — file missing from Tranc3; this is what drives overall_exit_code above to 1"
   cloud_only_tension:
     status: verified_caveat
     note: "AI-inference layer is genuinely zero-cost; hosting layer (Cloudflare Workers Cloud-Only default) is not strictly self-hosted, a known accepted gap pending funding per CLAUDE.md"

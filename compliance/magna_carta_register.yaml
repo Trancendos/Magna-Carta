@@ -519,7 +519,7 @@ requirements:
     verification_method: code_review
     last_reviewed: "2026-07-24"
     reviewer: "Trancendos"
-    notes: "SaaS subscription billing (Stripe, free/pro-GBP29/business-GBP149 tiers) and the Arcadian Exchange 2.5% marketplace fee are real and working. Of the 12 defined revenue streams in RevenueTracker, most (affiliate commissions, GitHub Sponsors, Ko-fi tips, certification fees, ad revenue) show zero balance — defined but not yet monetising. Do not represent all 12 as active revenue in product copy."
+    notes: "SaaS subscription billing (Stripe, free/pro-GBP29/business-GBP149 tiers) and RevenueTracker's 12-stream engine (incl. the Arcadian Exchange 2.5% marketplace fee) are real, well-built code. Corrected per review (charliecreates, P1): PassiveRevenueEngine has no persistence (resets to zero on every process restart) and Stripe defaults to free-only mode without a real STRIPE_SECRET_KEY, so no stream's current earning status can be verified from source code alone. Do not represent any of the 12 as confirmed active revenue in product copy."
 
   - id: MC-020
     standard: "Magna Carta / Taxation"
@@ -538,7 +538,7 @@ requirements:
     verification_method: document_review
     last_reviewed: "2026-07-24"
     reviewer: "Trancendos"
-    notes: "TaxMonitor (src/monetisation/billing.py) has real, correct UK/EU VAT rate logic and a working VIES validation API call — but no VAT registration number, UTR, or evidence of an actual R&D/AIA/Patent Box/SEIS-EIS claim was found anywhere. Code capability must not be conflated with actual tax compliance; every real-world registration/filing item is tracked as requiring a real accountant, not self-certified here."
+    notes: "TaxMonitor (src/monetisation/billing.py) has real UK/EU VAT rate logic and a working VIES validation API call. Corrected per review (coderabbitai): 2 hardcoded constants are stale, not simply 'correct' as an earlier version of this note claimed — UK_VAT_THRESHOLD_GBP (85000) is below the real £90,000 threshold effective 2024-04-01, and EU_VAT_RATES['FI'] (0.24) is below Finland's real 25.5% rate effective 2024-09-01. Separately, no VAT registration number, UTR, or evidence of an actual R&D/AIA/Patent Box/SEIS-EIS claim was found anywhere. Code capability must not be conflated with actual tax compliance; every real-world registration/filing item is tracked as requiring a real accountant, not self-certified here."
 
   - id: MC-021
     standard: "Magna Carta / Zero-Cost Architecture"
@@ -557,4 +557,4 @@ requirements:
     verification_method: automated_scan
     last_reviewed: "2026-07-24"
     reviewer: "Trancendos"
-    notes: "Live audit run 2026-07-24: 30 approved self-hosted providers, 5 correctly blocked-paid providers, 0 rotation-chain validation errors (status PASS). The audit script's own doc-presence check fails: docs/ZERO_COST_VENDOR_MATRIX.md is missing from Tranc3 — a genuine, currently-red item, not fabricated."
+    notes: "Live audit run 2026-07-24: 30 approved self-hosted providers, 5 correctly blocked-paid providers, 0 rotation-chain validation errors. Corrected per review (charliecreates, P1): the script's own overall exit code is 1 (FAIL), not PASS as an earlier version of this note stated — the JSON body's internal status field covers chain validation only. The audit script's own doc-presence check fails: docs/ZERO_COST_VENDOR_MATRIX.md is missing from Tranc3, which is what drives the real exit code."

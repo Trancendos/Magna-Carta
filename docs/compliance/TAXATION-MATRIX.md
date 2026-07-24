@@ -35,8 +35,8 @@ Tracks whether the platform's tax and cost frameworks are followed — real code
 
 | Item | Status | Finding |
 |---|---|---|
-| UK VAT rate/threshold logic | ✅ | Correct, real constants: 20% rate, £85,000/year registration threshold |
-| EU VAT-OSS per-country rate table | ✅ | Real table covering DE (19%), FR (20%), IT (22%), ES (21%), NL (21%), BE (21%), AT (20%), PL (23%), SE (25%), DK (25%), FI (24%), IE (23%), PT (23%), RO (19%), HU (27%), CZ (21%), and more |
+| UK VAT rate/threshold logic | ❌ | The 20% rate is current, but `UK_VAT_THRESHOLD_GBP = 85_000` is **stale** — HMRC raised the UK VAT registration threshold to £90,000 effective 1 April 2024 (The Value Added Tax (Increase of Registration Limits) Order 2024). The code has not been updated to reflect this and will under-flag registration obligations for businesses between £85,000–£90,000 turnover |
+| EU VAT-OSS per-country rate table | ❌ | Most rates verified current, but `"FI": 0.24` is **stale** — Finland raised its standard VAT rate to 25.5% effective 1 September 2024. Other rates in the table (DE 19%, FR 20%, IT 22%, ES 21%, NL 21%, BE 21%, AT 20%, PL 23%, SE 25%, DK 25%, IE 23%, PT 23%, RO 19%, HU 27%, CZ 21%) were not individually re-verified in this pass — the Finland finding alone is enough to warrant a full re-audit of this table against current national rates before trusting it |
 | EU VAT number validation | ✅ | Real VIES SOAP API integration (`validate_eu_vat_number`) — a genuine external call, not a mock |
 | Stripe Tax integration | ✅ | Enabled in checkout per the module's own comments; handles collection automatically once real Stripe price IDs are configured |
 | **Actual UK VAT registration** | 🎯 | Not found anywhere in either repo — no VAT registration number recorded. Do not assume registration has occurred just because the threshold-tracking code exists |
@@ -76,7 +76,8 @@ This confirms the taxation domain is a genuine, currently-unaddressed compliance
 
 | Activity | Frequency | Mechanism |
 |---|---|---|
-| VAT registration status confirmation | Immediate | 🎯 Requires a real accountant — confirm whether UK VAT registration has actually occurred given current/projected turnover vs. the £85,000 threshold |
+| Update `UK_VAT_THRESHOLD_GBP` to £90,000 and re-verify the full `EU_VAT_RATES` table (starting with Finland's 25.5%) | Immediate | Real engineering fix in `src/monetisation/billing.py` (Tranc3) — this matrix caught genuinely stale constants, not a hypothetical risk |
+| VAT registration status confirmation | Immediate | 🎯 Requires a real accountant — confirm whether UK VAT registration has actually occurred given current/projected turnover vs. the (corrected) £90,000 threshold |
 | Corporation tax / UTR confirmation | Immediate | 🎯 Requires real corporate tax records |
 | R&D credit / AIA / Patent Box claim assessment | On next accounting period close | 🎯 Requires a real accountant — do not self-assess |
 | Full re-review of this matrix | Quarterly | Aligned with REGULATION-MATRIX.md's cycle |
