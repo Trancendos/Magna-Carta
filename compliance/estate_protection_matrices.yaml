@@ -1,9 +1,11 @@
 ---
 # Estate Protection Matrices — machine-readable register
 # Covers: License Compliance (MC-012), Intellectual Property (MC-013),
-# Encryption (MC-014), Security (MC-015)
+# Encryption (MC-014), Security (MC-015), Legal (MC-016), Financial
+# (MC-017), Knowledge (MC-018), Revenue (MC-019), Taxation (MC-020),
+# Zero-Cost (MC-021)
 # Generated: 2026-07-24
-# Human-readable siblings: docs/compliance/{LICENSE-COMPLIANCE,INTELLECTUAL-PROPERTY,ENCRYPTION,SECURITY}-MATRIX.md
+# Human-readable siblings: docs/compliance/{LICENSE-COMPLIANCE,INTELLECTUAL-PROPERTY,ENCRYPTION,SECURITY,LEGAL,FINANCIAL,KNOWLEDGE,REVENUE,TAXATION,ZERO-COST}-MATRIX.md
 # Parent register: compliance/magna_carta_register.yaml
 # Bridge: compliance/tranc3_register_bridge.yaml
 
@@ -215,3 +217,185 @@ security:
     - "Add auth to fabulousa-service and ice-box-service GET routes"
     - "Schedule a full auth-coverage sweep of the remaining ~78 standalone workers not yet individually audited"
     - "Tighten wildcard CORS on the 65 flagged files (owner decision on allowed-origins policy)"
+
+legal:
+  mc_id: MC-016
+  human_readable: docs/compliance/LEGAL-MATRIX.md
+  customer_facing_instruments:
+    platform_aup:
+      status: verified_clear
+      path: docs/governance/ACCEPTABLE-USE-POLICY.md
+      note: "Code-enforced via CURRENT_TERMS_VERSION in src/access/registry.py"
+    terms_of_service:
+      status: confirmed_gap
+      note: "No standalone external ToS found in either repo"
+    privacy_policy:
+      status: confirmed_gap
+      note: "Only an internal DPIA exists (docs/privacy/PRIVACY_IMPACT_ASSESSMENT.md), no published customer-facing notice"
+    cookie_policy:
+      status: confirmed_gap
+    eula:
+      status: confirmed_gap
+  company_registration:
+    trading_name_asserted:
+      status: verified_caveat
+      value: "Trancendos Ltd"
+      note: "Appears repeatedly across both repos but is unverified as a registered entity"
+    companies_house_number:
+      status: external_action
+      note: "Not found anywhere in either repo"
+    registered_address:
+      status: external_action
+    incorporation_date:
+      status: external_action
+  tracked_legislation:
+    active_count: 10
+    watch_list_count: 6
+    source: compliance/legislation_register.yaml
+  action_items:
+    - "Draft external Terms of Service, Privacy Policy, and Cookie Policy before any commercial customer launch"
+    - "Confirm and record real Companies House number, registered address, and incorporation date"
+
+financial:
+  mc_id: MC-017
+  human_readable: docs/compliance/FINANCIAL-MATRIX.md
+  fca_alignment:
+    status: verified_caveat
+    parent_mc_id: MC-009
+    note: "Trancendos operates outside direct FCA authorisation per docs/compliance/FCA-ALIGNMENT.md — no client-money holding, no PSD2 authorisation"
+  billing_integration:
+    status: verified_clear
+    path: src/monetisation/billing.py
+    note: "Real Stripe integration — subscription billing via an authorised PSP, not a regulated payment service itself"
+  ledger_service_clarification:
+    status: verified_caveat
+    path: workers/ledger-service/worker.py
+    note: "Generic audit hash-chain, NOT a financial/payments ledger — flagged to prevent future misclassification"
+  psp_dpa:
+    status: verified_caveat
+    supplier_id: SUP-003
+    note: "DPA status is 'Template issued', not signed — matches existing ACT-001, not a new finding"
+  global_regulation_research:
+    status: not_assessed
+    note: "PSD2, US money-transmitter licensing, and AML/KYC named as categories worth researching with real regulatory counsel — not asserted as compliant or non-applicable"
+  action_items:
+    - "Execute signed PSP DPA (existing ACT-001)"
+    - "Engage real regulatory counsel before any expansion into direct EU/US payment processing"
+
+knowledge:
+  mc_id: MC-018
+  human_readable: docs/compliance/KNOWLEDGE-MATRIX.md
+  central_finding:
+    status: confirmed_gap
+    path: src/library/knowledge_base.py
+    note: "The Library's Article dataclass has no classification, sensitivity, or retention field of any kind"
+  existing_patterns_not_yet_applied:
+    data_classification_enum:
+      status: verified_clear
+      path: src/nanoservices/daas_stream/daas_stream.py
+      note: "Real, working classification+retention_ms+OPA enforcement — scoped to DaaS Stream only"
+    artifactory_retention:
+      status: verified_clear
+      path: src/artifactory/registry.py
+      note: "apply_retention() — scoped to The Artifactory only"
+  federation_paths:
+    dutchy_to_library:
+      status: verified_clear
+      note: "Confirmed real Library.create() calls from The Dutchy's report generators"
+    observatory_to_library:
+      status: confirmed_gap
+      note: "ingest() is dead code; /kb/ingest endpoint does not exist"
+  action_items:
+    - "Apply a DataClassification pattern (reuse daas_stream.py's) to The Library"
+    - "Fix or remove the dead Observatory-to-Library ingest path"
+
+revenue:
+  mc_id: MC-019
+  human_readable: docs/compliance/REVENUE-MATRIX.md
+  saas_tiers:
+    status: verified_clear
+    path: src/monetisation/billing.py
+    tiers:
+      free: {price_gbp: 0, req_per_hour: 100}
+      pro: {price_gbp: 29, req_per_hour: 1000}
+      business: {price_gbp: 149, req_per_hour: 10000, req_per_day: 100000}
+      enterprise: {price_gbp: null, req_per_hour: -1, note: "per-negotiation, not a published tier"}
+  revenue_streams:
+    total_defined: 12
+    active_or_earning:
+      - saas_subscriptions
+      - marketplace_fees
+    zero_balance:
+      - affiliate_commissions
+      - github_sponsors
+      - kofi_tips
+      - certification_fees
+      - ad_revenue
+    not_verified_live:
+      - api_metering
+      - personality_packs
+      - white_label_licenses
+      - data_insights
+      - consulting
+    future_only:
+      - nft_digital_assets
+  action_items:
+    - "Activate zero-balance streams per RevenueTracker's own strategy recommendations (GitHub Sponsors, affiliate programmes)"
+
+taxation:
+  mc_id: MC-020
+  human_readable: docs/compliance/TAXATION-MATRIX.md
+  tax_monitor_code:
+    status: verified_clear
+    path: src/monetisation/billing.py
+    note: "Real UK 20%/EU VAT-OSS per-country rate logic, real VIES API validation call, Stripe Tax integration"
+  actual_registration_status:
+    uk_vat_registration:
+      status: external_action
+      note: "No VAT number found anywhere in either repo"
+    eu_vat_oss_registration:
+      status: external_action
+    corporation_tax_utr:
+      status: external_action
+      note: "No Unique Taxpayer Reference found"
+  tax_relief_claims:
+    rd_tax_credit:
+      status: external_action
+      note: "Described generically in code; no evidence of an actual claim filed"
+    annual_investment_allowance:
+      status: external_action
+    patent_box:
+      status: external_action
+      note: "Contingent on a registered patent, a separate open item under MC-013"
+    seis_eis:
+      status: external_action
+  register_gaps:
+    frameworks_register_tax_entries: 0
+    legislation_register_tax_entries: 0
+    payroll_tracked_separately: "ACT-018, docs/bibles/FINANCE-BIBLE.md"
+  action_items:
+    - "Confirm real VAT registration status against actual/projected turnover vs the £85,000 threshold"
+    - "Confirm Corporation Tax UTR and any real R&D/AIA/Patent Box/SEIS-EIS claims with a real accountant"
+
+zero_cost:
+  mc_id: MC-021
+  human_readable: docs/compliance/ZERO-COST-MATRIX.md
+  live_audit:
+    date: "2026-07-24"
+    script: scripts/zero_cost_audit.py
+    registry_version: "2026-06"
+    approved_self_hosted_count: 30
+    approved_free_tier_count: 0
+    blocked_paid_count: 5
+    blocked_paid_providers: ["openai", "anthropic", "azure-openai", "gpt4", "claude-api-paid"]
+    rotation_chain_validation_errors: 0
+    status: PASS
+  doc_presence_check:
+    status: confirmed_gap
+    note: "Audit script's own check for docs/ZERO_COST_VENDOR_MATRIX.md fails — file missing from Tranc3"
+  cloud_only_tension:
+    status: verified_caveat
+    note: "AI-inference layer is genuinely zero-cost; hosting layer (Cloudflare Workers Cloud-Only default) is not strictly self-hosted, a known accepted gap pending funding per CLAUDE.md"
+  action_items:
+    - "Create docs/ZERO_COST_VENDOR_MATRIX.md in Tranc3 to satisfy the audit script's own check"
+    - "Wire scripts/zero_cost_audit.py into .forgejo/workflows/dependency-audit.yml"

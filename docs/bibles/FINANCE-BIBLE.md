@@ -54,6 +54,9 @@ Trigger → PROC-FIN-001 → COOK-FIN-001 → HYMN-FIN-001 → Evidence → PROC
 | Maturity % | [COMPLIANCE-MATURITY-AND-BENCHMARK.md](../compliance/COMPLIANCE-MATURITY-AND-BENCHMARK.md) |
 | RACI | [RACI-MATRIX.md](../governance/RACI-MATRIX.md) |
 | Job descriptions | [job-descriptions/INDEX.md](../job-descriptions/INDEX.md) |
+| Per-Service/Solution/Application FCA/financial posture | [FINANCIAL-MATRIX.md](../compliance/FINANCIAL-MATRIX.md) (MC-017) |
+| Per-Service/Solution/Application revenue/monetisation posture | [REVENUE-MATRIX.md](../compliance/REVENUE-MATRIX.md) (MC-019) |
+| Per-Service/Solution/Application tax posture | [TAXATION-MATRIX.md](../compliance/TAXATION-MATRIX.md) (MC-020) |
 
 ---
 

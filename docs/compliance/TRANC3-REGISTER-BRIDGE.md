@@ -11,7 +11,7 @@
 
 ## 1. Purpose
 
-Maps Magna Carta requirements (MC-001–MC-015) to Tranc3 DEFSTAN requirements (REQ-###), runtime rules (MC-RULE-###), policies, and obligations. Used when:
+Maps Magna Carta requirements (MC-001–MC-021) to Tranc3 DEFSTAN requirements (REQ-###), runtime rules (MC-RULE-###), policies, and obligations. Used when:
 
 - Importing Magna Carta rows into Tranc3 compliance reporting
 - Tracing audit questions from certification scope to code paths
@@ -59,6 +59,12 @@ magna_carta_register.yaml     ──►    compliance/register.yaml (DEFSTAN)
 | MC-013 | Intellectual Property Matrix | REQ-IA-006 | — | `PLATFORM_ENTITIES.md` |
 | MC-014 | Encryption Matrix | REQ-IA-001 | — | `docker-compose.production.yml` |
 | MC-015 | Security Matrix | REQ-IA-001 | — | `src/security/middleware.py` |
+| MC-016 | Legal Matrix | LEG-001/008 | — | `docs/governance/ACCEPTABLE-USE-POLICY.md` |
+| MC-017 | Financial Matrix | LEG-010 | — | `src/monetisation/billing.py` |
+| MC-018 | Knowledge Matrix | REQ-IA-006 | — | `src/library/knowledge_base.py` |
+| MC-019 | Revenue Matrix | MC-002 | — | `src/monetisation/billing.py` |
+| MC-020 | Taxation Matrix | LEG-008 | — | `src/monetisation/billing.py` |
+| MC-021 | Zero-Cost Matrix | MC-002 | — | `src/zero_cost/registry.py` |
 
 Full detail: [tranc3_register_bridge.yaml](../../compliance/tranc3_register_bridge.yaml).
 
@@ -78,6 +84,12 @@ Full detail: [tranc3_register_bridge.yaml](../../compliance/tranc3_register_brid
 | Traefik letsencrypt certresolver definition + P0 services on `websecure` | 🎯 Pending | MC-014 |
 | 18-worker `dev-secret` INTERNAL_SECRET fallback removal | 🎯 Pending | MC-014 |
 | Auth enforcement on 6 unauthenticated in-repo routers | 🎯 Pending | MC-015 |
+| External ToS/Privacy Policy/Cookie Policy + company registration confirmation | 🎯 Pending (real legal input) | MC-016 |
+| SUP-003 PSP DPA signature | 🎯 Pending (existing ACT-001) | MC-017 |
+| Classification/sensitivity/retention model for The Library | 🎯 Pending | MC-018 |
+| Activation of 7 zero-balance revenue streams | 🎯 Pending (owner decision) | MC-019 |
+| VAT registration / UTR / real tax-relief claim confirmation | 🎯 Pending (real accountant) | MC-020 |
+| `docs/ZERO_COST_VENDOR_MATRIX.md` creation in Tranc3 | 🎯 Pending | MC-021 |
 
 ---
 

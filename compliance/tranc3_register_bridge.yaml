@@ -234,3 +234,74 @@ bridges:
       - src/imind/routes.py
       - src/artifactory/routes.py
     integration_notes: "6 in-repo routers have zero auth enforcement (2 with unauthenticated delete endpoints); 65 files carry wildcard CORS — open remediation items, not yet fixed"
+
+  - mc_id: MC-016
+    title: "Legal Matrix"
+    tranc3_requirements:
+      - LEG-001
+      - LEG-008
+    magna_carta_paths:
+      - docs/compliance/LEGAL-MATRIX.md
+      - compliance/estate_protection_matrices.yaml
+    tranc3_paths:
+      - docs/governance/ACCEPTABLE-USE-POLICY.md
+      - src/access/registry.py
+    integration_notes: "No external ToS/Privacy Policy/Cookie Policy exists; no company registration (CRN, address) found anywhere — both open items requiring real legal input"
+
+  - mc_id: MC-017
+    title: "Financial Matrix"
+    tranc3_requirements:
+      - LEG-010
+    magna_carta_paths:
+      - docs/compliance/FINANCIAL-MATRIX.md
+      - compliance/estate_protection_matrices.yaml
+    tranc3_paths:
+      - src/monetisation/billing.py
+      - workers/ledger-service/worker.py
+    integration_notes: "Entity-level detail on the existing MC-009 FCA finding; workers/ledger-service is a generic audit hash-chain, not a financial ledger; SUP-003 PSP DPA remains unsigned"
+
+  - mc_id: MC-018
+    title: "Knowledge Matrix"
+    tranc3_requirements:
+      - REQ-IA-006
+    magna_carta_paths:
+      - docs/compliance/KNOWLEDGE-MATRIX.md
+      - compliance/estate_protection_matrices.yaml
+    tranc3_paths:
+      - src/library/knowledge_base.py
+      - src/nanoservices/daas_stream/daas_stream.py
+    integration_notes: "The Library has no classification/sensitivity/retention model; a working DataClassification pattern exists in daas_stream.py but is not applied to The Library"
+
+  - mc_id: MC-019
+    title: "Revenue Matrix"
+    tranc3_requirements:
+      - MC-002
+    magna_carta_paths:
+      - docs/compliance/REVENUE-MATRIX.md
+      - compliance/estate_protection_matrices.yaml
+    tranc3_paths:
+      - src/monetisation/billing.py
+    integration_notes: "SaaS subscriptions and marketplace fees are real and earning; 7 of 12 defined revenue streams show zero balance (defined, not yet monetising)"
+
+  - mc_id: MC-020
+    title: "Taxation Matrix"
+    tranc3_requirements:
+      - LEG-008
+    magna_carta_paths:
+      - docs/compliance/TAXATION-MATRIX.md
+      - compliance/estate_protection_matrices.yaml
+    tranc3_paths:
+      - src/monetisation/billing.py
+    integration_notes: "TaxMonitor's VAT logic is real and correct; no VAT registration, UTR, or actual R&D/AIA/Patent Box claim evidence found — all real-world tax status items require a real accountant"
+
+  - mc_id: MC-021
+    title: "Zero-Cost Matrix"
+    tranc3_requirements:
+      - MC-002
+    magna_carta_paths:
+      - docs/compliance/ZERO-COST-MATRIX.md
+      - compliance/estate_protection_matrices.yaml
+    tranc3_paths:
+      - src/zero_cost/registry.py
+      - scripts/zero_cost_audit.py
+    integration_notes: "Live audit (2026-07-24): 30 approved self-hosted providers, 5 correctly blocked-paid, 0 chain-validation errors, status PASS; the script's own docs/ZERO_COST_VENDOR_MATRIX.md doc-presence check fails (file missing from Tranc3)"
