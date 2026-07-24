@@ -337,8 +337,11 @@ revenue:
       - white_label_licenses
       - data_insights
       - consulting
-    future_only:
+    mentioned_but_not_implemented:
       - nft_digital_assets
+      # NOT a key in RevenueTracker.STREAMS (verified: only 12 keys exist,
+      # matching total_defined below) — this appears only in the class's
+      # own docstring as a "future" idea, never actually implemented.
   action_items:
     - "Activate zero-balance streams per RevenueTracker's own strategy recommendations (GitHub Sponsors, affiliate programmes)"
 

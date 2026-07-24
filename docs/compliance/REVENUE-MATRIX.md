@@ -60,9 +60,10 @@ Stripe integration is real: webhook handler at `/webhook/stripe` (`src/monetisat
 | Marketplace fees | Arcadian Exchange 2.5% transaction fee (real calculation: `marketplace_fee()`) | ⚠️ Fee-calculation logic is real and correct; actual transaction volume was below the code's own £100 "meaningful activity" threshold at last check |
 | Data insights reports | Anonymised aggregate trend reports | 📋 Defined; not verified live |
 | Certification fees | Trancendos developer certification programme | ❌ Zero balance — not yet configured |
-| NFT/Digital assets | Future: tokenised platform assets | 🎯 Explicitly marked "future" in the code's own docstring — not a current revenue stream, don't claim it as one |
 | Ad revenue | Opt-in contextual ads (Carbon Ads, free signup) | ❌ Zero balance — code's own recommendation exists for this too |
 | Consulting | Platform consulting and integration services | 📋 Defined; not verified live |
+
+**Not a 13th stream:** the class's own docstring numbered list also mentions "NFT/Digital assets — future: tokenised platform assets," but this is **not** one of the 12 real keys in `RevenueTracker.STREAMS` — verified by inspecting the dict directly. It is a future idea mentioned in a comment, not a defined-but-dormant stream like the 12 above; don't count it toward "12 revenue streams."
 
 **Honest summary:** the *infrastructure* for 12 revenue streams is real and well-built (idempotent booking, per-stream ledger, strategy recommendations), but only SaaS subscriptions and marketplace fees show any real activity signal — the rest are genuinely defined-but-dormant, not yet monetising. Do not represent all 12 as "active revenue streams" in product copy.
 
