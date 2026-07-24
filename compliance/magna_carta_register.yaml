@@ -354,3 +354,88 @@ requirements:
     last_reviewed: "2026-06-07"
     reviewer: "Trancendos"
     notes: "Programme implemented Phase 5; Tranc3 staging enablement and checker import are operational validation targets (ACT-009)"
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # ESTATE PROTECTION MATRICES (License / IP / Encryption / Security)
+  # ─────────────────────────────────────────────────────────────────────────────
+  - id: MC-012
+    standard: "Magna Carta / OSS Licensing / AI Model Licensing"
+    title: "License Compliance Matrix"
+    description: "Per-Service/Solution/Application/AI license posture — open-source dependency licenses, recommended-foundation licenses, and AI model licensing, grounded in a real pip-licenses scan rather than assumed clearance."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/compliance/LICENSE-COMPLIANCE-MATRIX.md
+        description: "Human-readable license compliance matrix"
+      - type: config
+        path: compliance/estate_protection_matrices.yaml
+        description: "Machine-readable register (license_compliance section)"
+    maps_to:
+      - REQ-IA-002
+      - ISO27001 A.5.32
+    verification_method: document_review
+    last_reviewed: "2026-07-24"
+    reviewer: "Trancendos"
+    notes: "Dependency scan (190 packages) is current as of this review date; 4 packages remain unclassified pending manual license lookup (see matrix §4). CI wiring (pip-licenses in Tranc3's dependency-audit.yml) not yet implemented."
+
+  - id: MC-013
+    standard: "Magna Carta / Intellectual Property"
+    title: "Intellectual Property Matrix"
+    description: "Per-Service/Solution/Application/AI IP posture — estate-protection (is Trancendos' own original work unambiguously owned) and non-infringement (does any entity risk infringing third-party IP), at a granularity IP-BIBLE.md and PROC-IP-001 do not provide."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/compliance/INTELLECTUAL-PROPERTY-MATRIX.md
+        description: "Human-readable intellectual property matrix"
+      - type: config
+        path: compliance/estate_protection_matrices.yaml
+        description: "Machine-readable register (intellectual_property section)"
+    maps_to:
+      - REQ-IA-006
+      - ISO27001 A.5.32
+    verification_method: document_review
+    last_reviewed: "2026-07-24"
+    reviewer: "Trancendos"
+    notes: "No trademark clearance search has been performed for any of the 43 platform entity names — tracked as a genuine open item (🎯), not asserted as cleared."
+
+  - id: MC-014
+    standard: "Magna Carta / Encryption Controls"
+    title: "Encryption Matrix"
+    description: "Per-Service/Solution/Application/AI encryption posture — TLS in-transit, at-rest, and secrets/signing — grounded in a direct code/config audit of the Tranc3 implementation."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/compliance/ENCRYPTION-MATRIX.md
+        description: "Human-readable encryption matrix"
+      - type: config
+        path: compliance/estate_protection_matrices.yaml
+        description: "Machine-readable register (encryption section)"
+    maps_to:
+      - REQ-IA-001
+      - ISO27001 A.8.24
+      - SOC2 CC6.7
+    verification_method: code_review
+    last_reviewed: "2026-07-24"
+    reviewer: "Trancendos"
+    notes: "Audit found real gaps, not assumed clearance: P0 services (auth, vault, AI backend) route on plain HTTP in docker-compose.production.yml; Traefik's letsencrypt certresolver is referenced by ~21 service labels but never defined on the Traefik service itself; 18 workers fall back to a hardcoded 'dev-secret' INTERNAL_SECRET. All three tracked as open remediation items, not fixed by this documentation pass."
+
+  - id: MC-015
+    standard: "Magna Carta / Security Controls"
+    title: "Security Matrix"
+    description: "Per-Service/Solution/Application authentication, authorization, and CORS posture — grounded in a direct code audit rather than an assumed posture. Sibling to the Encryption Matrix (MC-014) for non-cryptographic controls."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/compliance/SECURITY-MATRIX.md
+        description: "Human-readable security matrix"
+      - type: config
+        path: compliance/estate_protection_matrices.yaml
+        description: "Machine-readable register (security section)"
+    maps_to:
+      - REQ-IA-001
+      - ISO27001 A.8.3
+      - SOC2 CC6.1
+    verification_method: code_review
+    last_reviewed: "2026-07-24"
+    reviewer: "Trancendos"
+    notes: "Audit found 6 in-repo routers (src/imind, src/vrar3d, src/resonate, src/artifactory, src/library, src/studio) with zero auth enforcement, including two unauthenticated delete endpoints, plus 65 files with wildcard CORS across workers/*/worker.py and main.py. Tracked as open remediation items, not fixed by this documentation pass."

@@ -7,3 +7,6 @@ tranc3-repo/
 # Python virtual environments
 .venv/
 venv/
+
+# Local agent-session scaffolding (git worktrees spawned for isolated subagent tasks)
+.claude/

@@ -51,6 +51,8 @@ Canonical reference for **information security operations** — access control, 
 | OWASP AI Exchange | STD-037 | [OWASP-AI-EXCHANGE-ALIGNMENT.md](../compliance/OWASP-AI-EXCHANGE-ALIGNMENT.md), [AI-SECURITY-THREAT-MODEL.md](../compliance/AI-SECURITY-THREAT-MODEL.md) |
 | OWASP GenAI LLM Top 10 | STD-038 | PT-AI scope; PROC-AI-003 |
 | DEFSTAN (Tranc3) | Tranc3 register | CI gate SYS-033 |
+| Per-Service/Solution/Application security posture (auth, CORS, access control) | MC-015 | [SECURITY-MATRIX.md](../compliance/SECURITY-MATRIX.md) |
+| Per-Service/Solution/Application encryption posture (TLS, at-rest, secrets) | MC-014 | [ENCRYPTION-MATRIX.md](../compliance/ENCRYPTION-MATRIX.md) |
 
 ---
 
