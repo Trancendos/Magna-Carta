@@ -1,0 +1,217 @@
+---
+# Estate Protection Matrices — machine-readable register
+# Covers: License Compliance (MC-012), Intellectual Property (MC-013),
+# Encryption (MC-014), Security (MC-015)
+# Generated: 2026-07-24
+# Human-readable siblings: docs/compliance/{LICENSE-COMPLIANCE,INTELLECTUAL-PROPERTY,ENCRYPTION,SECURITY}-MATRIX.md
+# Parent register: compliance/magna_carta_register.yaml
+# Bridge: compliance/tranc3_register_bridge.yaml
+
+meta:
+  register_version: "1.0.0"
+  owner: "Platform Engineering / ISMS Lead"
+  last_updated: "2026-07-24"
+  review_cycle: "quarterly"
+  next_review: "2026-10-24"
+  magna_carta_register: "compliance/magna_carta_register.yaml"
+  status_legend:
+    verified_clear: "✅ — Verified, no known conflict/gap"
+    verified_caveat: "⚠️ — Verified with a documented caveat"
+    not_assessed: "📋 — Not yet assessed"
+    confirmed_gap: "❌ — Confirmed conflict or gap, remediation required"
+    external_action: "🎯 — Requires an external/owner action this framework cannot self-certify"
+  honesty_note: >
+    Per REGULATION-MATRIX.md §5: do not claim compliance/clearance in product
+    copy unless the corresponding row is verified_clear with evidence.
+
+license_compliance:
+  mc_id: MC-012
+  human_readable: docs/compliance/LICENSE-COMPLIANCE-MATRIX.md
+  scan_date: "2026-07-24"
+  scan_tool: "pip-licenses --format=json --with-urls"
+  packages_scanned: 190
+  license_family_summary:
+    permissive:
+      count: 158
+      families: ["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "PSF-2.0", "Unlicense"]
+      status: verified_clear
+    weak_copyleft:
+      count: 11
+      families: ["LGPL", "LGPLv2+", "MPL-2.0"]
+      status: verified_caveat
+      note: "Safe as unmodified library dependencies; would become a gap only if this estate modified and redistributed the library itself"
+    strong_copyleft:
+      count: 1
+      families: ["GPL (python-apt)"]
+      status: not_assessed
+      note: "Ubuntu system package pulled in transitively by the sandbox/OS image, not a Tranc3-authored or redistributed dependency — confirm absent from shipped container images"
+    proprietary:
+      count: 16
+      families: ["NVIDIA CUDA/cuDNN/NCCL runtime bindings"]
+      status: verified_clear
+      note: "Transitive torch GPU dependencies redistributed under NVIDIA's standard runtime-library terms"
+    unknown:
+      count: 4
+      packages: ["cuda-toolkit", "pygad", "rustworkx", "sentencepiece"]
+      status: not_assessed
+      note: "pip-licenses could not resolve SPDX metadata; sentencepiece is confirmed MIT per its upstream LICENSE file, the other 3 need the same manual check"
+  action_items:
+    - "Confirm GPL/LGPL Ubuntu-tooling rows are sandbox-only, absent from shipped container images"
+    - "Manually resolve the 4 unknown-license rows against each package's actual LICENSE file"
+    - "Wire pip-licenses into Tranc3's .forgejo/workflows/dependency-audit.yml"
+
+intellectual_property:
+  mc_id: MC-013
+  human_readable: docs/compliance/INTELLECTUAL-PROPERTY-MATRIX.md
+  estate_protection:
+    code_ownership: verified_clear
+    entity_name_trademark_clearance:
+      status: external_action
+      note: "No formal trademark search or registration performed for any of the 43 platform entity names"
+    personality_profiles_ownership: verified_clear
+    ai_assisted_content_ownership:
+      status: verified_caveat
+      note: "Treated as ordinarily eligible for ownership by the directing party under current US/UK guidance; no specific legal opinion obtained for this estate"
+  non_infringement_risks:
+    - entity: "Sashas Photo Studio"
+      risk: naming_collision
+      status: verified_caveat
+      note: "Deliberately spelled without an apostrophe; no trademark clearance search performed"
+    - entity: "TateKing"
+      risk: naming_collision
+      status: not_assessed
+    - entity: "Nexus-Prime / The Nexus"
+      risk: naming_collision
+      status: not_assessed
+    - entity: "AI Gateway model outputs (HuggingFace/OpenRouter free tiers)"
+      risk: training_data_provenance
+      status: not_assessed
+    - entity: "Sashas Photo Studio planned Stable Diffusion/ComfyUI backend"
+      risk: training_data_provenance
+      status: external_action
+      note: "Not yet integrated; flag for IP review before go-live"
+  action_items:
+    - "Trademark clearance search, prioritizing Trancendos, Infinity, Luminous"
+    - "Legal opinion on AI-assisted code/content ownership if commercial exposure increases"
+
+encryption:
+  mc_id: MC-014
+  human_readable: docs/compliance/ENCRYPTION-MATRIX.md
+  audit_date: "2026-07-24"
+  in_transit:
+    traefik_websecure_entrypoint:
+      status: verified_caveat
+      note: "Defined with a traefik-certs volume, but no --certificatesresolvers.letsencrypt.acme.* flag exists on the Traefik command block; ~21 service labels reference an undefined certresolver"
+    p0_services_on_plain_http:
+      status: confirmed_gap
+      services: ["infinity-auth", "infinity-void", "tranc3-backend", "tranc3-ai", "api-gateway", "infinity-ws"]
+      note: "All six route on the web (HTTP) entrypoint, not websecure"
+    p3_workers_missing_tls_label:
+      status: confirmed_gap
+      services: ["fabulousa-service", "ice-box-service"]
+      note: "Reference entrypoints=websecure but carry no tls=true or certresolver label"
+    redis_tls:
+      status: verified_clear
+      note: "REDIS_URL uses rediss:// per .env.example"
+    postgres_tls:
+      status: confirmed_gap
+      note: "DATABASE_URL example has no sslmode parameter; no SSL enforcement found in src/database/"
+  at_rest:
+    the_void_vault:
+      status: verified_clear
+      note: "AES-GCM + PBKDF2 (100k, SHA-256), 256-bit key, random IV — both CF Worker and self-hosted Python port"
+    vault_service:
+      status: verified_clear
+      note: "AES-256-GCM + PBKDF2 (100k, SHA-256); replaced a prior insecure XOR cipher per its own code comments"
+    sqlite_field_encryption:
+      status: verified_caveat
+      note: "src/database/encrypted_sqlite.py provides a real opt-in AES-GCM field-encryption helper; adoption in the main Postgres schema not confirmed"
+  secrets_and_signing:
+    jwt_algorithm:
+      status: verified_clear
+      value: "HS256"
+    jwt_secret_default_handling:
+      status: verified_clear
+      note: "Fails fast or generates an ephemeral secrets.token_hex(32); no hardcoded insecure default found"
+    password_hashing:
+      status: verified_caveat
+      note: "Two schemes coexist: argon2id/PBKDF2 (src/auth/passwords.py) vs bcrypt (src/auth/db_user_manager.py)"
+    internal_secret_dev_fallback:
+      status: confirmed_gap
+      affected_workers:
+        - basement
+        - chaos-party
+        - imaginarium
+        - imind
+        - resonate
+        - sashas-photo-studio
+        - taimra
+        - tateking
+        - the-academy
+        - the-dutchy
+        - the-lab
+        - the-studio
+        - the-void
+        - tranceflow
+        - tranquility
+        - vrar3d
+        - warp-radio
+        - warp-tunnel
+      count: 18
+      note: "Fall back to the literal string 'dev-secret' if INTERNAL_SECRET is unset"
+    internal_secret_safe_pattern_reference:
+      status: verified_clear
+      worker: infinity-void
+      note: "Explicitly rejects both an unset value and the string 'internal-dev-secret', raising RuntimeError at startup — proof the safe pattern already exists in-repo"
+  action_items:
+    - "Define a real letsencrypt certresolver on the Traefik service and route P0 services through websecure"
+    - "Remove the dev-secret fallback from the 18 affected workers, copying the infinity-void pattern"
+    - "Decide on a single password-hashing scheme (argon2id/PBKDF2 vs bcrypt)"
+
+security:
+  mc_id: MC-015
+  human_readable: docs/compliance/SECURITY-MATRIX.md
+  audit_date: "2026-07-24"
+  auth_coverage:
+    partial_auth_shared_secret:
+      status: verified_caveat
+      services: ["the-studio", "imind", "tranquility", "taimra", "vrar3d", "resonate", "sashas-photo-studio"]
+      note: "Enforce X-Internal-Secret on all non-/health routes, but default secret is the dev-secret fallback tracked under encryption.secrets_and_signing"
+    no_auth_standalone_workers:
+      status: confirmed_gap
+      findings:
+        - worker: fabulousa-service
+          unauthenticated_routes: ["GET /fabulousa/status", "GET /fabulousa/projects", "GET /fabulousa/assets"]
+        - worker: ice-box-service
+          unauthenticated_routes: ["GET /quarantine", "GET /quarantine/{id}", "GET /stats"]
+    no_auth_inrepo_routers:
+      status: confirmed_gap
+      routers:
+        - src/imind/routes.py
+        - src/vrar3d/routes.py
+        - src/resonate/routes.py
+        - src/artifactory/routes.py
+        - src/library/routes.py
+        - src/studio/routes.py
+      note: "Zero auth enforcement; RBACMiddleware only populates request.state.user, never blocks. Includes 2 unauthenticated delete endpoints (artifactory, library)."
+    verified_auth_present:
+      status: verified_clear
+      routers:
+        - src/tranquility/routes.py
+        - src/taimra/routes.py
+        - workers/library-service/router.py
+        - workers/files-service/worker.py
+      note: "Corrects earlier per-entity doc-pack assumptions that tranquility/taimra had no auth"
+  cors:
+    main_monolith:
+      status: verified_clear
+      note: "api.py uses CORS_ORIGINS env var, defaults to localhost only, not wildcard"
+    standalone_workers:
+      status: confirmed_gap
+      count: 65
+      note: "Files across workers/*/worker.py and main.py use allow_origins=['*']"
+  action_items:
+    - "Add auth enforcement to the 6 unauthenticated in-repo routers, prioritizing the 2 with delete endpoints"
+    - "Add auth to fabulousa-service and ice-box-service GET routes"
+    - "Schedule a full auth-coverage sweep of the remaining ~78 standalone workers not yet individually audited"
+    - "Tighten wildcard CORS on the 65 flagged files (owner decision on allowed-origins policy)"

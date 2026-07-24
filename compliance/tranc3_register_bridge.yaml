@@ -185,3 +185,52 @@ bridges:
       - compliance/tranc3_register_bridge.yaml
       - docs/engineering/TRANC3-INTEGRATION-GUIDE.md
     integration_notes: "This file — canonical MC↔REQ mapping and staging enablement spec"
+
+  - mc_id: MC-012
+    title: "License Compliance Matrix"
+    tranc3_requirements:
+      - REQ-IA-002
+    magna_carta_paths:
+      - docs/compliance/LICENSE-COMPLIANCE-MATRIX.md
+      - compliance/estate_protection_matrices.yaml
+    tranc3_paths:
+      - .forgejo/workflows/dependency-audit.yml
+    integration_notes: "pip-licenses scan is a Magna Carta-side artefact; wiring a license-fail-on-GPL/AGPL step into Tranc3's dependency-audit.yml is the pending CI integration (not yet implemented)"
+
+  - mc_id: MC-013
+    title: "Intellectual Property Matrix"
+    tranc3_requirements:
+      - REQ-IA-006
+    magna_carta_paths:
+      - docs/compliance/INTELLECTUAL-PROPERTY-MATRIX.md
+      - compliance/estate_protection_matrices.yaml
+    tranc3_paths:
+      - PLATFORM_ENTITIES.md
+      - CLAUDE.md
+    integration_notes: "Entity-name trademark clearance search is a genuine open item (🎯), not yet performed for any of the 43 platform entities"
+
+  - mc_id: MC-014
+    title: "Encryption Matrix"
+    tranc3_requirements:
+      - REQ-IA-001
+    magna_carta_paths:
+      - docs/compliance/ENCRYPTION-MATRIX.md
+      - compliance/estate_protection_matrices.yaml
+    tranc3_paths:
+      - docker-compose.production.yml
+      - workers/infinity-void/worker.py
+      - src/auth/tokens.py
+    integration_notes: "P0 services (auth, vault, AI backend) route on plain HTTP; Traefik's letsencrypt certresolver is referenced but never defined; 18 workers fall back to a hardcoded dev-secret INTERNAL_SECRET — all open remediation items, not yet fixed"
+
+  - mc_id: MC-015
+    title: "Security Matrix"
+    tranc3_requirements:
+      - REQ-IA-001
+    magna_carta_paths:
+      - docs/compliance/SECURITY-MATRIX.md
+      - compliance/estate_protection_matrices.yaml
+    tranc3_paths:
+      - src/security/middleware.py
+      - src/imind/routes.py
+      - src/artifactory/routes.py
+    integration_notes: "6 in-repo routers have zero auth enforcement (2 with unauthenticated delete endpoints); 65 files carry wildcard CORS — open remediation items, not yet fixed"

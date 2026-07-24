@@ -54,6 +54,8 @@ Trigger → PROC-IP-001 → COOK-IP-001 → HYMN-IP-001 → Evidence → PROC-CM
 | Maturity % | [COMPLIANCE-MATURITY-AND-BENCHMARK.md](../compliance/COMPLIANCE-MATURITY-AND-BENCHMARK.md) |
 | RACI | [RACI-MATRIX.md](../governance/RACI-MATRIX.md) |
 | Job descriptions | [job-descriptions/INDEX.md](../job-descriptions/INDEX.md) |
+| Per-Service/Solution/Application/AI IP posture | [INTELLECTUAL-PROPERTY-MATRIX.md](../compliance/INTELLECTUAL-PROPERTY-MATRIX.md) (MC-013) |
+| Per-Service/Solution/Application/AI license posture (OSS/model licensing) | [LICENSE-COMPLIANCE-MATRIX.md](../compliance/LICENSE-COMPLIANCE-MATRIX.md) (MC-012) |
 
 ---
 

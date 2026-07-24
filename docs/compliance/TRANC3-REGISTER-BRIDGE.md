@@ -11,7 +11,7 @@
 
 ## 1. Purpose
 
-Maps Magna Carta requirements (MC-001–MC-011) to Tranc3 DEFSTAN requirements (REQ-###), runtime rules (MC-RULE-###), policies, and obligations. Used when:
+Maps Magna Carta requirements (MC-001–MC-015) to Tranc3 DEFSTAN requirements (REQ-###), runtime rules (MC-RULE-###), policies, and obligations. Used when:
 
 - Importing Magna Carta rows into Tranc3 compliance reporting
 - Tracing audit questions from certification scope to code paths
@@ -55,6 +55,10 @@ magna_carta_register.yaml     ──►    compliance/register.yaml (DEFSTAN)
 | MC-009 | FCA Alignment Programme | — | — | `src/compliance/ai_governance.py` |
 | MC-010 | Evidence & Assurance Programme | — | — | `scripts/soc2_evidence_collector.py` |
 | MC-011 | Infinity App Bridge (Tranc3) | — | — | This document |
+| MC-012 | License Compliance Matrix | REQ-IA-002 | — | `.forgejo/workflows/dependency-audit.yml` |
+| MC-013 | Intellectual Property Matrix | REQ-IA-006 | — | `PLATFORM_ENTITIES.md` |
+| MC-014 | Encryption Matrix | REQ-IA-001 | — | `docker-compose.production.yml` |
+| MC-015 | Security Matrix | REQ-IA-001 | — | `src/security/middleware.py` |
 
 Full detail: [tranc3_register_bridge.yaml](../../compliance/tranc3_register_bridge.yaml).
 
@@ -69,6 +73,11 @@ Full detail: [tranc3_register_bridge.yaml](../../compliance/tranc3_register_brid
 | `MAGNA_CARTA_ENABLED=true` in staging | 🎯 Pending | ACT-009 |
 | HIPAA Tier A copy in Tranc3 main | 🎯 Pending | ACT-006 (verified locally) |
 | SOC 2 collector + evidence schedule merge | 🎯 Pending | ACT-008 |
+| pip-licenses gate in Tranc3's dependency-audit.yml | 🎯 Pending | MC-012 |
+| Trademark clearance search for the 43 platform entity names | 🎯 Pending | MC-013 |
+| Traefik letsencrypt certresolver definition + P0 services on `websecure` | 🎯 Pending | MC-014 |
+| 18-worker `dev-secret` INTERNAL_SECRET fallback removal | 🎯 Pending | MC-014 |
+| Auth enforcement on 6 unauthenticated in-repo routers | 🎯 Pending | MC-015 |
 
 ---
 

@@ -37,14 +37,18 @@ This is a distinct concern from [REGULATION-MATRIX.md](REGULATION-MATRIX.md) (re
 
 ## 3. Dependency license summary (Tranc3, `requirements.txt`)
 
-Scanned with `pip-licenses` against the installed environment on 2026-07-24. 190 packages resolved.
+Scanned with `pip-licenses --format=json --with-urls` against the installed environment on
+2026-07-24. 190 packages resolved; exact counts below (not rounded) — see
+[compliance/estate_protection_matrices.yaml](../../compliance/estate_protection_matrices.yaml)'s
+`license_compliance.license_family_summary` for the machine-readable equivalent, and the archived
+scan JSON referenced in §7 for full per-package detail.
 
 | License family | Count | Compliance posture |
 |---|---|---|
-| Permissive (MIT, BSD, Apache-2.0, ISC, PSF) | ~145 | ✅ No redistribution obligation beyond attribution/notice — safe for a closed or open estate |
-| Weak copyleft (LGPL, MPL 2.0) | ~10 | ⚠️ Safe when used as an unmodified library dependency (dynamic linking equivalent for Python imports); becomes ❌ only if this estate modifies and redistributes the library itself, which it does not |
+| Permissive (MIT, BSD, Apache-2.0, ISC, PSF, Unlicense) | 158 | ✅ No redistribution obligation beyond attribution/notice — safe for a closed or open estate |
+| Weak copyleft (LGPL, LGPLv2+, MPL 2.0) | 11 | ⚠️ Safe when used as an unmodified library dependency (dynamic linking equivalent for Python imports); becomes ❌ only if this estate modifies and redistributes the library itself, which it does not |
 | Strong copyleft (GPL) | 1 (`python-apt`) | 📋 Ubuntu system package pulled in transitively by the sandbox/OS image, not a Tranc3-authored or Tranc3-redistributed dependency — confirm it is not bundled into any shipped container image |
-| Proprietary (NVIDIA CUDA/cuDNN/NCCL bindings) | ~14 | ✅ Redistributed under NVIDIA's standard runtime-library redistribution terms as transitive `torch` GPU dependencies; these are hardware driver bindings invoked at runtime, not source code this estate modifies or redistributes standalone |
+| Proprietary (NVIDIA CUDA/cuDNN/NCCL bindings) | 16 | ✅ Redistributed under NVIDIA's standard runtime-library redistribution terms as transitive `torch` GPU dependencies; these are hardware driver bindings invoked at runtime, not source code this estate modifies or redistributes standalone |
 | Unknown / unclassified | 4 (`cuda-toolkit`, `pygad`, `rustworkx`, `sentencepiece`) | 📋 Needs manual classification — `pip-licenses` could not resolve SPDX metadata for these |
 
 Full per-package detail: `pip-licenses --format=json` output, archived per-scan in evidence (see §7).
@@ -73,7 +77,7 @@ Tranc3's `CLAUDE.md` already maintains a per-Location "Recommended Open Source F
 |---|---|---|
 | n8n-io/n8n (The Digital Grid) | Fair-code (self-host free) | Not OSI-approved open source — confirm self-hosted, non-commercial-resale use stays within n8n's Sustainable Use License terms before any commercial resale of Digital Grid workflows |
 | outline/outline (The Library) | BSL (self-host free) | Business Source License — converts to Apache 2.0 after a time-delay per version; confirm which version is adopted and its conversion date |
-| hashicorp/vault (The Void) | BSL (self-host free) | Same BSL caveat as above — HashiCorp's 2023 licence change affects only *commercial competing offerings*, not self-hosted internal use |
+| hashicorp/vault (The Void) | BSL (self-host free) | Same BSL caveat as above — HashiCorp's 2023 license change affects only *commercial competing offerings*, not self-hosted internal use |
 | AUTOMATIC1111/stable-diffusion-webui (Sashas Photo Studio) | AGPL 3.0 | Strongest copyleft in the recommended list — if ever exposed as a modified network service, AGPL's network-use clause requires source disclosure; flag before any customer-facing deployment |
 | cuckoosandbox/cuckoo (The Ice Box) | GPL 3.0 | Standard copyleft — safe as an unmodified sandboxed tool, review before any redistribution |
 | paperless-ngx (DocUtari) | GPL 3.0 | Same as above |
