@@ -1,7 +1,7 @@
 # Knowledge Matrix
 
-**Version:** 1.1.0
-**Date:** 2026-07-24 (re-audited 2026-07-25)
+**Version:** 1.2.0
+**Date:** 2026-07-24 (re-audited 2026-07-25, re-audited again 2026-07-25)
 **Owner:** Platform Engineering / ISMS Lead / DPO
 **Scope:** Every Service, Solution, Application, and AI in the Trancendos estate that stores, shares, or federates knowledge/data
 **Register:** MC-018
@@ -9,13 +9,15 @@
 
 **2026-07-25 re-audit:** the central finding (§3) — The Library had no classification/retention model — is now fixed in Tranc3 (`src/library/knowledge_base.py`'s `Article` dataclass, `fad3486e`). The Observatory → Library dead-ingest path (§5) was **not** touched this session and remains a genuinely open gap.
 
+**2026-07-25 second re-audit (same day):** §5's Observatory → Library gap is now also fixed, in Tranc3 commit `295c2c75`. Both bugs behind the dead path are addressed: `Observatory.record()` now forwards SECURITY/CRITICAL events to `library_pipeline.ingest()` (previously never called from anywhere), and the corrected `_should_trigger()`/`KBTrigger` now read `AuditEvent.to_dict()`'s real keys (`event_type`/`target`/`metadata`) instead of the nonexistent `action`/`resource` keys that made every event fail the filter regardless. The broken `LIBRARY_URL` + missing `/kb/ingest` HTTP path was replaced with a direct in-process `Library.create()` call, since both modules already run in the same process. Covered by `tests/test_library_pipeline.py` (10 tests).
+
 ---
 
 ## 1. Purpose
 
 Tracks, per Service/Solution/Application/AI, whether federated knowledge sharing across the platform actually follows a data classification, sensitivity, and retention framework — building on [DATA-MANAGEMENT-BIBLE.md](../bibles/DATA-MANAGEMENT-BIBLE.md) and [PRIVACY-BIBLE.md](../bibles/PRIVACY-BIBLE.md), both process-level pointer documents, with real code-grounded findings.
 
-**Honesty note (per this framework's own rule, REGULATION-MATRIX.md §6):** do not claim knowledge-governance compliance in product copy unless the corresponding row is ✅ with evidence — this cuts both ways, since an inaccurate ❌ left stale after a fix is equally dishonest. §3's central finding is now closed; §5's Observatory→Library gap remains genuinely open.
+**Honesty note (per this framework's own rule, REGULATION-MATRIX.md §6):** do not claim knowledge-governance compliance in product copy unless the corresponding row is ✅ with evidence — this cuts both ways, since an inaccurate ❌ left stale after a fix is equally dishonest. §3's central finding is closed; §5's Observatory→Library gap is now also closed (see second re-audit note above).
 
 ---
 
@@ -66,7 +68,7 @@ The Library (Zimik, Tranc3's canonical knowledge-base/wiki entity, `src/library/
 | Path | Status | Finding |
 |---|---|---|
 | The Dutchy → The Library | ✅ | Confirmed real, working integration (per the Tranc3 doc-pack series): `generate_platform_health_report()`/`generate_security_report()` genuinely call `Library.create()` to publish |
-| The Observatory → The Library | ❌ | Confirmed dead code in the same doc-pack series: `ingest()` is never called, and its target `/kb/ingest` endpoint doesn't exist on either implementation |
+| The Observatory → The Library | ✅ | **FIXED 2026-07-25 (Tranc3 `295c2c75`)**: `Observatory.record()` now forwards SECURITY/CRITICAL events to a corrected `library_pipeline.ingest()`, which calls `Library.create()` directly in-process (the old HTTP path to a nonexistent `/kb/ingest` endpoint is gone). See §7 for details. |
 | RAG/FAISS semantic search over Library content | ❌ | Claimed in source comments but not implemented in `src/library/*`, per the same prior audit |
 
 **This matrix does not re-audit these findings** — they were already discovered and documented during Tranc3's per-entity doc-pack series; cross-referenced here because they're directly relevant to "is knowledge actually federated."
@@ -84,7 +86,7 @@ The Library (Zimik, Tranc3's canonical knowledge-base/wiki entity, `src/library/
 | Activity | Frequency | Mechanism |
 |---|---|---|
 | Classification/retention regression check for The Library | Every PR touching `src/library/knowledge_base.py` | **Automated 2026-07-25:** `scripts/compliance_drift_audit.py`'s `library_classification` check, wired into `.forgejo/workflows/dependency-audit.yml`'s `compliance-drift-audit` job |
-| Fix The Observatory → Library dead ingest path | Not yet scheduled | 🎯 Real engineering task, already flagged in the Library doc-pack — genuinely still open, not touched by the 2026-07-25 re-audit |
+| Observatory→Library wiring regression check | Every PR touching `src/observability/{observatory,library_pipeline}.py` | **Automated 2026-07-25:** `scripts/compliance_drift_audit.py`'s `observatory_library_pipeline_wired` check, same CI job — asserts `record()` still forwards to `ingest()` and that the event-key regression (`action`/`resource` instead of `event_type`/`target`) hasn't returned |
 | Full re-review of this matrix | Quarterly | Aligned with REGULATION-MATRIX.md's cycle |
 
 **Next review:** 2026-10-24

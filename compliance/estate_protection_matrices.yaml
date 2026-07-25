@@ -10,7 +10,7 @@
 # Bridge: compliance/tranc3_register_bridge.yaml
 
 meta:
-  register_version: "1.0.2"
+  register_version: "1.0.3"
   owner: "Platform Engineering / ISMS Lead"
   last_updated: "2026-07-25"
   review_cycle: "quarterly"
@@ -312,10 +312,9 @@ knowledge:
       status: verified_clear
       note: "Confirmed real Library.create() calls from The Dutchy's report generators"
     observatory_to_library:
-      status: confirmed_gap
-      note: "ingest() is dead code; /kb/ingest endpoint does not exist — not touched by the 2026-07-25 classification/retention work, still open"
-  action_items:
-    - "Fix or remove the dead Observatory-to-Library ingest path"
+      status: verified_clear
+      note: "FIXED 2026-07-25 (Tranc3 295c2c75): Observatory.record() never called library_pipeline.ingest() (only api.py's start_pipeline() ran, scheduling flush_loop() on an always-empty queue), and even if it had, _should_trigger()/KBTrigger checked event['action']/event['resource'] — keys AuditEvent.to_dict() doesn't have (it uses event_type/target/metadata) — so every event would have been filtered out regardless. _send_batch() also POSTed to a /kb/ingest endpoint that exists on neither Library implementation, at a LIBRARY_URL defaulting to config-service's port. Fixed by wiring record() to forward SECURITY/CRITICAL events to the corrected ingest(), and replacing the broken HTTP round-trip with a direct in-process Library.create() call (library_pipeline.py and knowledge_base.py already share a process via api.py, so this removes the URL/endpoint mismatch at the root rather than re-pointing it). tests/test_library_pipeline.py (10 tests) covers the corrected event-shape matching and the end-to-end Observatory.record() -> Library.create() path."
+  action_items: []
 
 revenue:
   mc_id: MC-019
