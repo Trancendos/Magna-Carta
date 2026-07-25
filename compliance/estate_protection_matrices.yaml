@@ -65,6 +65,7 @@ license_compliance:
 intellectual_property:
   mc_id: MC-013
   human_readable: docs/compliance/INTELLECTUAL-PROPERTY-MATRIX.md
+  reaudit_date: "2026-07-25"
   estate_protection:
     code_ownership: verified_clear
     entity_name_trademark_clearance:
@@ -88,13 +89,14 @@ intellectual_property:
     - entity: "AI Gateway model outputs (HuggingFace/OpenRouter free tiers)"
       risk: training_data_provenance
       status: not_assessed
-    - entity: "Sashas Photo Studio planned Stable Diffusion/ComfyUI backend"
+    - entity: "Sashas Photo Studio Stable Diffusion/ComfyUI backend"
       risk: training_data_provenance
-      status: external_action
-      note: "Not yet integrated; flag for IP review before go-live"
+      status: not_assessed
+      note: "CORRECTED 2026-07-25: this was misdescribed as 'not yet integrated' — workers/sashas-photo-studio/main.py (the actual Dockerfile CMD entrypoint) already has a live ComfyUI-primary/A1111-fallback HTTP integration against self-hosted instances. No copyleft code-redistribution obligation (HTTP orchestration, not embedded GPL-3.0/AGPL-3.0 source), but the training-data-provenance review on generated output is now due, not deferrable"
   action_items:
     - "Trademark clearance search, prioritizing Trancendos, Infinity, Luminous"
     - "Legal opinion on AI-assisted code/content ownership if commercial exposure increases"
+    - "Training-data-provenance review for Sashas Photo Studio's now-live ComfyUI/A1111 output"
 
 encryption:
   mc_id: MC-014

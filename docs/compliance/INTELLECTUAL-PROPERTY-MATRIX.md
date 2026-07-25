@@ -1,13 +1,13 @@
 # Intellectual Property Matrix
 
-**Version:** 1.0.0
-**Date:** 2026-07-24
+**Version:** 1.1.0
+**Date:** 2026-07-24 (re-audited 2026-07-25)
 **Owner:** Legal / Engineering Lead
 **Scope:** Every Service, Solution, Application, and AI in the Trancendos estate
 **Register:** MC-013
 **Machine-readable:** [compliance/estate_protection_matrices.yaml](../../compliance/estate_protection_matrices.yaml) (`intellectual_property` section)
 
----
+**2026-07-25 re-audit:** §4's Sashas Photo Studio row is corrected — this matrix's 2026-07-24 draft (mirroring Tranc3's own `CLAUDE.md`) described the ComfyUI/Stable Diffusion backend as "not yet integrated." Reading the actual code shows this was already stale: `workers/sashas-photo-studio/main.py` (the file the Dockerfile's `CMD` actually runs — `worker.py` is a superseded, no-longer-run Pollinations.ai-backed implementation) has a real, live ComfyUI-primary/AUTOMATIC1111-fallback HTTP integration. It calls out to separately-hosted ComfyUI/A1111 instances over HTTP rather than embedding either project's own (GPL-3.0 / AGPL-3.0) source — so no copyleft *code* obligation attaches to Tranc3's own files here — but the training-data-provenance risk on generated *output* is consequently live now, not deferred. Tranc3's own `CLAUDE.md` has been corrected to match (both the entrypoint filename and the integration status).
 
 ## 1. Purpose
 
@@ -54,7 +54,7 @@ This matrix does **not** duplicate the [License Compliance Matrix](LICENSE-COMPL
 | **The Nexus / Nexus-Prime** | 📋 Not assessed | Generic term, lower collision risk, but not searched |
 | Third-party recommended-foundation names used in product copy (n8n, Outline, Vault, ComfyUI, etc. — `CLAUDE.md`'s Recommended Open Source Foundations table) | ✅ | These are referenced by their own project names as integration targets, not re-branded as Trancendos originals — nominative use, not a trademark risk, provided marketing copy never implies endorsement by those projects. No instance of implied endorsement found in this scan |
 | AI model outputs served through the AI Gateway's 5-tier fallback (`src/ai_gateway/`) | 📋 Not assessed | Output-ownership and training-data-provenance risk for third-party-hosted models (HuggingFace Inference API, OpenRouter free models) depends on each provider's own terms of service, which have not been catalogued here — this is the same open item flagged in the [License Compliance Matrix](LICENSE-COMPLIANCE-MATRIX.md) §6 for model licensing, and is not duplicated with separate findings |
-| Stock/generated imagery via Sashas Photo Studio's planned Stable Diffusion / ComfyUI backend | 🎯 | Not yet integrated (`CLAUDE.md` marks this "planned backend") — flag for IP review before go-live, since Stable Diffusion-family model training-data provenance is an active area of copyright litigation (see [LICENSE-COMPLIANCE-MATRIX.md](LICENSE-COMPLIANCE-MATRIX.md) §7) |
+| Stock/generated imagery via Sashas Photo Studio's Stable Diffusion / ComfyUI backend | 📋 | **Corrected 2026-07-25** — this is not a future item: `workers/sashas-photo-studio/main.py` (the actual production entrypoint) already orchestrates ComfyUI (primary) and AUTOMATIC1111 (fallback) over HTTP against self-hosted instances, with an offline placeholder as last resort. The integration itself calls out to separately-run services rather than embedding GPL-3.0/AGPL-3.0 source, so no copyleft-redistribution obligation attaches to Tranc3's own code. The genuinely open item is training-data-provenance risk on the *images this generates in production* — Stable Diffusion-family model training data is an active area of copyright litigation (see [LICENSE-COMPLIANCE-MATRIX.md](LICENSE-COMPLIANCE-MATRIX.md) §7) — and that review is now due, not deferrable to a future go-live |
 
 ---
 
@@ -70,6 +70,8 @@ Given the estate's scale (43 named entities, ~90 standalone workers, multiple AI
 |---|---|---|
 | Trademark collision spot-check for newly named entities | On new entity naming | Manual, at naming-decision time — not yet a gated checklist item; recommend adding to the entity-creation process |
 | AI model output/training-provenance watch | Aligned with License Compliance Matrix §8 | Manual, pending model shortlist |
+| Sashas Photo Studio generated-image provenance review | Now due (2026-07-25 re-audit found the backend already live) | Manual — no owner or target date assigned yet; recommend scheduling before any customer-facing image output ships |
+| Code-vs-doc drift spot-check (is a Location's `CLAUDE.md` "planned"/"not yet integrated" status still accurate?) | Every PR touching a worker's actual backend wiring | Manual — no automated check yet; this re-audit found one stale instance (Sashas Photo Studio) by direct code inspection rather than trusting the doc |
 | Full re-review of this matrix | Quarterly | Aligned with REGULATION-MATRIX.md's cycle |
 
 **Next review:** 2026-10-24
