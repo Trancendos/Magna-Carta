@@ -1,13 +1,13 @@
 # Revenue Matrix
 
-**Version:** 1.0.0
-**Date:** 2026-07-24
+**Version:** 1.0.1
+**Date:** 2026-07-24 (re-audited 2026-07-25)
 **Owner:** Finance / Platform Engineering
 **Scope:** Every Service, Solution, Application, and AI in the Trancendos estate with a monetisation surface
 **Register:** MC-019
 **Machine-readable:** [compliance/estate_protection_matrices.yaml](../../compliance/estate_protection_matrices.yaml) (`revenue` section)
 
----
+**2026-07-25 re-audit:** corrected a class-name error found throughout §5–§7 — this doc referred to the revenue-tracking class as `RevenueTracker`, but the actual class in `src/monetisation/billing.py` is `PassiveRevenueEngine` (§3 already had the name right; the rest of the doc didn't). All 6 stray references fixed. Re-verified against current source: `STREAMS` still has exactly 12 keys matching this matrix's table, the no-persistence finding (`self._revenue` reset to `0.0` on every instantiation) still holds, `marketplace_fee()` and the Stripe free-only-mode log message are unchanged. No other drift found.
 
 ## 1. Purpose
 
@@ -58,7 +58,7 @@ The webhook handler (`/webhook/stripe`), billing portal, and idempotent event bo
 
 ## 5. Passive/multi-stream revenue engine (12 real streams, code capability only)
 
-`RevenueTracker` (`src/monetisation/billing.py`) defines 12 real revenue streams with GBP tracking and a strategy-recommendation engine (fires a suggestion when a stream's in-memory balance is still £0 *at the time that process instance is queried* — not a durable historical signal, per §3). All 12 streams carry the same status for the same reason:
+`PassiveRevenueEngine` (`src/monetisation/billing.py`) defines 12 real revenue streams with GBP tracking and a strategy-recommendation engine (fires a suggestion when a stream's in-memory balance is still £0 *at the time that process instance is queried* — not a durable historical signal, per §3). All 12 streams carry the same status for the same reason:
 
 | Stream | Description | Status |
 |---|---|---|
@@ -75,9 +75,9 @@ The webhook handler (`/webhook/stripe`), billing portal, and idempotent event bo
 | Ad revenue | Opt-in contextual ads (Carbon Ads, free signup) | ⚠️ Code capability confirmed; not independently verified |
 | Consulting | Platform consulting and integration services | ⚠️ Code capability confirmed; not independently verified |
 
-**Not a 13th stream:** the class's own docstring numbered list also mentions "NFT/Digital assets — future: tokenised platform assets," but this is **not** one of the 12 real keys in `RevenueTracker.STREAMS` — verified by inspecting the dict directly. It is a future idea mentioned in a comment, not a defined stream like the 12 above; don't count it toward "12 revenue streams."
+**Not a 13th stream:** the class's own docstring numbered list also mentions "NFT/Digital assets — future: tokenised platform assets," but this is **not** one of the 12 real keys in `PassiveRevenueEngine.STREAMS` — verified by inspecting the dict directly. It is a future idea mentioned in a comment, not a defined stream like the 12 above; don't count it toward "12 revenue streams."
 
-**Honest summary:** the *infrastructure* for 12 revenue streams plus SaaS billing is real and well-built (idempotent booking, per-stream ledger, strategy recommendations, real Stripe/VIES/tax logic elsewhere in the same module). But because `RevenueTracker` has no persistence and Stripe's live-configuration status can't be confirmed from source code, **this matrix cannot assert any stream is actually earning in production today.** Do not represent any of these 12 as "active revenue" in product copy without independently querying real production data (e.g. an actual Stripe dashboard balance, or wiring `RevenueTracker` to a persistent store first).
+**Honest summary:** the *infrastructure* for 12 revenue streams plus SaaS billing is real and well-built (idempotent booking, per-stream ledger, strategy recommendations, real Stripe/VIES/tax logic elsewhere in the same module). But because `PassiveRevenueEngine` has no persistence and Stripe's live-configuration status can't be confirmed from source code, **this matrix cannot assert any stream is actually earning in production today.** Do not represent any of these 12 as "active revenue" in product copy without independently querying real production data (e.g. an actual Stripe dashboard balance, or wiring `PassiveRevenueEngine` to a persistent store first).
 
 ---
 
@@ -87,8 +87,8 @@ The webhook handler (`/webhook/stripe`), billing portal, and idempotent event bo
 |---|---|
 | Royal Bank of Arcadia | Billing/payments hub — hosts the Stripe integration surface |
 | Arcadian Exchange | Marketplace-fee stream (2.5% transaction fee) |
-| API Marketplace | Natural home for future affiliate/API-metering expansion — not yet wired to `RevenueTracker` per this scan |
-| The Academy | Natural home for certification-fee stream — not yet wired to `RevenueTracker` per this scan |
+| API Marketplace | Natural home for future affiliate/API-metering expansion — not yet wired to `PassiveRevenueEngine` per this scan |
+| The Academy | Natural home for certification-fee stream — not yet wired to `PassiveRevenueEngine` per this scan |
 
 Every other entity carries no distinct monetisation surface beyond the estate-wide SaaS tiers.
 
@@ -98,7 +98,7 @@ Every other entity carries no distinct monetisation surface beyond the estate-wi
 
 | Activity | Frequency | Mechanism |
 |---|---|---|
-| Wire `RevenueTracker` to a persistent store so status claims become verifiable | Not yet scheduled | 🎯 Real engineering task — currently the single biggest blocker to this matrix ever reaching a verified ✅ |
+| Wire `PassiveRevenueEngine` to a persistent store so status claims become verifiable | Not yet scheduled | 🎯 Real engineering task — currently the single biggest blocker to this matrix ever reaching a verified ✅ |
 | Confirm `STRIPE_SECRET_KEY` is genuinely set in production | Immediate | Manual — check deployment environment, not source code |
 | Full re-review of this matrix | Quarterly | Aligned with REGULATION-MATRIX.md's cycle |
 

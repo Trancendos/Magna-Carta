@@ -230,6 +230,8 @@ security:
 legal:
   mc_id: MC-016
   human_readable: docs/compliance/LEGAL-MATRIX.md
+  reaudit_date: "2026-07-25"
+  reaudit_note: "No drift found — all code-grounded claims re-verified unchanged (AUP/registry, absence of ToS/Privacy/Cookie/EULA docs, absence of Companies House registration, legislation_register.yaml's 10 active + 6 watch-list items)"
   customer_facing_instruments:
     platform_aup:
       status: verified_clear
@@ -268,6 +270,8 @@ legal:
 financial:
   mc_id: MC-017
   human_readable: docs/compliance/FINANCIAL-MATRIX.md
+  reaudit_date: "2026-07-25"
+  reaudit_note: "No drift found — billing.py tier pricing, StripeManager, /webhook/stripe route, ledger-service SHA-256 hash chain, and SUP-003's Template-issued DPA status all re-verified unchanged"
   fca_alignment:
     status: verified_caveat
     parent_mc_id: MC-009
@@ -321,6 +325,8 @@ knowledge:
 revenue:
   mc_id: MC-019
   human_readable: docs/compliance/REVENUE-MATRIX.md
+  reaudit_date: "2026-07-25"
+  reaudit_note: "Fixed a class-name error in the human-readable doc (RevenueTracker -> PassiveRevenueEngine, matching this YAML which already had it right); STREAMS count (12), no-persistence finding, marketplace_fee(), and the Stripe free-only-mode log message all re-verified unchanged"
   no_persistence_caveat:
     status: confirmed_gap
     note: >
@@ -370,25 +376,39 @@ revenue:
 taxation:
   mc_id: MC-020
   human_readable: docs/compliance/TAXATION-MATRIX.md
+  reaudit_date: "2026-07-25"
   tax_monitor_code:
-    status: confirmed_gap
+    status: verified_caveat
     path: src/monetisation/billing.py
     note: >
-      Real UK/EU VAT-OSS rate logic and real VIES API validation call, but
-      2 constants are stale as of this review: UK_VAT_THRESHOLD_GBP is
-      85000, while HMRC raised the actual threshold to £90,000 effective
-      1 April 2024; EU_VAT_RATES["FI"] is 0.24, while Finland raised its
-      standard rate to 25.5% effective 1 September 2024. Corrected per
-      review (coderabbitai) from an earlier version that claimed these
-      values were simply "correct."
+      FIXED 2026-07-25 re-audit (Tranc3 commit 74f68cef, "Fix stale VAT
+      constants in TaxMonitor (UK threshold, FI/RO/SK rates)"):
+      UK_VAT_THRESHOLD_GBP is now 90000; EU_VAT_RATES["FI"] is now 0.255,
+      ["RO"] is now 0.21, ["SK"] is now 0.23, each with an inline
+      effective-date comment. Table grown from 15 to 27 EU countries. The
+      remaining ~24 rates were not individually re-verified against a live
+      current source in this pass — narrower version of the same caveat
+      the original finding carried.
     uk_vat_threshold_gbp:
-      code_value: 85000
+      code_value: 90000
       current_real_value: 90000
       effective_date: "2024-04-01"
+      status: verified_clear
     eu_vat_rate_fi:
-      code_value: 0.24
+      code_value: 0.255
       current_real_value: 0.255
       effective_date: "2024-09-01"
+      status: verified_clear
+    eu_vat_rate_ro:
+      code_value: 0.21
+      current_real_value: 0.21
+      effective_date: "2025-08-01"
+      status: verified_clear
+    eu_vat_rate_sk:
+      code_value: 0.23
+      current_real_value: 0.23
+      effective_date: "2025-01-01"
+      status: verified_clear
   actual_registration_status:
     uk_vat_registration:
       status: external_action

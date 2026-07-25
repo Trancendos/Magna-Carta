@@ -1,13 +1,13 @@
 # Legal Matrix
 
-**Version:** 1.0.0
-**Date:** 2026-07-24
+**Version:** 1.0.1
+**Date:** 2026-07-24 (re-audited 2026-07-25)
 **Owner:** Legal / ISMS Lead
 **Scope:** Every Service, Solution, Application, and AI in the Trancendos estate
 **Register:** MC-016
 **Machine-readable:** [compliance/estate_protection_matrices.yaml](../../compliance/estate_protection_matrices.yaml) (`legal` section)
 
----
+**2026-07-25 re-audit:** every code-grounded claim in this matrix was re-verified against current source — `docs/governance/ACCEPTABLE-USE-POLICY.md` and `CURRENT_TERMS_VERSION`/the subscribe-history API in `src/access/registry.py` still exist as described in §3; a repo-wide search still finds no standalone Terms of Service, Privacy Policy, Cookie Policy, or EULA document in either repo; no Companies House registration number or registered address has been added anywhere in either repo since the original scan; `compliance/legislation_register.yaml` still tracks exactly 10 active items (LEG-001–010) plus 6 watch-list items (WATCH-001–006). No drift found — this matrix's findings hold unchanged.
 
 ## 1. Purpose
 
