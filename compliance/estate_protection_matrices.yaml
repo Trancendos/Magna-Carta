@@ -30,6 +30,7 @@ license_compliance:
   mc_id: MC-012
   human_readable: docs/compliance/LICENSE-COMPLIANCE-MATRIX.md
   scan_date: "2026-07-24"
+  reaudit_date: "2026-07-25"
   scan_tool: "pip-licenses --format=json --with-urls"
   packages_scanned: 190
   license_family_summary:
@@ -48,19 +49,18 @@ license_compliance:
       status: not_assessed
       note: "Ubuntu system package pulled in transitively by the sandbox/OS image, not a Tranc3-authored or redistributed dependency — confirm absent from shipped container images"
     proprietary:
-      count: 16
+      count: 19
       families: ["NVIDIA CUDA/cuDNN/NCCL runtime bindings"]
       status: verified_clear
-      note: "Transitive torch GPU dependencies redistributed under NVIDIA's standard runtime-library terms"
+      note: "FIXED 2026-07-25: was 16 + a separate 'unknown' cuda-toolkit line item; cuda-toolkit, cuda-bindings, and cuda-pathfinder are now confirmed (via pip show Requires:/Required-by: chains) as transitive torch==2.13.0 dependencies and folded into this bucket, redistributed under NVIDIA's standard runtime-library terms like the rest"
     unknown:
-      count: 4
-      packages: ["cuda-toolkit", "pygad", "rustworkx", "sentencepiece"]
-      status: not_assessed
-      note: "pip-licenses could not resolve SPDX metadata; sentencepiece is confirmed MIT per its upstream LICENSE file, the other 3 need the same manual check"
-  action_items:
-    - "Confirm GPL/LGPL Ubuntu-tooling rows are sandbox-only, absent from shipped container images"
-    - "Manually resolve the 4 unknown-license rows against each package's actual LICENSE file"
-    - "Wire pip-licenses into Tranc3's .forgejo/workflows/dependency-audit.yml"
+      count: 0
+      status: verified_clear
+      note: "FIXED 2026-07-25 (was 4: cuda-toolkit, pygad, rustworkx, sentencepiece). cuda-toolkit folded into proprietary above. pygad confirmed BSD-3-Clause and rustworkx confirmed Apache-2.0, both via each package's bundled dist-info LICENSE file read directly (rustworkx is a transitive qiskit==2.4.1 dependency, not a direct requirements.txt entry). sentencepiece confirmed Apache-2.0 via the upstream google/sentencepiece GitHub LICENSE file (no bundled dist-info LICENSE ships with this package, which is why pip-licenses returned UNKNOWN) — correcting this register's own prior note, which had misstated it as MIT."
+  action_items: []
+  ci_wiring:
+    status: verified_clear
+    note: "FIXED 2026-07-25: pip-licenses added to Tranc3's .forgejo/workflows/dependency-audit.yml python-audit job — a pip-licenses --format=markdown report (archived as pip-licenses-report.json) plus a --fail-on gate for GPL/AGPL family strings"
 
 intellectual_property:
   mc_id: MC-013
