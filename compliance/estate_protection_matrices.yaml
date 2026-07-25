@@ -116,7 +116,11 @@ encryption:
     additional_websecure_workers_missing_tls_label:
       status: verified_clear
       count: 37
-      note: "FOUND AND FIXED 2026-07-25: writing scripts/compliance_drift_audit.py's websecure_tls_labels check and running it against the full compose file surfaced 37 more services (beyond the 6 P0 + fabulousa/ice-box already known) referencing entrypoints=websecure with no tls/certresolver label at all. All 37 now carry tls=true + tls.certresolver=letsencrypt. None of the 37 have a Host() matcher (mostly PathPrefix-only) so ACME still cannot issue real certs for them — tracked as a separate open action item, not claimed as fully solved."
+      note: "FOUND AND FIXED 2026-07-25: writing scripts/compliance_drift_audit.py's websecure_tls_labels check and running it against the full compose file surfaced 37 more services (beyond the 6 P0 + fabulousa/ice-box already known) referencing entrypoints=websecure with no tls/certresolver label at all. All 37 now carry tls=true + tls.certresolver=letsencrypt."
+    tls_routers_host_matcher:
+      status: verified_clear
+      count: 39
+      note: "FOUND AND FIXED 2026-07-25 (same day as the label fix above): all 39 routers with tls=true but only a PathPrefix rule (the 37 above, plus fabulousa-service and ice-box-service) now carry Host(`<worker>.trancendos.com`) — subdomain-per-worker, the domain strategy decided for this fix. scripts/compliance_drift_audit.py's new tls_routers_have_host_matcher check guards against regression. Does not itself guarantee the 39 subdomains' DNS records exist — that provisioning step is a separate infra/ops task, not claimed as done here."
     redis_tls:
       status: verified_clear
       note: "REDIS_URL uses rediss:// per .env.example"
@@ -172,7 +176,6 @@ encryption:
       note: "Explicitly rejects both an unset value and the string 'internal-dev-secret', raising RuntimeError at startup — proof the safe pattern already exists in-repo"
   action_items:
     - "Decide on a single password-hashing scheme (argon2id/PBKDF2 vs bcrypt)"
-    - "Add real Host() matchers (per-service domain decision) to the 37 services fixed 2026-07-25 with tls=true/certresolver but only a PathPrefix rule — ACME cannot issue a cert without a resolvable domain"
 
 security:
   mc_id: MC-015
