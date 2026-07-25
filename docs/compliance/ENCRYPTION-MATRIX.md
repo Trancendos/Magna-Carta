@@ -1,11 +1,13 @@
 # Encryption Matrix
 
-**Version:** 1.0.0
-**Date:** 2026-07-24
+**Version:** 1.1.0
+**Date:** 2026-07-24 (re-audited 2026-07-25)
 **Owner:** Platform Engineering / ISMS Lead
 **Scope:** Every Service, Solution, Application, and AI in the Trancendos estate
 **Register:** MC-014
 **Machine-readable:** [compliance/estate_protection_matrices.yaml](../../compliance/estate_protection_matrices.yaml) (`encryption` section)
+
+**2026-07-25 re-audit:** every ❌ confirmed gap from the 2026-07-24 audit below is now fixed in Tranc3 (PR #345). Rows are updated to ✅ with evidence rather than left stale — per this framework's own honesty rule, an inaccurate ❌ is as much a violation as an inaccurate ✅. Only the password-hashing consolidation decision (§5) remains open, since it requires an owner decision rather than a code fix.
 
 ---
 
@@ -33,13 +35,13 @@ Tracks, per encryption surface (in-transit, at-rest, secrets/signing), whether t
 
 | Surface | Status | Finding |
 |---|---|---|
-| Traefik `websecure` (:443) entrypoint | ⚠️ | Defined in `docker-compose.production.yml` (entrypoints at lines 69–70) with a `traefik-certs` volume mounted for Let's Encrypt, but **no `--certificatesresolvers.letsencrypt.acme.*` flag exists on the Traefik service's own `command:` block** — the `letsencrypt` certresolver referenced by ~21 service labels is never actually defined. As configured today, ACME certificate automation is not wired up |
-| Core P0 services routing (infinity-auth, infinity-void, tranc3-backend, tranc3-ai, api-gateway, infinity-ws) | ❌ | All six route on the plain `web` (HTTP) entrypoint, not `websecure` — the platform's most security-sensitive services (auth, vault, AI backend) are not TLS-terminated by Traefik at all in the current compose file |
-| Newer P3 workers using `entrypoints=websecure` (e.g. `fabulousa-service`, `ice-box-service`) | ❌ | Reference the `websecure` entrypoint but carry **no accompanying `tls=true` or certresolver label** — Traefik would not actually terminate TLS for these routes as configured |
+| Traefik `websecure` (:443) entrypoint | ✅ | **FIXED 2026-07-25:** `--certificatesresolvers.letsencrypt.acme.email`, `.acme.storage`, `.acme.httpchallenge`, and `.acme.httpchallenge.entrypoint=web` flags now exist on the Traefik service's `command:` block, using the already-mounted `traefik-certs` volume — the `letsencrypt` certresolver referenced by service labels is now actually defined |
+| Core P0 services routing (infinity-auth, infinity-void, tranc3-backend, tranc3-ai, api-gateway, infinity-ws) | ✅ | **FIXED 2026-07-25:** all six now use `entrypoints=websecure` + `tls=true` + `tls.certresolver=letsencrypt`, plus a `Host(\`api.trancendos.com\`)` matcher (added alongside their existing `PathPrefix` rules on 2026-07-25 so Traefik's ACME resolver has a real domain to request a certificate against — a `PathPrefix`-only rule has no domain for ACME to use) |
+| Newer P3 workers using `entrypoints=websecure` (e.g. `fabulousa-service`, `ice-box-service`) | ✅ | **FIXED 2026-07-25:** both now carry `tls=true` and `tls.certresolver=letsencrypt` alongside their `entrypoints=websecure` label |
 | Redis connection (`REDIS_URL`) | ✅ | `.env.example` uses `rediss://` (TLS) |
-| Postgres connection (`DATABASE_URL`) | ❌ | `.env.example`'s example string is a plain `postgresql://` with no `sslmode` parameter, and no `sslmode`/`connect_args` SSL enforcement exists anywhere in `src/database/` — the only `sslmode` occurrence in the repo is Mattermost's *internal* DB in `docker-compose.production.yml`, explicitly set to `sslmode=disable`, unrelated to the main app |
+| Postgres connection (`DATABASE_URL`) | ✅ | **FIXED 2026-07-25:** `.env.example`'s example string now includes `?sslmode=require`; SQLAlchemy's `create_engine()` (`src/database/schema.py`) passes the DSN straight through to psycopg2, which honors `sslmode` natively as a connection-string parameter — no code change was needed beyond the default connection string |
 
-**Remediation priority:** the P0 routing gap (auth/vault/AI-backend on plain HTTP) and the missing Traefik ACME resolver definition are the two highest-priority findings in this entire matrix — both are one-line-per-service compose fixes once a certresolver is actually defined, not architectural rewrites.
+**Remediation priority (2026-07-24 audit):** the P0 routing gap (auth/vault/AI-backend on plain HTTP) and the missing Traefik ACME resolver definition were the two highest-priority findings in this matrix — both were one-line-per-service compose fixes once a certresolver was actually defined, and both are now closed as of the 2026-07-25 re-audit.
 
 ---
 
@@ -61,10 +63,10 @@ Tracks, per encryption surface (in-transit, at-rest, secrets/signing), whether t
 | JWT signing algorithm | ✅ | Confirmed `HS256` (HMAC-SHA256) consistently across `src/auth/facade.py`, `src/auth/tokens.py`, and `workers/infinity-auth/config.py` |
 | JWT_SECRET default handling | ✅ | No hardcoded insecure default found — `facade.py` and `infinity-auth/config.py` either fail fast or generate an ephemeral `secrets.token_hex(32)` if `JWT_SECRET` is unset, rather than falling back to a fixed string |
 | Password hashing | ⚠️ | **Two different schemes coexist**: `src/auth/passwords.py` prefers argon2id (`argon2.PasswordHasher`) with a PBKDF2-SHA256 (260,000 iterations) fallback and a legacy 100,000-iteration format; `src/auth/db_user_manager.py` uses **bcrypt** directly via a custom `_BcryptContext` class instead. Both are cryptographically sound algorithms individually, but two parallel hashing paths for the same concern is a genuine consolidation gap, not a security defect per se |
-| Worker-to-worker `INTERNAL_SECRET` | ❌ | **18 workers** currently fall back to the literal string `"dev-secret"` if `INTERNAL_SECRET` is unset: `basement`, `chaos-party`, `imaginarium`, `imind`, `resonate`, `sashas-photo-studio`, `taimra`, `tateking`, `the-academy`, `the-dutchy`, `the-lab`, `the-studio`, `the-void`, `tranceflow`, `tranquility`, `vrar3d`, `warp-radio`, `warp-tunnel` (each `workers/<name>/worker.py`, confirmed via direct grep on 2026-07-24). Any deployment that forgets to set `INTERNAL_SECRET` silently runs with a publicly-known shared secret across all 18 |
-| The Void's own `INTERNAL_SECRET` handling (contrast case) | ✅ | `workers/infinity-void/worker.py` explicitly **rejects** both an unset value and the specific string `"internal-dev-secret"`, raising `RuntimeError` at startup rather than silently falling back — proof the safe pattern is known and used elsewhere in the same codebase, making the 18-worker gap a consistency problem, not a knowledge gap |
+| Worker-to-worker `INTERNAL_SECRET` | ✅ | **FIXED 2026-07-25:** all 18 workers (`basement`, `chaos-party`, `imaginarium`, `imind`, `resonate`, `sashas-photo-studio`, `taimra`, `tateking`, `the-academy`, `the-dutchy`, `the-lab`, `the-studio`, `the-void`, `tranceflow`, `tranquility`, `vrar3d`, `warp-radio`, `warp-tunnel`) now raise `RuntimeError` at startup if `INTERNAL_SECRET` is unset or equals `"dev-secret"` (**stripped** comparison — a bot reviewer found and got fixed a whitespace-padding bypass in the first pass, where `" dev-secret "` would have slipped through an unstripped check). Also extended to `workers/tateking/main.py`, `workers/the-lab/main.py`, `workers/imaginarium/main.py` (the real deployed entrypoints for those three, distinct from their `worker.py`) and `workers/tranceflow/config.py`, `workers/vrar3d/config.py`. The validated secret is now stored **stripped**, not raw, so incidental whitespace from secret injection (k8s/file-mounted secrets) can't silently break worker-to-worker auth even after passing validation |
+| The Void's own `INTERNAL_SECRET` handling (contrast case) | ✅ | `workers/infinity-void/worker.py` explicitly **rejects** both an unset value and the specific string `"internal-dev-secret"`, raising `RuntimeError` at startup rather than silently falling back — the pattern the 18 workers above now also follow |
 
-**Remediation priority:** the 18-worker `dev-secret` fallback is the single highest-value fix in this matrix — it is the same one-line pattern already correctly implemented in `infinity-void/worker.py`, so fixing it is copying an existing in-repo pattern, not new design work.
+**Remediation priority (2026-07-24 audit):** the 18-worker `dev-secret` fallback was the single highest-value fix in this matrix — it was the same one-line pattern already correctly implemented in `infinity-void/worker.py`, and is now fixed as of 2026-07-25.
 
 ---
 
@@ -72,10 +74,12 @@ Tracks, per encryption surface (in-transit, at-rest, secrets/signing), whether t
 
 | Activity | Frequency | Mechanism |
 |---|---|---|
-| Traefik TLS/certresolver audit | Quarterly, or on any new service's compose entry | Manual compose review — no automated check exists yet; candidate for a Forgejo CI lint step |
-| `INTERNAL_SECRET`/`dev-secret` fallback grep | Every PR touching `workers/*/worker.py` | Manual today; candidate for a `security-scan.yml` grep-based gate |
+| Traefik TLS/certresolver audit | Every PR touching `docker-compose.production.yml` | **Automated 2026-07-25:** `scripts/compliance_drift_audit.py`'s `websecure_tls_labels` check, wired into `.forgejo/workflows/dependency-audit.yml`'s `compliance-drift-audit` job. Running it against the full compose file during this re-audit found **37 more services** beyond the originally-scoped 6 P0 + fabulousa/ice-box referencing `entrypoints=websecure` with no `tls`/`certresolver` label at all — these are now fixed too |
+| `INTERNAL_SECRET`/`dev-secret` fallback grep | Every PR touching `workers/*/worker.py` | **Automated 2026-07-25:** `scripts/compliance_drift_audit.py`'s `no_dev_secret_default` check, same CI job |
 | Password-hashing consolidation decision (argon2/PBKDF2 vs bcrypt) | Next security architecture review | Owner decision required — this matrix documents the split, it does not resolve it |
 | Full re-review of this matrix | Quarterly | Aligned with REGULATION-MATRIX.md's cycle |
+
+**Note on the 37 additionally-fixed services:** `scripts/compliance_drift_audit.py`'s `websecure_tls_labels` check only asserts a `tls=true`/`tls.certresolver` label exists per router — it does **not** assert a `Host()` matcher exists. Traefik's ACME resolver needs a real domain to request a certificate against; a `PathPrefix`-only rule (which most of these 37 use) gives it none. Only the original 6 P0 services have a `Host(\`api.trancendos.com\`)` matcher. Adding real `Host()` matchers to the other 37 requires per-service domain decisions (subdomain vs. shared domain, whether each is even meant to be internet-facing) that this pass did not make — flagged here as a genuine open follow-up, not silently claimed as solved.
 
 **Next review:** 2026-10-24
 

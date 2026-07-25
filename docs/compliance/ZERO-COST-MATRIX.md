@@ -1,11 +1,13 @@
 # Zero-Cost Matrix
 
-**Version:** 1.0.0
-**Date:** 2026-07-24
+**Version:** 1.1.0
+**Date:** 2026-07-24 (re-audited 2026-07-25)
 **Owner:** Platform Engineering / ISMS Lead
 **Scope:** Every Service, Solution, Application, and AI in the Trancendos estate
 **Register:** MC-021
 **Machine-readable:** [compliance/estate_protection_matrices.yaml](../../compliance/estate_protection_matrices.yaml) (`zero_cost` section)
+
+**2026-07-25 re-audit:** both open items from the 2026-07-24 audit are now closed — `docs/ZERO_COST_VENDOR_MATRIX.md` exists and the script's own exit code is `0` (PASS), confirmed by re-running the script directly; the script is also now wired into CI (`.forgejo/workflows/dependency-audit.yml`'s `zero-cost-audit` job) so this stops being a manual, ad-hoc check.
 
 ---
 
@@ -31,9 +33,11 @@ Tracks, per Service/Solution/Application/AI, whether the platform's zero-cost ar
 
 ## 3. Live audit result
 
-Ran `python3 scripts/zero_cost_audit.py` against Tranc3 on 2026-07-24. This script is real and executable — not a proposed control — and validates `src/zero_cost/registry.py`'s provider registry and rotation-chain configuration.
+Ran `python3 scripts/zero_cost_audit.py` against Tranc3 on 2026-07-24, then re-ran it directly again on 2026-07-25 to confirm the fix. This script is real and executable — not a proposed control — and validates `src/zero_cost/registry.py`'s provider registry and rotation-chain configuration.
 
-**Overall command result: ❌ FAIL (exit code 1)** — the JSON body's own `"status": "PASS"` field describes rotation-chain structural validation only, not the script's overall outcome. The script separately checks for `docs/ZERO_COST_VENDOR_MATRIX.md`, and its actual process exit code is `1` when that file is missing (confirmed by running the script and checking `$?` directly, not just reading the JSON body). Reporting this matrix's headline result as "PASS" would misstate what the command actually returns — corrected here per review.
+**2026-07-24 result: ❌ FAIL (exit code 1)** — the JSON body's own `"status": "PASS"` field described rotation-chain structural validation only, not the script's overall outcome; the script's separate doc-presence check for `docs/ZERO_COST_VENDOR_MATRIX.md` failed since the file didn't exist.
+
+**2026-07-25 re-audit result: ✅ PASS (exit code 0)** — `docs/ZERO_COST_VENDOR_MATRIX.md` was created at the script's expected path; re-running the script and checking `$?` directly (not just the JSON body) confirms a clean `0` exit.
 
 | Metric | Value | Assessment |
 |---|---|---|
@@ -41,11 +45,11 @@ Ran `python3 scripts/zero_cost_audit.py` against Tranc3 on 2026-07-24. This scri
 | Approved self-hosted providers | 30 | ✅ |
 | Approved free-tier providers | 0 | 📋 all providers are currently bucketed as self-hosted or blocked-paid; no distinct free-tier-only bucket populated |
 | Blocked-paid providers | 5 (`openai`, `anthropic`, `azure-openai`, `gpt4`, `claude-api-paid`) | ✅ correctly blocked — these five are the exact paid AI APIs the zero-cost mandate exists to avoid |
-| Rotation-chain structural validation | 0 errors | ✅ all 5 defined chains (`embeddings_default`, `image_default`, `stt_default`, `zero_cost_cloud`, `zero_cost_full`) pass structural validation — this is the narrow condition the JSON body's `"status"` field actually measures |
-| Script's own doc-presence check | `WARN: docs/ZERO_COST_VENDOR_MATRIX.md missing` | ❌ the audit script expects this file at Tranc3's repo root and it does not exist — this is what drives the script's real exit code 1 |
-| **Overall script exit status** | **`1` (FAIL)** | ❌ do not report this audit as passing until the missing doc is created — chain validation passing is necessary but not sufficient for the script's own definition of success |
+| Rotation-chain structural validation | 0 errors | ✅ all 5 defined chains (`embeddings_default`, `image_default`, `stt_default`, `zero_cost_cloud`, `zero_cost_full`) pass structural validation |
+| Script's own doc-presence check | ✅ `docs/ZERO_COST_VENDOR_MATRIX.md` present | **FIXED 2026-07-25** — the audit script's expected file now exists at Tranc3's repo root |
+| **Overall script exit status** | **`0` (PASS)** | ✅ confirmed by direct re-run of the script on 2026-07-25 |
 
-**Action:** create `docs/ZERO_COST_VENDOR_MATRIX.md` in Tranc3 (the script's own expected path) so the audit actually exits 0; this is a genuine, currently-red item, not fabricated for this matrix.
+**Action (closed 2026-07-25):** `docs/ZERO_COST_VENDOR_MATRIX.md` was created in Tranc3 at the script's own expected path; the audit now exits 0.
 
 ---
 
@@ -89,8 +93,8 @@ Given the estate's scale, this matrix does not score all 43 named entities indiv
 
 | Activity | Frequency | Mechanism |
 |---|---|---|
-| `scripts/zero_cost_audit.py` run | Every PR touching `src/zero_cost/registry.py`, and monthly | **Not yet wired into CI** — recommend adding as a step in Tranc3's `.forgejo/workflows/dependency-audit.yml`, alongside the existing pip-audit/Safety scans |
-| `docs/ZERO_COST_VENDOR_MATRIX.md` creation | Immediate | Currently missing; the audit script already expects it (§3) |
+| `scripts/zero_cost_audit.py` run | Every PR (scheduled weekly too) | **Automated 2026-07-25:** wired into Tranc3's `.forgejo/workflows/dependency-audit.yml` as the `zero-cost-audit` job, with `set -o pipefail` so the script's real exit code isn't masked by the report-upload `tee` step |
+| `docs/ZERO_COST_VENDOR_MATRIX.md` creation | Done | **FIXED 2026-07-25** — file created; the audit script's doc-presence check now passes |
 | Cloud-Only → Hybrid/Local migration review | On funding decision | Manual, gated at `wiki-content/Architecture-CF_WORKER_MIGRATION_ROADMAP.md`'s own review points |
 | Full re-review of this matrix | Quarterly | Aligned with REGULATION-MATRIX.md's cycle |
 
@@ -102,6 +106,7 @@ Given the estate's scale, this matrix does not score all 43 named entities indiv
 
 - [LICENSE-COMPLIANCE-MATRIX.md](LICENSE-COMPLIANCE-MATRIX.md) — the same `pip-licenses` scan overlaps with this matrix's provider-license data; not duplicated
 - [ENCRYPTION-MATRIX.md](ENCRYPTION-MATRIX.md), [SECURITY-MATRIX.md](SECURITY-MATRIX.md) — several zero-cost security tools (trivy, gitleaks, semgrep) listed here are the same tools those matrices reference
+- [SUPPLIER-DPA-REGISTER.md](SUPPLIER-DPA-REGISTER.md) — this matrix's §4 approved-provider list covers zero-cost/self-hosted *tooling*; it is a different lens from the Supplier register's GDPR-processor view of paid *infrastructure* vendors (Fly.io, Cloudflare, Supabase, Upstash) that the 2026-07-25 re-audit found were missing from that register entirely — see its SUP-006–009
 - `CLAUDE.md` §"Zero-Cost Self-Hosted Architecture (Fortiere)" (Tranc3 repo) — the policy this matrix verifies against
 - [TRANC3-REGISTER-BRIDGE.md](TRANC3-REGISTER-BRIDGE.md) — MC-021 bridge entry
 - [compliance/estate_protection_matrices.yaml](../../compliance/estate_protection_matrices.yaml) — machine-readable register

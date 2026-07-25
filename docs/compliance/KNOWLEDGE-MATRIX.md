@@ -1,11 +1,13 @@
 # Knowledge Matrix
 
-**Version:** 1.0.0
-**Date:** 2026-07-24
+**Version:** 1.1.0
+**Date:** 2026-07-24 (re-audited 2026-07-25)
 **Owner:** Platform Engineering / ISMS Lead / DPO
 **Scope:** Every Service, Solution, Application, and AI in the Trancendos estate that stores, shares, or federates knowledge/data
 **Register:** MC-018
 **Machine-readable:** [compliance/estate_protection_matrices.yaml](../../compliance/estate_protection_matrices.yaml) (`knowledge` section)
+
+**2026-07-25 re-audit:** the central finding (§3) — The Library had no classification/retention model — is now fixed in Tranc3 (`src/library/knowledge_base.py`'s `Article` dataclass, `fad3486e`). The Observatory → Library dead-ingest path (§5) was **not** touched this session and remains a genuinely open gap.
 
 ---
 
@@ -13,7 +15,7 @@
 
 Tracks, per Service/Solution/Application/AI, whether federated knowledge sharing across the platform actually follows a data classification, sensitivity, and retention framework — building on [DATA-MANAGEMENT-BIBLE.md](../bibles/DATA-MANAGEMENT-BIBLE.md) and [PRIVACY-BIBLE.md](../bibles/PRIVACY-BIBLE.md), both process-level pointer documents, with real code-grounded findings.
 
-**Honesty note (per this framework's own rule, REGULATION-MATRIX.md §6):** do not claim knowledge-governance compliance in product copy unless the corresponding row is ✅ with evidence. The central finding of this matrix is a genuine, currently-open gap (§3), not a clean bill of health.
+**Honesty note (per this framework's own rule, REGULATION-MATRIX.md §6):** do not claim knowledge-governance compliance in product copy unless the corresponding row is ✅ with evidence — this cuts both ways, since an inaccurate ❌ left stale after a fix is equally dishonest. §3's central finding is now closed; §5's Observatory→Library gap remains genuinely open.
 
 ---
 
@@ -29,17 +31,17 @@ Tracks, per Service/Solution/Application/AI, whether federated knowledge sharing
 
 ---
 
-## 3. Central finding: The Library has no classification, sensitivity, or retention model
+## 3. Central finding: The Library's classification, sensitivity, and retention model
 
-The Library (Zimik, Tranc3's canonical knowledge-base/wiki entity, `src/library/knowledge_base.py`) is the platform's own designated federated-knowledge hub per `CLAUDE.md`'s service table — but its actual code is a **bare in-memory CRUD layer**. Its `Article` dataclass has fields for `id`, `title`, `body`, `tags`, `status`, `author`, `source` — **no classification, sensitivity, or retention field exists anywhere in this module.** `status` (draft/published/archived) is a workflow state, not a sensitivity label.
+The Library (Zimik, Tranc3's canonical knowledge-base/wiki entity, `src/library/knowledge_base.py`) is the platform's own designated federated-knowledge hub per `CLAUDE.md`'s service table. The 2026-07-24 audit found it was a bare in-memory CRUD layer with no classification, sensitivity, or retention field — `status` (draft/published/archived) is a workflow state, not a sensitivity label.
 
 | Concern | Status | Finding |
 |---|---|---|
-| Data classification (public/internal/confidential/restricted) applied to Library content | ❌ | No such field or enforcement exists in `src/library/knowledge_base.py` |
-| Sensitivity tagging on knowledge articles | ❌ | Not implemented |
-| Retention schedule applied to Library content | ❌ | Not implemented — content persists indefinitely with no expiry/archival trigger |
+| Data classification (public/internal/confidential/restricted) applied to Library content | ✅ | **FIXED 2026-07-25:** `Article.classification: DataClassification`, reusing the same enum from `src/nanoservices/daas_stream/daas_stream.py` (§4) rather than inventing a parallel one. `src/library/routes.py` enforces it: `_can_read()` gates RESTRICTED/TOP_SECRET articles to the author or an admin, applied consistently across list/search/get/delete |
+| Sensitivity tagging on knowledge articles | ✅ | **FIXED 2026-07-25:** the classification field above doubles as the sensitivity label; `create_article` accepts a `classification` param (default `INTERNAL`) and `get_stats()` reports an article-count breakdown `by_classification` |
+| Retention schedule applied to Library content | ✅ | **FIXED 2026-07-25:** `Article.retention_days` (optional; `None` = retain forever) + `retention_expired()` + `Library.apply_retention()`, mirroring the already-proven pattern in `src/artifactory/registry.py` |
 
-**This is a real, previously-undocumented gap** — the platform's designated knowledge-base entity has zero data-governance controls despite the estate having the building blocks to give it some (§4).
+**Closed as of 2026-07-25** — The Library now reuses the DaaS Stream nanoservice's `DataClassification` enum rather than the parallel scheme this matrix's original audit suggested inventing (§4's "Action" note below is accordingly resolved, not just proposed).
 
 ---
 
@@ -53,7 +55,7 @@ The Library (Zimik, Tranc3's canonical knowledge-base/wiki entity, `src/library/
 | Retention pruning by schedule | `src/backup/engine.py` (Tranc3) | ✅ Real — scoped to backups, not knowledge content |
 | "Configurable retention pull from audit-service" | `workers/basement/worker.py` (Tranc3) | ✅ Real — scoped to The Basement's archived-info store |
 
-**Action:** The Library could adopt the same `DataClassification` pattern already proven in the DaaS Stream nanoservice, rather than inventing a new one — this is a real, scoped follow-up engineering task, not something this documentation pass fixes.
+**Action (closed 2026-07-25):** The Library now adopts the same `DataClassification` pattern already proven in the DaaS Stream nanoservice, rather than a new one — see §3.
 
 ---
 
@@ -81,8 +83,8 @@ The Library (Zimik, Tranc3's canonical knowledge-base/wiki entity, `src/library/
 
 | Activity | Frequency | Mechanism |
 |---|---|---|
-| Design and implement classification/retention for The Library | Not yet scheduled | 🎯 Real engineering task — proposed pattern: reuse `DataClassification` from `daas_stream.py` |
-| Fix The Observatory → Library dead ingest path | Not yet scheduled | 🎯 Real engineering task, already flagged in the Library doc-pack |
+| Classification/retention regression check for The Library | Every PR touching `src/library/knowledge_base.py` | **Automated 2026-07-25:** `scripts/compliance_drift_audit.py`'s `library_classification` check, wired into `.forgejo/workflows/dependency-audit.yml`'s `compliance-drift-audit` job |
+| Fix The Observatory → Library dead ingest path | Not yet scheduled | 🎯 Real engineering task, already flagged in the Library doc-pack — genuinely still open, not touched by the 2026-07-25 re-audit |
 | Full re-review of this matrix | Quarterly | Aligned with REGULATION-MATRIX.md's cycle |
 
 **Next review:** 2026-10-24

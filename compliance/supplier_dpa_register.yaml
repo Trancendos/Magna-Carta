@@ -6,9 +6,9 @@
 # Obligations: OBL-003, OBL-081
 
 meta:
-  register_version: "1.0.0"
+  register_version: "1.1.0"
   owner: "DPO / Procurement"
-  last_updated: "2026-06-07"
+  last_updated: "2026-07-25"
   review_cycle: "quarterly"
   policy: "docs/policies/POL-SUP-001-Supplier-Management.md"
   markdown_index: "docs/compliance/SUPPLIER-DPA-REGISTER.md"
@@ -16,7 +16,7 @@ meta:
 schema:
   supplier_id: "SUP-### unique identifier"
   risk_tier: "Critical | High | Medium | Low"
-  dpa_status: "Signed | Template issued | In negotiation | Not required | N/A"
+  dpa_status: "Signed | Template issued | In negotiation | Not required | Not assessed | N/A"
   transfer_mechanism: "UK IDTA | SCCs | Adequacy | N/A (UK only)"
   sub_processor_disclosed: "boolean"
   review_date: "YYYY-MM-DD"
@@ -80,6 +80,54 @@ suppliers:
     security_evidence: "HIPAA-ALIGNMENT §4 BAA template; MC-RULE-009"
     review_date: "2026-09-06"
     notes: "Per-integration BAA/DPA on customer onboarding"
+
+  - supplier_id: SUP-006
+    name: "Fly.io"
+    category: "Compute hosting (tranc3-backend, tranc3-bots)"
+    data_processed: "All in-memory/in-transit platform PII processed by the Fly.io-hosted app instances; encrypted volume at /app/models"
+    risk_tier: Critical
+    dpa_status: "Not assessed"
+    transfer_mechanism: "Not assessed"
+    sub_processor_disclosed: false
+    security_evidence: "None collected yet — CLAUDE.md names Fly.io (region lhr) as the current legacy hosting target for tranc3-backend/tranc3-bots, but no DPA/security-questionnaire evidence exists in this register"
+    review_date: "2026-09-06"
+    notes: "GAP found on 2026-07-25 re-audit: a real, currently-used infrastructure processor with no register row prior to this. Added per this framework's honesty rule rather than left undocumented. Needs DPO/Procurement action per the onboarding_checklist below before this can move past 'Not assessed'."
+
+  - supplier_id: SUP-007
+    name: "Cloudflare (Workers/KV/D1, ~26 live workers)"
+    category: "Edge compute + storage (legacy, being decommissioned per CF_WORKER_MIGRATION_ROADMAP.md)"
+    data_processed: "Auth tokens/sessions (infinity-auth-api), encrypted secrets ciphertext (infinity-void D1), user/order/payment metadata (trancendos-*-service workers)"
+    risk_tier: Critical
+    dpa_status: "Not assessed"
+    transfer_mechanism: "Not assessed"
+    sub_processor_disclosed: false
+    security_evidence: "None collected yet — CLAUDE.md's own Cloudflare Workers table names ~26 live workers processing exactly this data; Cloudflare's standard DPA is publicly available but has not been reviewed/executed against here"
+    review_date: "2026-09-06"
+    notes: "GAP found on 2026-07-25 re-audit, same as SUP-006. The zero-cost architecture's stated goal is decommissioning these workers (Hybrid/Local path), but they remain live and in Cloud-Only mode today, so this is a present-tense processor, not a hypothetical one."
+
+  - supplier_id: SUP-008
+    name: "Supabase (DATABASE_URL)"
+    category: "Managed PostgreSQL"
+    data_processed: "Primary platform database — users, sessions, all persisted PII per the SQLAlchemy schema"
+    risk_tier: Critical
+    dpa_status: "Not assessed"
+    transfer_mechanism: "Not assessed"
+    sub_processor_disclosed: false
+    security_evidence: "None collected yet — CLAUDE.md's Required Environment Variables section names Supabase as the DATABASE_URL provider; Supabase publishes a standard DPA but it has not been reviewed/executed against here"
+    review_date: "2026-09-06"
+    notes: "GAP found on 2026-07-25 re-audit. This is the platform's primary data store, making it the single highest-priority row in this batch to actually close out."
+
+  - supplier_id: SUP-009
+    name: "Upstash (REDIS_URL)"
+    category: "Managed Redis"
+    data_processed: "Inference job queue payloads, cache entries, rate-limit counters (per src/ai_gateway, InferenceWorker)"
+    risk_tier: High
+    dpa_status: "Not assessed"
+    transfer_mechanism: "Not assessed"
+    sub_processor_disclosed: false
+    security_evidence: "None collected yet — CLAUDE.md's Required Environment Variables section names Upstash as the REDIS_URL provider (rediss:// TLS already confirmed in the Encryption Matrix, MC-014); no DPA evidence collected"
+    review_date: "2026-09-06"
+    notes: "GAP found on 2026-07-25 re-audit."
 
 onboarding_checklist:
   - "Complete security questionnaire or collect ISO 27001 / SOC 2 report"
