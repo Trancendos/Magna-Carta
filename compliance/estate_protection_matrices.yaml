@@ -10,7 +10,7 @@
 # Bridge: compliance/tranc3_register_bridge.yaml
 
 meta:
-  register_version: "1.0.1"
+  register_version: "1.0.2"
   owner: "Platform Engineering / ISMS Lead"
   last_updated: "2026-07-25"
   review_cycle: "quarterly"
@@ -145,8 +145,8 @@ encryption:
       status: verified_clear
       note: "Fails fast or generates an ephemeral secrets.token_hex(32); no hardcoded insecure default found"
     password_hashing:
-      status: verified_caveat
-      note: "Two schemes coexist: argon2id/PBKDF2 (src/auth/passwords.py) vs bcrypt (src/auth/db_user_manager.py)"
+      status: verified_clear
+      note: "FIXED 2026-07-25: src/auth/db_user_manager.py's _BcryptContext retired in favor of _PasswordContext, which hashes new passwords via src/auth/passwords.py's hash_password() (argon2id preferred). Pre-existing bcrypt hashes still verify and upgrade to the new scheme on next successful login (DB-backed and in-memory-fallback paths both covered). Guarded by scripts/compliance_drift_audit.py's db_user_manager_consolidated_hashing check."
     internal_secret_dev_fallback:
       status: verified_clear
       affected_workers:
@@ -174,8 +174,7 @@ encryption:
       status: verified_clear
       worker: infinity-void
       note: "Explicitly rejects both an unset value and the string 'internal-dev-secret', raising RuntimeError at startup — proof the safe pattern already exists in-repo"
-  action_items:
-    - "Decide on a single password-hashing scheme (argon2id/PBKDF2 vs bcrypt)"
+  action_items: []
 
 security:
   mc_id: MC-015
