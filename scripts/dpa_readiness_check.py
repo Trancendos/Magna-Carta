@@ -34,6 +34,12 @@ REQUIRED_SUPPLIER_FIELDS = [
     "review_date",
 ]
 CRITICAL_STATUSES_OK_FOR_READINESS = {"Signed", "Template issued", "In negotiation", "Not required", "N/A"}
+# The full recorded-status vocabulary. "Not assessed" is a legitimate register
+# state (a real processor whose DPA work hasn't started) but deliberately NOT
+# in the readiness set above: recording the gap honestly is valid, claiming
+# readiness through it is not. Enum validation uses this; the critical-supplier
+# readiness semantics keep the stricter set.
+VALID_DPA_STATUSES = CRITICAL_STATUSES_OK_FOR_READINESS | {"Not assessed"}
 
 
 @dataclass
@@ -81,7 +87,7 @@ def run_checks() -> list[Check]:
             if field not in sup:
                 missing_fields += 1
         status = sup.get("dpa_status")
-        if status not in CRITICAL_STATUSES_OK_FOR_READINESS:
+        if status not in VALID_DPA_STATUSES:
             invalid_status += 1
         if sup.get("risk_tier") == "Critical" and status == "Template issued":
             if not sup.get("notes"):

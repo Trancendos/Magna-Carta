@@ -17,7 +17,7 @@ schema:
   supplier_id: "SUP-### unique identifier"
   risk_tier: "Critical | High | Medium | Low"
   dpa_status: "Signed | Template issued | In negotiation | Not required | Not assessed | N/A"
-  transfer_mechanism: "UK IDTA | SCCs | Adequacy | N/A (UK only)"
+  transfer_mechanism: "UK IDTA | SCCs | Adequacy | Not assessed | N/A (UK only)"
   sub_processor_disclosed: "boolean"
   review_date: "YYYY-MM-DD"
 

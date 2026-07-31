@@ -60,7 +60,7 @@ license_compliance:
   action_items: []
   ci_wiring:
     status: verified_clear
-    note: "FIXED 2026-07-25: pip-licenses added to Tranc3's .forgejo/workflows/dependency-audit.yml python-audit job — a pip-licenses --format=markdown report (archived as pip-licenses-report.json) plus a --fail-on gate for GPL/AGPL family strings"
+    note: "FIXED 2026-07-25: pip-licenses added to Tranc3's .forgejo/workflows/dependency-audit.yml python-audit job — a pip-licenses --format=json --with-urls report archived as pip-licenses-report.json (plus a --format=markdown console summary) and a --fail-on gate for GPL/AGPL family strings"
 
 intellectual_property:
   mc_id: MC-013
