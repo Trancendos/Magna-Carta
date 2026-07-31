@@ -1,0 +1,164 @@
+# Matrix Suites — machine-readable registry
+#
+# Bundles the estate's 31 governance/compliance matrices (13 in this repo,
+# 18 in Tranc3 docs/governance/) into 8 Suites, each governed by one of the
+# platform's 8 Pillars (src/entities/platform.py Pillar enum) and stewarded
+# by the Lead AI of the Location whose function matches the suite.
+#
+# Human-readable sibling: docs/governance/MATRIX-SUITES.md
+# Validated by: scripts/matrix_suites_check.py (Layer B CI)
+#
+# Invariants the validator enforces:
+#   * every matrix in the estate inventory is assigned to exactly one suite
+#   * every suite names a pillar, steward AI, steward location, presiding prime
+#   * every suite has a review cadence and a next_review date
+#
+# Steward assignments are DEFAULTS. At runtime the authoritative holder of a
+# stewardship is resolved through Tranc3's Role Assignment Registry (/roles),
+# so operators can reassign an AI without editing this file; this file records
+# the designed baseline the registry is seeded from.
+
+meta:
+  register_version: "1.0.0"
+  owner: "Platform Owner Trancendos / ISMS Lead"
+  created: "2026-07-31"
+  last_updated: "2026-07-31"
+  review_cadence_default: quarterly
+  observatory_event_prefix: "governance.suite"
+  townhall_integration: "CranBania board — one lane per suite (planned; see MATRIX-SUITES.md §6)"
+
+suites:
+  - suite_id: SUITE-FIN
+    name: Financial Suite
+    pillar: "Commercial / Financial"
+    steward_ai: "Dorris Fontaine"
+    steward_location: "Royal Bank of Arcadia"
+    presiding_prime: "Dorris Fontaine"
+    escalation: ["Dorris Fontaine (Prime)", "Cornelius MacIntyre", "Human owner"]
+    review_cadence: monthly
+    next_review: "2026-08-31"
+    observatory_events: "governance.suite.financial.*"
+    kpi: "0 overdue matrix reviews; FCA/monetisation rows evidenced or honestly gapped"
+    matrices:
+      - {id: FINANCIAL-MATRIX, repo: magna-carta, path: docs/compliance/FINANCIAL-MATRIX.md, register: MC-017}
+      - {id: REVENUE-MATRIX, repo: magna-carta, path: docs/compliance/REVENUE-MATRIX.md, register: MC-019}
+      - {id: TAXATION-MATRIX, repo: magna-carta, path: docs/compliance/TAXATION-MATRIX.md, register: MC-020}
+      - {id: ZERO-COST-MATRIX, repo: magna-carta, path: docs/compliance/ZERO-COST-MATRIX.md, register: MC-021}
+
+  - suite_id: SUITE-LEG
+    name: Legal & Regulatory Suite
+    pillar: "Architectural"
+    steward_ai: "Tristuran"
+    steward_location: "The Town Hall"
+    presiding_prime: "Cornelius MacIntyre"
+    escalation: ["Cornelius MacIntyre", "Human owner"]
+    review_cadence: monthly
+    next_review: "2026-08-31"
+    observatory_events: "governance.suite.legal.*"
+    kpi: "ICO/DPA/BAA gates progressed on schedule (ACT-001/002/003); no unevidenced compliance claims in product copy"
+    matrices:
+      - {id: LEGAL-MATRIX, repo: magna-carta, path: docs/compliance/LEGAL-MATRIX.md, register: MC-016}
+      - {id: REGULATION-MATRIX, repo: magna-carta, path: docs/compliance/REGULATION-MATRIX.md, register: MC-011}
+      - {id: LICENSE-COMPLIANCE-MATRIX, repo: magna-carta, path: docs/compliance/LICENSE-COMPLIANCE-MATRIX.md, register: MC-012}
+      - {id: INTELLECTUAL-PROPERTY-MATRIX, repo: magna-carta, path: docs/compliance/INTELLECTUAL-PROPERTY-MATRIX.md, register: MC-013}
+      - {id: PRIVACY-MATRIX, repo: tranc3, path: docs/governance/PRIVACY-MATRIX.md, register: null}
+
+  - suite_id: SUITE-SEC
+    name: Security Suite
+    pillar: "Security"
+    steward_ai: "Renik"
+    steward_location: "Cryptex"
+    presiding_prime: "The Guardian (Marcus Magnolia)"
+    escalation: ["The Guardian (Marcus Magnolia)", "Cornelius MacIntyre", "Human owner"]
+    review_cadence: monthly
+    next_review: "2026-08-31"
+    observatory_events: "governance.suite.security.*"
+    kpi: "security_score.py >= 90%; open code-scanning alerts triaged within cadence; SECURITY_ALERT_REGISTER.md current"
+    matrices:
+      - {id: SECURITY-MATRIX, repo: magna-carta, path: docs/compliance/SECURITY-MATRIX.md, register: MC-015}
+      - {id: ENCRYPTION-MATRIX, repo: magna-carta, path: docs/compliance/ENCRYPTION-MATRIX.md, register: MC-014}
+      - {id: AI-SECURITY-SCOPING-MATRIX, repo: magna-carta, path: docs/compliance/AI-SECURITY-SCOPING-MATRIX.md, register: null}
+      - {id: PERMISSIONS-ACCESS-MATRIX, repo: tranc3, path: docs/governance/PERMISSIONS-ACCESS-MATRIX.md, register: null}
+      - {id: DATA-TRANSFER-MATRIX, repo: tranc3, path: docs/governance/DATA-TRANSFER-MATRIX.md, register: null}
+      - {id: HARD-STOP-MATRIX, repo: tranc3, path: docs/governance/HARD-STOP-MATRIX.md, register: null}
+
+  - suite_id: SUITE-KNO
+    name: Knowledge Suite
+    pillar: "Knowledge"
+    steward_ai: "Zimik"
+    steward_location: "The Library"
+    presiding_prime: "Norman Hawkins"
+    escalation: ["Norman Hawkins", "Cornelius MacIntyre", "Human owner"]
+    review_cadence: quarterly
+    next_review: "2026-10-31"
+    observatory_events: "governance.suite.knowledge.*"
+    kpi: "wiki mirrors canonical sources (no forked copies); MATRIX-INDEX current"
+    matrices:
+      - {id: KNOWLEDGE-MATRIX, repo: magna-carta, path: docs/compliance/KNOWLEDGE-MATRIX.md, register: MC-018}
+      - {id: MATRIX-INDEX, repo: tranc3, path: docs/governance/MATRIX-INDEX.md, register: null}
+
+  - suite_id: SUITE-ENG
+    name: Engineering Suite
+    pillar: "Development (Code)"
+    steward_ai: "The Dr. (Nikolai O'denhime)"
+    steward_location: "The Lab"
+    presiding_prime: "The Dr. (Nikolai O'denhime)"
+    escalation: ["The Dr. (Nikolai O'denhime) (Prime)", "Cornelius MacIntyre", "Human owner"]
+    review_cadence: quarterly
+    next_review: "2026-10-31"
+    observatory_events: "governance.suite.engineering.*"
+    kpi: "production gate green; error catalog and remediation paths current"
+    matrices:
+      - {id: CODE-COMPLIANCE-MATRIX, repo: tranc3, path: docs/governance/CODE-COMPLIANCE-MATRIX.md, register: null}
+      - {id: DEBUGGING-MATRIX, repo: tranc3, path: docs/governance/DEBUGGING-MATRIX.md, register: null}
+      - {id: ERROR-REMEDIATION-MATRIX, repo: tranc3, path: docs/governance/ERROR-REMEDIATION-MATRIX.md, register: null}
+      - {id: GPU-MATRIX, repo: tranc3, path: docs/governance/GPU-MATRIX.md, register: null}
+      - {id: TOKEN-EFFICIENCY-MATRIX, repo: tranc3, path: docs/governance/TOKEN-EFFICIENCY-MATRIX.md, register: null}
+
+  - suite_id: SUITE-AIG
+    name: AI Governance Suite
+    pillar: "Architectural"
+    steward_ai: "Samantha Turing"
+    steward_location: "Turing's Hub"
+    presiding_prime: "Trancendos"
+    escalation: ["Trancendos (Prime)", "Cornelius MacIntyre", "Human owner"]
+    review_cadence: quarterly
+    next_review: "2026-10-31"
+    observatory_events: "governance.suite.ai.*"
+    kpi: "model advancement pipeline gates observed (Prime -> Cornelius -> Human); tier assignments match platform.py"
+    matrices:
+      - {id: TRANCENDOS-MODELS-MATRIX, repo: tranc3, path: docs/governance/TRANCENDOS-MODELS-MATRIX.md, register: null}
+      - {id: AI-AGENT-BOT-TIER-MATRIX, repo: tranc3, path: docs/governance/AI-AGENT-BOT-TIER-MATRIX.md, register: null}
+      - {id: AI-RELATIONSHIP-MATRIX, repo: tranc3, path: docs/governance/AI-RELATIONSHIP-MATRIX.md, register: null}
+      - {id: RACI-MATRIX, repo: magna-carta, path: docs/governance/RACI-MATRIX.md, register: null}
+
+  - suite_id: SUITE-OPS
+    name: Operations Suite
+    pillar: "DevOps"
+    steward_ai: "Trancendos"
+    steward_location: "The Citadel"
+    presiding_prime: "Cornelius MacIntyre"
+    escalation: ["Cornelius MacIntyre", "Human owner"]
+    review_cadence: quarterly
+    next_review: "2026-10-31"
+    observatory_events: "governance.suite.operations.*"
+    kpi: "capacity thresholds enforced (CapacityGuard events); traffic and environmental rows current"
+    matrices:
+      - {id: BOM-MATRIX, repo: tranc3, path: docs/governance/BOM-MATRIX.md, register: null}
+      - {id: ENVIRONMENTAL-MATRIX, repo: tranc3, path: docs/governance/ENVIRONMENTAL-MATRIX.md, register: null}
+      - {id: LOCATION-TRAFFIC-MATRIX, repo: tranc3, path: docs/governance/LOCATION-TRAFFIC-MATRIX.md, register: null}
+      - {id: THRESHOLD-MATRIX, repo: tranc3, path: docs/governance/THRESHOLD-MATRIX.md, register: null}
+
+  - suite_id: SUITE-EXP
+    name: Experience Suite
+    pillar: "Creativity"
+    steward_ai: "Baron Von Hilton"
+    steward_location: "Fabulousa"
+    presiding_prime: "Voxx"
+    escalation: ["Voxx", "Cornelius MacIntyre", "Human owner"]
+    review_cadence: quarterly
+    next_review: "2026-10-31"
+    observatory_events: "governance.suite.experience.*"
+    kpi: "design-system deviations recorded; UX debt reviewed on cadence"
+    matrices:
+      - {id: UX-UI-DESIGN-MATRIX, repo: tranc3, path: docs/governance/UX-UI-DESIGN-MATRIX.md, register: null}

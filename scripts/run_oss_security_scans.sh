@@ -76,7 +76,16 @@ if command -v pip-audit >/dev/null 2>&1; then
   for req in requirements.txt requirements-oss.txt; do
     if [[ -f "$ROOT/$req" ]]; then
       echo "--- pip-audit ($req) ---"
-      if pip-audit -r "$ROOT/$req"; then
+      # Accepted findings are suppressed HERE, next to the scan, so the acceptance
+      # is real rather than a comment the scanner never reads. Each --ignore-vuln
+      # must have a written disposition in the requirements file it applies to.
+      #   PYSEC-2026-3481/3482/3483: mcp 1.23.3, transitive via semgrep's hard pin —
+      #   see requirements-oss.txt (dev-time scanner dep, never deployed; forcing
+      #   >=1.28.1 breaks semgrep itself, verified).
+      if pip-audit -r "$ROOT/$req" \
+          --ignore-vuln PYSEC-2026-3481 \
+          --ignore-vuln PYSEC-2026-3482 \
+          --ignore-vuln PYSEC-2026-3483; then
         echo "OK  pip-audit $req"
       else
         echo "FINDINGS in pip-audit $req — review above" >&2
