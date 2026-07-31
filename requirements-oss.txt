@@ -6,3 +6,12 @@ semgrep>=1.60
 pip-audit>=2.7
 # Transitive override: semgrep pins pyjwt~=2.12; 2.13+ fixes PYSEC-2026-175–179
 pyjwt>=2.13.0
+# NOT overridden — mcp 1.23.3 (transitive via semgrep). pip-audit flags it for
+# PYSEC-2026-3481/-3482 (fixed in 1.27.2) and -3483 (fixed in 1.28.1), but semgrep
+# hard-pins `mcp==1.23.3`: forcing >=1.28.1 resolves to 2.0.0 and breaks semgrep
+# itself, which is a worse outcome than the finding. Verified by attempting it.
+#
+# Accepted for now. These are dev-time scanner dependencies — semgrep runs locally
+# and in the optional SEC-006 tier, is never deployed, and is not exposed to
+# untrusted input. Revisit when semgrep relaxes its pin; until then pip-audit will
+# keep reporting it, which is the correct behaviour for an accepted finding.
