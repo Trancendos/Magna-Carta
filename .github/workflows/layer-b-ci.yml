@@ -1,14 +1,23 @@
 ---
 # Magna Carta — Layer B compliance CI (GitHub Actions mirror)
 #
-# Cloud-only phase interim measure: this mirrors .forgejo/workflows/layer-b-ci.yml so
-# the compliance registers are still verified on every change while The Workshop
-# (self-hosted Forgejo) is offline pending server funding. Forgejo remains the primary
-# CI per the zero-cost self-hosted policy — same dual-path rationale as Tranc3's
-# deploy-cloudflare.yml. Keep this file and the Forgejo copy in sync.
+# ADVISORY ONLY — this workflow is NOT a mandatory Layer B gate.
 #
-# This also supplies the PR status check GitHub itself needs to gate merges, which is
-# the documented exception to the "prefer Forgejo" rule.
+# docs/compliance/ZERO-COST-SECURITY-TOOLING.md §1 lists GitHub Actions under
+# "Prohibited mandatory — Never for Layer B" (minute limits and overage billing), and
+# names scripts/run_layer_b_local_ci.sh + the weekly cron as the mandatory path. This
+# mirror does not change that and must not be configured as a required status check.
+#
+# Why it exists anyway: The Workshop (self-hosted Forgejo) is offline pending server
+# funding, so during the cloud-only phase the Forgejo copy does not actually execute —
+# and a workflow that never runs reports nothing. Running the same checks here surfaces
+# a broken register on the PR that introduces it. That is strictly additional signal on
+# top of the mandatory local path, not a replacement for it, so it does not engage the
+# prohibition, which is about *depending* on metered cloud CI for compliance.
+#
+# Retire this copy when The Workshop returns, rather than maintaining both indefinitely.
+# The parity step below keeps it honest: the two files must stay identical apart from
+# these header comments.
 
 name: layer-b-ci
 
@@ -31,6 +40,17 @@ jobs:
         with:
           persist-credentials: false
 
+      # The two copies must stay identical apart from their header comments. A comment
+      # saying so cannot enforce it; this can. Strips comments and blank lines from both
+      # and fails on any difference in the executable content.
+      - name: Verify the Forgejo and GitHub copies have not drifted
+        shell: bash
+        run: |
+          diff -u \
+            <(sed -E '/^[[:space:]]*(#|$)/d' .forgejo/workflows/layer-b-ci.yml) \
+            <(sed -E '/^[[:space:]]*(#|$)/d' .github/workflows/layer-b-ci.yml) \
+            && echo "Workflow copies are in sync."
+
       - name: Set up Python
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
@@ -38,8 +58,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          # Interpreter-qualified: run_layer_b_local_ci.sh invokes every check with
+          # `python3`, so installing with a bare `pip` risks a different environment on
+          # any runner where the two do not resolve to the same interpreter.
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
+          python3 --version && python3 -m pip --version
 
       # run_layer_b_local_ci.sh is the single entry point the programme already uses
       # locally and via the weekly cron. CI runs exactly the same script so the two
