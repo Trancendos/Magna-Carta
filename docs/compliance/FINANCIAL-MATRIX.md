@@ -1,13 +1,13 @@
 # Financial Matrix
 
-**Version:** 1.0.0
-**Date:** 2026-07-24
+**Version:** 1.0.1
+**Date:** 2026-07-24 (re-audited 2026-07-25)
 **Owner:** Finance / ISMS Lead
 **Scope:** Every Service, Solution, Application, and AI in the Trancendos estate that touches money movement, billing, or financial regulation
 **Register:** MC-017
 **Machine-readable:** [compliance/estate_protection_matrices.yaml](../../compliance/estate_protection_matrices.yaml) (`financial` section)
 
----
+**2026-07-25 re-audit:** every code-grounded claim re-verified against current source — `src/monetisation/billing.py`'s pro (£29) / business (£149) tier pricing, `StripeManager`, and the `/webhook/stripe` route (`src/monetisation/router.py:170`) are unchanged; `workers/ledger-service/worker.py` still computes a SHA-256 hash chain over `entry_id:prev_hash:actor:action:timestamp` (still a generic audit/integrity log, not a financial ledger); `compliance/supplier_dpa_register.yaml`'s SUP-003 entry is still `dpa_status: "Template issued"` with the same "Execute signed DPA before production payment routing" note. No drift found — this matrix's findings hold unchanged.
 
 ## 1. Purpose
 

@@ -185,7 +185,9 @@ supplier_dpa_gates:
   register: compliance/supplier_dpa_register.yaml
   items_key: suppliers
   critical_tiers: ["Critical"]
-  blocked_dpa_status: ["Template issued", "In negotiation"]
+  # "Not assessed" included so Critical processors whose DPA work has not even
+  # started are surfaced by MON-014 rather than silently skipped.
+  blocked_dpa_status: ["Template issued", "In negotiation", "Not assessed"]
   trigger_supplier_map: compliance/framework_triggers.yaml
   readiness_mode_severity: info
 

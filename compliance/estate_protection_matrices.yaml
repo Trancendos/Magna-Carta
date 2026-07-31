@@ -10,9 +10,9 @@
 # Bridge: compliance/tranc3_register_bridge.yaml
 
 meta:
-  register_version: "1.0.0"
+  register_version: "1.0.3"
   owner: "Platform Engineering / ISMS Lead"
-  last_updated: "2026-07-24"
+  last_updated: "2026-07-25"
   review_cycle: "quarterly"
   next_review: "2026-10-24"
   magna_carta_register: "compliance/magna_carta_register.yaml"
@@ -30,6 +30,7 @@ license_compliance:
   mc_id: MC-012
   human_readable: docs/compliance/LICENSE-COMPLIANCE-MATRIX.md
   scan_date: "2026-07-24"
+  reaudit_date: "2026-07-25"
   scan_tool: "pip-licenses --format=json --with-urls"
   packages_scanned: 190
   license_family_summary:
@@ -48,23 +49,23 @@ license_compliance:
       status: not_assessed
       note: "Ubuntu system package pulled in transitively by the sandbox/OS image, not a Tranc3-authored or redistributed dependency — confirm absent from shipped container images"
     proprietary:
-      count: 16
+      count: 19
       families: ["NVIDIA CUDA/cuDNN/NCCL runtime bindings"]
       status: verified_clear
-      note: "Transitive torch GPU dependencies redistributed under NVIDIA's standard runtime-library terms"
+      note: "FIXED 2026-07-25: was 16 + a separate 'unknown' cuda-toolkit line item; cuda-toolkit, cuda-bindings, and cuda-pathfinder are now confirmed (via pip show Requires:/Required-by: chains) as transitive torch==2.13.0 dependencies and folded into this bucket, redistributed under NVIDIA's standard runtime-library terms like the rest"
     unknown:
-      count: 4
-      packages: ["cuda-toolkit", "pygad", "rustworkx", "sentencepiece"]
-      status: not_assessed
-      note: "pip-licenses could not resolve SPDX metadata; sentencepiece is confirmed MIT per its upstream LICENSE file, the other 3 need the same manual check"
-  action_items:
-    - "Confirm GPL/LGPL Ubuntu-tooling rows are sandbox-only, absent from shipped container images"
-    - "Manually resolve the 4 unknown-license rows against each package's actual LICENSE file"
-    - "Wire pip-licenses into Tranc3's .forgejo/workflows/dependency-audit.yml"
+      count: 0
+      status: verified_clear
+      note: "FIXED 2026-07-25 (was 4: cuda-toolkit, pygad, rustworkx, sentencepiece). cuda-toolkit folded into proprietary above. pygad confirmed BSD-3-Clause and rustworkx confirmed Apache-2.0, both via each package's bundled dist-info LICENSE file read directly (rustworkx is a transitive qiskit==2.4.1 dependency, not a direct requirements.txt entry). sentencepiece confirmed Apache-2.0 via the upstream google/sentencepiece GitHub LICENSE file (no bundled dist-info LICENSE ships with this package, which is why pip-licenses returned UNKNOWN) — correcting this register's own prior note, which had misstated it as MIT."
+  action_items: []
+  ci_wiring:
+    status: verified_clear
+    note: "FIXED 2026-07-25: pip-licenses added to Tranc3's .forgejo/workflows/dependency-audit.yml python-audit job — a pip-licenses --format=json --with-urls report archived as pip-licenses-report.json (plus a --format=markdown console summary) and a --fail-on gate for GPL/AGPL family strings"
 
 intellectual_property:
   mc_id: MC-013
   human_readable: docs/compliance/INTELLECTUAL-PROPERTY-MATRIX.md
+  reaudit_date: "2026-07-25"
   estate_protection:
     code_ownership: verified_clear
     entity_name_trademark_clearance:
@@ -88,36 +89,46 @@ intellectual_property:
     - entity: "AI Gateway model outputs (HuggingFace/OpenRouter free tiers)"
       risk: training_data_provenance
       status: not_assessed
-    - entity: "Sashas Photo Studio planned Stable Diffusion/ComfyUI backend"
+    - entity: "Sashas Photo Studio Stable Diffusion/ComfyUI backend"
       risk: training_data_provenance
-      status: external_action
-      note: "Not yet integrated; flag for IP review before go-live"
+      status: not_assessed
+      note: "CORRECTED 2026-07-25: this was misdescribed as 'not yet integrated' — workers/sashas-photo-studio/main.py (the actual Dockerfile CMD entrypoint) already has a live ComfyUI-primary/A1111-fallback HTTP integration against self-hosted instances. No copyleft code-redistribution obligation (HTTP orchestration, not embedded GPL-3.0/AGPL-3.0 source), but the training-data-provenance review on generated output is now due, not deferrable"
   action_items:
     - "Trademark clearance search, prioritizing Trancendos, Infinity, Luminous"
     - "Legal opinion on AI-assisted code/content ownership if commercial exposure increases"
+    - "Training-data-provenance review for Sashas Photo Studio's now-live ComfyUI/A1111 output"
 
 encryption:
   mc_id: MC-014
   human_readable: docs/compliance/ENCRYPTION-MATRIX.md
   audit_date: "2026-07-24"
+  reaudit_date: "2026-07-25"
   in_transit:
     traefik_websecure_entrypoint:
-      status: verified_caveat
-      note: "Defined with a traefik-certs volume, but no --certificatesresolvers.letsencrypt.acme.* flag exists on the Traefik command block; ~21 service labels reference an undefined certresolver"
+      status: verified_clear
+      note: "FIXED 2026-07-25: --certificatesresolvers.letsencrypt.acme.email/.storage/.httpchallenge* flags added to the Traefik service's command: block in docker-compose.production.yml; the letsencrypt certresolver referenced by service labels is now actually defined"
     p0_services_on_plain_http:
-      status: confirmed_gap
+      status: verified_clear
       services: ["infinity-auth", "infinity-void", "tranc3-backend", "tranc3-ai", "api-gateway", "infinity-ws"]
-      note: "All six route on the web (HTTP) entrypoint, not websecure"
+      note: "FIXED 2026-07-25: all six now route on entrypoints=websecure with tls=true and tls.certresolver=letsencrypt, plus a Host(`api.trancendos.com`) matcher so ACME has a real domain to issue against (previously PathPrefix-only, which Traefik's ACME cannot resolve a cert for)"
     p3_workers_missing_tls_label:
-      status: confirmed_gap
+      status: verified_clear
       services: ["fabulousa-service", "ice-box-service"]
-      note: "Reference entrypoints=websecure but carry no tls=true or certresolver label"
+      note: "FIXED 2026-07-25: both now carry tls=true and tls.certresolver=letsencrypt alongside entrypoints=websecure in docker-compose.production.yml"
+    additional_websecure_workers_missing_tls_label:
+      status: verified_clear
+      count: 37
+      note: "FOUND AND FIXED 2026-07-25: writing scripts/compliance_drift_audit.py's websecure_tls_labels check and running it against the full compose file surfaced 37 more services (beyond the 6 P0 + fabulousa/ice-box already known) referencing entrypoints=websecure with no tls/certresolver label at all. All 37 now carry tls=true + tls.certresolver=letsencrypt."
+    tls_routers_host_matcher:
+      status: verified_clear
+      count: 39
+      note: "FOUND AND FIXED 2026-07-25 (same day as the label fix above): all 39 routers with tls=true but only a PathPrefix rule (the 37 above, plus fabulousa-service and ice-box-service) now carry Host(`<worker>.trancendos.com`) — subdomain-per-worker, the domain strategy decided for this fix. scripts/compliance_drift_audit.py's new tls_routers_have_host_matcher check guards against regression. Does not itself guarantee the 39 subdomains' DNS records exist — that provisioning step is a separate infra/ops task, not claimed as done here."
     redis_tls:
       status: verified_clear
       note: "REDIS_URL uses rediss:// per .env.example"
     postgres_tls:
-      status: confirmed_gap
-      note: "DATABASE_URL example has no sslmode parameter; no SSL enforcement found in src/database/"
+      status: verified_clear
+      note: "FIXED 2026-07-25: DATABASE_URL example in .env.example now includes ?sslmode=require; SQLAlchemy's create_engine() passes the DSN straight to psycopg2, which honors sslmode natively — no code change needed beyond the connection-string default"
   at_rest:
     the_void_vault:
       status: verified_clear
@@ -136,10 +147,10 @@ encryption:
       status: verified_clear
       note: "Fails fast or generates an ephemeral secrets.token_hex(32); no hardcoded insecure default found"
     password_hashing:
-      status: verified_caveat
-      note: "Two schemes coexist: argon2id/PBKDF2 (src/auth/passwords.py) vs bcrypt (src/auth/db_user_manager.py)"
+      status: verified_clear
+      note: "FIXED 2026-07-25: src/auth/db_user_manager.py's _BcryptContext retired in favor of _PasswordContext, which hashes new passwords via src/auth/passwords.py's hash_password() (argon2id preferred). Pre-existing bcrypt hashes still verify and upgrade to the new scheme on next successful login (DB-backed and in-memory-fallback paths both covered). Guarded by scripts/compliance_drift_audit.py's db_user_manager_consolidated_hashing check."
     internal_secret_dev_fallback:
-      status: confirmed_gap
+      status: verified_clear
       affected_workers:
         - basement
         - chaos-party
@@ -160,34 +171,34 @@ encryption:
         - warp-radio
         - warp-tunnel
       count: 18
-      note: "Fall back to the literal string 'dev-secret' if INTERNAL_SECRET is unset"
+      note: "FIXED 2026-07-25: all 18 workers now raise RuntimeError at startup if INTERNAL_SECRET is unset or equals 'dev-secret' (stripped comparison, closing a whitespace-padding bypass a bot reviewer found in the first fix pass), matching the infinity-void reference pattern. Also extended to workers/tateking/main.py, workers/the-lab/main.py, workers/imaginarium/main.py (the real deployed entrypoints for those three, distinct from their worker.py) and workers/tranceflow/config.py, workers/vrar3d/config.py. The validated secret is now also stored stripped, not raw, so incidental whitespace from secret injection (k8s/file-mounted secrets) can't silently break auth even after passing validation."
     internal_secret_safe_pattern_reference:
       status: verified_clear
       worker: infinity-void
       note: "Explicitly rejects both an unset value and the string 'internal-dev-secret', raising RuntimeError at startup — proof the safe pattern already exists in-repo"
-  action_items:
-    - "Define a real letsencrypt certresolver on the Traefik service and route P0 services through websecure"
-    - "Remove the dev-secret fallback from the 18 affected workers, copying the infinity-void pattern"
-    - "Decide on a single password-hashing scheme (argon2id/PBKDF2 vs bcrypt)"
+  action_items: []
 
 security:
   mc_id: MC-015
   human_readable: docs/compliance/SECURITY-MATRIX.md
   audit_date: "2026-07-24"
+  reaudit_date: "2026-07-25"
   auth_coverage:
     partial_auth_shared_secret:
-      status: verified_caveat
+      status: verified_clear
       services: ["the-studio", "imind", "tranquility", "taimra", "vrar3d", "resonate", "sashas-photo-studio"]
-      note: "Enforce X-Internal-Secret on all non-/health routes, but default secret is the dev-secret fallback tracked under encryption.secrets_and_signing"
+      note: "FIXED 2026-07-25: all 7 are among the 18 workers whose dev-secret fallback was removed (see encryption.secrets_and_signing.internal_secret_dev_fallback) — X-Internal-Secret is now a real, required, unguessable secret, not a weak shared default"
     no_auth_standalone_workers:
-      status: confirmed_gap
+      status: verified_clear
       findings:
         - worker: fabulousa-service
-          unauthenticated_routes: ["GET /fabulousa/status", "GET /fabulousa/projects", "GET /fabulousa/assets"]
+          previously_unauthenticated_routes: ["GET /fabulousa/status", "GET /fabulousa/projects", "GET /fabulousa/assets"]
+          note: "FIXED: GET /fabulousa/projects and GET /fabulousa/assets now gated behind _require_internal_auth; GET /fabulousa/status remains intentionally public (health-style status endpoint), matching the same open-by-design convention as /health elsewhere"
         - worker: ice-box-service
-          unauthenticated_routes: ["GET /quarantine", "GET /quarantine/{id}", "GET /stats"]
+          previously_unauthenticated_routes: ["GET /quarantine", "GET /quarantine/{id}", "GET /stats"]
+          note: "FIXED: GET /quarantine and GET /quarantine/{id} now gated behind _require_internal_auth; GET /stats intentionally left public as a health/metrics-style endpoint"
     no_auth_inrepo_routers:
-      status: confirmed_gap
+      status: verified_clear
       routers:
         - src/imind/routes.py
         - src/vrar3d/routes.py
@@ -195,7 +206,7 @@ security:
         - src/artifactory/routes.py
         - src/library/routes.py
         - src/studio/routes.py
-      note: "Zero auth enforcement; RBACMiddleware only populates request.state.user, never blocks. Includes 2 unauthenticated delete endpoints (artifactory, library)."
+      note: "FIXED 2026-07-25: all six now require Depends(get_current_user) on every non-status route; artifactory and library's delete endpoints require the same auth plus (library) an ownership/classification check before deleting a RESTRICTED article; resonate and vrar3d additionally enforce self-or-admin ownership on user-scoped actions. tests/test_shared_resource_routers_auth.py (43 tests) covers public-status-stays-public, unauthenticated-rejected, authenticated-allowed, and ownership-denied/admin-override cases for all six."
     verified_auth_present:
       status: verified_clear
       routers:
@@ -209,18 +220,18 @@ security:
       status: verified_clear
       note: "api.py uses CORS_ORIGINS env var, defaults to localhost only, not wildcard"
     standalone_workers:
-      status: confirmed_gap
-      count: 65
-      note: "Files across workers/*/worker.py and main.py use allow_origins=['*']"
+      status: verified_clear
+      count: 68
+      note: "FIXED 2026-07-25 (commit 3e428d35): all 68 flagged worker/main.py files now parse CORS_ORIGINS as a trimmed, empty-filtered allowlist instead of allow_origins=['*'] — [o.strip() for o in os.getenv('CORS_ORIGINS', 'http://localhost:3000').split(',') if o.strip()]. The generator template (workers/_generate_workers.py) had the same wildcard as its own default (os.environ.get('CORS_ORIGINS', '*')) and was fixed separately (commit a7ae3e00) so regenerating a worker doesn't reintroduce it, plus a follow-up fix (commit 0870bc71) for a missing `import os` that would have made the generated template crash with NameError. The credentialed dimensional-nexus-service worker now explicitly rejects a wildcard CORS_ORIGINS value at startup rather than letting Starlette crash on it. Verified 2026-07-25 via `grep -rl 'allow_origins=\\[\"\\*\"\\]' workers/` returning zero matches, and scripts/compliance_drift_audit.py's no_wildcard_cors check (PASS)."
   action_items:
-    - "Add auth enforcement to the 6 unauthenticated in-repo routers, prioritizing the 2 with delete endpoints"
-    - "Add auth to fabulousa-service and ice-box-service GET routes"
     - "Schedule a full auth-coverage sweep of the remaining ~78 standalone workers not yet individually audited"
-    - "Tighten wildcard CORS on the 65 flagged files (owner decision on allowed-origins policy)"
+    - "Decide whether GET /fabulousa/status, GET /ice-box stats, and other open-by-design health-style endpoints should stay open or move behind auth too (owner decision, not a code defect)"
 
 legal:
   mc_id: MC-016
   human_readable: docs/compliance/LEGAL-MATRIX.md
+  reaudit_date: "2026-07-25"
+  reaudit_note: "No drift found — all code-grounded claims re-verified unchanged (AUP/registry, absence of ToS/Privacy/Cookie/EULA docs, absence of Companies House registration, legislation_register.yaml's 10 active + 6 watch-list items)"
   customer_facing_instruments:
     platform_aup:
       status: verified_clear
@@ -259,6 +270,8 @@ legal:
 financial:
   mc_id: MC-017
   human_readable: docs/compliance/FINANCIAL-MATRIX.md
+  reaudit_date: "2026-07-25"
+  reaudit_note: "No drift found — billing.py tier pricing, StripeManager, /webhook/stripe route, ledger-service SHA-256 hash chain, and SUP-003's Template-issued DPA status all re-verified unchanged"
   fca_alignment:
     status: verified_caveat
     parent_mc_id: MC-009
@@ -285,15 +298,17 @@ financial:
 knowledge:
   mc_id: MC-018
   human_readable: docs/compliance/KNOWLEDGE-MATRIX.md
+  audit_date: "2026-07-24"
+  reaudit_date: "2026-07-25"
   central_finding:
-    status: confirmed_gap
+    status: verified_clear
     path: src/library/knowledge_base.py
-    note: "The Library's Article dataclass has no classification, sensitivity, or retention field of any kind"
+    note: "FIXED 2026-07-25: Article gained classification (reusing DataClassification from daas_stream.py, exactly the pattern this matrix recommended) and retention_days fields plus retention_expired()/apply_retention(). src/library/routes.py enforces read clearance (RESTRICTED/TOP_SECRET require admin or the article's own author, derived from current_user rather than a client-supplied field), filters by visibility before truncating to a page limit, and requires the same clearance check before delete. stats() now reports a by_classification breakdown."
   existing_patterns_not_yet_applied:
     data_classification_enum:
       status: verified_clear
       path: src/nanoservices/daas_stream/daas_stream.py
-      note: "Real, working classification+retention_ms+OPA enforcement — scoped to DaaS Stream only"
+      note: "Real, working classification+retention_ms+OPA enforcement — scoped to DaaS Stream only. As of 2026-07-25, src/library/knowledge_base.py now imports and reuses this same enum rather than inventing a second taxonomy (see central_finding above)."
     artifactory_retention:
       status: verified_clear
       path: src/artifactory/registry.py
@@ -303,15 +318,15 @@ knowledge:
       status: verified_clear
       note: "Confirmed real Library.create() calls from The Dutchy's report generators"
     observatory_to_library:
-      status: confirmed_gap
-      note: "ingest() is dead code; /kb/ingest endpoint does not exist"
-  action_items:
-    - "Apply a DataClassification pattern (reuse daas_stream.py's) to The Library"
-    - "Fix or remove the dead Observatory-to-Library ingest path"
+      status: verified_clear
+      note: "FIXED 2026-07-25 (Tranc3 295c2c75): Observatory.record() never called library_pipeline.ingest() (only api.py's start_pipeline() ran, scheduling flush_loop() on an always-empty queue), and even if it had, _should_trigger()/KBTrigger checked event['action']/event['resource'] — keys AuditEvent.to_dict() doesn't have (it uses event_type/target/metadata) — so every event would have been filtered out regardless. _send_batch() also POSTed to a /kb/ingest endpoint that exists on neither Library implementation, at a LIBRARY_URL defaulting to config-service's port. Fixed by wiring record() to forward SECURITY/CRITICAL events to the corrected ingest(), and replacing the broken HTTP round-trip with a direct in-process Library.create() call (library_pipeline.py and knowledge_base.py already share a process via api.py, so this removes the URL/endpoint mismatch at the root rather than re-pointing it). tests/test_library_pipeline.py (10 tests) covers the corrected event-shape matching and the end-to-end Observatory.record() -> Library.create() path."
+  action_items: []
 
 revenue:
   mc_id: MC-019
   human_readable: docs/compliance/REVENUE-MATRIX.md
+  reaudit_date: "2026-07-25"
+  reaudit_note: "Fixed a class-name error in the human-readable doc (RevenueTracker -> PassiveRevenueEngine, matching this YAML which already had it right); STREAMS count (12), no-persistence finding, marketplace_fee(), and the Stripe free-only-mode log message all re-verified unchanged"
   no_persistence_caveat:
     status: confirmed_gap
     note: >
@@ -361,25 +376,39 @@ revenue:
 taxation:
   mc_id: MC-020
   human_readable: docs/compliance/TAXATION-MATRIX.md
+  reaudit_date: "2026-07-25"
   tax_monitor_code:
-    status: confirmed_gap
+    status: verified_caveat
     path: src/monetisation/billing.py
     note: >
-      Real UK/EU VAT-OSS rate logic and real VIES API validation call, but
-      2 constants are stale as of this review: UK_VAT_THRESHOLD_GBP is
-      85000, while HMRC raised the actual threshold to £90,000 effective
-      1 April 2024; EU_VAT_RATES["FI"] is 0.24, while Finland raised its
-      standard rate to 25.5% effective 1 September 2024. Corrected per
-      review (coderabbitai) from an earlier version that claimed these
-      values were simply "correct."
+      FIXED 2026-07-25 re-audit (Tranc3 commit 74f68cef, "Fix stale VAT
+      constants in TaxMonitor (UK threshold, FI/RO/SK rates)"):
+      UK_VAT_THRESHOLD_GBP is now 90000; EU_VAT_RATES["FI"] is now 0.255,
+      ["RO"] is now 0.21, ["SK"] is now 0.23, each with an inline
+      effective-date comment. Table grown from 15 to 27 EU countries. The
+      remaining ~24 rates were not individually re-verified against a live
+      current source in this pass — narrower version of the same caveat
+      the original finding carried.
     uk_vat_threshold_gbp:
-      code_value: 85000
+      code_value: 90000
       current_real_value: 90000
       effective_date: "2024-04-01"
+      status: verified_clear
     eu_vat_rate_fi:
-      code_value: 0.24
+      code_value: 0.255
       current_real_value: 0.255
       effective_date: "2024-09-01"
+      status: verified_clear
+    eu_vat_rate_ro:
+      code_value: 0.21
+      current_real_value: 0.21
+      effective_date: "2025-08-01"
+      status: verified_clear
+    eu_vat_rate_sk:
+      code_value: 0.23
+      current_real_value: 0.23
+      effective_date: "2025-01-01"
+      status: verified_clear
   actual_registration_status:
     uk_vat_registration:
       status: external_action
@@ -411,6 +440,7 @@ taxation:
 zero_cost:
   mc_id: MC-021
   human_readable: docs/compliance/ZERO-COST-MATRIX.md
+  reaudit_date: "2026-07-25"
   live_audit:
     date: "2026-07-24"
     script: scripts/zero_cost_audit.py
@@ -430,12 +460,22 @@ zero_cost:
       it separately requires docs/ZERO_COST_VENDOR_MATRIX.md to exist.
       Corrected per review (charliecreates, P1) from an earlier version
       that reported this audit's overall status as PASS.
+  reaudit:
+    date: "2026-07-25"
+    script: scripts/zero_cost_audit.py
+    overall_script_exit_status: PASS
+    overall_exit_code: 0
+    note: >
+      Re-ran python3 scripts/zero_cost_audit.py against current Tranc3 —
+      exit code 0, "status": "PASS" in the JSON body, and no doc-presence
+      WARN emitted, now that docs/ZERO_COST_VENDOR_MATRIX.md exists.
   doc_presence_check:
-    status: confirmed_gap
-    note: "Audit script's own check for docs/ZERO_COST_VENDOR_MATRIX.md fails — file missing from Tranc3; this is what drives overall_exit_code above to 1"
+    status: verified_clear
+    note: "FIXED 2026-07-25: docs/ZERO_COST_VENDOR_MATRIX.md now exists in Tranc3, grounded in config/zero_cost/providers.yaml's real contents (30 approved self-hosted providers, 5 blocked-paid, 6 rotation chains, policy block); the audit script's own doc-presence check now passes and tests/test_zero_cost_registry.py asserts the script's exit code is 0."
   cloud_only_tension:
     status: verified_caveat
     note: "AI-inference layer is genuinely zero-cost; hosting layer (Cloudflare Workers Cloud-Only default) is not strictly self-hosted, a known accepted gap pending funding per CLAUDE.md"
-  action_items:
-    - "Create docs/ZERO_COST_VENDOR_MATRIX.md in Tranc3 to satisfy the audit script's own check"
-    - "Wire scripts/zero_cost_audit.py into .forgejo/workflows/dependency-audit.yml"
+  ci_automation:
+    status: verified_clear
+    note: "FIXED 2026-07-25: a zero-cost-audit job now runs scripts/zero_cost_audit.py in .forgejo/workflows/dependency-audit.yml (set -o pipefail so a nonzero script exit actually fails the job, not just the tee), uploads the JSON report as an artifact, and is a dependency of the audit-dashboard job."
+  action_items: []

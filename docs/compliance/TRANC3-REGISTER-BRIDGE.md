@@ -1,7 +1,7 @@
 # Tranc3 Register Bridge
 
-**Version:** 1.0.0  
-**Date:** 2026-06-07  
+**Version:** 1.1.0  
+**Date:** 2026-06-07 (§4 integration-status table refreshed 2026-07-25)  
 **Owner:** Platform Engineering / ISMS Lead  
 **Machine-readable:** [compliance/tranc3_register_bridge.yaml](../../compliance/tranc3_register_bridge.yaml)  
 **Integration guide:** [TRANC3-INTEGRATION-GUIDE.md](../engineering/TRANC3-INTEGRATION-GUIDE.md)  
@@ -82,17 +82,17 @@ Full detail: [tranc3_register_bridge.yaml](../../compliance/tranc3_register_brid
 | `MAGNA_CARTA_ENABLED=true` in staging | 🎯 Pending | ACT-009 |
 | HIPAA Tier A copy in Tranc3 main | 🎯 Pending | ACT-006 (verified locally) |
 | SOC 2 collector + evidence schedule merge | 🎯 Pending | ACT-008 |
-| pip-licenses gate in Tranc3's dependency-audit.yml | 🎯 Pending | MC-012 |
-| Trademark clearance search for the 43 platform entity names | 🎯 Pending | MC-013 |
-| Traefik letsencrypt certresolver definition + P0 services on `websecure` | 🎯 Pending | MC-014 |
-| 18-worker `dev-secret` INTERNAL_SECRET fallback removal | 🎯 Pending | MC-014 |
-| Auth enforcement on 6 unauthenticated in-repo routers | 🎯 Pending | MC-015 |
+| pip-licenses gate in Tranc3's dependency-audit.yml | ✅ Done (Tranc3 `389ef6ae`) | MC-012 |
+| Trademark clearance search for the 43 platform entity names | 🎯 Pending (real legal input) | MC-013 |
+| Traefik letsencrypt certresolver definition + P0 services on `websecure` | ✅ Done | MC-014 |
+| 18-worker `dev-secret` INTERNAL_SECRET fallback removal | ✅ Done | MC-014 |
+| Auth enforcement on 6 unauthenticated in-repo routers | ✅ Done | MC-015 |
 | External ToS/Privacy Policy/Cookie Policy + company registration confirmation | 🎯 Pending (real legal input) | MC-016 |
 | SUP-003 PSP DPA signature | 🎯 Pending (existing ACT-001) | MC-017 |
-| Classification/sensitivity/retention model for The Library | 🎯 Pending | MC-018 |
+| Classification/sensitivity/retention model for The Library | ✅ Done | MC-018 |
 | Activation of 7 zero-balance revenue streams | 🎯 Pending (owner decision) | MC-019 |
 | VAT registration / UTR / real tax-relief claim confirmation | 🎯 Pending (real accountant) | MC-020 |
-| `docs/ZERO_COST_VENDOR_MATRIX.md` creation in Tranc3 | 🎯 Pending | MC-021 |
+| `docs/ZERO_COST_VENDOR_MATRIX.md` creation in Tranc3 | ✅ Done | MC-021 |
 
 ---
 

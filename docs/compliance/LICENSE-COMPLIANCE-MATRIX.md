@@ -1,11 +1,13 @@
 # License Compliance Matrix
 
-**Version:** 1.0.0
-**Date:** 2026-07-24
+**Version:** 1.1.0
+**Date:** 2026-07-24 (re-audited 2026-07-25)
 **Owner:** Platform Engineering / ISMS Lead
 **Scope:** Every Service, Solution, Application, and AI in the Trancendos estate (Tranc3 implementation + Magna Carta foundation)
 **Register:** MC-012
 **Machine-readable:** [compliance/estate_protection_matrices.yaml](../../compliance/estate_protection_matrices.yaml) (`license_compliance` section)
+
+**2026-07-25 re-audit:** §3/§4's 4 UNKNOWN packages are now resolved with evidence (`cuda-toolkit`/`cuda-bindings`/`cuda-pathfinder` are confirmed transitive `torch` dependencies covered by the existing NVIDIA-proprietary bucket; `rustworkx` is a transitive `qiskit` dependency, Apache-2.0; `pygad` is BSD-3-Clause; `sentencepiece` is Apache-2.0, **correcting** this matrix's own prior draft note in §4 which had misstated it as MIT). §8's CI action item is also closed: `pip-licenses` is now wired into Tranc3's `.forgejo/workflows/dependency-audit.yml` `python-audit` job (a `pip-licenses --format=markdown` report plus a `--fail-on` gate for GPL/AGPL family strings).
 
 ---
 
@@ -48,8 +50,8 @@ scan JSON referenced in §7 for full per-package detail.
 | Permissive (MIT, BSD, Apache-2.0, ISC, PSF, Unlicense) | 158 | ✅ No redistribution obligation beyond attribution/notice — safe for a closed or open estate |
 | Weak copyleft (LGPL, LGPLv2+, MPL 2.0) | 11 | ⚠️ Safe when used as an unmodified library dependency (dynamic linking equivalent for Python imports); becomes ❌ only if this estate modifies and redistributes the library itself, which it does not |
 | Strong copyleft (GPL) | 1 (`python-apt`) | 📋 Ubuntu system package pulled in transitively by the sandbox/OS image, not a Tranc3-authored or Tranc3-redistributed dependency — confirm it is not bundled into any shipped container image |
-| Proprietary (NVIDIA CUDA/cuDNN/NCCL bindings) | 16 | ✅ Redistributed under NVIDIA's standard runtime-library redistribution terms as transitive `torch` GPU dependencies; these are hardware driver bindings invoked at runtime, not source code this estate modifies or redistributes standalone |
-| Unknown / unclassified | 4 (`cuda-toolkit`, `pygad`, `rustworkx`, `sentencepiece`) | 📋 Needs manual classification — `pip-licenses` could not resolve SPDX metadata for these |
+| Proprietary (NVIDIA CUDA/cuDNN/NCCL bindings) | 16 (+3 folded in below) | ✅ Redistributed under NVIDIA's standard runtime-library redistribution terms as transitive `torch` GPU dependencies; these are hardware driver bindings invoked at runtime, not source code this estate modifies or redistributes standalone |
+| Unknown / unclassified | 0 (was 4: `cuda-toolkit`, `pygad`, `rustworkx`, `sentencepiece`) | ✅ **Resolved 2026-07-25** — all 4 manually classified, see §4 |
 
 Full per-package detail: `pip-licenses --format=json` output, archived per-scan in evidence (see §7).
 
@@ -63,9 +65,12 @@ Full per-package detail: `pip-licenses --format=json` output, archived per-scan 
 | `launchpadlib`, `lazr.restfulclient`, `lazr.uri`, `wadllib` | various | LGPL | 📋 Low | Ubuntu/Launchpad tooling transitively present in this dev sandbox; not a runtime dependency of any Tranc3 service — confirm absent from `requirements.txt` (it is) |
 | `psycopg2-binary` | 2.9.12 | LGPL | ⚠️ Accepted | Used unmodified as the PostgreSQL driver (Supabase `DATABASE_URL`); LGPL permits this without redistribution obligation |
 | `deap`, `moocore` | 1.4.4 / 0.3.2 | LGPL | 📋 Pending | Genetic-algorithm libraries — confirm which service (if any) actually imports these vs. transitive sandbox presence |
-| `cuda-toolkit`, `pygad`, `rustworkx`, `sentencepiece` | various | UNKNOWN | 📋 Pending | `sentencepiece==0.2.1` is explicitly pinned in `requirements.txt` for tokenization (CVE-2026-1260 remediation) — its actual license is MIT per upstream `LICENSE` file; `pip-licenses`' SPDX detection failed to pick it up. The other three need the same manual check. |
+| `sentencepiece` | 0.2.1 | ✅ Apache License 2.0 | ✅ Resolved 2026-07-25 | Explicitly pinned in `requirements.txt` for tokenization (CVE-2026-1260 remediation). No bundled `LICENSE` file ships in this package's `dist-info` (which is why `pip-licenses`' SPDX detection returned UNKNOWN) — confirmed directly against the upstream `google/sentencepiece` repository's `LICENSE` file (Apache License 2.0, not MIT as an earlier draft of this row mistakenly stated). |
+| `pygad` | 3.3.1 | ✅ BSD-3-Clause | ✅ Resolved 2026-07-25 | Confirmed by reading the package's bundled `dist-info` `LICENSE` file directly — permissive, no redistribution obligation beyond attribution |
+| `rustworkx` | 0.18.0 | ✅ Apache License 2.0 | ✅ Resolved 2026-07-25 | Confirmed by reading the package's bundled `dist-info` `LICENSE` file directly. Not a direct `requirements.txt` entry — it is a transitive dependency of `qiskit==2.4.1` (`qiskit`'s own `Requires:` metadata lists `rustworkx` directly) |
+| `cuda-toolkit`, `cuda-bindings`, `cuda-pathfinder` | 13.0.2 / 13.3.1 / 1.5.6 | Proprietary (NVIDIA) | ✅ Resolved 2026-07-25 | Not direct `requirements.txt` entries — confirmed via `pip show`'s `Requires:`/`Required-by:` chain that all three are transitive dependencies of `torch==2.13.0` (`torch` → `cuda-bindings`, `cuda-toolkit`; `cuda-bindings` → `cuda-pathfinder`). Same NVIDIA runtime-library redistribution terms as this matrix's existing 16-package proprietary bucket in §3 — folded in there rather than left as a separate UNKNOWN line item |
 
-**Action (📋 → ✅ target):** confirm the GPL/LGPL Ubuntu-tooling rows are sandbox-only artifacts absent from shipped container images, and manually resolve the four UNKNOWN rows against each package's actual `LICENSE` file. Target: next scheduled scan (§7).
+**Action (📋 → ✅ target):** confirm the GPL/LGPL Ubuntu-tooling rows are sandbox-only artifacts absent from shipped container images (still open). The four former UNKNOWN rows are now closed as of 2026-07-25 — see above.
 
 ---
 
@@ -121,7 +126,7 @@ The user's framing of "isn't affected by the AI Cannibalism Act or any other act
 
 | Activity | Frequency | Mechanism |
 |---|---|---|
-| Dependency license scan (`pip-licenses`) | Every PR + weekly | **Not yet wired into CI** — recommend adding a `pip-licenses --fail-on="GPL;AGPL"`-style step to Tranc3's `.forgejo/workflows/dependency-audit.yml`, alongside the existing `pip-audit`/Safety CVE scanning it already runs |
+| Dependency license scan (`pip-licenses`) | Weekly + on PRs touching `requirements*.txt`/`pyproject.toml`/`package*.json` | **Wired into CI 2026-07-25**: `python-audit` job in Tranc3's `.forgejo/workflows/dependency-audit.yml` now runs `pip-licenses --format=markdown` (report, archived as `pip-licenses-report.json`) plus a `pip-licenses --fail-on="GNU General Public License (GPL);GNU Affero General Public License v3 or later (AGPLv3+);GNU Affero General Public License v3"` gate that fails the job if a shipped dependency carries strong copyleft, alongside the existing `pip-audit`/OSV-Scanner CVE scanning it already ran |
 | Foundation-license re-check (§5) | On each new foundation adoption | Manual, gated at PR review for the relevant `workers/*/` integration |
 | AI model license register (§6) | On each new model added to the AI Gateway's fallback tiers | Manual, once the register in §6 is built |
 | Legislation watch (§7) | Quarterly | Aligned with [legislation_register.yaml](../../compliance/legislation_register.yaml)'s existing quarterly cycle |
