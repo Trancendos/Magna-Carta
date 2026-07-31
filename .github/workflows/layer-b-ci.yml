@@ -1,0 +1,49 @@
+---
+# Magna Carta — Layer B compliance CI (GitHub Actions mirror)
+#
+# Cloud-only phase interim measure: this mirrors .forgejo/workflows/layer-b-ci.yml so
+# the compliance registers are still verified on every change while The Workshop
+# (self-hosted Forgejo) is offline pending server funding. Forgejo remains the primary
+# CI per the zero-cost self-hosted policy — same dual-path rationale as Tranc3's
+# deploy-cloudflare.yml. Keep this file and the Forgejo copy in sync.
+#
+# This also supplies the PR status check GitHub itself needs to gate merges, which is
+# the documented exception to the "prefer Forgejo" rule.
+
+name: layer-b-ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  layer-b:
+    name: "Layer B compliance checks"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # run_layer_b_local_ci.sh is the single entry point the programme already uses
+      # locally and via the weekly cron. CI runs exactly the same script so the two
+      # cannot drift: compliance health, automation readiness, DPA readiness,
+      # SEC-002 security testing and the zero-cost tooling register.
+      - name: Layer B local CI
+        run: bash scripts/run_layer_b_local_ci.sh
