@@ -153,9 +153,20 @@ ledger_separation:
 # (e.g. exactly 20 units) belongs to the tier that boundary opens, not the
 # one it closes. The first tier's band_min_units must be 0 and the final
 # tier's band_max_units must be null — every non-negative equity value has
-# exactly one tier, with nothing above the ceiling left ungoverned. Equity at
-# or below zero is deliberately outside this ladder — see
-# demotion.insolvency and the insolvency_breach kill switch.
+# exactly one tier, with nothing above the ceiling left ungoverned.
+#
+# EXCEPT at exactly zero. demotion.insolvency's condition is also
+# equity_at_or_below_zero, which literally overlaps TIER-0's inclusive
+# band_min_units: 0. That overlap is resolved by evaluation order, not by
+# band arithmetic: insolvency is checked BEFORE tier-band assignment, every
+# time. Equity at exactly zero therefore never reaches band matching at all —
+# it is caught by insolvency first, and TIER-0's true operative range is
+# equity strictly greater than zero, up to 20. band_min_units is still
+# written as the number 0, because that is the tier's floor for display and
+# for the "first tier starts at 0" ladder-contiguity check — but the register
+# does not rely on band arithmetic alone to keep an operator with nothing
+# left to risk out of a live tier. See demotion.insolvency and the
+# insolvency_breach kill switch.
 capital_tiers:
   - tier_id: TIER-0
     name: Simulated
@@ -265,9 +276,11 @@ demotion:
   rule: >
     A tier is held, not owned. Equity falling below a band's floor demotes the
     operator to the tier that contains its current equity, immediately and
-    without approval. capital_tiers governs [0, +inf) — it has no floor for
-    equity at or below zero, because demotion assumes there is always a lower
-    tier to fall into, and TIER-0 is the lowest one there is.
+    without approval — but only once insolvency (below) has been checked and
+    ruled out. capital_tiers' effective range is (0, +inf): demotion assumes
+    there is always a lower tier to fall into, and TIER-0 is the lowest one
+    there is, but equity at or below zero is not a "lower tier" — it is
+    insolvency, checked first, every time.
   rationale: >
     Promotion requires evidence and approval; demotion must require neither, or
     a failing operator keeps the permissions it earned while healthy at exactly
@@ -278,16 +291,21 @@ demotion:
     - emit_event: governance.capital.tier.demoted
   insolvency:
     condition: equity_at_or_below_zero
+    precedence: checked_before_tier_band_assignment
     rule: >
       Zero or negative equity is not a demotion — there is no tier below TIER-0
       to demote into. It is insolvency, and it exits the tier ladder entirely
       into the insolvency_breach kill switch below, which halts every
-      automated action in both function types pending human review. An
-      operator does not resume at TIER-0 automatically once equity recovers
-      above zero; human_owner reinstates it explicitly, because equity
-      touching zero means a control upstream of this register — a risk limit,
-      a leverage cap, a stop — already failed to hold, and that failure needs
-      a human look before the operator acts again.
+      automated action in both function types pending human review. This
+      condition is evaluated before any capital_tiers band match: equity at
+      or below zero overlaps TIER-0's inclusive band_min_units: 0 by the raw
+      numbers, and precedence is what keeps that overlap from ever reading as
+      "still in TIER-0, still simulating." An operator does not resume at
+      TIER-0 automatically once equity recovers above zero; human_owner
+      reinstates it explicitly, because equity touching zero means a control
+      upstream of this register — a risk limit, a leverage cap, a stop —
+      already failed to hold, and that failure needs a human look before the
+      operator acts again.
 
 # ---------------------------------------------------------------------------
 # Kill switches
@@ -387,9 +405,14 @@ honesty_rules:
     - Simulated results must be labelled as simulated wherever they are reported.
     - >
       Nothing in this layer authorises an adopting platform to offer capital
-      services to third parties. Deploying an operator's own capital and
-      handling other people's money are different activities under most
-      financial regulation, and the second is out of scope here.
+      services to third parties. This layer does not assess legal or
+      regulatory status in any jurisdiction — deploying an operator's own
+      capital and handling other people's money are treated as different
+      activities by financial regulation in many jurisdictions, but which
+      rules apply, and how, is a question for jurisdiction-specific legal
+      review before deployment, not something this register determines.
+      Handling other people's money is out of scope for this layer
+      regardless of the answer.
 
 # ---------------------------------------------------------------------------
 # Binding contract

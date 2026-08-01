@@ -110,6 +110,41 @@ def _check_is_generic(raw: str) -> list[str]:
     return errors
 
 
+# Every list-valued top-level section the checks below iterate over is
+# assumed to contain mappings (function_types entries, capital_tiers
+# entries, and so on) — every `.get()` call on an entry depends on it. An
+# adopter who writes `function_types: [alpha]` (a string, not a mapping)
+# would otherwise hit an uncaught AttributeError deep inside whichever
+# check ran first, printing a Python traceback instead of a normal
+# validator error line. main() runs _sanitize_list_sections before any
+# other check, so every check function below can assume this shape holds.
+LIST_SECTIONS = ("roles", "function_types", "capital_tiers", "progression_gates", "kill_switches")
+
+
+def _sanitize_list_sections(doc: dict) -> list[str]:
+    """Replace each list section with only its mapping entries, recording an
+    error for anything else, so downstream checks never see a non-mapping
+    entry to call .get() on.
+    """
+    errors: list[str] = []
+    for key in LIST_SECTIONS:
+        raw_value = doc.get(key)
+        if raw_value is None:
+            continue
+        if not isinstance(raw_value, list):
+            errors.append(f"{key} must be a list, got {type(raw_value).__name__}")
+            doc[key] = []
+            continue
+        clean: list[dict] = []
+        for index, item in enumerate(raw_value):
+            if isinstance(item, dict):
+                clean.append(item)
+            else:
+                errors.append(f"{key}[{index}] must be a mapping, got {type(item).__name__}")
+        doc[key] = clean
+    return errors
+
+
 def _check_ledger_separation(doc: dict) -> list[str]:
     errors: list[str] = []
     fts = doc.get("function_types") or []
@@ -556,6 +591,10 @@ def main() -> int:
     warnings: list[str] = []
 
     errors += _check_is_generic(raw)
+    # Runs before every other check: sanitizes doc's list sections in place so
+    # nothing downstream can crash on a non-mapping entry instead of reporting
+    # a normal validator error.
+    errors += _sanitize_list_sections(doc)
     errors += _check_ledger_separation(doc)
     errors += _check_required_flags(doc)
     errors += _check_unique_ids(doc)

@@ -104,20 +104,37 @@ at all, or can only be placed by abandoning the risk limit entirely. Simulation
 against real data is the only coherent behaviour, and it is also where an operator
 learns what loss feels like before loss is real.
 
+**What the columns measure.** These fractions and multiples are meaningless without
+denominators, so the register fixes them here — Stage 7.3's runtime enforcement must
+use these definitions, not invent its own:
+- **Risk/action** — fraction of *current equity at the moment the action is proposed*,
+  not equity at tier entry. A tier's cap tightens in absolute terms as equity falls
+  and loosens as it grows, tracking the operator's actual capacity to absorb loss.
+- **Daily loss** — fraction of equity *at the start of the current session/day*,
+  compared against realised-plus-unrealised loss accumulated since. Resets at the
+  session boundary named in `daily_loss_breach`.
+- **Leverage** — gross notional exposure divided by current equity, not net. A
+  position that is long and short in equal size at 1× leverage each is 2× gross,
+  not 0× net — netting hides the capital actually at risk if either side moves
+  against the operator independently.
+
 Bands are expressed in a currency-neutral unit the binding defines, so the ladder is
 not tied to one currency or starting sum. Bands are half-open — `[min, max)` — so
 equity exactly at a boundary (e.g. exactly 20 units) belongs to the tier that
 boundary opens, not the one it closes. The ladder must start at 0 and stay
 open-ended only at the final tier; nothing above zero is left ungoverned.
 
-**Zero or negative equity is not a demotion — it's insolvency.** The ladder covers
-`[0, +inf)`; there is no tier below TIER-0 to fall into. Equity at or below zero
-exits the ladder entirely into the `insolvency_breach` kill switch, which halts
-every automated action in both function types. Unlike an ordinary demotion, the
-operator does not resume automatically once equity recovers above zero —
-`human_owner` reinstates it explicitly, because equity touching zero means some
-control upstream of this register (a risk limit, a leverage cap, a stop) already
-failed to hold.
+**Zero or negative equity is not a demotion — it's insolvency, checked first.**
+TIER-0's `band_min_units: 0` and insolvency's `equity_at_or_below_zero` condition
+overlap at exactly zero by the raw numbers; that overlap is resolved by evaluation
+order, not band arithmetic. Insolvency is always checked before any tier-band match,
+so equity at exactly zero is never read as "still in TIER-0" — the ladder's true
+operative range is equity strictly greater than zero. Equity at or below zero exits
+the ladder entirely into the `insolvency_breach` kill switch, which halts every
+automated action in both function types. Unlike an ordinary demotion, the operator
+does not resume automatically once equity recovers above zero — `human_owner`
+reinstates it explicitly, because equity touching zero means some control upstream
+of this register (a risk limit, a leverage cap, a stop) already failed to hold.
 
 ## 6. Progression and demotion are asymmetric — deliberately
 
@@ -164,6 +181,10 @@ from `REGULATION-MATRIX.md`, whose §6 covers industry-specific regulation
 - A function being **defined** is not a function being **profitable**.
 - A tier being **permitted** is not a tier being **earned**.
 - Simulated results must be labelled simulated wherever reported.
-- Nothing here authorises offering capital services to third parties. Deploying an
-  operator's own capital and handling other people's money are different activities
-  under most financial regulation, and the second is out of scope for this layer.
+- Nothing here authorises offering capital services to third parties. This layer does
+  not assess legal or regulatory status in any jurisdiction — deploying an operator's
+  own capital and handling other people's money are treated as different activities
+  by financial regulation in many jurisdictions, but which rules apply, and how, is a
+  question for jurisdiction-specific legal review before deployment, not something
+  this register determines. Handling other people's money is out of scope for this
+  layer regardless of the answer.
