@@ -118,7 +118,10 @@ def _check_ledger_separation(doc: dict) -> list[str]:
         seen[ledger] = fid
 
     sep = doc.get("ledger_separation") or {}
-    if not sep.get("enforced"):
+    # Literal True, not truthiness. A quoted "false" is a non-empty string —
+    # truthy in Python — and `not sep.get("enforced")` would have let it pass
+    # as if the control were still switched on.
+    if sep.get("enforced") is not True:
         errors.append("ledger_separation.enforced must be true")
     # Must be the literal boolean False, not merely falsy. A missing `transfers`
     # block or a missing `permitted` key would previously pass this check by
@@ -129,6 +132,123 @@ def _check_ledger_separation(doc: dict) -> list[str]:
             "ledger_separation.transfers.permitted must be false — transfers are an "
             "exception requiring named authority, not a default"
         )
+    return errors
+
+
+def _check_required_flags(doc: dict) -> list[str]:
+    """`enforced` / `required` flags gate the register's other load-bearing
+    controls, the same way ledger_separation.enforced does. Checked against
+    the literal boolean True for the same reason: a quoted "false" is a
+    truthy string and must not read as the control still being on.
+    """
+    errors: list[str] = []
+    checks = [
+        (doc.get("demotion") or {}, "enforced", "demotion.enforced"),
+        (
+            (doc.get("evidence") or {}).get("decision_journal") or {},
+            "required",
+            "evidence.decision_journal.required",
+        ),
+        (doc.get("binding") or {}, "required", "binding.required"),
+    ]
+    for container, key, label in checks:
+        if container.get(key) is not True:
+            errors.append(f"{label} must be true")
+    return errors
+
+
+def _check_unique_ids(doc: dict) -> list[str]:
+    """Every *_id field is a reference key used elsewhere in the register. A
+    set comprehension (as roles/gates lookups use to build their reference
+    sets) silently discards duplicates, so a second entry sharing an ID would
+    pass every "is this ID declared" check while leaving the reference
+    genuinely ambiguous — nothing says which of the two entries a rule that
+    names that ID actually means.
+    """
+    errors: list[str] = []
+    id_specs = [
+        ("roles", "role_id"),
+        ("function_types", "function_id"),
+        ("capital_tiers", "tier_id"),
+        ("progression_gates", "gate_id"),
+        ("kill_switches", "switch_id"),
+    ]
+    for list_key, id_key in id_specs:
+        seen: set = set()
+        for item in doc.get(list_key) or []:
+            value = item.get(id_key)
+            if value is None:
+                continue
+            if value in seen:
+                errors.append(
+                    f"{list_key}: duplicate {id_key} {value!r} — every entry "
+                    "needs a unique id, or references to it are ambiguous"
+                )
+            seen.add(value)
+    return errors
+
+
+def _check_hard_authorities(doc: dict) -> list[str]:
+    """Some authority slots are not "any declared role" — they are the human
+    checkpoints the layer is built around. _require_role (used elsewhere)
+    only checks that a referenced role exists, which would let an adopter
+    legally point one of these at capital_operator: the role exists, so the
+    weaker check passes, while the checkpoint the field exists to provide is
+    defeated. These are checked against the specific role they require.
+    """
+    errors: list[str] = []
+
+    transfers = (doc.get("ledger_separation") or {}).get("transfers") or {}
+    exception_authority = transfers.get("exception_authority")
+    if exception_authority is not None and exception_authority != "human_owner":
+        errors.append(
+            "ledger_separation.transfers.exception_authority must be "
+            "human_owner — the one sanctioned ledger crossing is a human "
+            "checkpoint by design, not a role any declared actor may hold"
+        )
+
+    for gate in doc.get("progression_gates") or []:
+        gid = gate.get("gate_id", "<unnamed>")
+        req = gate.get("requires") or {}
+        if req.get("approval") == "capital_operator":
+            errors.append(
+                f"{gid}.requires.approval is capital_operator — an operator "
+                "cannot approve its own promotion"
+            )
+        live = req.get("live_capital_approval")
+        if live is not None and live != "human_owner":
+            errors.append(
+                f"{gid}.requires.live_capital_approval must be human_owner "
+                "when set — it exists to require a checkpoint above "
+                "presiding_authority, not a delegatable role"
+            )
+
+    # The ledger boundary switch is the one release authority this register
+    # names as needing human_owner specifically, in its own rationale text —
+    # a crossing that trips it means the ledger_separation control itself may
+    # have failed, which is not a call any automated role gets to make. Other
+    # never-auto-release switches (e.g. limit_override_attempt) legitimately
+    # use presiding_authority; the invariant that applies to all of them is
+    # the capital_operator check below, not a blanket human_owner rule.
+    HUMAN_OWNER_RELEASE_SWITCHES = ("ledger_boundary_violation",)
+
+    for switch in doc.get("kill_switches") or []:
+        sid = switch.get("switch_id", "<unnamed>")
+        release_authority = switch.get("release_authority")
+        if release_authority == "capital_operator":
+            errors.append(
+                f"kill switch {sid}.release_authority is capital_operator — "
+                "the actor a switch exists to stop cannot also be the one "
+                "who releases it"
+            )
+        elif sid in HUMAN_OWNER_RELEASE_SWITCHES and release_authority != "human_owner":
+            errors.append(
+                f"kill switch {sid}.release_authority must be human_owner, "
+                f"got {release_authority!r} — this switch's own rationale is "
+                "that a ledger-boundary crossing is not a call any automated "
+                "role gets to make"
+            )
+
     return errors
 
 
@@ -265,6 +385,12 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
         # live_capital_approval is intentionally null except at gate.tier0_to_tier1 —
         # unlike approval, its absence is a valid configuration, not an omission.
         _require_role(req.get("live_capital_approval"), f"{gid}.requires.live_capital_approval")
+        evidence = req.get("evidence")
+        if not (isinstance(evidence, str) and evidence.strip()):
+            errors.append(
+                f"{gid}.requires.evidence is missing or empty — a promotion gate "
+                "without evidence to point to degrades into approval alone"
+            )
 
     switches = doc.get("kill_switches") or []
     if not switches:
@@ -320,10 +446,13 @@ def main() -> int:
 
     errors += _check_is_generic(raw)
     errors += _check_ledger_separation(doc)
+    errors += _check_required_flags(doc)
+    errors += _check_unique_ids(doc)
     tier_errors, tier_warnings = _check_tier_ladder(doc)
     errors += tier_errors
     warnings += tier_warnings
     errors += _check_roles_and_switches(doc)
+    errors += _check_hard_authorities(doc)
 
     for line in warnings:
         print(f"[WARNING] {line}")

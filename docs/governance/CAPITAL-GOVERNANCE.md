@@ -108,7 +108,16 @@ Bands are expressed in a currency-neutral unit the binding defines, so the ladde
 not tied to one currency or starting sum. Bands are half-open — `[min, max)` — so
 equity exactly at a boundary (e.g. exactly 20 units) belongs to the tier that
 boundary opens, not the one it closes. The ladder must start at 0 and stay
-open-ended only at the final tier; nothing above or below is left ungoverned.
+open-ended only at the final tier; nothing above zero is left ungoverned.
+
+**Zero or negative equity is not a demotion — it's insolvency.** The ladder covers
+`[0, +inf)`; there is no tier below TIER-0 to fall into. Equity at or below zero
+exits the ladder entirely into the `insolvency_breach` kill switch, which halts
+every automated action in both function types. Unlike an ordinary demotion, the
+operator does not resume automatically once equity recovers above zero —
+`human_owner` reinstates it explicitly, because equity touching zero means some
+control upstream of this register (a risk limit, a leverage cap, a stop) already
+failed to hold.
 
 ## 6. Progression and demotion are asymmetric — deliberately
 
@@ -128,6 +137,13 @@ system for the first time.
 If promotion needs evidence but demotion needed approval too, a failing operator
 would keep the permissions it earned while healthy at precisely the moment those
 permissions are most dangerous.
+
+**Some authority fields must be `human_owner` specifically, not merely a declared
+role.** The ledger-transfer exception, the simulated → live approval, and the
+`ledger_boundary_violation` kill switch's release are checked against that exact
+role — not just "is this role declared" — because a role that merely exists could
+otherwise legally be `capital_operator`, letting the actor a control exists to
+constrain also be the one who clears it.
 
 ## 7. Staged rollout
 

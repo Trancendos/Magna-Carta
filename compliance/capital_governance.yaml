@@ -18,10 +18,20 @@
 #     placeholder text
 #   * every function_type declares a ledger, and no two share one
 #   * capital tiers form a contiguous, non-overlapping, ascending ladder that
-#     starts at 0 and is open-ended only at the final tier
+#     starts at 0 and is open-ended only at the final tier — equity at or
+#     below zero is insolvency, not a tier, and exits to the
+#     insolvency_breach kill switch instead (see demotion.insolvency)
 #   * every non-terminal tier names its permitted function types, a
-#     progression gate, and that gate names an approving role
-#   * every role slot referenced by a rule is declared in `roles`
+#     progression gate, and that gate names an approving role and non-empty
+#     evidence
+#   * role_id, gate_id, switch_id, tier_id and function_id are each unique —
+#     no two entries share one
+#   * every role slot referenced by a rule is declared in `roles`, and the
+#     hard checkpoints (the ledger-transfer exception, first live-capital
+#     approval, and any kill switch that never auto-releases) resolve to
+#     human_owner specifically, not merely to any declared role
+#   * `enforced` / `required` flags are checked as the literal boolean, not
+#     by truthiness — a quoted "false" must fail the same as an actual false
 #   * at least one kill switch is declared, and each names both a trigger and
 #     an authority to release it
 
@@ -132,8 +142,10 @@ ledger_separation:
 # inclusive, the upper bound is exclusive, so equity exactly at a boundary
 # (e.g. exactly 20 units) belongs to the tier that boundary opens, not the
 # one it closes. The first tier's band_min_units must be 0 and the final
-# tier's band_max_units must be null — every equity value has exactly one
-# tier, with nothing below the floor or above the ceiling left ungoverned.
+# tier's band_max_units must be null — every non-negative equity value has
+# exactly one tier, with nothing above the ceiling left ungoverned. Equity at
+# or below zero is deliberately outside this ladder — see
+# demotion.insolvency and the insolvency_breach kill switch.
 capital_tiers:
   - tier_id: TIER-0
     name: Simulated
@@ -243,7 +255,9 @@ demotion:
   rule: >
     A tier is held, not owned. Equity falling below a band's floor demotes the
     operator to the tier that contains its current equity, immediately and
-    without approval.
+    without approval. capital_tiers governs [0, +inf) — it has no floor for
+    equity at or below zero, because demotion assumes there is always a lower
+    tier to fall into, and TIER-0 is the lowest one there is.
   rationale: >
     Promotion requires evidence and approval; demotion must require neither, or
     a failing operator keeps the permissions it earned while healthy at exactly
@@ -252,6 +266,18 @@ demotion:
     - reduce_limits_to_new_tier
     - close_positions_exceeding_new_tier_caps
     - emit_event: governance.capital.tier.demoted
+  insolvency:
+    condition: equity_at_or_below_zero
+    rule: >
+      Zero or negative equity is not a demotion — there is no tier below TIER-0
+      to demote into. It is insolvency, and it exits the tier ladder entirely
+      into the insolvency_breach kill switch below, which halts every
+      automated action in both function types pending human review. An
+      operator does not resume at TIER-0 automatically once equity recovers
+      above zero; human_owner reinstates it explicitly, because equity
+      touching zero means a control upstream of this register — a risk limit,
+      a leverage cap, a stop — already failed to hold, and that failure needs
+      a human look before the operator acts again.
 
 # ---------------------------------------------------------------------------
 # Kill switches
@@ -286,6 +312,21 @@ kill_switches:
     scope: ALL
     release_authority: presiding_authority
     auto_release: never
+
+  - switch_id: insolvency_breach
+    trigger: equity_at_or_below_zero
+    action: halt_all_actions_both_functions
+    scope: ALL
+    release_authority: human_owner
+    auto_release: never
+    rationale: >
+      Equity at or below zero has fallen out of the tier ladder, not just to
+      its floor — see demotion.insolvency. Every risk limit in this register
+      is expressed as a fraction of positive equity, so at zero they stop
+      constraining anything at all. The halt is unconditional and the release
+      is human-only, because getting back into the ladder after this needs a
+      decision about what tier the operator resumes at, not just a balance
+      check.
 
 # ---------------------------------------------------------------------------
 # Evidence and honesty
