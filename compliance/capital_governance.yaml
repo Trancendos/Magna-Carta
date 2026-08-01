@@ -14,12 +14,16 @@
 # Validated by: scripts/capital_governance_check.py (Layer B CI)
 #
 # Invariants the validator enforces:
-#   * no platform-specific proper nouns appear in this file
+#   * no platform-specific proper nouns appear in this file, including inside
+#     placeholder text
 #   * every function_type declares a ledger, and no two share one
-#   * capital tiers form a contiguous, non-overlapping, ascending ladder
-#   * every tier names its permitted function types and a progression gate
+#   * capital tiers form a contiguous, non-overlapping, ascending ladder that
+#     starts at 0 and is open-ended only at the final tier
+#   * every non-terminal tier names its permitted function types, a
+#     progression gate, and that gate names an approving role
 #   * every role slot referenced by a rule is declared in `roles`
-#   * kill switches declare both a trigger and an authority to release them
+#   * at least one kill switch is declared, and each names both a trigger and
+#     an authority to release it
 
 meta:
   register_version: "1.0.0"
@@ -28,7 +32,7 @@ meta:
   # Deliberately unowned here. The adopting platform names an owner in its
   # binding; this file must not assume one exists.
   owner: "<bound by adopting platform>"
-  review_cadence_default: quarterly
+  review_cycle: quarterly
   observatory_event_prefix: "governance.capital"
   scope: >
     Any automated actor that spends, allocates, risks, or earns money on behalf
@@ -95,8 +99,10 @@ function_types:
 ledger_separation:
   enforced: true
   rule: >
-    No function type may draw on another function type's ledger, under any
-    condition, including shortfall, margin call, or operator discretion.
+    No function type may draw on another function type's ledger through any
+    automated path, or on any automated actor's own authority — including
+    shortfall, margin call, or operator discretion. The sole path across is the
+    named human exception below; nothing else may cross this boundary, ever.
   rationale: >
     If an external function can reach the internal budget, a trading loss stops
     being a trading loss and becomes an infrastructure outage: compute that
@@ -121,12 +127,19 @@ ledger_separation:
 # ---------------------------------------------------------------------------
 # Bands are expressed as fractions of a currency-neutral unit the binding
 # defines, so the ladder is not tied to one currency or one starting sum.
+#
+# Bands are half-open: [band_min_units, band_max_units). The lower bound is
+# inclusive, the upper bound is exclusive, so equity exactly at a boundary
+# (e.g. exactly 20 units) belongs to the tier that boundary opens, not the
+# one it closes. The first tier's band_min_units must be 0 and the final
+# tier's band_max_units must be null — every equity value has exactly one
+# tier, with nothing below the floor or above the ceiling left ungoverned.
 capital_tiers:
   - tier_id: TIER-0
     name: Simulated
     band_min_units: 0
     band_max_units: 20
-    permitted_functions: [INTERNAL]
+    permitted_functions: [INTERNAL, EXTERNAL]
     external_execution: simulated_only
     max_risk_per_action_fraction: 0.01
     max_daily_loss_fraction: 0.05
@@ -223,7 +236,7 @@ progression_gates:
         Performance across at least two distinct market or demand regimes, so
         the record reflects adaptation rather than one favourable environment.
       approval: presiding_authority
-      live_capital_approval: human_owner
+      live_capital_approval: null
 
 demotion:
   enforced: true
@@ -252,15 +265,20 @@ kill_switches:
     auto_release: next_session_boundary
 
   - switch_id: ledger_boundary_violation
-    trigger: any_attempt_to_draw_across_function_ledgers
+    trigger: unauthorized_attempt_to_draw_across_function_ledgers
     action: halt_all_actions_both_functions
     scope: ALL
     release_authority: human_owner
     auto_release: never
     rationale: >
-      An attempted ledger crossing means either the constraint is not being
+      An unauthorized ledger crossing means either the constraint is not being
       honoured or the operator has found a path around it. Both are conditions a
-      machine must not clear on its own.
+      machine must not clear on its own. The trigger names "unauthorized"
+      deliberately: the one sanctioned crossing is the named transfer exception
+      above, carried out by human_owner through exception_authority with recorded
+      justification. That is a transfer under approval, not an attempt around the
+      boundary, and it must not itself detonate the same switch it depends on
+      being available.
 
   - switch_id: limit_override_attempt
     trigger: operator_proposes_action_exceeding_its_own_tier_limits
@@ -288,7 +306,11 @@ evidence:
       balance check.
 
 honesty_rules:
-  inherited_from: docs/compliance/REGULATION-MATRIX.md
+  # Authored directly in this register and its sibling doc
+  # (docs/governance/CAPITAL-GOVERNANCE.md §8) — not inherited from
+  # REGULATION-MATRIX.md. That document's §6 covers industry-specific regulation
+  # (HIPAA/FCA/NHS), not capital honesty rules, so claiming inheritance from it
+  # would assert a false provenance in an audit context.
   rules:
     - A function being defined is not a function being profitable.
     - A tier being permitted is not a tier being earned.
@@ -316,7 +338,37 @@ binding:
     - ledger_separation
     - demotion
     - kill_switches
+    - evidence
+  constraints:
+    - id: role_disjointness
+      rule: >
+        The actor bound to presiding_authority must differ from the actor bound
+        to capital_operator, and the actor bound to human_owner must be an
+        actual human, not an automated actor. Without this, an operator could
+        approve its own limit increases, or an automated actor could authorise
+        its own transition into live capital.
+      enforcement: >
+        Stated here as a binding requirement now. Structural validation is
+        staged to the Stage 7.2 binding validator, once binding files exist for
+        it to check — this register has no binding file to validate yet.
+    - id: distinct_ledgers
+      rule: >
+        The ledger identifiers bound to ledger_identifier_per_function_type must
+        be distinct per function type. A binding that maps INTERNAL and EXTERNAL
+        to the same real ledger would satisfy must_declare's presence check
+        while defeating ledger_separation entirely.
+      enforcement: >
+        Stated here as a binding requirement now. Structural validation is
+        staged to the Stage 7.2 binding validator, once binding files exist for
+        it to check — this register has no binding file to validate yet.
   rationale: >
     A binding that could relax ledger separation, demotion, or the kill switches
-    would let the adopting platform opt out of the three controls that exist
-    precisely to override local judgement under pressure.
+    would let the adopting platform opt out of the four controls that exist
+    precisely to override local judgement under pressure. Evidence joins that
+    list because progression_gates decide promotion from the decision journal
+    evidence describes — a binding allowed to weaken the journal could starve
+    a gate of the record it needs to be objective, without ever touching a gate
+    directly. role_disjointness and distinct_ledgers are named as constraints
+    rather than folded into must_not_override because they govern what a
+    binding must contain, not what it must leave alone — the two lists answer
+    different questions and neither substitutes for the other.

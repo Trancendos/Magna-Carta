@@ -30,9 +30,20 @@ layer stops being portable one line at a time. `capital_governance_check.py`
 therefore fails the build on any adopter-specific proper noun in the register.
 
 Adopters supply a **binding file** mapping each generic `role_id` to a real actor.
-A binding may configure; it may not relax `ledger_separation`, `demotion`, or the
-kill switches — the three controls that exist precisely to override local judgement
-under pressure.
+A binding may configure; it may not relax `ledger_separation`, `demotion`, the kill
+switches, or `evidence` — the controls that exist precisely to override local
+judgement under pressure, or that the other controls depend on to work.
+
+Two further constraints apply to the binding itself, stated in the register now
+even though structural validation of them is staged to §7.2 (no binding file
+exists yet to validate): the actor bound to `presiding_authority` must differ
+from the actor bound to `capital_operator`, `human_owner` must be an actual
+human, and the ledger identifiers bound to INTERNAL and EXTERNAL must be
+distinct. Without the first, an operator could approve its own limit increases;
+without the second, an automated actor could authorise its own promotion to live
+capital; without the third, a binding could satisfy the letter of `must_declare`
+while mapping both function types onto the same real ledger — defeating ledger
+separation entirely.
 
 ## 3. Two function types
 
@@ -65,6 +76,13 @@ explicit approval, recorded justification, and a post-transfer audit entry — a
 remains a transfer between separate ledgers. There is no configuration under which
 they merge.
 
+The `ledger_boundary_violation` kill switch backs this with an automatic, human-only
+release halt — but its trigger is deliberately scoped to *unauthorized* crossings.
+The one sanctioned crossing is the transfer exception above, carried out by
+`human_owner` through `exception_authority`; it is a transfer under approval, not an
+attempt around the boundary, and must not itself detonate the switch that exists to
+catch the unapproved version.
+
 This is stated before any tier or limit because it is very hard to retrofit once
 ledgers are entangled.
 
@@ -87,7 +105,10 @@ against real data is the only coherent behaviour, and it is also where an operat
 learns what loss feels like before loss is real.
 
 Bands are expressed in a currency-neutral unit the binding defines, so the ladder is
-not tied to one currency or starting sum.
+not tied to one currency or starting sum. Bands are half-open — `[min, max)` — so
+equity exactly at a boundary (e.g. exactly 20 units) belongs to the tier that
+boundary opens, not the one it closes. The ladder must start at 0 and stay
+open-ended only at the final tier; nothing above or below is left ungoverned.
 
 ## 6. Progression and demotion are asymmetric — deliberately
 
@@ -118,9 +139,11 @@ permissions are most dangerous.
 | 7.4 | Decision-journal persistence and progression-gate assessment | staged |
 | 7.5 | Observatory event emission under `governance.capital.*` | staged |
 
-## 8. Honesty rules (inherited)
+## 8. Honesty rules
 
-Per `REGULATION-MATRIX.md` §6:
+Authored directly in this document and its machine-readable sibling — not inherited
+from `REGULATION-MATRIX.md`, whose §6 covers industry-specific regulation
+(HIPAA/FCA/NHS), not capital honesty rules:
 
 - A function being **defined** is not a function being **profitable**.
 - A tier being **permitted** is not a tier being **earned**.
