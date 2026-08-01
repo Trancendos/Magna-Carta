@@ -13,6 +13,7 @@ being portable one line at a time. This makes that regression a build failure.
 
 from __future__ import annotations
 
+import math
 import re
 import sys
 from pathlib import Path
@@ -225,6 +226,18 @@ def _check_hard_authorities(doc: dict) -> list[str]:
             "checkpoint by design, not a role any declared actor may hold"
         )
 
+    # A tier whose external_execution is simulated_only is the one this register's
+    # own docs call "the one progression the presiding authority cannot grant
+    # alone" — the gate that lifts a tier out of simulation into live money is a
+    # structural fact about that tier, not a name any adopter should have to know.
+    # Identifying it by that property (rather than hardcoding "gate.tier0_to_tier1")
+    # means the rule still holds if the register's tier ids ever change.
+    simulated_only_gate_ids = {
+        tier.get("progression_gate")
+        for tier in (doc.get("capital_tiers") or [])
+        if tier.get("external_execution") == "simulated_only" and tier.get("progression_gate")
+    }
+
     for gate in doc.get("progression_gates") or []:
         gid = gate.get("gate_id", "<unnamed>")
         req = gate.get("requires") or {}
@@ -234,21 +247,23 @@ def _check_hard_authorities(doc: dict) -> list[str]:
                 "cannot approve its own promotion"
             )
         live = req.get("live_capital_approval")
-        if live is not None and live != "human_owner":
+        if gid in simulated_only_gate_ids:
+            # Checking only "if set, must be human_owner" (as an earlier version
+            # did) lets an adopter delete the field from exactly this gate and
+            # pass — the one place the human checkpoint is not optional.
+            if live != "human_owner":
+                errors.append(
+                    f"{gid}.requires.live_capital_approval must be human_owner "
+                    "— this gate lifts a tier out of simulated_only execution "
+                    "into live money, the one progression that cannot be "
+                    "delegated to presiding_authority alone"
+                )
+        elif live is not None and live != "human_owner":
             errors.append(
                 f"{gid}.requires.live_capital_approval must be human_owner "
                 "when set — it exists to require a checkpoint above "
                 "presiding_authority, not a delegatable role"
             )
-
-    # The ledger boundary switch is the one release authority this register
-    # names as needing human_owner specifically, in its own rationale text —
-    # a crossing that trips it means the ledger_separation control itself may
-    # have failed, which is not a call any automated role gets to make. Other
-    # never-auto-release switches (e.g. limit_override_attempt) legitimately
-    # use presiding_authority; the invariant that applies to all of them is
-    # the capital_operator check below, not a blanket human_owner rule.
-    HUMAN_OWNER_RELEASE_SWITCHES = ("ledger_boundary_violation",)
 
     for switch in doc.get("kill_switches") or []:
         sid = switch.get("switch_id", "<unnamed>")
@@ -259,12 +274,25 @@ def _check_hard_authorities(doc: dict) -> list[str]:
                 "the actor a switch exists to stop cannot also be the one "
                 "who releases it"
             )
-        elif sid in HUMAN_OWNER_RELEASE_SWITCHES and release_authority != "human_owner":
+        # Any switch that halts everything (scope: ALL) and never auto-releases
+        # is, by that combination, a hard kill — the operator has no bounded
+        # blast radius and no clock to wait out. That structural profile is the
+        # test, not a name: hardcoding specific switch_ids here (as an earlier
+        # version did with only "ledger_boundary_violation") silently exempted
+        # every other switch sharing the same profile, including one added
+        # later (insolvency_breach) and one that was already here
+        # (limit_override_attempt) but had been assigned presiding_authority
+        # without anything here checking it belonged in this class.
+        elif (
+            switch.get("scope") == "ALL"
+            and switch.get("auto_release") == "never"
+            and release_authority != "human_owner"
+        ):
             errors.append(
-                f"kill switch {sid}.release_authority must be human_owner, "
-                f"got {release_authority!r} — this switch's own rationale is "
-                "that a ledger-boundary crossing is not a call any automated "
-                "role gets to make"
+                f"kill switch {sid}.release_authority must be human_owner, got "
+                f"{release_authority!r} — a switch that halts everything and "
+                "never auto-releases is a hard kill by definition, and a hard "
+                "kill is not a call any automated role gets to make"
             )
 
     return errors
@@ -359,21 +387,54 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
         elif gate not in gate_ids:
             errors.append(f"{tid}: progression_gate {gate!r} is not declared")
 
+        leverage_permitted = tier.get("leverage_permitted")
         max_leverage = tier.get("max_leverage")
-        if tier.get("leverage_permitted"):
-            if max_leverage is None:
-                errors.append(
-                    f"{tid}: leverage_permitted is true but max_leverage is not set "
-                    "— a permission with no declared cap is unbounded, which is not "
-                    "what 'permitted' means anywhere else in this register"
-                )
-            elif max_leverage <= 1.0:
-                warnings.append(f"{tid}: leverage_permitted is true but max_leverage <= 1.0")
-        elif (max_leverage or 1.0) > 1.0:
+        # isinstance(x, bool), not truthiness: a quoted "false" is a non-empty
+        # string — truthy in Python — and `if tier.get("leverage_permitted")`
+        # would have treated it as leverage being permitted. bool is also
+        # excluded from the numeric check below for the same class of reason:
+        # True/False are ints in Python, so max_leverage: true would otherwise
+        # silently pass as the number 1.
+        if not isinstance(leverage_permitted, bool):
             errors.append(
-                f"{tid}: leverage_permitted is false but max_leverage is "
-                f"{max_leverage} — the cap contradicts the permission"
+                f"{tid}: leverage_permitted must be a boolean, got {leverage_permitted!r}"
             )
+        else:
+            max_leverage_is_finite_number = (
+                isinstance(max_leverage, (int, float))
+                and not isinstance(max_leverage, bool)
+                and math.isfinite(max_leverage)
+            )
+            if leverage_permitted:
+                if max_leverage is None:
+                    errors.append(
+                        f"{tid}: leverage_permitted is true but max_leverage is not set "
+                        "— a permission with no declared cap is unbounded, which is not "
+                        "what 'permitted' means anywhere else in this register"
+                    )
+                elif not max_leverage_is_finite_number:
+                    # Catches non-numeric types (a string) and non-finite floats
+                    # (.inf, .nan — both valid YAML) alike: either would either
+                    # crash the <= comparison below or, for inf, silently pass
+                    # it (inf <= 1.0 is False, so a cap that cannot constrain
+                    # anything would otherwise read as a valid, generous one).
+                    errors.append(
+                        f"{tid}: max_leverage must be a finite number, got "
+                        f"{max_leverage!r}"
+                    )
+                elif max_leverage <= 1.0:
+                    warnings.append(f"{tid}: leverage_permitted is true but max_leverage <= 1.0")
+            elif max_leverage is not None:
+                if not max_leverage_is_finite_number:
+                    errors.append(
+                        f"{tid}: max_leverage must be a finite number, got "
+                        f"{max_leverage!r}"
+                    )
+                elif max_leverage > 1.0:
+                    errors.append(
+                        f"{tid}: leverage_permitted is false but max_leverage is "
+                        f"{max_leverage} — the cap contradicts the permission"
+                    )
 
     return errors, warnings
 

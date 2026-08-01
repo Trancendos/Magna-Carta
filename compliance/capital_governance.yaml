@@ -27,9 +27,11 @@
 #   * role_id, gate_id, switch_id, tier_id and function_id are each unique —
 #     no two entries share one
 #   * every role slot referenced by a rule is declared in `roles`, and the
-#     hard checkpoints (the ledger-transfer exception, first live-capital
-#     approval, and any kill switch that never auto-releases) resolve to
-#     human_owner specifically, not merely to any declared role
+#     hard checkpoints resolve to human_owner specifically, not merely to any
+#     declared role: the ledger-transfer exception, the live_capital_approval
+#     on the gate attached to a simulated_only tier, and any kill switch that
+#     is both scope: ALL and auto_release: never (identified by that profile,
+#     not by name — a future switch matching it inherits the same rule)
 #   * `enforced` / `required` flags are checked as the literal boolean, not
 #     by truthiness — a quoted "false" must fail the same as an actual false
 #   * at least one kill switch is declared, and each names both a trigger and
@@ -328,8 +330,17 @@ kill_switches:
     trigger: operator_proposes_action_exceeding_its_own_tier_limits
     action: halt_operator_and_record
     scope: ALL
-    release_authority: presiding_authority
+    release_authority: human_owner
     auto_release: never
+    rationale: >
+      scope: ALL and auto_release: never make this a hard kill by the same
+      profile as ledger_boundary_violation and insolvency_breach, whatever
+      the trigger's severity looks like in isolation — an operator proposing
+      an action beyond its own limits, halted platform-wide with no clock to
+      wait out, is not a smaller incident just because presiding_authority
+      could plausibly assess it. The register does not grade hard kills by
+      trigger; it grades them by blast radius and reversibility, and this one
+      shares both with the other two.
 
   - switch_id: insolvency_breach
     trigger: equity_at_or_below_zero
