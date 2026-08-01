@@ -37,6 +37,43 @@ REGISTER = ROOT / "compliance" / "capital_governance.yaml"
 # defeats gate integrity without ever touching a gate.
 NON_OVERRIDABLE_CONTROLS = ("ledger_separation", "demotion", "kill_switches", "evidence")
 
+# CAPITAL-GOVERNANCE.md §2 names the same four controls in prose. That prose
+# and this constant are two independent copies of one fact, and only this
+# constant is checked against the register (must_not_override, above) — the
+# doc could drift from both without CI noticing. _check_docs_name_non_overridable_controls
+# closes that gap by checking the doc text too, so all three copies stay
+# machine-verified against each other rather than trusting the doc by hand.
+CAPITAL_GOVERNANCE_DOC = ROOT / "docs" / "governance" / "CAPITAL-GOVERNANCE.md"
+
+# The doc's prose doesn't always spell a control's identifier verbatim — it
+# says "the kill switches", not "kill_switches" — so a literal substring
+# search needs a stand-in phrase for any control whose readable-prose form
+# differs from its identifier.
+DOC_PROSE_FOR_CONTROL = {"kill_switches": "kill switches"}
+
+# The fixed pair of function types ledger_separation depends on. Not just
+# "function_types must be non-empty" (the existing check): an adopter could
+# satisfy that with only INTERNAL, silently dropping external capital
+# handling — the higher-risk half of what this register governs — from the
+# model entirely, with the ledger-separation check having nothing to compare
+# it against.
+REQUIRED_FUNCTION_IDS = ("INTERNAL", "EXTERNAL")
+
+# The fixed four-role contract every rule below assumes exists, even for the
+# one role (risk_authority) no rule references *by name* yet — its pre-action
+# check is Stage 7.3 runtime enforcement, staged ahead of the rules that will
+# use it. Because nothing currently names it, an adopter could delete it from
+# roles and every existing _require_role check would still pass.
+REQUIRED_ROLE_IDS = ("capital_operator", "risk_authority", "presiding_authority", "human_owner")
+
+# The only two values capital_tiers.external_execution may hold. Checked as
+# an enum, not just "is it simulated_only", because _check_hard_authorities
+# identifies which gates need the strict human_owner requirement by matching
+# this field against the literal string "simulated_only" — a typo or renamed
+# value would silently fail that match and downgrade a tier's progression
+# gate to the weaker "if set" check instead of failing loud.
+VALID_EXTERNAL_EXECUTION = ("simulated_only", "live_permitted")
+
 # Proper nouns belonging to specific adopters rather than to governance. This
 # list is the enforcement of the "generic layer" principle, so it is deliberately
 # concrete: a vague rule would not catch anything.
@@ -145,11 +182,55 @@ def _sanitize_list_sections(doc: dict) -> list[str]:
     return errors
 
 
+# Every top-level section below that checks read as a mapping via `doc.get(key)
+# or {}` — ledger_separation, demotion, evidence, binding — has the same
+# uncaught-AttributeError exposure as the list sections above if an adopter
+# writes e.g. `demotion: disabled` (a string, not a mapping): `or {}` only
+# rescues an absent/falsy value, not a truthy non-mapping one, so the first
+# `.get()` against it crashes instead of reporting a structural error. Two
+# sections nest one level deeper (ledger_separation.transfers,
+# evidence.decision_journal) and share the same exposure at that nested key.
+DICT_SECTIONS = ("ledger_separation", "demotion", "evidence", "binding")
+NESTED_DICT_SECTIONS = (("ledger_separation", "transfers"), ("evidence", "decision_journal"))
+
+
+def _sanitize_dict_sections(doc: dict) -> list[str]:
+    """Replace each non-mapping dict-section value with {}, recording an
+    error, so downstream checks never call .get() on something that isn't a
+    mapping — the dict-section counterpart to _sanitize_list_sections above.
+    """
+    errors: list[str] = []
+    for key in DICT_SECTIONS:
+        value = doc.get(key)
+        if value is not None and not isinstance(value, dict):
+            errors.append(f"{key} must be a mapping, got {type(value).__name__}")
+            doc[key] = {}
+    for parent, child in NESTED_DICT_SECTIONS:
+        parent_value = doc.get(parent) or {}
+        child_value = parent_value.get(child)
+        if child_value is not None and not isinstance(child_value, dict):
+            errors.append(
+                f"{parent}.{child} must be a mapping, got {type(child_value).__name__}"
+            )
+            parent_value[child] = {}
+    return errors
+
+
 def _check_ledger_separation(doc: dict) -> list[str]:
     errors: list[str] = []
     fts = doc.get("function_types") or []
     if not fts:
         return ["function_types is empty — nothing is governed"]
+
+    declared_function_ids = {ft.get("function_id") for ft in fts}
+    for required in REQUIRED_FUNCTION_IDS:
+        if required not in declared_function_ids:
+            errors.append(
+                f"function_types is missing required function_id {required!r} — "
+                "ledger_separation exists to keep INTERNAL and EXTERNAL apart; "
+                "dropping either one lets the missing half of what this register "
+                "governs disappear from the model with nothing left to separate it from"
+            )
 
     seen: dict[str, str] = {}
     for ft in fts:
@@ -395,6 +476,40 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
 
         prev_max = hi
 
+        external_execution = tier.get("external_execution")
+        if external_execution not in VALID_EXTERNAL_EXECUTION:
+            errors.append(
+                f"{tid}: external_execution must be one of {VALID_EXTERNAL_EXECUTION!r}, "
+                f"got {external_execution!r} — _check_hard_authorities matches this field "
+                "literally against 'simulated_only' to require human_owner on the tier's "
+                "progression gate; an unrecognized value would silently miss that match "
+                "instead of failing loud"
+            )
+
+        for field in ("max_risk_per_action_fraction", "max_daily_loss_fraction"):
+            value = tier.get(field)
+            if value is None:
+                errors.append(
+                    f"{tid}: {field} is required — CAPITAL-GOVERNANCE.md §5 binds Stage "
+                    "7.3 runtime risk enforcement to this value; a tier that loses it "
+                    "would be unconstrained with no CI signal"
+                )
+            elif not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(
+                value
+            ):
+                errors.append(f"{tid}: {field} must be a finite number, got {value!r}")
+
+        positions = tier.get("max_concurrent_positions")
+        if positions is None:
+            errors.append(
+                f"{tid}: max_concurrent_positions is required — CAPITAL-GOVERNANCE.md §5 "
+                "binds Stage 7.3 runtime risk enforcement to this value"
+            )
+        elif not isinstance(positions, int) or isinstance(positions, bool) or positions < 1:
+            errors.append(
+                f"{tid}: max_concurrent_positions must be a positive integer, got {positions!r}"
+            )
+
         permitted_functions = tier.get("permitted_functions") or []
         if not permitted_functions:
             # Every tier needs a function policy, not just non-terminal ones —
@@ -484,6 +599,16 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
         # of hiding three of them behind the first one found.
         errors.append("roles is empty — every rule references a role slot")
 
+    for required_role in REQUIRED_ROLE_IDS:
+        if required_role not in role_ids:
+            errors.append(
+                f"roles is missing required role_id {required_role!r} — the register "
+                "assumes this fixed four-role contract even for a role like "
+                "risk_authority that no rule references by name yet (its check is "
+                "Stage 7.3 runtime enforcement), so dropping it would pass every "
+                "existing reference check while quietly narrowing the contract"
+            )
+
     def _require_role(value, where: str) -> None:
         if value and value not in role_ids:
             errors.append(f"{where} references undeclared role {value!r}")
@@ -565,6 +690,33 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
     return errors
 
 
+def _check_docs_name_non_overridable_controls() -> list[str]:
+    """CAPITAL-GOVERNANCE.md must mention every control in
+    NON_OVERRIDABLE_CONTROLS, so an edit to the constant, the register's
+    must_not_override list, or the doc's prose can't drift from the other
+    two silently — see the constant's own comment above.
+    """
+    try:
+        doc_text = CAPITAL_GOVERNANCE_DOC.read_text(encoding="utf-8")
+    except OSError as exc:
+        return [f"cannot read {CAPITAL_GOVERNANCE_DOC} to verify it names every "
+                f"non-overridable control: {exc}"]
+    errors: list[str] = []
+    for control in NON_OVERRIDABLE_CONTROLS:
+        needle = DOC_PROSE_FOR_CONTROL.get(control, control)
+        # \s+ between words, not a literal substring search: Markdown prose
+        # wraps at arbitrary column widths, so "kill switches" can legitimately
+        # appear in the source as "kill\nswitches" without the doc having
+        # drifted from the constant at all.
+        pattern = re.compile(r"\s+".join(re.escape(word) for word in needle.split()))
+        if not pattern.search(doc_text):
+            errors.append(
+                f"{CAPITAL_GOVERNANCE_DOC.name} does not mention {control!r} (looked for "
+                f"{needle!r}) — it and NON_OVERRIDABLE_CONTROLS have drifted apart"
+            )
+    return errors
+
+
 def main() -> int:
     if not REGISTER.exists():
         print(f"ERROR: {REGISTER} not found", file=sys.stderr)
@@ -595,6 +747,9 @@ def main() -> int:
     # nothing downstream can crash on a non-mapping entry instead of reporting
     # a normal validator error.
     errors += _sanitize_list_sections(doc)
+    # Same reasoning, for the top-level (and two nested) sections every check
+    # below reads as a mapping rather than a list.
+    errors += _sanitize_dict_sections(doc)
     errors += _check_ledger_separation(doc)
     errors += _check_required_flags(doc)
     errors += _check_unique_ids(doc)
@@ -603,6 +758,7 @@ def main() -> int:
     warnings += tier_warnings
     errors += _check_roles_and_switches(doc)
     errors += _check_hard_authorities(doc)
+    errors += _check_docs_name_non_overridable_controls()
 
     for line in warnings:
         print(f"[WARNING] {line}")
