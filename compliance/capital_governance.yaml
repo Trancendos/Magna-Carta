@@ -43,7 +43,10 @@ meta:
   # binding; this file must not assume one exists.
   owner: "<bound by adopting platform>"
   review_cycle: quarterly
-  observatory_event_prefix: "governance.capital"
+  # Deliberately "audit", not the name of any adopter's audit subsystem. The
+  # binding routes this stream to whatever the adopting platform actually
+  # calls its audit log; this register only names the event namespace below.
+  audit_event_prefix: "governance.capital"
   scope: >
     Any automated actor that spends, allocates, risks, or earns money on behalf
     of the adopting platform, regardless of method or venue.
@@ -61,7 +64,12 @@ roles:
     description: >
       Evaluates a proposed capital action against tier limits and exposure caps
       before it reaches a venue. Sits between operator and execution, never
-      beside it.
+      beside it. Not yet referenced by any rule below: the pre-action check
+      this role performs is runtime enforcement, staged to Stage 7.3
+      (see docs/governance/CAPITAL-GOVERNANCE.md §7) alongside the rest of
+      pre-action evaluation. Declared here now so a binding can name the
+      actor ahead of that enforcement landing, not because this register
+      already exercises it.
   - role_id: presiding_authority
     description: >
       Escalation above the risk authority. Approves tier progression and any
@@ -289,6 +297,16 @@ kill_switches:
     scope: EXTERNAL
     release_authority: presiding_authority
     auto_release: next_session_boundary
+    auto_release_requires: loss_back_within_tier_daily_limit
+    rationale: >
+      The session boundary is a timer, not a fix — necessary but not
+      sufficient for release. If the triggering loss is still open and still
+      above the tier's daily limit when the boundary arrives, the switch must
+      not clear: doing so would let external actions resume while the exact
+      condition that halted them is still true. auto_release_requires names
+      the condition that must actually hold before the boundary can release
+      it; presiding_authority may still release early, or override, for a
+      reviewed reason.
 
   - switch_id: ledger_boundary_violation
     trigger: unauthorized_attempt_to_draw_across_function_ledgers

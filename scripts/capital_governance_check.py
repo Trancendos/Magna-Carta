@@ -60,16 +60,29 @@ PLATFORM_SPECIFIC_TERMS = [
     "Dorris Fontaine",
     "Cornelius",
     "Cryptex",
-    "The Observatory",
+    # Bare, not "The Observatory": an earlier version only matched the
+    # two-word phrase, so a lowercase field like `observatory_event_prefix`
+    # slipped straight past it — the estate's Observatory concept leaking
+    # into the generic register through the very field that was supposed to
+    # be a portable audit-event namespace. Bare "Observatory" catches that
+    # and the two-word phrase both.
+    "Observatory",
 ]
 
 # Whole-word matching, not substring containment. "Porter" as a bare substring
 # also fires inside "reporter", "supporter" and "transporter", which would fail
 # the build on ordinary prose and make the register hostile to edit — and a check
-# people learn to work around is worse than no check. \b handles the multi-word
-# terms too, anchoring only at the outer edges.
+# people learn to work around is worse than no check.
+#
+# Not \b: regex word boundaries treat underscore as a word character, so
+# \bObservatory\b does not match "observatory_event_prefix" — there is no
+# boundary between "y" and "_". That gap is exactly how this register's own
+# observatory_event_prefix field slipped past this check once (before it was
+# renamed). The lookaround below excludes only letters and digits, so
+# underscores, dots, and other punctuation all count as boundaries while
+# "reporter"/"supporter" still don't false-positive on "Porter".
 _TERM_PATTERNS = [
-    (term, re.compile(rf"\b{re.escape(term)}\b", re.IGNORECASE))
+    (term, re.compile(rf"(?<![A-Za-z0-9]){re.escape(term)}(?![A-Za-z0-9])", re.IGNORECASE))
     for term in PLATFORM_SPECIFIC_TERMS
 ]
 
@@ -163,7 +176,11 @@ def _check_unique_ids(doc: dict) -> list[str]:
     sets) silently discards duplicates, so a second entry sharing an ID would
     pass every "is this ID declared" check while leaving the reference
     genuinely ambiguous — nothing says which of the two entries a rule that
-    names that ID actually means.
+    names that ID actually means. A missing ID is the same defect by another
+    route: skipping it (as an earlier version did) lets any number of
+    unidentified entries accumulate silently instead of being flagged, so a
+    missing id is now an error in its own right, not just excluded from the
+    duplicate check.
     """
     errors: list[str] = []
     id_specs = [
@@ -177,7 +194,8 @@ def _check_unique_ids(doc: dict) -> list[str]:
         seen: set = set()
         for item in doc.get(list_key) or []:
             value = item.get(id_key)
-            if value is None:
+            if not value:
+                errors.append(f"{list_key}: entry missing required {id_key}")
                 continue
             if value in seen:
                 errors.append(
@@ -314,7 +332,17 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
 
         prev_max = hi
 
-        for fn in tier.get("permitted_functions") or []:
+        permitted_functions = tier.get("permitted_functions") or []
+        if not permitted_functions:
+            # Every tier needs a function policy, not just non-terminal ones —
+            # there is no "no functions permitted" tier in this design, and an
+            # empty list leaves the tier's policy undefined rather than
+            # deliberately empty.
+            errors.append(
+                f"{tid}: permitted_functions is empty — every tier must declare "
+                "which function types it governs"
+            )
+        for fn in permitted_functions:
             if fn not in known_functions:
                 errors.append(f"{tid}: permitted_functions names unknown function {fn!r}")
 
@@ -331,12 +359,20 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
         elif gate not in gate_ids:
             errors.append(f"{tid}: progression_gate {gate!r} is not declared")
 
-        if tier.get("leverage_permitted") and (tier.get("max_leverage") or 0) <= 1.0:
-            warnings.append(f"{tid}: leverage_permitted is true but max_leverage <= 1.0")
-        if not tier.get("leverage_permitted") and (tier.get("max_leverage") or 1.0) > 1.0:
+        max_leverage = tier.get("max_leverage")
+        if tier.get("leverage_permitted"):
+            if max_leverage is None:
+                errors.append(
+                    f"{tid}: leverage_permitted is true but max_leverage is not set "
+                    "— a permission with no declared cap is unbounded, which is not "
+                    "what 'permitted' means anywhere else in this register"
+                )
+            elif max_leverage <= 1.0:
+                warnings.append(f"{tid}: leverage_permitted is true but max_leverage <= 1.0")
+        elif (max_leverage or 1.0) > 1.0:
             errors.append(
                 f"{tid}: leverage_permitted is false but max_leverage is "
-                f"{tier.get('max_leverage')} — the cap contradicts the permission"
+                f"{max_leverage} — the cap contradicts the permission"
             )
 
     return errors, warnings
@@ -408,6 +444,20 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
                 "named to release either never releases or anyone releases it"
             )
         _require_role(switch.get("release_authority"), f"kill switch {sid}.release_authority")
+        # A time-based auto_release (anything but "never") is a clock, not a
+        # fix — the condition that tripped the switch can still be true when
+        # the clock runs out. Any switch that releases on a timer must name
+        # what else has to hold before that release is real, or the timer
+        # alone lets the halted action resume while still in breach.
+        auto_release = switch.get("auto_release")
+        if auto_release and auto_release != "never":
+            condition = switch.get("auto_release_requires")
+            if not (isinstance(condition, str) and condition.strip()):
+                errors.append(
+                    f"kill switch {sid} auto_release is {auto_release!r} but declares "
+                    "no auto_release_requires — a time-based release with no named "
+                    "condition can clear while the trigger is still true"
+                )
 
     protected = set((doc.get("binding") or {}).get("must_not_override") or [])
     for required in NON_OVERRIDABLE_CONTROLS:

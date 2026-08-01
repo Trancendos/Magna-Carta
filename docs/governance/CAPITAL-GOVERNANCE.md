@@ -153,7 +153,7 @@ constrain also be the one who clears it.
 | 7.2 | Adopter binding schema and worked example | staged |
 | 7.3 | Runtime enforcement: pre-action risk evaluation against tier limits | staged |
 | 7.4 | Decision-journal persistence and progression-gate assessment | staged |
-| 7.5 | Observatory event emission under `governance.capital.*` | staged |
+| 7.5 | Audit-log event emission under `governance.capital.*`, routed to whatever the binding names as its audit sink | staged |
 
 ## 8. Honesty rules
 
