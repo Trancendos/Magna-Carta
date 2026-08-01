@@ -26,9 +26,25 @@ except ImportError:  # pragma: no cover - Layer B installs requirements first
 ROOT = Path(__file__).resolve().parents[1]
 REGISTER = ROOT / "compliance" / "capital_governance.yaml"
 
+# Controls a binding may never relax. Kept as one constant because the register,
+# CAPITAL-GOVERNANCE.md and this check must agree on the list: an earlier version
+# hardcoded only two of the three here while both documents named three, so an
+# adopter could have dropped `demotion` from must_not_override and passed CI —
+# quietly acquiring the ability to keep a failing operator's permissions.
+NON_OVERRIDABLE_CONTROLS = ("ledger_separation", "demotion", "kill_switches")
+
 # Proper nouns belonging to specific adopters rather than to governance. This
 # list is the enforcement of the "generic layer" principle, so it is deliberately
 # concrete: a vague rule would not catch anything.
+#
+# MAINTENANCE: this is a denylist, and its honest limitation is that it cannot
+# catch an adopter name nobody has added to it. That is unavoidable — a layer
+# that is generic by definition cannot enumerate the adopters it does not know
+# about. It is still worth having, because the realistic failure mode is not an
+# unknown platform appearing: it is *this* estate's own vocabulary leaking in
+# while someone edits the file. Add a term whenever a new adopter-specific proper
+# noun enters the wider repository, and prefer over-listing to under-listing —
+# a false positive costs one rename, a false negative costs portability.
 PLATFORM_SPECIFIC_TERMS = [
     "Trancendos",
     "Tranc3",
@@ -182,7 +198,7 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
         _require_role(switch.get("release_authority"), f"kill switch {sid}.release_authority")
 
     protected = set((doc.get("binding") or {}).get("must_not_override") or [])
-    for required in ("ledger_separation", "kill_switches"):
+    for required in NON_OVERRIDABLE_CONTROLS:
         if required not in protected:
             errors.append(
                 f"binding.must_not_override omits {required!r} — an adopter could then "
