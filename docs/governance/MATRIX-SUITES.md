@@ -72,7 +72,7 @@ doc change** and is captured in the registry's audit trail.
 
 ## 4. Feeding the Observatory
 
-Each suite declares an event prefix. The staged integration (§7.2) emits:
+Each suite declares an event prefix. The Tranc3-side integration (§7.2, landed) emits:
 
 - `governance.suite.<name>.review.completed` — steward closes a cadence review
 - `governance.suite.<name>.review.overdue` — `next_review` passed without one
@@ -112,7 +112,7 @@ governance work itself.
 | Stage | Deliverable | Status |
 |---|---|---|
 | 7.1 | Registry (`matrix_suites.yaml`) + this doc + Layer B validator | ✅ this change |
-| 7.2 | Observatory emission from Tranc3 (`src/compliance/` reads the registry via the submodule and emits suite events) | staged |
+| 7.2 | Observatory emission from Tranc3 (`src/compliance/` reads the registry via the submodule and emits suite events) | ✅ landed — Tranc3 `src/compliance/matrix_suites.py` + `src/compliance/matrix_suites_routes.py`, mounted at `/compliance/suites` in `api.py`; emits all four §4 events through the same `Observatory.record()` path as `capacity.threshold_crossed` |
 | 7.3 | Bridge the 14 unregistered Tranc3 matrices into `tranc3_register_bridge.yaml` with MC numbers | staged |
 | 7.4 | CranBania board lane + workshop template per suite; SLA-backed review cards | staged |
 | 7.5 | Role Registry seeding: create the 8 suite-steward roles at `/roles` from this file | staged |
