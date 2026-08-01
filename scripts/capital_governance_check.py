@@ -74,6 +74,22 @@ REQUIRED_ROLE_IDS = ("capital_operator", "risk_authority", "presiding_authority"
 # gate to the weaker "if set" check instead of failing loud.
 VALID_EXTERNAL_EXECUTION = ("simulated_only", "live_permitted")
 
+# The four hard-kill switches CAPITAL-GOVERNANCE.md and this register's own
+# comments treat as structural, not optional: ledger_boundary_violation and
+# insolvency_breach are named directly in the doc's prose (§4, §5, §6) as
+# load-bearing halts; daily_loss_breach and limit_override_attempt share the
+# same scope: ALL / auto_release: never hard-kill profile _check_hard_authorities
+# already enforces human_owner release on. "kill_switches is non-empty" (the
+# existing check) is satisfied by any single switch, including a soft,
+# narrow-scope one — an adopter could drop all four of these and keep, say,
+# only a low-impact switch, and still pass.
+REQUIRED_KILL_SWITCH_IDS = (
+    "daily_loss_breach",
+    "ledger_boundary_violation",
+    "limit_override_attempt",
+    "insolvency_breach",
+)
+
 # Proper nouns belonging to specific adopters rather than to governance. This
 # list is the enforcement of the "generic layer" principle, so it is deliberately
 # concrete: a vague rule would not catch anything.
@@ -123,6 +139,14 @@ _TERM_PATTERNS = [
     (term, re.compile(rf"(?<![A-Za-z0-9]){re.escape(term)}(?![A-Za-z0-9])", re.IGNORECASE))
     for term in PLATFORM_SPECIFIC_TERMS
 ]
+
+
+def _is_finite_number(value: object) -> bool:
+    """True for an int/float that isn't a bool and isn't inf/nan — the
+    reusable form of the isinstance+isfinite guard used throughout this file
+    (bool is excluded because it's a Python int subtype, so True would
+    otherwise silently pass any numeric check as 1)."""
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
 
 
 def _check_is_generic(raw: str) -> list[str]:
@@ -213,6 +237,19 @@ def _sanitize_dict_sections(doc: dict) -> list[str]:
                 f"{parent}.{child} must be a mapping, got {type(child_value).__name__}"
             )
             parent_value[child] = {}
+    # progression_gates[*].requires is a per-entry nested mapping, not a fixed
+    # top-level path — NESTED_DICT_SECTIONS can't express "this key, inside
+    # every item of a list", so it's sanitized here instead. Both
+    # _check_hard_authorities and _check_roles_and_switches read it via
+    # `gate.get("requires") or {}`, which only rescues an absent/falsy value;
+    # a truthy non-mapping (e.g. `requires: "human_owner"`) would still crash
+    # their first .get() call.
+    for gate in doc.get("progression_gates") or []:
+        requires = gate.get("requires")
+        if requires is not None and not isinstance(requires, dict):
+            gid = gate.get("gate_id", "<unnamed>")
+            errors.append(f"progression_gates: gate {gid!r}.requires must be a mapping, got {type(requires).__name__}")
+            gate["requires"] = {}
     return errors
 
 
@@ -440,7 +477,19 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
     prev_max = None
     for index, tier in enumerate(tiers):
         tid = tier.get("tier_id", "<unnamed>")
-        lo, hi = tier.get("band_min_units"), tier.get("band_max_units")
+        lo_raw, hi_raw = tier.get("band_min_units"), tier.get("band_max_units")
+        # A non-numeric band bound (e.g. the YAML string "20") would otherwise
+        # reach `hi <= lo` below and crash with an uncaught TypeError instead
+        # of a structural error. Sanitize first, same as every other numeric
+        # field in this file: treat an invalid value as absent for the rest
+        # of this tier's checks, which still reports it (via the existing
+        # "is required" branches) rather than silently accepting it.
+        lo = lo_raw if (lo_raw is None or _is_finite_number(lo_raw)) else None
+        hi = hi_raw if (hi_raw is None or _is_finite_number(hi_raw)) else None
+        if lo_raw is not None and lo is None:
+            errors.append(f"{tid}: band_min_units must be a finite number, got {lo_raw!r}")
+        if hi_raw is not None and hi is None:
+            errors.append(f"{tid}: band_max_units must be a finite number, got {hi_raw!r}")
         is_final = index == last_index
 
         if lo is None:
@@ -485,6 +534,19 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
                 "progression gate; an unrecognized value would silently miss that match "
                 "instead of failing loud"
             )
+        elif index == 0 and external_execution != "simulated_only":
+            # The whole ladder could otherwise start with live_permitted:
+            # _check_hard_authorities only requires human_owner on gates
+            # attached to a simulated_only tier, so if no tier is
+            # simulated_only, no gate is ever required to have it — the
+            # entire simulation-to-live human checkpoint silently disappears,
+            # not just weakens.
+            errors.append(
+                f"{tid}: the first tier (index 0) must have external_execution: "
+                "simulated_only — this is the register's only structural "
+                "guarantee that a fresh actor starts in simulation rather than "
+                "live capital"
+            )
 
         for field in ("max_risk_per_action_fraction", "max_daily_loss_fraction"):
             value = tier.get(field)
@@ -494,10 +556,17 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
                     "7.3 runtime risk enforcement to this value; a tier that loses it "
                     "would be unconstrained with no CI signal"
                 )
-            elif not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(
-                value
-            ):
+            elif not _is_finite_number(value):
                 errors.append(f"{tid}: {field} must be a finite number, got {value!r}")
+            elif not (0 <= value <= 1):
+                # A fraction of equity above 1.0 (100%) authorizes risking or
+                # losing more than the tier's entire equity in one action or
+                # one day — the numeric cap this field exists to be would
+                # itself be non-limiting.
+                errors.append(
+                    f"{tid}: {field} must be between 0 and 1 (a fraction of equity), "
+                    f"got {value!r}"
+                )
 
         positions = tier.get("max_concurrent_positions")
         if positions is None:
@@ -550,11 +619,7 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
                 f"{tid}: leverage_permitted must be a boolean, got {leverage_permitted!r}"
             )
         else:
-            max_leverage_is_finite_number = (
-                isinstance(max_leverage, (int, float))
-                and not isinstance(max_leverage, bool)
-                and math.isfinite(max_leverage)
-            )
+            max_leverage_is_finite_number = max_leverage is not None and _is_finite_number(max_leverage)
             if leverage_permitted:
                 if max_leverage is None:
                     errors.append(
@@ -648,6 +713,25 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
                 f"{gid}.requires.evidence is missing or empty — a promotion gate "
                 "without evidence to point to degrades into approval alone"
             )
+        # These three numeric fields are what makes promotion earned rather
+        # than approval-only — approval and evidence being present says
+        # nothing if the bar they're approving against can be set to zero,
+        # negative, or an arbitrarily generous breach allowance. isinstance
+        # bool-exclusion for the same reason as elsewhere in this file: True
+        # is an int in Python, so e.g. max_limit_breaches: true would
+        # otherwise silently pass as the integer 1.
+        for field in ("min_recorded_actions", "min_observation_days"):
+            value = req.get(field)
+            if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+                errors.append(
+                    f"{gid}.requires.{field} must be a non-negative integer, got {value!r}"
+                )
+        max_breaches = req.get("max_limit_breaches")
+        if not isinstance(max_breaches, int) or isinstance(max_breaches, bool) or max_breaches < 0:
+            errors.append(
+                f"{gid}.requires.max_limit_breaches must be a non-negative integer, got "
+                f"{max_breaches!r}"
+            )
 
     switches = doc.get("kill_switches") or []
     if not switches:
@@ -655,6 +739,15 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
             "kill_switches is empty — at least one emergency halt control is required; "
             "an adopter that removes them all would have no automatic stop left"
         )
+    declared_switch_ids = {s.get("switch_id") for s in switches}
+    for required_switch in REQUIRED_KILL_SWITCH_IDS:
+        if required_switch not in declared_switch_ids:
+            errors.append(
+                f"kill_switches is missing required switch_id {required_switch!r} — "
+                "'kill_switches is non-empty' (above) is satisfied by any single "
+                "switch, including a narrow, low-impact one; an adopter could drop "
+                "this hard-kill control specifically and still pass"
+            )
     for switch in switches:
         sid = switch.get("switch_id", "<unnamed>")
         if not switch.get("trigger"):

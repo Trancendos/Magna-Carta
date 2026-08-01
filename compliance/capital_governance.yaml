@@ -436,10 +436,15 @@ binding:
     - id: role_disjointness
       rule: >
         The actor bound to presiding_authority must differ from the actor bound
-        to capital_operator, and the actor bound to human_owner must be an
-        actual human, not an automated actor. Without this, an operator could
-        approve its own limit increases, or an automated actor could authorise
-        its own transition into live capital.
+        to capital_operator, the actor bound to risk_authority must also differ
+        from the actor bound to capital_operator, and the actor bound to
+        human_owner must be an actual human, not an automated actor. Without
+        the first, an operator could approve its own limit increases; without
+        the second, the pre-action risk check (risk_authority's role, per the
+        roles list above: "between operator and execution, never beside it")
+        would not be independent of the actor it is meant to check, letting an
+        operator validate its own actions; without the third, an automated
+        actor could authorise its own transition into live capital.
       enforcement: >
         Stated here as a binding requirement now. Structural validation is
         staged to the Stage 7.2 binding validator, once binding files exist for
