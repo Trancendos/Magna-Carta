@@ -259,7 +259,7 @@ def _check_ledger_separation(doc: dict) -> list[str]:
     if not fts:
         return ["function_types is empty — nothing is governed"]
 
-    declared_function_ids = {ft.get("function_id") for ft in fts}
+    declared_function_ids = {ft.get("function_id") for ft in fts if isinstance(ft.get("function_id"), str)}
     for required in REQUIRED_FUNCTION_IDS:
         if required not in declared_function_ids:
             errors.append(
@@ -275,6 +275,9 @@ def _check_ledger_separation(doc: dict) -> list[str]:
         ledger = ft.get("ledger")
         if not ledger:
             errors.append(f"function_type {fid} declares no ledger")
+            continue
+        if not isinstance(ledger, str):
+            errors.append(f"function_type {fid} ledger must be a string, got {ledger!r}")
             continue
         if ledger in seen:
             errors.append(
@@ -351,6 +354,15 @@ def _check_unique_ids(doc: dict) -> list[str]:
             if not value:
                 errors.append(f"{list_key}: entry missing required {id_key}")
                 continue
+            # Every id below is looked up via set membership (`in` / `.add()`)
+            # somewhere in this file — a non-string value that happens to be
+            # unhashable (a list or mapping in the YAML, e.g. `function_id:
+            # [INTERNAL]`) would crash `seen.add(value)` right here with an
+            # uncaught TypeError, rather than the structural error this loop
+            # exists to produce.
+            if not isinstance(value, str):
+                errors.append(f"{list_key}: {id_key} must be a string, got {value!r}")
+                continue
             if value in seen:
                 errors.append(
                     f"{list_key}: duplicate {id_key} {value!r} — every entry "
@@ -388,7 +400,8 @@ def _check_hard_authorities(doc: dict) -> list[str]:
     simulated_only_gate_ids = {
         tier.get("progression_gate")
         for tier in (doc.get("capital_tiers") or [])
-        if tier.get("external_execution") == "simulated_only" and tier.get("progression_gate")
+        if tier.get("external_execution") == "simulated_only"
+        and isinstance(tier.get("progression_gate"), str)
     }
 
     for gate in doc.get("progression_gates") or []:
@@ -436,17 +449,26 @@ def _check_hard_authorities(doc: dict) -> list[str]:
         # later (insolvency_breach) and one that was already here
         # (limit_override_attempt) but had been assigned presiding_authority
         # without anything here checking it belonged in this class.
-        elif (
-            switch.get("scope") == "ALL"
-            and switch.get("auto_release") == "never"
-            and release_authority != "human_owner"
+        #
+        # "auto_release == 'never'" is not the test — that only matches the
+        # literal string. auto_release: false, auto_release: null, or the
+        # field being absent all mean exactly the same thing operationally
+        # (there is no configured timer), so any of them must count as a hard
+        # kill too. Only a genuine, non-empty string naming a real timer
+        # condition (checked below at line ~800) exempts a switch from this.
+        elif switch.get("scope") == "ALL" and not (
+            isinstance(switch.get("auto_release"), str)
+            and switch.get("auto_release").strip()
+            and switch.get("auto_release") != "never"
         ):
-            errors.append(
-                f"kill switch {sid}.release_authority must be human_owner, got "
-                f"{release_authority!r} — a switch that halts everything and "
-                "never auto-releases is a hard kill by definition, and a hard "
-                "kill is not a call any automated role gets to make"
-            )
+            if release_authority != "human_owner":
+                errors.append(
+                    f"kill switch {sid}.release_authority must be human_owner, got "
+                    f"{release_authority!r} — a switch that halts everything and "
+                    "has no configured auto-release timer is a hard kill by "
+                    "definition, and a hard kill is not a call any automated "
+                    "role gets to make"
+                )
 
     return errors
 
@@ -470,8 +492,17 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
     if not tiers:
         return ["capital_tiers is empty"], warnings
 
-    known_functions = {ft.get("function_id") for ft in (doc.get("function_types") or [])}
-    gate_ids = {g.get("gate_id") for g in (doc.get("progression_gates") or [])}
+    # str-filtered, not a bare set comprehension: _check_unique_ids reports a
+    # non-string function_id/gate_id as a structural error, but that check
+    # and this one run independently — without filtering here too, a
+    # non-string (and possibly unhashable) id would crash this set's own
+    # construction before _check_unique_ids's error is ever seen.
+    known_functions = {
+        ft.get("function_id") for ft in (doc.get("function_types") or []) if isinstance(ft.get("function_id"), str)
+    }
+    gate_ids = {
+        g.get("gate_id") for g in (doc.get("progression_gates") or []) if isinstance(g.get("gate_id"), str)
+    }
     last_index = len(tiers) - 1
 
     prev_max = None
@@ -579,7 +610,14 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
                 f"{tid}: max_concurrent_positions must be a positive integer, got {positions!r}"
             )
 
-        permitted_functions = tier.get("permitted_functions") or []
+        permitted_functions = tier.get("permitted_functions")
+        if not isinstance(permitted_functions, list):
+            if permitted_functions is not None:
+                errors.append(
+                    f"{tid}: permitted_functions must be a list, got "
+                    f"{type(permitted_functions).__name__}"
+                )
+            permitted_functions = []
         if not permitted_functions:
             # Every tier needs a function policy, not just non-terminal ones —
             # there is no "no functions permitted" tier in this design, and an
@@ -590,19 +628,29 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
                 "which function types it governs"
             )
         for fn in permitted_functions:
-            if fn not in known_functions:
+            # isinstance guard before the `in` check below: a non-string
+            # entry that happens to be unhashable (e.g. a nested list) would
+            # otherwise crash `fn not in known_functions` with a TypeError.
+            if not isinstance(fn, str):
+                errors.append(f"{tid}: permitted_functions entry must be a string, got {fn!r}")
+            elif fn not in known_functions:
                 errors.append(f"{tid}: permitted_functions names unknown function {fn!r}")
 
         gate = tier.get("progression_gate")
+        gate_is_valid_reference = gate is None or isinstance(gate, str)
+        if not gate_is_valid_reference:
+            errors.append(f"{tid}: progression_gate must be a string, got {gate!r}")
+            gate = None
         if is_final:
             if gate is not None and gate not in gate_ids:
                 errors.append(f"{tid}: progression_gate {gate!r} is not declared")
         elif gate is None:
-            errors.append(
-                f"{tid}: progression_gate is required for every non-terminal tier — "
-                "without one, equity can cross the boundary with no evidence or "
-                "approval control"
-            )
+            if gate_is_valid_reference:
+                errors.append(
+                    f"{tid}: progression_gate is required for every non-terminal tier — "
+                    "without one, equity can cross the boundary with no evidence or "
+                    "approval control"
+                )
         elif gate not in gate_ids:
             errors.append(f"{tid}: progression_gate {gate!r} is not declared")
 
@@ -656,7 +704,7 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
 
 def _check_roles_and_switches(doc: dict) -> list[str]:
     errors: list[str] = []
-    role_ids = {r.get("role_id") for r in (doc.get("roles") or [])}
+    role_ids = {r.get("role_id") for r in (doc.get("roles") or []) if isinstance(r.get("role_id"), str)}
     if not role_ids:
         # Record and continue rather than return: an adopter that empties roles
         # entirely has also broken every kill-switch and must_not_override check
@@ -675,7 +723,14 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
             )
 
     def _require_role(value, where: str) -> None:
-        if value and value not in role_ids:
+        if not value:
+            return
+        # isinstance guard before the `in` check: an unhashable truthy value
+        # (a list or mapping in the YAML) would otherwise crash `value not in
+        # role_ids` with a TypeError instead of reporting it structurally.
+        if not isinstance(value, str):
+            errors.append(f"{where} must be a string, got {value!r}")
+        elif value not in role_ids:
             errors.append(f"{where} references undeclared role {value!r}")
 
     # exception_authority lives under `transfers`, not directly on
@@ -739,7 +794,7 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
             "kill_switches is empty — at least one emergency halt control is required; "
             "an adopter that removes them all would have no automatic stop left"
         )
-    declared_switch_ids = {s.get("switch_id") for s in switches}
+    declared_switch_ids = {s.get("switch_id") for s in switches if isinstance(s.get("switch_id"), str)}
     for required_switch in REQUIRED_KILL_SWITCH_IDS:
         if required_switch not in declared_switch_ids:
             errors.append(
@@ -810,6 +865,35 @@ def _check_docs_name_non_overridable_controls() -> list[str]:
     return errors
 
 
+def _check_docs_are_generic() -> list[str]:
+    """_check_is_generic only scans the machine-readable register.
+    CAPITAL-GOVERNANCE.md is the same 'generic by design' layer in prose
+    form — and the more likely place for a casual platform-specific mention
+    to slip in while editing — so it needs the identical denylist scan, not
+    just the narrower non-overridable-controls check above. Without this, a
+    platform-specific term added to the doc would pass Layer B while the
+    identical term in the YAML would fail it.
+    """
+    try:
+        doc_text = CAPITAL_GOVERNANCE_DOC.read_text(encoding="utf-8")
+    except OSError as exc:
+        return [
+            f"cannot read {CAPITAL_GOVERNANCE_DOC} to check it for platform-specific "
+            f"terms: {exc}"
+        ]
+    errors: list[str] = []
+    for lineno, line in enumerate(doc_text.splitlines(), start=1):
+        for term, pattern in _TERM_PATTERNS:
+            if pattern.search(line):
+                errors.append(
+                    f"{CAPITAL_GOVERNANCE_DOC.name} line {lineno}: contains "
+                    f"platform-specific term {term!r} — this document must stay "
+                    "adoptable by any platform, the same requirement "
+                    "_check_is_generic enforces on the register itself."
+                )
+    return errors
+
+
 def main() -> int:
     if not REGISTER.exists():
         print(f"ERROR: {REGISTER} not found", file=sys.stderr)
@@ -836,6 +920,7 @@ def main() -> int:
     warnings: list[str] = []
 
     errors += _check_is_generic(raw)
+    errors += _check_docs_are_generic()
     # Runs before every other check: sanitizes doc's list sections in place so
     # nothing downstream can crash on a non-mapping entry instead of reporting
     # a normal validator error.

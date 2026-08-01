@@ -37,13 +37,16 @@ judgement under pressure, or that the other controls depend on to work.
 Two further constraints apply to the binding itself, stated in the register now
 even though structural validation of them is staged to §7.2 (no binding file
 exists yet to validate): the actor bound to `presiding_authority` must differ
-from the actor bound to `capital_operator`, `human_owner` must be an actual
-human, and the ledger identifiers bound to INTERNAL and EXTERNAL must be
-distinct. Without the first, an operator could approve its own limit increases;
-without the second, an automated actor could authorise its own promotion to live
-capital; without the third, a binding could satisfy the letter of `must_declare`
-while mapping both function types onto the same real ledger — defeating ledger
-separation entirely.
+from the actor bound to `capital_operator`, the actor bound to `risk_authority`
+must also differ from the actor bound to `capital_operator`, `human_owner` must
+be an actual human, and the ledger identifiers bound to INTERNAL and EXTERNAL
+must be distinct. Without the first, an operator could approve its own limit
+increases; without the second, the pre-action risk check `risk_authority`
+exists to perform would not be independent of the actor it is meant to check,
+letting an operator validate its own actions; without the third, an automated
+actor could authorise its own promotion to live capital; without the fourth, a
+binding could satisfy the letter of `must_declare` while mapping both function
+types onto the same real ledger — defeating ledger separation entirely.
 
 ## 3. Two function types
 
