@@ -65,14 +65,24 @@ PLATFORM_SPECIFIC_TERMS = [
 # for adopter names would flag the very mechanism that keeps the file generic.
 _PLACEHOLDER_RE = re.compile(r"<[^>]+>")
 
+# Whole-word matching, not substring containment. "Porter" as a bare substring
+# also fires inside "reporter", "supporter" and "transporter", which would fail
+# the build on ordinary prose and make the register hostile to edit — and a check
+# people learn to work around is worse than no check. \b handles the multi-word
+# terms too, anchoring only at the outer edges.
+_TERM_PATTERNS = [
+    (term, re.compile(rf"\b{re.escape(term)}\b", re.IGNORECASE))
+    for term in PLATFORM_SPECIFIC_TERMS
+]
+
 
 def _check_is_generic(raw: str) -> list[str]:
     """No adopter-specific proper noun may appear anywhere in the register."""
     errors: list[str] = []
     for lineno, line in enumerate(raw.splitlines(), start=1):
         scannable = _PLACEHOLDER_RE.sub("", line)
-        for term in PLATFORM_SPECIFIC_TERMS:
-            if term.lower() in scannable.lower():
+        for term, pattern in _TERM_PATTERNS:
+            if pattern.search(scannable):
                 errors.append(
                     f"line {lineno}: contains platform-specific term {term!r} — this "
                     "register must stay adoptable by any platform. Move the reference "
@@ -175,10 +185,20 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
         if value and value not in role_ids:
             errors.append(f"{where} references undeclared role {value!r}")
 
-    _require_role(
-        (doc.get("ledger_separation") or {}).get("exception_authority"),
-        "ledger_separation.exception_authority",
-    )
+    # exception_authority lives under `transfers`, not directly on
+    # ledger_separation. An earlier version read the wrong path, so the lookup
+    # returned None, _require_role skipped on falsy, and the only role guarding
+    # cross-ledger transfers was never validated at all.
+    transfers = (doc.get("ledger_separation") or {}).get("transfers") or {}
+    exception_authority = transfers.get("exception_authority")
+    if not exception_authority:
+        errors.append(
+            "ledger_separation.transfers.exception_authority is missing — a transfer "
+            "exception with nobody named to authorise it is either impossible or "
+            "available to anyone, and the register must not leave that ambiguous"
+        )
+    else:
+        _require_role(exception_authority, "ledger_separation.transfers.exception_authority")
 
     for gate in doc.get("progression_gates") or []:
         gid = gate.get("gate_id", "<unnamed>")
