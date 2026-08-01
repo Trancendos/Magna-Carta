@@ -106,6 +106,7 @@ Runtime enforcement for the **Tranc3 App Framework** lives in the [Tranc3](https
 
 | Document | Purpose |
 |----------|---------|
+| [docs/governance/CAPITAL-GOVERNANCE.md](docs/governance/CAPITAL-GOVERNANCE.md) | Generic capital-governance layer — ledger separation, tiers, kill switches (`compliance/capital_governance.yaml`) |
 | [docs/governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md](docs/governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md) | AI Governance Committee terms of reference |
 | [docs/governance/RACI-MATRIX.md](docs/governance/RACI-MATRIX.md) | Control ownership RACI |
 | [docs/governance/INTERNAL-AUDIT-PROGRAMME.md](docs/governance/INTERNAL-AUDIT-PROGRAMME.md) | ISO 9.2 internal audit plan (MC-010) |
@@ -272,6 +273,7 @@ magna-carta/
     ├── schemas/
     │   └── REGISTER-SCHEMAS.md
     ├── governance/
+    │   ├── CAPITAL-GOVERNANCE.md
     │   ├── AI-GOVERNANCE-COMMITTEE-CHARTER.md
     │   ├── RACI-MATRIX.md
     │   ├── INTERNAL-AUDIT-PROGRAMME.md

@@ -1,0 +1,472 @@
+# Capital Governance — machine-readable registry
+#
+# GENERIC BY DESIGN. This file governs how an adopting platform lets automated
+# actors handle money. It names no platform, no product, no AI, no venue. Every
+# actor is referenced through a role slot that the adopting platform fills in
+# its own binding file (see `binding` below).
+#
+# That constraint is the point: Magna Carta is a governance layer any solution
+# can adopt. A rule that mentions a specific platform's entities is not a
+# governance rule, it is that platform's configuration wearing a governance
+# rule's clothes.
+#
+# Human-readable sibling: docs/governance/CAPITAL-GOVERNANCE.md
+# Validated by: scripts/capital_governance_check.py (Layer B CI)
+#
+# Invariants the validator enforces:
+#   * no platform-specific proper nouns appear in this file, including inside
+#     placeholder text
+#   * every function_type declares a ledger, and no two share one
+#   * capital tiers form a contiguous, non-overlapping, ascending ladder that
+#     starts at 0 and is open-ended only at the final tier — equity at or
+#     below zero is insolvency, not a tier, and exits to the
+#     insolvency_breach kill switch instead (see demotion.insolvency)
+#   * every non-terminal tier names its permitted function types, a
+#     progression gate, and that gate names an approving role and non-empty
+#     evidence
+#   * role_id, gate_id, switch_id, tier_id and function_id are each unique —
+#     no two entries share one
+#   * every role slot referenced by a rule is declared in `roles`, and the
+#     hard checkpoints resolve to human_owner specifically, not merely to any
+#     declared role: the ledger-transfer exception, the live_capital_approval
+#     on the gate attached to a simulated_only tier, and any kill switch that
+#     is both scope: ALL and auto_release: never (identified by that profile,
+#     not by name — a future switch matching it inherits the same rule)
+#   * `enforced` / `required` flags are checked as the literal boolean, not
+#     by truthiness — a quoted "false" must fail the same as an actual false
+#   * at least one kill switch is declared, and each names both a trigger and
+#     an authority to release it
+
+meta:
+  register_version: "1.0.0"
+  created: "2026-08-01"
+  last_updated: "2026-08-01"
+  # Deliberately unowned here. The adopting platform names an owner in its
+  # binding; this file must not assume one exists.
+  owner: "<bound by adopting platform>"
+  review_cycle: quarterly
+  # Deliberately "audit", not the name of any adopter's audit subsystem. The
+  # binding routes this stream to whatever the adopting platform actually
+  # calls its audit log; this register only names the event namespace below.
+  audit_event_prefix: "governance.capital"
+  scope: >
+    Any automated actor that spends, allocates, risks, or earns money on behalf
+    of the adopting platform, regardless of method or venue.
+
+# ---------------------------------------------------------------------------
+# Role slots — filled by the adopting platform's binding file
+# ---------------------------------------------------------------------------
+# Rules below refer to these ids only. The binding maps each to a real actor.
+roles:
+  - role_id: capital_operator
+    description: >
+      The automated actor that proposes and executes capital actions. Subject to
+      every constraint here; may never widen its own limits.
+  - role_id: risk_authority
+    description: >
+      Evaluates a proposed capital action against tier limits and exposure caps
+      before it reaches a venue. Sits between operator and execution, never
+      beside it. Not yet referenced by any rule below: the pre-action check
+      this role performs is runtime enforcement, staged to Stage 7.3
+      (see docs/governance/CAPITAL-GOVERNANCE.md §7) alongside the rest of
+      pre-action evaluation. Declared here now so a binding can name the
+      actor ahead of that enforcement landing, not because this register
+      already exercises it.
+  - role_id: presiding_authority
+    description: >
+      Escalation above the risk authority. Approves tier progression and any
+      exception. Cannot be the same actor as the capital_operator.
+  - role_id: human_owner
+    description: >
+      Terminal authority. Sole releaser of a hard kill switch and sole approver
+      of the transition from simulated to live capital.
+
+# ---------------------------------------------------------------------------
+# Function types — what the money is FOR
+# ---------------------------------------------------------------------------
+# The distinction that matters is not "which market" but "what does failure do".
+# An internal function that fails wastes budget. An external function that fails
+# destroys principal. They therefore cannot share a ledger.
+function_types:
+  - function_id: INTERNAL
+    name: Internal Function
+    intent: cost_reduction
+    ledger: ledger.internal
+    description: >
+      Spends allocated budget to reduce the platform's own operating cost —
+      procurement, capacity purchasing, resource arbitrage against internal
+      demand. Exposure is bounded by the budget line.
+    failure_mode: overspend_against_budget
+    exposure: bounded
+    principal_at_risk: false
+
+  - function_id: EXTERNAL
+    name: External Function
+    intent: capital_gain
+    ledger: ledger.external
+    description: >
+      Deploys capital to generate return by any method the operator develops —
+      markets, yield, content, affiliate, licensing, or methods not yet
+      invented. The governance is deliberately method-agnostic: it constrains
+      exposure and demands evidence, and does not care how the return is sought.
+    failure_mode: loss_of_principal
+    exposure: unbounded_without_controls
+    principal_at_risk: true
+
+# ---------------------------------------------------------------------------
+# Ledger separation — the load-bearing rule
+# ---------------------------------------------------------------------------
+ledger_separation:
+  enforced: true
+  rule: >
+    No function type may draw on another function type's ledger through any
+    automated path, or on any automated actor's own authority — including
+    shortfall, margin call, or operator discretion. The sole path across is the
+    named human exception below; nothing else may cross this boundary, ever.
+  rationale: >
+    If an external function can reach the internal budget, a trading loss stops
+    being a trading loss and becomes an infrastructure outage: compute that
+    cannot be paid for because a position moved against it. The failure crosses
+    from the money domain into the availability domain, and the platform loses
+    the ability to operate while it is losing money — the worst possible
+    correlation. This separation is very hard to retrofit once ledgers are
+    entangled, which is why it is stated before any tier or limit.
+  transfers:
+    permitted: false
+    exception_authority: human_owner
+    exception_requires:
+      - explicit_human_approval
+      - recorded_justification
+      - post_transfer_audit_entry
+    note: >
+      A permitted exception is still a transfer between separate ledgers, not a
+      merge. There is no configuration under which the ledgers become one.
+
+# ---------------------------------------------------------------------------
+# Capital tiers — a ladder that must be climbed, not granted
+# ---------------------------------------------------------------------------
+# Bands are expressed as fractions of a currency-neutral unit the binding
+# defines, so the ladder is not tied to one currency or one starting sum.
+#
+# Bands are half-open: [band_min_units, band_max_units). The lower bound is
+# inclusive, the upper bound is exclusive, so equity exactly at a boundary
+# (e.g. exactly 20 units) belongs to the tier that boundary opens, not the
+# one it closes. The first tier's band_min_units must be 0 and the final
+# tier's band_max_units must be null — every non-negative equity value has
+# exactly one tier, with nothing above the ceiling left ungoverned.
+#
+# EXCEPT at exactly zero. demotion.insolvency's condition is also
+# equity_at_or_below_zero, which literally overlaps TIER-0's inclusive
+# band_min_units: 0. That overlap is resolved by evaluation order, not by
+# band arithmetic: insolvency is checked BEFORE tier-band assignment, every
+# time. Equity at exactly zero therefore never reaches band matching at all —
+# it is caught by insolvency first, and TIER-0's true operative range is
+# equity strictly greater than zero, up to 20. band_min_units is still
+# written as the number 0, because that is the tier's floor for display and
+# for the "first tier starts at 0" ladder-contiguity check — but the register
+# does not rely on band arithmetic alone to keep an operator with nothing
+# left to risk out of a live tier. See demotion.insolvency and the
+# insolvency_breach kill switch.
+capital_tiers:
+  - tier_id: TIER-0
+    name: Simulated
+    band_min_units: 0
+    band_max_units: 20
+    permitted_functions: [INTERNAL, EXTERNAL]
+    external_execution: simulated_only
+    max_risk_per_action_fraction: 0.01
+    max_daily_loss_fraction: 0.05
+    max_concurrent_positions: 1
+    leverage_permitted: false
+    max_leverage: 1.0
+    rationale: >
+      Live external execution is refused at this tier for a structural reason,
+      not a cautious one. At 20 units with a 1% risk budget an action is sized
+      at 0.2 units, and venues commonly reject orders below roughly 10 units of
+      notional. A live order at this tier either cannot be placed or can only be
+      placed by abandoning the risk limit entirely. Simulation against real data
+      is therefore the only coherent behaviour, and it is also where the
+      operator learns what loss feels like before loss is real.
+    progression_gate: gate.tier0_to_tier1
+
+  - tier_id: TIER-1
+    name: Constrained Live
+    band_min_units: 20
+    band_max_units: 100
+    permitted_functions: [INTERNAL, EXTERNAL]
+    external_execution: live_permitted
+    max_risk_per_action_fraction: 0.02
+    max_daily_loss_fraction: 0.05
+    max_concurrent_positions: 2
+    leverage_permitted: false
+    max_leverage: 1.0
+    progression_gate: gate.tier1_to_tier2
+
+  - tier_id: TIER-2
+    name: Diversified
+    band_min_units: 100
+    band_max_units: 500
+    permitted_functions: [INTERNAL, EXTERNAL]
+    external_execution: live_permitted
+    max_risk_per_action_fraction: 0.02
+    max_daily_loss_fraction: 0.04
+    max_concurrent_positions: 4
+    leverage_permitted: true
+    max_leverage: 2.0
+    progression_gate: gate.tier2_to_tier3
+
+  - tier_id: TIER-3
+    name: Established
+    band_min_units: 500
+    band_max_units: null   # unbounded upper end
+    permitted_functions: [INTERNAL, EXTERNAL]
+    external_execution: live_permitted
+    max_risk_per_action_fraction: 0.02
+    max_daily_loss_fraction: 0.03
+    max_concurrent_positions: 6
+    leverage_permitted: true
+    max_leverage: 3.0
+    progression_gate: null   # terminal tier
+
+# ---------------------------------------------------------------------------
+# Progression gates — earned, evidenced, and reversible
+# ---------------------------------------------------------------------------
+# Equity crossing a band boundary is necessary but never sufficient. Without
+# this, an operator that got lucky once is promoted for it.
+progression_gates:
+  - gate_id: gate.tier0_to_tier1
+    requires:
+      min_recorded_actions: 100
+      min_observation_days: 30
+      max_limit_breaches: 0
+      evidence: >
+        A recorded decision journal covering every action, each with its inputs,
+        the risk decision applied, and the realised outcome.
+      approval: presiding_authority
+      live_capital_approval: human_owner
+    note: >
+      The transition from simulated to live capital is the one progression the
+      presiding authority cannot grant alone. Only the human owner may authorise
+      real money entering the system for the first time.
+
+  - gate_id: gate.tier1_to_tier2
+    requires:
+      min_recorded_actions: 250
+      min_observation_days: 60
+      max_limit_breaches: 0
+      evidence: >
+        Demonstrated drawdown recovery: at least one peak-to-trough decline
+        followed by a return to the prior peak without a limit breach.
+      approval: presiding_authority
+      live_capital_approval: null
+
+  - gate_id: gate.tier2_to_tier3
+    requires:
+      min_recorded_actions: 500
+      min_observation_days: 90
+      max_limit_breaches: 0
+      evidence: >
+        Performance across at least two distinct market or demand regimes, so
+        the record reflects adaptation rather than one favourable environment.
+      approval: presiding_authority
+      live_capital_approval: null
+
+demotion:
+  enforced: true
+  rule: >
+    A tier is held, not owned. Equity falling below a band's floor demotes the
+    operator to the tier that contains its current equity, immediately and
+    without approval — but only once insolvency (below) has been checked and
+    ruled out. capital_tiers' effective range is (0, +inf): demotion assumes
+    there is always a lower tier to fall into, and TIER-0 is the lowest one
+    there is, but equity at or below zero is not a "lower tier" — it is
+    insolvency, checked first, every time.
+  rationale: >
+    Promotion requires evidence and approval; demotion must require neither, or
+    a failing operator keeps the permissions it earned while healthy at exactly
+    the moment those permissions are most dangerous.
+  on_demotion:
+    - reduce_limits_to_new_tier
+    - close_positions_exceeding_new_tier_caps
+    - emit_event: governance.capital.tier.demoted
+  insolvency:
+    condition: equity_at_or_below_zero
+    precedence: checked_before_tier_band_assignment
+    rule: >
+      Zero or negative equity is not a demotion — there is no tier below TIER-0
+      to demote into. It is insolvency, and it exits the tier ladder entirely
+      into the insolvency_breach kill switch below, which halts every
+      automated action in both function types pending human review. This
+      condition is evaluated before any capital_tiers band match: equity at
+      or below zero overlaps TIER-0's inclusive band_min_units: 0 by the raw
+      numbers, and precedence is what keeps that overlap from ever reading as
+      "still in TIER-0, still simulating." An operator does not resume at
+      TIER-0 automatically once equity recovers above zero; human_owner
+      reinstates it explicitly, because equity touching zero means a control
+      upstream of this register — a risk limit, a leverage cap, a stop —
+      already failed to hold, and that failure needs a human look before the
+      operator acts again.
+
+# ---------------------------------------------------------------------------
+# Kill switches
+# ---------------------------------------------------------------------------
+kill_switches:
+  - switch_id: daily_loss_breach
+    trigger: realised_and_unrealised_loss_exceeds_tier_daily_limit
+    action: halt_all_external_actions
+    scope: EXTERNAL
+    release_authority: presiding_authority
+    auto_release: next_session_boundary
+    auto_release_requires: loss_back_within_tier_daily_limit
+    rationale: >
+      The session boundary is a timer, not a fix — necessary but not
+      sufficient for release. If the triggering loss is still open and still
+      above the tier's daily limit when the boundary arrives, the switch must
+      not clear: doing so would let external actions resume while the exact
+      condition that halted them is still true. auto_release_requires names
+      the condition that must actually hold before the boundary can release
+      it; presiding_authority may still release early, or override, for a
+      reviewed reason.
+
+  - switch_id: ledger_boundary_violation
+    trigger: unauthorized_attempt_to_draw_across_function_ledgers
+    action: halt_all_actions_both_functions
+    scope: ALL
+    release_authority: human_owner
+    auto_release: never
+    rationale: >
+      An unauthorized ledger crossing means either the constraint is not being
+      honoured or the operator has found a path around it. Both are conditions a
+      machine must not clear on its own. The trigger names "unauthorized"
+      deliberately: the one sanctioned crossing is the named transfer exception
+      above, carried out by human_owner through exception_authority with recorded
+      justification. That is a transfer under approval, not an attempt around the
+      boundary, and it must not itself detonate the same switch it depends on
+      being available.
+
+  - switch_id: limit_override_attempt
+    trigger: operator_proposes_action_exceeding_its_own_tier_limits
+    action: halt_operator_and_record
+    scope: ALL
+    release_authority: human_owner
+    auto_release: never
+    rationale: >
+      scope: ALL and auto_release: never make this a hard kill by the same
+      profile as ledger_boundary_violation and insolvency_breach, whatever
+      the trigger's severity looks like in isolation — an operator proposing
+      an action beyond its own limits, halted platform-wide with no clock to
+      wait out, is not a smaller incident just because presiding_authority
+      could plausibly assess it. The register does not grade hard kills by
+      trigger; it grades them by blast radius and reversibility, and this one
+      shares both with the other two.
+
+  - switch_id: insolvency_breach
+    trigger: equity_at_or_below_zero
+    action: halt_all_actions_both_functions
+    scope: ALL
+    release_authority: human_owner
+    auto_release: never
+    rationale: >
+      Equity at or below zero has fallen out of the tier ladder, not just to
+      its floor — see demotion.insolvency. Every risk limit in this register
+      is expressed as a fraction of positive equity, so at zero they stop
+      constraining anything at all. The halt is unconditional and the release
+      is human-only, because getting back into the ladder after this needs a
+      decision about what tier the operator resumes at, not just a balance
+      check.
+
+# ---------------------------------------------------------------------------
+# Evidence and honesty
+# ---------------------------------------------------------------------------
+evidence:
+  decision_journal:
+    required: true
+    retention: full_history
+    per_action_fields:
+      - inputs_observed
+      - reasoning_recorded
+      - risk_decision_applied
+      - tier_in_force
+      - outcome_realised
+    rationale: >
+      The journal is what makes progression assessable and what lets an operator
+      be asked why it did something. Without it, a tier gate degrades into a
+      balance check.
+
+honesty_rules:
+  # Authored directly in this register and its sibling doc
+  # (docs/governance/CAPITAL-GOVERNANCE.md §8) — not inherited from
+  # REGULATION-MATRIX.md. That document's §6 covers industry-specific regulation
+  # (HIPAA/FCA/NHS), not capital honesty rules, so claiming inheritance from it
+  # would assert a false provenance in an audit context.
+  rules:
+    - A function being defined is not a function being profitable.
+    - A tier being permitted is not a tier being earned.
+    - Simulated results must be labelled as simulated wherever they are reported.
+    - >
+      Nothing in this layer authorises an adopting platform to offer capital
+      services to third parties. This layer does not assess legal or
+      regulatory status in any jurisdiction — deploying an operator's own
+      capital and handling other people's money are treated as different
+      activities by financial regulation in many jurisdictions, but which
+      rules apply, and how, is a question for jurisdiction-specific legal
+      review before deployment, not something this register determines.
+      Handling other people's money is out of scope for this layer
+      regardless of the answer.
+
+# ---------------------------------------------------------------------------
+# Binding contract
+# ---------------------------------------------------------------------------
+binding:
+  required: true
+  description: >
+    The adopting platform supplies a binding file mapping every role_id above to
+    a real actor, defining its currency unit, and naming its ledgers. This file
+    holds no knowledge of that mapping.
+  must_declare:
+    - unit_currency
+    - actor_for_each_role_id
+    - ledger_identifier_per_function_type
+  must_not_override:
+    - ledger_separation
+    - demotion
+    - kill_switches
+    - evidence
+  constraints:
+    - id: role_disjointness
+      rule: >
+        The actor bound to presiding_authority must differ from the actor bound
+        to capital_operator, the actor bound to risk_authority must also differ
+        from the actor bound to capital_operator, and the actor bound to
+        human_owner must be an actual human, not an automated actor. Without
+        the first, an operator could approve its own limit increases; without
+        the second, the pre-action risk check (risk_authority's role, per the
+        roles list above: "between operator and execution, never beside it")
+        would not be independent of the actor it is meant to check, letting an
+        operator validate its own actions; without the third, an automated
+        actor could authorise its own transition into live capital.
+      enforcement: >
+        Stated here as a binding requirement now. Structural validation is
+        staged to the Stage 7.2 binding validator, once binding files exist for
+        it to check — this register has no binding file to validate yet.
+    - id: distinct_ledgers
+      rule: >
+        The ledger identifiers bound to ledger_identifier_per_function_type must
+        be distinct per function type. A binding that maps INTERNAL and EXTERNAL
+        to the same real ledger would satisfy must_declare's presence check
+        while defeating ledger_separation entirely.
+      enforcement: >
+        Stated here as a binding requirement now. Structural validation is
+        staged to the Stage 7.2 binding validator, once binding files exist for
+        it to check — this register has no binding file to validate yet.
+  rationale: >
+    A binding that could relax ledger separation, demotion, or the kill switches
+    would let the adopting platform opt out of the four controls that exist
+    precisely to override local judgement under pressure. Evidence joins that
+    list because progression_gates decide promotion from the decision journal
+    evidence describes — a binding allowed to weaken the journal could starve
+    a gate of the record it needs to be objective, without ever touching a gate
+    directly. role_disjointness and distinct_ledgers are named as constraints
+    rather than folded into must_not_override because they govern what a
+    binding must contain, not what it must leave alone — the two lists answer
+    different questions and neither substitutes for the other.

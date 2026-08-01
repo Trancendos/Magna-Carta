@@ -40,6 +40,7 @@ run_step() {
 run_step "Compliance health" python3 scripts/compliance_health_check.py --report
 run_step "Automation readiness" python3 scripts/readiness_automation_score.py --report
 run_step "Matrix suites" python3 scripts/matrix_suites_check.py
+run_step "Capital governance" python3 scripts/capital_governance_check.py
 run_step "DPA readiness" python3 scripts/dpa_readiness_check.py --report
 run_step "Security testing SEC-002" python3 scripts/run_security_testing.py --report
 run_step "Zero-cost tooling ZCT" python3 scripts/zero_cost_tooling_check.py --report
