@@ -90,9 +90,12 @@ Suites strengthen this framework in three ways:
 
 1. **Coverage accounting** — the validator proves every matrix has a governing suite,
    so a new matrix that nobody owns fails CI instead of drifting.
-2. **Register bridging** — each matrix row carries its MC-### where one exists; the 14
-   Tranc3-side matrices with `register: null` become visible as a worked backlog for
-   `tranc3_register_bridge.yaml` instead of an unknown.
+2. **Register bridging** — each matrix row carries its MC-### where one exists. As of Stage 7.3
+   all 31 matrices carry a real MC-### (MC-001 through MC-041); the 20 that were previously
+   `register: null` (18 Tranc3-side, 2 Magna Carta-side) are now bridged in
+   `tranc3_register_bridge.yaml` with honest, doc-grounded `magna_carta_register.yaml` entries —
+   status `PROGRAMME_ARTEFACT`, `verification_method: document_review`, and `notes` carrying each
+   source matrix's own stated gaps forward rather than claiming completeness.
 3. **Layer B integration** — `matrix_suites_check.py` runs inside
    `run_layer_b_local_ci.sh`, so suite health is checked with the same cadence and
    honesty rules as every other register (overdue = warning, structural error = failure,
@@ -113,7 +116,7 @@ governance work itself.
 |---|---|---|
 | 7.1 | Registry (`matrix_suites.yaml`) + this doc + Layer B validator | ✅ this change |
 | 7.2 | Observatory emission from Tranc3 (`src/compliance/` reads the registry via the submodule and emits suite events) | ✅ landed — Tranc3 `src/compliance/matrix_suites.py` + `src/compliance/matrix_suites_routes.py`, mounted at `/compliance/suites` in `api.py`; emits all four §4 events through the same `Observatory.record()` path as `capacity.threshold_crossed` |
-| 7.3 | Bridge the 14 unregistered Tranc3 matrices into `tranc3_register_bridge.yaml` with MC numbers | staged |
+| 7.3 | Bridge the 20 unregistered matrices (18 Tranc3-side, 2 Magna Carta-side) into `tranc3_register_bridge.yaml` + `magna_carta_register.yaml` with MC-022 through MC-041 | ✅ this change |
 | 7.4 | CranBania board lane + workshop template per suite; SLA-backed review cards | staged |
 | 7.5 | Role Registry seeding: create the 8 suite-steward roles at `/roles` from this file | staged |
 

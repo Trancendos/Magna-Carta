@@ -22,7 +22,7 @@ meta:
   register_version: "1.0.0"
   owner: "Platform Owner Trancendos / ISMS Lead"
   created: "2026-07-31"
-  last_updated: "2026-07-31"
+  last_updated: "2026-08-07"
   review_cadence_default: quarterly
   observatory_event_prefix: "governance.suite"
   townhall_integration: "CranBania board — one lane per suite (planned; see MATRIX-SUITES.md §6)"
@@ -61,7 +61,7 @@ suites:
       - {id: REGULATION-MATRIX, repo: magna-carta, path: docs/compliance/REGULATION-MATRIX.md, register: MC-011}
       - {id: LICENSE-COMPLIANCE-MATRIX, repo: magna-carta, path: docs/compliance/LICENSE-COMPLIANCE-MATRIX.md, register: MC-012}
       - {id: INTELLECTUAL-PROPERTY-MATRIX, repo: magna-carta, path: docs/compliance/INTELLECTUAL-PROPERTY-MATRIX.md, register: MC-013}
-      - {id: PRIVACY-MATRIX, repo: tranc3, path: docs/governance/PRIVACY-MATRIX.md, register: null}
+      - {id: PRIVACY-MATRIX, repo: tranc3, path: docs/governance/PRIVACY-MATRIX.md, register: MC-022}
 
   - suite_id: SUITE-SEC
     name: Security Suite
@@ -77,10 +77,10 @@ suites:
     matrices:
       - {id: SECURITY-MATRIX, repo: magna-carta, path: docs/compliance/SECURITY-MATRIX.md, register: MC-015}
       - {id: ENCRYPTION-MATRIX, repo: magna-carta, path: docs/compliance/ENCRYPTION-MATRIX.md, register: MC-014}
-      - {id: AI-SECURITY-SCOPING-MATRIX, repo: magna-carta, path: docs/compliance/AI-SECURITY-SCOPING-MATRIX.md, register: null}
-      - {id: PERMISSIONS-ACCESS-MATRIX, repo: tranc3, path: docs/governance/PERMISSIONS-ACCESS-MATRIX.md, register: null}
-      - {id: DATA-TRANSFER-MATRIX, repo: tranc3, path: docs/governance/DATA-TRANSFER-MATRIX.md, register: null}
-      - {id: HARD-STOP-MATRIX, repo: tranc3, path: docs/governance/HARD-STOP-MATRIX.md, register: null}
+      - {id: AI-SECURITY-SCOPING-MATRIX, repo: magna-carta, path: docs/compliance/AI-SECURITY-SCOPING-MATRIX.md, register: MC-023}
+      - {id: PERMISSIONS-ACCESS-MATRIX, repo: tranc3, path: docs/governance/PERMISSIONS-ACCESS-MATRIX.md, register: MC-024}
+      - {id: DATA-TRANSFER-MATRIX, repo: tranc3, path: docs/governance/DATA-TRANSFER-MATRIX.md, register: MC-025}
+      - {id: HARD-STOP-MATRIX, repo: tranc3, path: docs/governance/HARD-STOP-MATRIX.md, register: MC-026}
 
   - suite_id: SUITE-KNO
     name: Knowledge Suite
@@ -95,7 +95,7 @@ suites:
     kpi: "wiki mirrors canonical sources (no forked copies); MATRIX-INDEX current"
     matrices:
       - {id: KNOWLEDGE-MATRIX, repo: magna-carta, path: docs/compliance/KNOWLEDGE-MATRIX.md, register: MC-018}
-      - {id: MATRIX-INDEX, repo: tranc3, path: docs/governance/MATRIX-INDEX.md, register: null}
+      - {id: MATRIX-INDEX, repo: tranc3, path: docs/governance/MATRIX-INDEX.md, register: MC-027}
 
   - suite_id: SUITE-ENG
     name: Engineering Suite
@@ -109,11 +109,11 @@ suites:
     observatory_events: "governance.suite.engineering.*"
     kpi: "production gate green; error catalog and remediation paths current"
     matrices:
-      - {id: CODE-COMPLIANCE-MATRIX, repo: tranc3, path: docs/governance/CODE-COMPLIANCE-MATRIX.md, register: null}
-      - {id: DEBUGGING-MATRIX, repo: tranc3, path: docs/governance/DEBUGGING-MATRIX.md, register: null}
-      - {id: ERROR-REMEDIATION-MATRIX, repo: tranc3, path: docs/governance/ERROR-REMEDIATION-MATRIX.md, register: null}
-      - {id: GPU-MATRIX, repo: tranc3, path: docs/governance/GPU-MATRIX.md, register: null}
-      - {id: TOKEN-EFFICIENCY-MATRIX, repo: tranc3, path: docs/governance/TOKEN-EFFICIENCY-MATRIX.md, register: null}
+      - {id: CODE-COMPLIANCE-MATRIX, repo: tranc3, path: docs/governance/CODE-COMPLIANCE-MATRIX.md, register: MC-028}
+      - {id: DEBUGGING-MATRIX, repo: tranc3, path: docs/governance/DEBUGGING-MATRIX.md, register: MC-029}
+      - {id: ERROR-REMEDIATION-MATRIX, repo: tranc3, path: docs/governance/ERROR-REMEDIATION-MATRIX.md, register: MC-030}
+      - {id: GPU-MATRIX, repo: tranc3, path: docs/governance/GPU-MATRIX.md, register: MC-031}
+      - {id: TOKEN-EFFICIENCY-MATRIX, repo: tranc3, path: docs/governance/TOKEN-EFFICIENCY-MATRIX.md, register: MC-032}
 
   - suite_id: SUITE-AIG
     name: AI Governance Suite
@@ -127,10 +127,10 @@ suites:
     observatory_events: "governance.suite.ai.*"
     kpi: "model advancement pipeline gates observed (Prime -> Cornelius -> Human); tier assignments match platform.py"
     matrices:
-      - {id: TRANCENDOS-MODELS-MATRIX, repo: tranc3, path: docs/governance/TRANCENDOS-MODELS-MATRIX.md, register: null}
-      - {id: AI-AGENT-BOT-TIER-MATRIX, repo: tranc3, path: docs/governance/AI-AGENT-BOT-TIER-MATRIX.md, register: null}
-      - {id: AI-RELATIONSHIP-MATRIX, repo: tranc3, path: docs/governance/AI-RELATIONSHIP-MATRIX.md, register: null}
-      - {id: RACI-MATRIX, repo: magna-carta, path: docs/governance/RACI-MATRIX.md, register: null}
+      - {id: TRANCENDOS-MODELS-MATRIX, repo: tranc3, path: docs/governance/TRANCENDOS-MODELS-MATRIX.md, register: MC-033}
+      - {id: AI-AGENT-BOT-TIER-MATRIX, repo: tranc3, path: docs/governance/AI-AGENT-BOT-TIER-MATRIX.md, register: MC-034}
+      - {id: AI-RELATIONSHIP-MATRIX, repo: tranc3, path: docs/governance/AI-RELATIONSHIP-MATRIX.md, register: MC-035}
+      - {id: RACI-MATRIX, repo: magna-carta, path: docs/governance/RACI-MATRIX.md, register: MC-036}
 
   - suite_id: SUITE-OPS
     name: Operations Suite
@@ -144,10 +144,10 @@ suites:
     observatory_events: "governance.suite.operations.*"
     kpi: "capacity thresholds enforced (CapacityGuard events); traffic and environmental rows current"
     matrices:
-      - {id: BOM-MATRIX, repo: tranc3, path: docs/governance/BOM-MATRIX.md, register: null}
-      - {id: ENVIRONMENTAL-MATRIX, repo: tranc3, path: docs/governance/ENVIRONMENTAL-MATRIX.md, register: null}
-      - {id: LOCATION-TRAFFIC-MATRIX, repo: tranc3, path: docs/governance/LOCATION-TRAFFIC-MATRIX.md, register: null}
-      - {id: THRESHOLD-MATRIX, repo: tranc3, path: docs/governance/THRESHOLD-MATRIX.md, register: null}
+      - {id: BOM-MATRIX, repo: tranc3, path: docs/governance/BOM-MATRIX.md, register: MC-037}
+      - {id: ENVIRONMENTAL-MATRIX, repo: tranc3, path: docs/governance/ENVIRONMENTAL-MATRIX.md, register: MC-038}
+      - {id: LOCATION-TRAFFIC-MATRIX, repo: tranc3, path: docs/governance/LOCATION-TRAFFIC-MATRIX.md, register: MC-039}
+      - {id: THRESHOLD-MATRIX, repo: tranc3, path: docs/governance/THRESHOLD-MATRIX.md, register: MC-040}
 
   - suite_id: SUITE-EXP
     name: Experience Suite
@@ -161,4 +161,4 @@ suites:
     observatory_events: "governance.suite.experience.*"
     kpi: "design-system deviations recorded; UX debt reviewed on cadence"
     matrices:
-      - {id: UX-UI-DESIGN-MATRIX, repo: tranc3, path: docs/governance/UX-UI-DESIGN-MATRIX.md, register: null}
+      - {id: UX-UI-DESIGN-MATRIX, repo: tranc3, path: docs/governance/UX-UI-DESIGN-MATRIX.md, register: MC-041}
