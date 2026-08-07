@@ -115,7 +115,7 @@ governance work itself.
 | Stage | Deliverable | Status |
 |---|---|---|
 | 7.1 | Registry (`matrix_suites.yaml`) + this doc + Layer B validator | ✅ this change |
-| 7.2 | Observatory emission from Tranc3 (`src/compliance/` reads the registry via the submodule and emits suite events) | ✅ landed — Tranc3 `src/compliance/matrix_suites.py` + `src/compliance/matrix_suites_routes.py`, mounted at `/compliance/suites` in `api.py`; emits all four §4 events through the same `Observatory.record()` path as `capacity.threshold_crossed` |
+| 7.2 | Observatory emission from Tranc3 (`src/compliance/` reads the registry via the submodule and emits suite events) | ✅ landed — Tranc3 [`src/compliance/matrix_suites.py`](https://github.com/Trancendos/Tranc3/blob/main/src/compliance/matrix_suites.py) + [`src/compliance/matrix_suites_routes.py`](https://github.com/Trancendos/Tranc3/blob/main/src/compliance/matrix_suites_routes.py), mounted at `/compliance/suites` in [`api.py`](https://github.com/Trancendos/Tranc3/blob/main/api.py); emits all four §4 events through the same `Observatory.record()` path as `capacity.threshold_crossed` |
 | 7.3 | Bridge the 20 unregistered matrices (18 Tranc3-side, 2 Magna Carta-side) into `tranc3_register_bridge.yaml` + `magna_carta_register.yaml` with MC-022 through MC-041 | ✅ this change |
 | 7.4 | CranBania board lane + workshop template per suite; SLA-backed review cards | staged |
 | 7.5 | Role Registry seeding: create the 8 suite-steward roles at `/roles` from this file | staged |
