@@ -1,6 +1,9 @@
 # Matrix Suites — bundling the estate's matrices into governed frameworks
 
-**Version:** 1.2.0
+**Version:** 1.2.0 (tracks this narrative doc; independent of the YAML's own
+`meta.register_version`, which versions the registry's schema/content and only bumps when
+`compliance/matrix_suites.yaml` itself changes — unchanged since 1.0.0, as this pass only
+updated staged-vs-landed status in this doc)
 **Date:** 2026-08-07 (v1.2.0: Stage 7.5 landed — see §7)
 **Owner:** Platform Owner Trancendos / ISMS Lead
 **Machine-readable:** [compliance/matrix_suites.yaml](../../compliance/matrix_suites.yaml)
@@ -114,17 +117,13 @@ governance work itself.
 
 ## 7. Staged rollout (what exists now vs next)
 
-Note on 7.5: the deliverable name below ("Role Registry seeding") describes the original
-proposal. What actually landed is a live cross-reference, not a literal seed of 8 new rows —
-see the explanation directly under the table.
-
 | Stage | Deliverable | Status |
 |---|---|---|
 | 7.1 | Registry (`matrix_suites.yaml`) + this doc + Layer B validator | ✅ this change |
 | 7.2 | Observatory emission from Tranc3 (`src/compliance/` reads the registry via the submodule and emits suite events) | ✅ landed — Tranc3 [`src/compliance/matrix_suites.py`](https://github.com/Trancendos/Tranc3/blob/main/src/compliance/matrix_suites.py) + [`src/compliance/matrix_suites_routes.py`](https://github.com/Trancendos/Tranc3/blob/main/src/compliance/matrix_suites_routes.py), mounted at `/compliance/suites` in [`api.py`](https://github.com/Trancendos/Tranc3/blob/main/api.py); emits all four §4 events through the same `Observatory.record()` path as `capacity.threshold_crossed` |
 | 7.3 | Bridge the 20 unregistered matrices (18 Tranc3-side, 2 Magna Carta-side) into `tranc3_register_bridge.yaml` + `magna_carta_register.yaml` with MC-022 through MC-041 | ✅ this change |
 | 7.4 | CranBania board lane + workshop template per suite; SLA-backed review cards | staged |
-| 7.5 | Role Registry seeding: create the 8 suite-steward roles at `/roles` from this file | ✅ landed — see explanation below |
+| 7.5 | Suite stewardship at `/roles`: cross-reference this file's steward baseline against the live Role Registry, with drift detection (originally scoped as "seeding" 8 new rows — see below for why that changed) | ✅ landed — see explanation below |
 
 **7.5 detail.** Tranc3 [`src/roles/suite_stewardship.py`](https://github.com/Trancendos/Tranc3/blob/main/src/roles/suite_stewardship.py), routes added to [`src/roles/routes.py`](https://github.com/Trancendos/Tranc3/blob/main/src/roles/routes.py) at `GET /roles/suites` and `GET /roles/suites/{suite_id}`. Not a literal 8-row insert — Suites aren't Locations, so each suite's stewardship is resolved live by reading this file's `steward_ai` baseline and cross-referencing the Role Registry's *current* holder at `steward_location`, exposing a `drifted` flag when they diverge. Keeps `/roles` as the single source of truth for "who holds what" instead of a second, unsynced copy.
 
