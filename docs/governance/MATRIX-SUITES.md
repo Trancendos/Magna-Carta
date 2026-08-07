@@ -1,15 +1,16 @@
 # Matrix Suites — bundling the estate's matrices into governed frameworks
 
-**Version:** 1.2.0 (tracks this narrative doc; independent of the YAML's own
+**Version:** 1.3.0 (tracks this narrative doc; independent of the YAML's own
 `meta.register_version`, which versions the registry's schema/content and only bumps when
 `compliance/matrix_suites.yaml` itself changes — unchanged since 1.0.0, as this pass only
 updated staged-vs-landed status in this doc)
-**Date:** 2026-08-07 (v1.2.0: Stage 7.5 landed — see §7)
+**Date:** 2026-08-07 (v1.3.0: Stage 7.4 landed — see §7)
 **Owner:** Platform Owner Trancendos / ISMS Lead
 **Machine-readable:** [compliance/matrix_suites.yaml](../../compliance/matrix_suites.yaml)
 **Validated by:** `scripts/matrix_suites_check.py` (runs in Layer B CI)
-**Status:** Registry, Observatory emission (7.2), register bridging (7.3), and Role Registry
-cross-reference (7.5) all landed; CranBania board integration (7.4) still staged (§7)
+**Status:** All five staged sub-items (7.1–7.5) now landed: registry, Observatory emission
+(7.2), register bridging (7.3), CranBania review-card sync (7.4), and Role Registry
+cross-reference (7.5) — see §7
 
 ---
 
@@ -108,12 +109,18 @@ Suites strengthen this framework in three ways:
 
 ## 6. Strengthening The Town Hall
 
-The Town Hall (CranBania) is the procedural surface: the staged integration (§7.4) maps
-each suite to a CranBania board lane with a workshop template per review cadence, so a
-suite review is a *card with an SLA*, not a calendar hope. CranBania's existing SLA
-breach webhooks then give overdue suite reviews the same escalation mechanics as
-incidents — which is precisely the Town Hall's PRINCE2/ITIL mandate applied to
-governance work itself.
+The Town Hall (CranBania) is the procedural surface: the Stage 7.4 integration ensures
+every suite **with a valid `next_review`** has an open CranBania review card carrying a
+real `slaResponseHours`/due date, so a suite review is a *card with an SLA*, not a
+calendar hope — CranBania's own SLA tracking then treats an overdue review the same way
+it treats an unresolved incident, which is precisely the Town Hall's PRINCE2/ITIL mandate
+applied to governance work itself. (A suite whose `next_review` is missing or unparseable
+is skipped, not silently given a card with a nonsense due date — see §7's 7.4 detail.)
+
+Not literally "a board lane" or "a workshop template per review cadence" as originally
+scoped — CranBania's board schema has no swim-lane dimension, and its workshop-template
+feature isn't wired into this integration. See §7's 7.4 detail for what was built instead
+and why.
 
 ## 7. Staged rollout (what exists now vs next)
 
@@ -122,8 +129,10 @@ governance work itself.
 | 7.1 | Registry (`matrix_suites.yaml`) + this doc + Layer B validator | ✅ this change |
 | 7.2 | Observatory emission from Tranc3 (`src/compliance/` reads the registry via the submodule and emits suite events) | ✅ landed — Tranc3 [`src/compliance/matrix_suites.py`](https://github.com/Trancendos/Tranc3/blob/main/src/compliance/matrix_suites.py) + [`src/compliance/matrix_suites_routes.py`](https://github.com/Trancendos/Tranc3/blob/main/src/compliance/matrix_suites_routes.py), mounted at `/compliance/suites` in [`api.py`](https://github.com/Trancendos/Tranc3/blob/main/api.py); emits all four §4 events through the same `Observatory.record()` path as `capacity.threshold_crossed` |
 | 7.3 | Bridge the 20 unregistered matrices (18 Tranc3-side, 2 Magna Carta-side) into `tranc3_register_bridge.yaml` + `magna_carta_register.yaml` with MC-022 through MC-041 | ✅ this change |
-| 7.4 | CranBania board lane + workshop template per suite; SLA-backed review cards | staged |
+| 7.4 | CranBania review-card sync per suite; SLA-backed review cards (originally scoped as "board lane" + "workshop template" — see below for why that changed) | ✅ landed — see explanation below |
 | 7.5 | Suite stewardship at `/roles`: cross-reference this file's steward baseline against the live Role Registry, with drift detection (originally scoped as "seeding" 8 new rows — see below for why that changed) | ✅ landed — see explanation below |
+
+**7.4 detail.** Tranc3 [`src/compliance/matrix_suites_cranbania.py`](https://github.com/Trancendos/Tranc3/blob/main/src/compliance/matrix_suites_cranbania.py), CLI entrypoint [`scripts/sync_matrix_suite_cranbania_cards.py`](https://github.com/Trancendos/Tranc3/blob/main/scripts/sync_matrix_suite_cranbania_cards.py), scheduled daily via `.forgejo/workflows/matrix-suites-cranbania-sync.yml`. For every suite with a valid `next_review`, ensures exactly one *open* CranBania card tagged `["matrix-suite", "<suite_id>"]` exists, with `slaResponseHours` computed from now until `next_review` (clamped to a minimum of 1 hour for an already-overdue suite, so the API's positive-number requirement never silently drops the card most needing to exist). Idempotent — a suite already holding an open card is skipped; a card the steward moves to Done doesn't block a fresh card. `next_review` itself only ever advances via a Magna Carta-side edit to `matrix_suites.yaml` (§7.2's existing, deliberate design — not new to 7.4); until that edit lands, the day after a Done the sync creates a new card against the same due date, which is the intended nag rather than a bug. Does not duplicate Stage 7.2's `governance.suite.<name>.review.overdue` Observatory emission, which stays the source of truth for "is this suite overdue" — this integration only ensures a *human-facing, SLA-tracked card* exists alongside that signal. See §6 for why this uses tags rather than a literal board lane, and skips CranBania's separate workshop-template feature.
 
 **7.5 detail.** Tranc3 [`src/roles/suite_stewardship.py`](https://github.com/Trancendos/Tranc3/blob/main/src/roles/suite_stewardship.py), routes added to [`src/roles/routes.py`](https://github.com/Trancendos/Tranc3/blob/main/src/roles/routes.py) at `GET /roles/suites` and `GET /roles/suites/{suite_id}`. Not a literal 8-row insert — Suites aren't Locations, so each suite's stewardship is resolved live by reading this file's `steward_ai` baseline and cross-referencing the Role Registry's *current* holder at `steward_location`, exposing a `drifted` flag when they diverge. Keeps `/roles` as the single source of truth for "who holds what" instead of a second, unsynced copy.
 
