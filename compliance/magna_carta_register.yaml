@@ -11,7 +11,7 @@ meta:
   platform: "Infinity Network — Magna Carta (Tranc3 App Framework exemplar)"
   classification: "UNCLASSIFIED — PUBLIC"
   owner: "Trancendos Platform Engineering"
-  last_updated: "2026-06-07"
+  last_updated: "2026-08-07"
   review_cycle: "quarterly"
   parent_register: "compliance/register.yaml"
   runtime_config: "config/magna_carta_config.json"
@@ -558,3 +558,352 @@ requirements:
     last_reviewed: "2026-07-24"
     reviewer: "Trancendos"
     notes: "Live audit run 2026-07-24: 30 approved self-hosted providers, 5 correctly blocked-paid providers, 0 rotation-chain validation errors. Corrected per review (charliecreates, P1): the script's own overall exit code is 1 (FAIL), not PASS as an earlier version of this note stated — the JSON body's internal status field covers chain validation only. The audit script's own doc-presence check fails: docs/ZERO_COST_VENDOR_MATRIX.md is missing from Tranc3, which is what drives the real exit code."
+
+  - id: MC-022
+    standard: "Magna Carta / GDPR"
+    title: "Privacy Matrix (DSR Workflow)"
+    description: "Automated GDPR Data Subject Request (DSR) handling covering all six GDPR request types (access, rectification, erasure, restriction, portability, objection), tagged REQ-PRI-001."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/PRIVACY-MATRIX.md
+        description: "Tranc3-repo Privacy Matrix (human-readable)"
+      - type: code
+        path: src/privacy/dsr_workflow.py
+        description: "Tranc3-repo DSRType enum + automated DSR handling"
+    maps_to:
+      - REQ-PRI-001
+      - GDPR Art. 15-20
+      - MC-001
+    verification_method: document_review
+    last_reviewed: "2026-07-30"
+    reviewer: "Trancendos"
+    notes: "A real, tested, tagged workflow found only by grepping the codebase — no governance doc previously pointed to it. Honest gap stated in the source doc: no operator-facing surface exists yet for a human to trigger or review a DSR request through a UI; the workflow is code-only today."
+
+  - id: MC-023
+    standard: "Magna Carta / AI Security"
+    title: "AI Security Scoping Matrix"
+    description: "Classifies every AI use case by capability tier and applies cumulative security controls, preventing under-scoping of agentic features with chat-only controls (vendor-neutral, no AWS deployment required)."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/compliance/AI-SECURITY-SCOPING-MATRIX.md
+        description: "Capability-tier classification framework"
+    maps_to:
+      - MC-005
+      - MC-015
+    verification_method: document_review
+    last_reviewed: "2026-06-09"
+    reviewer: "AI Lead / Security Ops"
+    notes: "Framework document only; per-Location capability-tier classification against this framework has not yet been performed for any of the 43 platform entities."
+
+  - id: MC-024
+    standard: "Magna Carta / Access Control"
+    title: "Permissions & Access Matrix"
+    description: "Maps three distinct real systems answering three different questions — Role Registry (who holds a Location's functional role), Access Registry (which Locations a user has actually consented into), and Zero Trust IAM (is this specific request trustworthy right now) — none a superset of the others."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/PERMISSIONS-ACCESS-MATRIX.md
+        description: "Tranc3-repo Permissions & Access Matrix"
+      - type: code
+        path: src/roles/registry.py
+        description: "Tranc3-repo Role Assignment Registry"
+      - type: code
+        path: src/auth/zero_trust.py
+        description: "Tranc3-repo Zero Trust IAM"
+    maps_to:
+      - MC-015
+    verification_method: document_review
+    last_reviewed: "2026-07-30"
+    reviewer: "Trancendos"
+    notes: "Three real, already-built systems mapped rather than newly built; no single operator-facing surface consolidates all three today."
+
+  - id: MC-025
+    standard: "Magna Carta / Cross-Border Data Transfer"
+    title: "Data Transfer Matrix"
+    description: "Documents real data-locality facts for a currently single-operator platform with no confirmed multi-region user base; deliberately does not attempt a formal SCC or adequacy-decision assessment as premature paperwork at the current scale."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/DATA-TRANSFER-MATRIX.md
+        description: "Tranc3-repo Data Transfer Matrix"
+    maps_to:
+      - MC-001
+      - MC-016
+    verification_method: document_review
+    last_reviewed: "2026-07-30"
+    reviewer: "Trancendos Platform Engineering"
+    notes: "Genuine finding recorded: a fully-built data residency enforcement module exists in code but is not mounted anywhere in the running app. Formal SCC/adequacy assessment intentionally deferred until a real multi-region userbase exists."
+
+  - id: MC-026
+    standard: "Magna Carta / Operational Safety"
+    title: "Hard Stop Matrix"
+    description: "Maps every mechanism on the platform that can outright halt something — an AI, a request, a provider, a spend — rather than merely rate-limit or degrade it: a Sovereign-tier kill switch, four independent circuit breakers, a quota-based request refusal, and a regex endpoint blocklist."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/HARD-STOP-MATRIX.md
+        description: "Tranc3-repo Hard Stop Matrix"
+    maps_to:
+      - MC-015
+    verification_method: document_review
+    last_reviewed: "2026-07-27"
+    reviewer: "Trancendos"
+    notes: "No single view previously answered 'has anything been hard-stopped right now' — closed by enumeration. §6's structural cross-reference recommendation is recorded as future work, not a current gap."
+
+  - id: MC-027
+    standard: "Magna Carta / Knowledge Management"
+    title: "Matrix Index"
+    description: "Master index answering, for every 'Matrix' or 'Framework' requested across governance brainstorming, whether real code already backs it and whether it is documented; most of the ~35 brainstormed items turned out to already exist as real, running code."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/MATRIX-INDEX.md
+        description: "Tranc3-repo master matrix index"
+    maps_to:
+      - MC-018
+    verification_method: document_review
+    last_reviewed: "2026-07-30"
+    reviewer: "Trancendos"
+    notes: "Records genuine gaps honestly rather than padding: Data Registry, Data Share Framework, and Solutions Matrix are recorded as 'no real code found — not built', not fabricated as complete."
+
+  - id: MC-028
+    standard: "Magna Carta / Code Compliance"
+    title: "Code Compliance Matrix"
+    description: "Ties together four enforcement layers already running (pre-commit hooks, CI/CD, DEFSTAN requirements, Magna Carta runtime rules) that previously had no map showing how a local ruff failure relates to a DEFSTAN requirement or a Magna Carta rule."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/CODE-COMPLIANCE-MATRIX.md
+        description: "Tranc3-repo Code Compliance Matrix"
+    maps_to:
+      - MC-004
+      - MC-011
+    verification_method: document_review
+    last_reviewed: "2026-07-30"
+    reviewer: "The Workshop (Larry Lowhammer)"
+    notes: "No new enforcement introduced, only the missing map. Open item noted in the source doc: mypy type checking is present but not currently wired as a pre-commit hook, only a CI step."
+
+  - id: MC-029
+    standard: "Magna Carta / Operations"
+    title: "Debugging Matrix"
+    description: "A debugging guide across the ~90-worker distributed platform, built entirely from real, already-working observability infrastructure, closing a gap where existing runbooks covered only deploy/disaster-recovery scenarios, not diagnosis."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/DEBUGGING-MATRIX.md
+        description: "Tranc3-repo Debugging Matrix"
+    maps_to:
+      - MC-018
+    verification_method: document_review
+    last_reviewed: "2026-07-30"
+    reviewer: "The Observatory (Norman Hawkins)"
+    notes: "Privacy caveat recorded as not yet resolved: user_id in structured-log bindings is a stable per-user identifier carried in plain logs. Also notes some failure classes never reach a human today given current alerting scope."
+
+  - id: MC-030
+    standard: "Magna Carta / Error Management"
+    title: "Error, Vulnerability, Remediation & Self-Healing Matrix"
+    description: "Maps five brainstormed items (Error Code Registry, CVE Matrix, Remediation Matrix, Self-Healing Matrix, Diagnosis/Resolution Matrix) to one real conceptual pipeline — each stage independently real and running, not yet wired end-to-end."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/ERROR-REMEDIATION-MATRIX.md
+        description: "Tranc3-repo error/remediation/self-healing matrix"
+    maps_to:
+      - MC-011
+    verification_method: document_review
+    last_reviewed: "2026-07-30"
+    reviewer: "Trancendos"
+    notes: "Honest gap stated explicitly: nothing currently connects the pipeline stages into one traceable end-to-end flow. Current self-healing is a monitor (logging + a recovery_actions_taken counter), not yet a self-healer in the literal sense."
+
+  - id: MC-031
+    standard: "Magna Carta / Infrastructure"
+    title: "GPU Matrix"
+    description: "Maps which platform services genuinely need a GPU versus are CPU-first by design, and what happens today with zero GPU deployed in production, consistent with the Zero-Cost Self-Hosted Architecture's current Cloud Only default."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/GPU-MATRIX.md
+        description: "Tranc3-repo GPU Matrix"
+    maps_to:
+      - MC-002
+    verification_method: document_review
+    last_reviewed: "2026-07-27"
+    reviewer: "Trancendos"
+    notes: "No GPU deployed anywhere in the live stack today, by design — gated on the same server-funding blocker as the rest of the self-hosted path. VRAM/cost budgets recorded as not yet meaningful to set."
+
+  - id: MC-032
+    standard: "Magna Carta / Zero-Cost Architecture"
+    title: "Token Efficiency Matrix"
+    description: "Documents the mechanisms that make AI token usage itself efficient (response cache, etc.), a distinct narrower angle from THRESHOLD-MATRIX's per-provider rate ceilings."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/TOKEN-EFFICIENCY-MATRIX.md
+        description: "Tranc3-repo Token Efficiency Matrix"
+      - type: code
+        path: src/ai_gateway/gateway.py
+        description: "Tranc3-repo LRUCache response cache"
+    maps_to:
+      - MC-002
+    verification_method: document_review
+    last_reviewed: "2026-07-30"
+    reviewer: "Luminous (Cornelius MacIntyre)"
+    notes: "§4 records an honest gap: CapacityGuard.consume() has no token-budget escalation band analogous to its hard-stop mechanism — the hard stop itself remains fully authoritative and unaffected."
+
+  - id: MC-033
+    standard: "Magna Carta / AI Governance"
+    title: "Trancendos Models Matrix"
+    description: "Governance framework tracking which base AI model powers every named AI across the platform's 43 Locations, the governed advancement pipeline (Prime -> Cornelius -> Human) that gates real skill/feature improvement into a model, and Governance Board failover/override authority over a malfunctioning Sovereign-tier AI."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/TRANCENDOS-MODELS-MATRIX.md
+        description: "Tranc3-repo Trancendos Models Matrix"
+      - type: code
+        path: src/models/matrix.py
+        description: "Tranc3-repo base tiers + specialized variants"
+      - type: code
+        path: src/models/benchmark.py
+        description: "Tranc3-repo SQLite-backed benchmark history"
+      - type: code
+        path: src/models/governance.py
+        description: "Tranc3-repo advancement pipeline governance"
+    maps_to:
+      - MC-005
+    verification_method: document_review
+    last_reviewed: "2026-07-30"
+    reviewer: "Trancendos"
+    notes: "Doc states plainly it does not yet fix a specific review cadence per skill domain — currently ad-hoc rather than scheduled."
+
+  - id: MC-034
+    standard: "Magna Carta / AI Governance"
+    title: "AI <-> Agent <-> Bot Tier Matrix"
+    description: "Connects four modules that did not previously cross-reference each other (trance_one/, t2ance/, the named Lead AIs, src/agents/, tranc3-bots/bots/registry.py) into the platform's single 5-tier hierarchy."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/AI-AGENT-BOT-TIER-MATRIX.md
+        description: "Tranc3-repo tier matrix"
+    maps_to:
+      - MC-005
+    verification_method: document_review
+    last_reviewed: "2026-07-30"
+    reviewer: "Trancendos"
+    notes: "Recorded gap: the Tier 4 AgentOrchestrator has no mounted HTTP router — one instance of a recurring pattern of real subsystems built but not yet exposed."
+
+  - id: MC-035
+    standard: "Magna Carta / AI Governance"
+    title: "AI-to-AI Relationship Matrix, Activity Feed & Location Brochure"
+    description: "A real, tested, SQLite-backed relationship layer (src/relations/, mounted at /relations) tracking pairwise trust/relationship scores across the platform's 43 Locations and their Lead AIs."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/AI-RELATIONSHIP-MATRIX.md
+        description: "Tranc3-repo relationship matrix"
+      - type: code
+        path: src/relations/
+        description: "Tranc3-repo relationship layer implementation"
+    maps_to:
+      - MC-005
+    verification_method: document_review
+    last_reviewed: "2026-07-30"
+    reviewer: "Trancendos"
+    notes: "Doc states known simplifications plainly rather than implying completeness: malformed profiles (invalid JSON/UTF-8, non-object, missing code_name) fall back the same as a missing profile."
+
+  - id: MC-036
+    standard: "Magna Carta / Operating Model"
+    title: "RACI Matrix — Magna Carta Operating Model"
+    description: "Responsible/Accountable/Consulted/Informed matrix for governance and policy decisions under the Magna Carta operating model, expanding FRAMEWORK.md §9."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/RACI-MATRIX.md
+        description: "RACI matrix for governance and policy decisions"
+    maps_to:
+      - MC-006
+    verification_method: document_review
+    last_reviewed: "2026-06-07"
+    reviewer: "ISMS Lead"
+    notes: "Operating-model documentation; not yet cross-checked against the runtime Role Assignment Registry (Tranc3 src/roles/registry.py) for drift between designed RACI roles and actual runtime role holders."
+
+  - id: MC-037
+    standard: "Magna Carta / Supply Chain"
+    title: "BOM Matrix — Bills of Materials Across the Platform"
+    description: "Triages the 'BOM-ification' trend (SBOM, CBOM, AI-BOM, HBOM, SaaSBOM, and ~15 other acronyms) against real code and infrastructure, building only where there is genuine signal."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/BOM-MATRIX.md
+        description: "Tranc3-repo BOM matrix"
+    maps_to:
+      - MC-011
+    verification_method: document_review
+    last_reviewed: "2026-07-31"
+    reviewer: "Trancendos"
+    notes: "Honest 'not applicable / premature' calls recorded rather than padding: AI-BOM is premature since Tranc3Engine runs in bootstrap mode with no trained weights; HBOM is not applicable since the platform runs on rented Fly.io/Cloudflare compute with no owned hardware to catalog."
+
+  - id: MC-038
+    standard: "Magna Carta / Sustainability"
+    title: "Environmental Matrix"
+    description: "Splits the platform's sustainability/environmental posture honestly into what's actually known versus a reasonable estimate versus not tracked yet; replaces a single placeholder row previously in Magna Carta's EXTERNAL-FRAMEWORK-MAPPING.md."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/ENVIRONMENTAL-MATRIX.md
+        description: "Tranc3-repo Environmental Matrix"
+    maps_to:
+      - MC-002
+    verification_method: document_review
+    last_reviewed: "2026-07-27"
+    reviewer: "Trancendos"
+    notes: "Does not claim to have measured anything; states plainly where real data would need to come from. No environmental-impact measurement programme exists yet."
+
+  - id: MC-039
+    standard: "Magna Carta / Operations"
+    title: "Location-to-Location Traffic Matrix"
+    description: "Maps what actually exists today for understanding which Locations talk to which, correcting the assumption that workers/topology-service/ covers this — it documents something else entirely."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/LOCATION-TRAFFIC-MATRIX.md
+        description: "Tranc3-repo Location-to-Location Traffic Matrix"
+    maps_to:
+      - MC-011
+    verification_method: document_review
+    last_reviewed: "2026-07-30"
+    reviewer: "Trancendos"
+    notes: "§3 records the actual gap explicitly: no unified Location-to-Location traffic matrix exists anywhere in the repo, only partial building blocks."
+
+  - id: MC-040
+    standard: "Magna Carta / Operations"
+    title: "Threshold Matrix"
+    description: "Rolls up every numeric threshold enforced anywhere on the platform (rate limits, capacity ceilings, circuit-breaker trip points, model-advancement bars) that previously lived scattered across six-plus independent modules with no cross-reference."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/THRESHOLD-MATRIX.md
+        description: "Tranc3-repo Threshold Matrix"
+    maps_to:
+      - MC-002
+    verification_method: document_review
+    last_reviewed: "2026-07-27"
+    reviewer: "Trancendos"
+    notes: "Introduces no new threshold logic, only the missing map, plus a short list of genuine consolidation opportunities and one dormant system it makes visible again."
+
+  - id: MC-041
+    standard: "Magna Carta / Experience"
+    title: "UX/UI Design Matrix"
+    description: "Consolidates three separately-requested documents (UX Standards Matrix, UI Standards Matrix, Design Matrix) plus a fourth (Component Matrix — 62 real components under web/src/components/) into one, avoiding fragmentation of an already-thin area."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: document
+        path: docs/governance/UX-UI-DESIGN-MATRIX.md
+        description: "Tranc3-repo UX/UI Design Matrix"
+    maps_to:
+      - MC-011
+    verification_method: document_review
+    last_reviewed: "2026-07-30"
+    reviewer: "Fabulousa (Baron Von Hilton)"
+    notes: "§4 records what's aspirational and not yet built honestly rather than implying it exists; accessibility-specific standards and gap list live separately in ACCESSIBILITY-STANDARDS.md."

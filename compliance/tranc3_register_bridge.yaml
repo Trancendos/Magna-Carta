@@ -9,7 +9,7 @@
 meta:
   register_version: "1.0.0"
   owner: "Platform Engineering / ISMS Lead"
-  last_updated: "2026-07-24"
+  last_updated: "2026-08-07"
   review_cycle: "quarterly"
   magna_carta_register: "compliance/magna_carta_register.yaml"
   tranc3_register: "compliance/register.yaml"
@@ -310,3 +310,152 @@ bridges:
       - src/zero_cost/registry.py
       - scripts/zero_cost_audit.py
     integration_notes: "Live audit (2026-07-24): 30 approved self-hosted providers, 5 correctly blocked-paid, 0 chain-validation errors, status PASS; the script's own docs/ZERO_COST_VENDOR_MATRIX.md doc-presence check fails (file missing from Tranc3)"
+
+  - mc_id: MC-022
+    title: "Privacy Matrix (DSR Workflow)"
+    tranc3_requirements:
+      - REQ-PRI-001
+    tranc3_paths:
+      - docs/governance/PRIVACY-MATRIX.md
+      - src/privacy/dsr_workflow.py
+    integration_notes: "Real, tested DSR workflow covering all six GDPR request types; found only by grepping the codebase, no prior governance doc pointed to it. Open item: no operator-facing surface for a human to trigger/review a DSR request — code-only today."
+
+  - mc_id: MC-023
+    title: "AI Security Scoping Matrix"
+    tranc3_requirements: []
+    magna_carta_paths:
+      - docs/compliance/AI-SECURITY-SCOPING-MATRIX.md
+    integration_notes: "Capability-tier security scoping framework; per-Location classification against it has not yet been performed for any of the 43 platform entities."
+
+  - mc_id: MC-024
+    title: "Permissions & Access Matrix"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/PERMISSIONS-ACCESS-MATRIX.md
+      - src/roles/registry.py
+      - src/auth/zero_trust.py
+    integration_notes: "Maps three already-real, non-overlapping systems (Role Registry, Access Registry, Zero Trust IAM); no consolidated operator-facing surface across all three exists yet."
+
+  - mc_id: MC-025
+    title: "Data Transfer Matrix"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/DATA-TRANSFER-MATRIX.md
+    integration_notes: "Documents real data-locality facts for a single-operator, no-confirmed-multi-region platform. Genuine finding: a fully-built data residency enforcement module exists in code but isn't mounted anywhere."
+
+  - mc_id: MC-026
+    title: "Hard Stop Matrix"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/HARD-STOP-MATRIX.md
+    integration_notes: "Enumerates all 5 hard-stop mechanisms (Sovereign kill switch, 4 circuit breakers, quota refusal, endpoint blocklist). §6's cross-reference recommendation is future work, not a current gap."
+
+  - mc_id: MC-027
+    title: "Matrix Index"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/MATRIX-INDEX.md
+    integration_notes: "Master index across ~35 brainstormed governance matrix concepts. Genuine gaps recorded honestly: Data Registry, Data Share Framework, Solutions Matrix are 'no real code found — not built'."
+
+  - mc_id: MC-028
+    title: "Code Compliance Matrix"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/CODE-COMPLIANCE-MATRIX.md
+    integration_notes: "Maps pre-commit hooks / CI / DEFSTAN / Magna Carta runtime rules into one enforcement-layer view. Open item: mypy is a CI step but not yet a pre-commit hook."
+
+  - mc_id: MC-029
+    title: "Debugging Matrix"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/DEBUGGING-MATRIX.md
+    integration_notes: "Debugging guide for the ~90-worker distributed platform built from real observability infra. Open item: user_id in structured-log bindings is a stable per-user identifier in plain logs."
+
+  - mc_id: MC-030
+    title: "Error, Vulnerability, Remediation & Self-Healing Matrix"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/ERROR-REMEDIATION-MATRIX.md
+    integration_notes: "Maps the error -> classify -> remediate -> self-heal pipeline; each stage real but not wired end-to-end (explicit §6 gap). Self-healing is currently a monitor, not a literal self-healer."
+
+  - mc_id: MC-031
+    title: "GPU Matrix"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/GPU-MATRIX.md
+    integration_notes: "Zero GPU deployed in production today, by design under Cloud Only mode — gated on the same server-funding blocker as the rest of the self-hosted path."
+
+  - mc_id: MC-032
+    title: "Token Efficiency Matrix"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/TOKEN-EFFICIENCY-MATRIX.md
+      - src/ai_gateway/gateway.py
+    integration_notes: "Documents the LRU response cache and other token-efficiency mechanisms. §4 gap: CapacityGuard.consume() has no token-budget escalation band; the hard stop itself is unaffected."
+
+  - mc_id: MC-033
+    title: "Trancendos Models Matrix"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/TRANCENDOS-MODELS-MATRIX.md
+      - src/models/matrix.py
+      - src/models/benchmark.py
+      - src/models/governance.py
+    integration_notes: "Governed advancement pipeline (Prime -> Cornelius -> Human) gating model tier/variant changes. Does not yet fix a specific review cadence per skill domain."
+
+  - mc_id: MC-034
+    title: "AI <-> Agent <-> Bot Tier Matrix"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/AI-AGENT-BOT-TIER-MATRIX.md
+    integration_notes: "Connective map across trance_one/, t2ance/, named Lead AIs, src/agents/, tranc3-bots/bots/registry.py. Recorded gap: the Tier 4 AgentOrchestrator has no mounted HTTP router."
+
+  - mc_id: MC-035
+    title: "AI-to-AI Relationship Matrix, Activity Feed & Location Brochure"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/AI-RELATIONSHIP-MATRIX.md
+      - src/relations/
+    integration_notes: "Real, tested, SQLite-backed relationship layer mounted at /relations. Known simplification stated plainly: malformed profiles fall back the same as a missing profile."
+
+  - mc_id: MC-036
+    title: "RACI Matrix — Magna Carta Operating Model"
+    tranc3_requirements: []
+    magna_carta_paths:
+      - docs/governance/RACI-MATRIX.md
+    integration_notes: "Operating-model RACI documentation; not yet cross-checked against the runtime Role Assignment Registry (Tranc3 src/roles/registry.py) for drift."
+
+  - mc_id: MC-037
+    title: "BOM Matrix — Bills of Materials Across the Platform"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/BOM-MATRIX.md
+    integration_notes: "Triages SBOM/CBOM/AI-BOM/HBOM/SaaSBOM concepts against real infra. AI-BOM recorded as premature (bootstrap-mode inference engine, no trained weights); HBOM not applicable (rented compute only)."
+
+  - mc_id: MC-038
+    title: "Environmental Matrix"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/ENVIRONMENTAL-MATRIX.md
+    integration_notes: "Splits sustainability posture into known / estimated / not-tracked. Does not claim to have measured anything; no environmental-impact measurement programme exists yet."
+
+  - mc_id: MC-039
+    title: "Location-to-Location Traffic Matrix"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/LOCATION-TRAFFIC-MATRIX.md
+    integration_notes: "§3 records the actual gap explicitly: no unified Location-to-Location traffic matrix exists anywhere in the repo, only partial building blocks."
+
+  - mc_id: MC-040
+    title: "Threshold Matrix"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/THRESHOLD-MATRIX.md
+    integration_notes: "Rolls up rate limits, capacity ceilings, circuit-breaker trip points, and model-advancement bars previously scattered across 6+ modules. No new threshold logic introduced, only the missing map."
+
+  - mc_id: MC-041
+    title: "UX/UI Design Matrix"
+    tranc3_requirements: []
+    tranc3_paths:
+      - docs/governance/UX-UI-DESIGN-MATRIX.md
+    integration_notes: "Consolidates UX Standards, UI Standards, Design Matrix, and Component Matrix (62 real components). §4 records what's aspirational and not yet built, honestly."
