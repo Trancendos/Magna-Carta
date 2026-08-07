@@ -91,7 +91,8 @@ Suites strengthen this framework in three ways:
 1. **Coverage accounting** — the validator proves every matrix has a governing suite,
    so a new matrix that nobody owns fails CI instead of drifting.
 2. **Register bridging** — each matrix row carries its MC-### where one exists. As of Stage 7.3
-   all 31 matrices carry a real MC-### (MC-001 through MC-041); the 20 that were previously
+   all 31 matrices carry a real MC-### (MC-011 through MC-041 — MC-001–MC-010 are non-matrix
+   Magna Carta programme rows, not matrices); the 20 that were previously
    `register: null` (18 Tranc3-side, 2 Magna Carta-side) are now bridged in
    `tranc3_register_bridge.yaml` with honest, doc-grounded `magna_carta_register.yaml` entries —
    status `PROGRAMME_ARTEFACT`, `verification_method: document_review`, and `notes` carrying each

@@ -1,7 +1,7 @@
 # Tranc3 Register Bridge
 
 **Version:** 1.1.0  
-**Date:** 2026-06-07 (§4 integration-status table refreshed 2026-07-25)  
+**Date:** 2026-06-07 (§3 mapping table extended to MC-041, §4 integration-status table refreshed 2026-08-07)  
 **Owner:** Platform Engineering / ISMS Lead  
 **Machine-readable:** [compliance/tranc3_register_bridge.yaml](../../compliance/tranc3_register_bridge.yaml)  
 **Integration guide:** [TRANC3-INTEGRATION-GUIDE.md](../engineering/TRANC3-INTEGRATION-GUIDE.md)  
@@ -11,7 +11,7 @@
 
 ## 1. Purpose
 
-Maps Magna Carta requirements (MC-001–MC-021) to Tranc3 DEFSTAN requirements (REQ-###), runtime rules (MC-RULE-###), policies, and obligations. Used when:
+Maps Magna Carta requirements (MC-001–MC-041) to Tranc3 DEFSTAN requirements (REQ-###), runtime rules (MC-RULE-###), policies, and obligations. Used when:
 
 - Importing Magna Carta rows into Tranc3 compliance reporting
 - Tracing audit questions from certification scope to code paths
@@ -65,11 +65,32 @@ magna_carta_register.yaml     ──►    compliance/register.yaml (DEFSTAN)
 | MC-019 | Revenue Matrix | —[^related-mc] | — | `src/monetisation/billing.py` |
 | MC-020 | Taxation Matrix | —[^legislation-refs] | — | `src/monetisation/billing.py` |
 | MC-021 | Zero-Cost Matrix | —[^related-mc] | — | `src/zero_cost/registry.py` |
+| MC-022 | Privacy Matrix (DSR Workflow) | REQ-PRI-001 | — | `docs/governance/PRIVACY-MATRIX.md` |
+| MC-023 | AI Security Scoping Matrix | —[^no-req] | — | `docs/compliance/AI-SECURITY-SCOPING-MATRIX.md` |
+| MC-024 | Permissions & Access Matrix | —[^no-req] | — | `docs/governance/PERMISSIONS-ACCESS-MATRIX.md` |
+| MC-025 | Data Transfer Matrix | —[^no-req] | — | `docs/governance/DATA-TRANSFER-MATRIX.md` |
+| MC-026 | Hard Stop Matrix | —[^no-req] | — | `docs/governance/HARD-STOP-MATRIX.md` |
+| MC-027 | Matrix Index | —[^no-req] | — | `docs/governance/MATRIX-INDEX.md` |
+| MC-028 | Code Compliance Matrix | —[^no-req] | — | `docs/governance/CODE-COMPLIANCE-MATRIX.md` |
+| MC-029 | Debugging Matrix | —[^no-req] | — | `docs/governance/DEBUGGING-MATRIX.md` |
+| MC-030 | Error, Vulnerability, Remediation & Self-Healing Matrix | —[^no-req] | — | `docs/governance/ERROR-REMEDIATION-MATRIX.md` |
+| MC-031 | GPU Matrix | —[^no-req] | — | `docs/governance/GPU-MATRIX.md` |
+| MC-032 | Token Efficiency Matrix | —[^no-req] | — | `docs/governance/TOKEN-EFFICIENCY-MATRIX.md` |
+| MC-033 | Trancendos Models Matrix | —[^no-req] | — | `docs/governance/TRANCENDOS-MODELS-MATRIX.md` |
+| MC-034 | AI ↔ Agent ↔ Bot Tier Matrix | —[^no-req] | — | `docs/governance/AI-AGENT-BOT-TIER-MATRIX.md` |
+| MC-035 | AI-to-AI Relationship Matrix, Activity Feed & Location Brochure | —[^no-req] | — | `docs/governance/AI-RELATIONSHIP-MATRIX.md` |
+| MC-036 | RACI Matrix — Magna Carta Operating Model | —[^no-req] | — | `docs/governance/RACI-MATRIX.md` |
+| MC-037 | BOM Matrix — Bills of Materials Across the Platform | —[^no-req] | — | `docs/governance/BOM-MATRIX.md` |
+| MC-038 | Environmental Matrix | —[^no-req] | — | `docs/governance/ENVIRONMENTAL-MATRIX.md` |
+| MC-039 | Location-to-Location Traffic Matrix | —[^no-req] | — | `docs/governance/LOCATION-TRAFFIC-MATRIX.md` |
+| MC-040 | Threshold Matrix | —[^no-req] | — | `docs/governance/THRESHOLD-MATRIX.md` |
+| MC-041 | UX/UI Design Matrix | —[^no-req] | — | `docs/governance/UX-UI-DESIGN-MATRIX.md` |
 
 Full detail: [tranc3_register_bridge.yaml](../../compliance/tranc3_register_bridge.yaml).
 
 [^legislation-refs]: No Tranc3 DEFSTAN `REQ-###` requirement exists yet for this matrix's scope — `tranc3_requirements` is correctly empty (`[]`), matching the same pattern as MC-006/007/008/009/010/011. The relevant cross-reference is instead recorded in `tranc3_register_bridge.yaml`'s `legislation_refs` field (Magna Carta `legislation_register.yaml` entries), not conflated with the `REQ-###` namespace.
 [^related-mc]: No Tranc3 DEFSTAN `REQ-###` requirement exists yet for this matrix's scope. The cross-reference is recorded in `tranc3_register_bridge.yaml`'s `related_mc_ids` field (a Magna Carta-internal `MC-###` reference), kept in its own field rather than the `tranc3_requirements` list to avoid mixing two different identifier namespaces.
+[^no-req]: `tranc3_requirements` is correctly empty (`[]`) in `tranc3_register_bridge.yaml` — this Stage 7.3 matrix (bridged 2026-08-07) has no Tranc3 DEFSTAN `REQ-###` requirement mapped to it yet, matching the same honest-gap pattern as MC-006 through MC-010 and MC-023–MC-041's siblings above.
 
 ---
 
