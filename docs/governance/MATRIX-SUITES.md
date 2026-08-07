@@ -110,19 +110,17 @@ Suites strengthen this framework in three ways:
 ## 6. Strengthening The Town Hall
 
 The Town Hall (CranBania) is the procedural surface: the Stage 7.4 integration ensures
-every suite has an open CranBania review card carrying a real `slaResponseHours`/due date,
-so a suite review is a *card with an SLA*, not a calendar hope — CranBania's own SLA
-tracking then treats an overdue review the same way it treats an unresolved incident,
-which is precisely the Town Hall's PRINCE2/ITIL mandate applied to governance work itself.
+every suite **with a valid `next_review`** has an open CranBania review card carrying a
+real `slaResponseHours`/due date, so a suite review is a *card with an SLA*, not a
+calendar hope — CranBania's own SLA tracking then treats an overdue review the same way
+it treats an unresolved incident, which is precisely the Town Hall's PRINCE2/ITIL mandate
+applied to governance work itself. (A suite whose `next_review` is missing or unparseable
+is skipped, not silently given a card with a nonsense due date — see §7's 7.4 detail.)
 
-Not literally "a board lane": CranBania's board schema (`lib/types.ts`) has no swim-lane
-dimension, only 5 fixed columns shared by every card type — adding one would mean changing
-CranBania's own schema for a Tranc3-side reporting need. Each review card instead carries
-`tags: ["matrix-suite", "<suite_id>"]`, filterable in the CranBania UI/API exactly like a
-lane would be, without a schema change. Not "a workshop template per review cadence"
-either — CranBania's separate workshop-template feature isn't wired into this integration;
-the card carries the suite's cadence/steward/escalation context in its description instead.
-See §7's 7.4 detail for the full design and what's intentionally out of scope.
+Not literally "a board lane" or "a workshop template per review cadence" as originally
+scoped — CranBania's board schema has no swim-lane dimension, and its workshop-template
+feature isn't wired into this integration. See §7's 7.4 detail for what was built instead
+and why.
 
 ## 7. Staged rollout (what exists now vs next)
 
@@ -134,7 +132,7 @@ See §7's 7.4 detail for the full design and what's intentionally out of scope.
 | 7.4 | CranBania review-card sync per suite; SLA-backed review cards (originally scoped as "board lane" + "workshop template" — see below for why that changed) | ✅ landed — see explanation below |
 | 7.5 | Suite stewardship at `/roles`: cross-reference this file's steward baseline against the live Role Registry, with drift detection (originally scoped as "seeding" 8 new rows — see below for why that changed) | ✅ landed — see explanation below |
 
-**7.4 detail.** Tranc3 [`src/compliance/matrix_suites_cranbania.py`](https://github.com/Trancendos/Tranc3/blob/main/src/compliance/matrix_suites_cranbania.py), CLI entrypoint [`scripts/sync_matrix_suite_cranbania_cards.py`](https://github.com/Trancendos/Tranc3/blob/main/scripts/sync_matrix_suite_cranbania_cards.py), scheduled daily via `.forgejo/workflows/matrix-suites-cranbania-sync.yml`. For every suite with a valid `next_review`, ensures exactly one *open* CranBania card tagged `["matrix-suite", "<suite_id>"]` exists, with `slaResponseHours` computed from now until `next_review` (clamped to a minimum of 1 hour for an already-overdue suite, so the API's positive-number requirement never silently drops the card most needing to exist). Idempotent — a suite already holding an open card is skipped; a card the steward moves to Done doesn't block the next cadence cycle's fresh card. Does not duplicate Stage 7.2's `governance.suite.<name>.review.overdue` Observatory emission, which stays the source of truth for "is this suite overdue" — this integration only ensures a *human-facing, SLA-tracked card* exists alongside that signal. See §6 for why this uses tags rather than a literal board lane, and skips CranBania's separate workshop-template feature.
+**7.4 detail.** Tranc3 [`src/compliance/matrix_suites_cranbania.py`](https://github.com/Trancendos/Tranc3/blob/main/src/compliance/matrix_suites_cranbania.py), CLI entrypoint [`scripts/sync_matrix_suite_cranbania_cards.py`](https://github.com/Trancendos/Tranc3/blob/main/scripts/sync_matrix_suite_cranbania_cards.py), scheduled daily via `.forgejo/workflows/matrix-suites-cranbania-sync.yml`. For every suite with a valid `next_review`, ensures exactly one *open* CranBania card tagged `["matrix-suite", "<suite_id>"]` exists, with `slaResponseHours` computed from now until `next_review` (clamped to a minimum of 1 hour for an already-overdue suite, so the API's positive-number requirement never silently drops the card most needing to exist). Idempotent — a suite already holding an open card is skipped; a card the steward moves to Done doesn't block a fresh card. `next_review` itself only ever advances via a Magna Carta-side edit to `matrix_suites.yaml` (§7.2's existing, deliberate design — not new to 7.4); until that edit lands, the day after a Done the sync creates a new card against the same due date, which is the intended nag rather than a bug. Does not duplicate Stage 7.2's `governance.suite.<name>.review.overdue` Observatory emission, which stays the source of truth for "is this suite overdue" — this integration only ensures a *human-facing, SLA-tracked card* exists alongside that signal. See §6 for why this uses tags rather than a literal board lane, and skips CranBania's separate workshop-template feature.
 
 **7.5 detail.** Tranc3 [`src/roles/suite_stewardship.py`](https://github.com/Trancendos/Tranc3/blob/main/src/roles/suite_stewardship.py), routes added to [`src/roles/routes.py`](https://github.com/Trancendos/Tranc3/blob/main/src/roles/routes.py) at `GET /roles/suites` and `GET /roles/suites/{suite_id}`. Not a literal 8-row insert — Suites aren't Locations, so each suite's stewardship is resolved live by reading this file's `steward_ai` baseline and cross-referencing the Role Registry's *current* holder at `steward_location`, exposing a `drifted` flag when they diverge. Keeps `/roles` as the single source of truth for "who holds what" instead of a second, unsynced copy.
 

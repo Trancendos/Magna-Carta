@@ -25,7 +25,7 @@ meta:
   last_updated: "2026-08-07"
   review_cadence_default: quarterly
   observatory_event_prefix: "governance.suite"
-  townhall_integration: "CranBania board — one lane per suite (planned; see MATRIX-SUITES.md §6)"
+  townhall_integration: "CranBania review cards tagged matrix-suite/<suite_id> on the shared board — landed Stage 7.4, see MATRIX-SUITES.md §6"
 
 suites:
   - suite_id: SUITE-FIN
