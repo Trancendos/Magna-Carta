@@ -405,11 +405,33 @@ def assign_frameworks_to_groups(frameworks: list[dict]) -> dict[str, str]:
     fw_by_id = {f["framework_id"]: f for f in frameworks}
     assignment: dict[str, str] = {}
 
-    # Pass 1 — explicit claims.
+    # Pass 1 — explicit claims. First group in SIGNAL_GROUPS order wins.
+    #
+    # Three frameworks are legitimately claimed by two groups (FW-004 by GDPR
+    # and AI-US, FW-030 by PCI and PAYMENTS, FW-112 by CCPA and AI-US) because
+    # they genuinely sit in both scopes, while the catalog carries exactly one
+    # signal_id per framework. Something has to win.
+    #
+    # What matters is that the winner is *visible* rather than an accident of
+    # list position — silent first-match-wins on list order is precisely the bug
+    # this two-pass rewrite was written to fix, and leaving the same fragility
+    # in pass 1 would have re-created it one level down. Contested claims are
+    # therefore reported at generation time, so reordering SIGNAL_GROUPS can
+    # never quietly reassign a framework.
+    contested: dict[str, list[str]] = {}
     for group in SIGNAL_GROUPS:
         for fid in group.get("framework_ids", []):
-            if fid in fw_by_id and fid not in assignment:
+            if fid not in fw_by_id:
+                continue
+            contested.setdefault(fid, []).append(group["signal_id"])
+            if fid not in assignment:
                 assignment[fid] = group["signal_id"]
+    for fid, claimants in sorted(contested.items()):
+        if len(claimants) > 1:
+            print(
+                f"  contested claim: {fid} claimed by {', '.join(claimants)} "
+                f"-> {assignment[fid]} (first in SIGNAL_GROUPS order)"
+            )
 
     # Pass 2 — category sweeps and filters, over whatever remains.
     for group in SIGNAL_GROUPS:

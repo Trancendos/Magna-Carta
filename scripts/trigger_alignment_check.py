@@ -136,12 +136,29 @@ def main() -> int:
             print(f"[ERROR] {line}", file=sys.stderr)
         return 1
 
-    fw_name = {
-        f["framework_id"]: f.get("name") or ""
-        for f in (frameworks_doc.get("frameworks") or [])
-        if isinstance(f, dict) and f.get("framework_id")
-    }
-    triggers = [t for t in (triggers_doc.get("triggers") or []) if isinstance(t, dict)]
+    # Validate every record rather than filtering the malformed ones out. A
+    # comprehension guarded by `isinstance(x, dict)` silently drops whatever it
+    # does not understand, so a register half-converted to some other shape
+    # would pass this check with most of it never examined — the opposite of
+    # what a register validator is for. Each collection is walked with its index
+    # so a report names the offending item.
+    fw_name: dict[str, str] = {}
+    for i, f in enumerate(frameworks_doc.get("frameworks") or []):
+        if not isinstance(f, dict):
+            errors.append(f"frameworks_register.yaml: frameworks[{i}] is {type(f).__name__}, expected a mapping")
+            continue
+        fid = f.get("framework_id")
+        if not isinstance(fid, str) or not fid.strip():
+            errors.append(f"frameworks_register.yaml: frameworks[{i}] has no usable 'framework_id'")
+            continue
+        fw_name[fid] = f.get("name") or ""
+
+    triggers = []
+    for i, x in enumerate(triggers_doc.get("triggers") or []):
+        if not isinstance(x, dict):
+            errors.append(f"framework_triggers.yaml: triggers[{i}] is {type(x).__name__}, expected a mapping")
+            continue
+        triggers.append(x)
     if not triggers:
         print("[ERROR] framework_triggers.yaml: 'triggers' must be a non-empty list", file=sys.stderr)
         return 1
@@ -149,8 +166,19 @@ def main() -> int:
     referenced: set[str] = set()
     activated_by: dict[str, list[str]] = {}
 
-    for trig in triggers:
-        tid = trig.get("trigger_id") or "<unnamed trigger>"
+    for i, trig in enumerate(triggers):
+        tid = trig.get("trigger_id")
+        if not isinstance(tid, str) or not tid.strip():
+            # Was `trig.get("trigger_id") or "<unnamed trigger>"`. That
+            # placeholder became a real key in `activated_by`, so a record with
+            # no id looked like a trigger named "<unnamed trigger>" — and a
+            # non-string id would have raised TypeError on lookup instead of
+            # being reported.
+            errors.append(
+                f"framework_triggers.yaml: triggers[{i}] has no usable 'trigger_id' "
+                f"(got {type(trig.get('trigger_id')).__name__})"
+            )
+            continue
         fids = trig.get("framework_ids")
         if not isinstance(fids, list) or not fids:
             # An empty list is a list, so `isinstance` alone let it through. A
@@ -207,12 +235,42 @@ def main() -> int:
     # it. Where that trigger does not list the framework, the two registers
     # disagree and the catalog is the one that is wrong.
     mismatched: list[str] = []
-    for entry in catalog_doc.get("entries") or []:
+    for i, entry in enumerate(catalog_doc.get("entries") or []):
         if not isinstance(entry, dict):
+            errors.append(
+                f"framework_implementation_catalog.yaml: entries[{i}] is "
+                f"{type(entry).__name__}, expected a mapping"
+            )
             continue
         fid = entry.get("framework_id")
         tid = entry.get("trigger_id")
-        if not fid or not tid:
+        # A catalog entry missing either id is malformed, not exempt. Skipping
+        # it silently meant the one record whose activation path could not be
+        # checked was also the one nobody heard about.
+        if not isinstance(fid, str) or not fid.strip():
+            errors.append(
+                f"framework_implementation_catalog.yaml: entries[{i}] has no usable 'framework_id'"
+            )
+            continue
+        tier = entry.get("implementation_tier")
+        if tier == "excluded":
+            # `excluded` means the framework is deliberately activated by
+            # nothing, so a null trigger_id is correct rather than missing. All
+            # 7 such entries are excluded and every other entry carries a
+            # trigger. Flagging them would have made the check fail on
+            # well-formed data — the reason this exemption is keyed on the
+            # declared tier and not on the absence of the field.
+            if isinstance(tid, str) and tid.strip():
+                errors.append(
+                    f"{fid}: implementation_tier is 'excluded' but it names trigger "
+                    f"{tid!r}. Excluded frameworks must not have an activation path."
+                )
+            continue
+        if not isinstance(tid, str) or not tid.strip():
+            errors.append(
+                f"{fid}: catalog entry has no usable 'trigger_id' and its tier is "
+                f"{tier!r}, not 'excluded'"
+            )
             continue
         if tid not in activated_by:
             # Was folded into the skip above, which meant a typo'd trigger name
