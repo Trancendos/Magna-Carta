@@ -373,7 +373,35 @@ def assign_frameworks_to_groups(frameworks: list[dict]) -> dict[str, str]:
     FW-062 (HIPAA Security Rule) purely because it appears earlier in
     SIGNAL_GROUPS, leaving SIG-HIPAA-001 to activate whatever the sweeps had
     skipped. Groups still cannot steal from one another *within* a pass.
+
+    A group is either explicit or sweep-based, never both. Pass 2 skips any
+    group carrying ``framework_ids``, so a group defining both would have its
+    sweep silently dropped — a mistake that would look like a working config.
+    Rejected outright rather than given a precedence rule, because the two
+    readings ("the ids plus whatever the sweep finds" vs "the ids only") are
+    both plausible and the config should not have to be guessed at.
     """
+    # Every key that only has meaning inside pass 2. `category`,
+    # `framework_filter` and `applicability` select what a sweep picks up;
+    # `exclude_ids` and `exclude_applicability` narrow it. Alongside
+    # `framework_ids` all five are dead config.
+    sweep_keys = (
+        "framework_filter",
+        "category",
+        "applicability",
+        "exclude_ids",
+        "exclude_applicability",
+    )
+    for group in SIGNAL_GROUPS:
+        if "framework_ids" in group:
+            clashes = [k for k in sweep_keys if k in group]
+            if clashes:
+                raise ValueError(
+                    f"{group['signal_id']}: defines explicit 'framework_ids' alongside "
+                    f"sweep key(s) {clashes}. A signal group must be one or the other — "
+                    f"split it into two groups if it genuinely needs both."
+                )
+
     fw_by_id = {f["framework_id"]: f for f in frameworks}
     assignment: dict[str, str] = {}
 

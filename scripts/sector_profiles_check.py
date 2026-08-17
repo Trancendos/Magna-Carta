@@ -164,12 +164,42 @@ def main() -> int:
         )
 
     # Sectors that record a known gap are surfaced so they are not mistaken for
-    # complete coverage.
+    # complete coverage. Read from the structured `known_gaps` list, never by
+    # searching prose: an earlier version looked for the literal "GAP:" in
+    # `notes`, which made a validator's behaviour depend on an author's wording
+    # and would have gone quiet the moment someone wrote "Gap:" or reworded the
+    # sentence — failing open on exactly the profiles most needing the warning.
     for sector in sectors:
-        if isinstance(sector, dict) and "GAP:" in str(sector.get("notes", "")):
-            _warn(
-                f"sector '{sector.get('sector_id')}' records a known gap in its "
-                f"notes — treat its coverage as partial"
+        if not isinstance(sector, dict):
+            continue
+        gaps = sector.get("known_gaps")
+        sid = sector.get("sector_id")
+        if gaps is None:
+            continue
+        if not isinstance(gaps, list) or not gaps:
+            _err(
+                f"sector '{sid}': 'known_gaps' must be a non-empty list of strings. "
+                f"Omit the key entirely for a profile with no known gaps."
+            )
+            continue
+        for entry in gaps:
+            if not isinstance(entry, str) or not entry.strip():
+                _err(f"sector '{sid}': every 'known_gaps' entry must be a non-empty string")
+        _warn(
+            f"sector '{sid}' records {len(gaps)} known gap(s) — treat its coverage "
+            f"as partial"
+        )
+
+    # Catch the reverse drift: gap prose left in `notes` where no validator and
+    # no reader scanning `known_gaps` will find it.
+    for sector in sectors:
+        if not isinstance(sector, dict):
+            continue
+        if "gap" in str(sector.get("notes", "")).lower() and not sector.get("known_gaps"):
+            _err(
+                f"sector '{sector.get('sector_id')}': 'notes' mentions a gap but "
+                f"'known_gaps' is absent. Move the gap into 'known_gaps' so it is "
+                f"machine-readable."
             )
 
     _report()

@@ -64,7 +64,10 @@ schema:
   typical_clients: "the kinds of organisation this profile is for"
   stakeholder_roles: "who is usually involved on the client side"
   delivery_notes: "engagement constraints that change how work is delivered"
-  notes: "optional — caveats, gaps, things deliberately not claimed"
+  notes: "optional — caveats and things deliberately not claimed"
+  known_gaps: "optional list — each entry one concrete coverage gap. Presence of
+    this key is what marks a profile as partial; validators read the field, never
+    the prose in notes."
 
 sectors:
   - sector_id: healthcare
@@ -196,11 +199,12 @@ sectors:
     notes: >-
       Export control is a legal regime distinct from security classification.
       Do not treat clearance as sufficient.
-
-      GAP: US EAR (FW-067) and US ITAR (FW-068) are in the framework register
-      but no trigger references either, so neither activates from any signal.
-      ITAR carries a deliberate not-applicable position; EAR does not, and a
-      genuine export-controlled engagement needs a signal for it.
+    known_gaps:
+      - >-
+        US EAR (FW-067) and US ITAR (FW-068) are in the framework register but no
+        trigger references either, so neither activates from any signal. ITAR
+        carries a deliberate not-applicable position; EAR does not, and a genuine
+        export-controlled engagement needs a signal for it.
 
   - sector_id: retail_ecommerce
     name: Retail & E-commerce
@@ -256,12 +260,13 @@ sectors:
       Communications metadata carries obligations distinct from ordinary
       personal data, and lawful intercept systems are usually out of scope
       entirely for commercial engagements — confirm the boundary in writing.
-    notes: >-
-      GAP: SIG-EU-INDUSTRY-001 is a category sweep over the register's
-      `eu_industry` category, not a sector signal, so it activates a mixed set
-      (FINMA, Japan FISC, UAE IAR, GxP among others) with little bearing on
-      telecommunications. PECR and GDPR carry the real weight here. A dedicated
-      signal for electronic-communications duties would replace the sweep.
+    known_gaps:
+      - >-
+        SIG-EU-INDUSTRY-001 is a category sweep over the register's `eu_industry`
+        category, not a sector signal, so it activates a mixed set (FINMA, Japan
+        FISC, UAE IAR, GxP among others) with little bearing on telecommunications.
+        PECR and GDPR carry the real weight here. A dedicated signal for
+        electronic-communications duties would replace the sweep.
 
   - sector_id: manufacturing_industrial
     name: Manufacturing & Industrial
@@ -291,12 +296,14 @@ sectors:
       maintenance windows may be quarterly. IEC 62443 is the governing standard
       for industrial control security and is not currently represented as its
       own signal — see the gap note below.
-    notes: >-
-      GAP: no IEC 62443 signal exists yet. Industrial control engagements will
-      need one added to proactive_signals.yaml before this profile is complete.
-      SIG-EU-INDUSTRY-001 is also a category sweep rather than a sector signal
-      and activates little that bears on manufacturing — treat GDPR as the only
-      substantive activation this profile currently delivers.
+    known_gaps:
+      - >-
+        No IEC 62443 signal exists yet. Industrial control engagements will need
+        one added to proactive_signals.yaml before this profile is complete.
+      - >-
+        SIG-EU-INDUSTRY-001 is a category sweep rather than a sector signal and
+        activates little that bears on manufacturing — treat GDPR as the only
+        substantive activation this profile currently delivers.
 
   - sector_id: energy_utilities
     name: Energy & Utilities
@@ -322,11 +329,14 @@ sectors:
       Designation as critical national infrastructure brings regulator
       notification duties and can restrict where data may be processed and who
       may access it. Assume longer approval cycles than commercial work.
-    notes: >-
-      GAP: NERC CIP (North America) and NIS2 sector-specific duties are not yet
-      represented as distinct signals, and SIG-EU-INDUSTRY-001 is a category
-      sweep rather than a sector signal. This is the weakest profile in the
-      register — treat it as a starting point for scoping, not as coverage.
+    known_gaps:
+      - >-
+        NERC CIP (North America) and NIS2 sector-specific duties are not yet
+        represented as distinct signals.
+      - >-
+        SIG-EU-INDUSTRY-001 is a category sweep rather than a sector signal. This
+        is the weakest profile in the register — treat it as a starting point for
+        scoping, not as coverage.
 
   - sector_id: education
     name: Education
@@ -354,10 +364,12 @@ sectors:
       Code, US FERPA/COPPA) and safeguarding records are among the most
       sensitive categories the estate would ever process. Academic calendars
       constrain delivery windows sharply.
-    notes: >-
-      GAP: FERPA exists in the framework register as FW-063 but no trigger
-      references it, so no scope signal can activate it — it was previously
-      reachable only through TRG-HIPAA-001, which was a defect (FERPA is
-      education law, not health) and has been corrected. COPPA is absent from
-      the register entirely. A US education engagement needs a signal added for
-      both before this profile is complete.
+    known_gaps:
+      - >-
+        FERPA exists in the framework register as FW-063 but no trigger references
+        it, so no scope signal can activate it — it was previously reachable only
+        through TRG-HIPAA-001, which was a defect (FERPA is education law, not
+        health) and has been corrected.
+      - >-
+        COPPA is absent from the register entirely. A US education engagement needs
+        a signal added for it before this profile is complete.
