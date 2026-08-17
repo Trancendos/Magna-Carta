@@ -110,6 +110,14 @@ def anchor_matches(token: str, name: str) -> bool:
 
 
 def _load(path: Path, errors: list[str]) -> dict:
+    """Load one register, accumulating rather than raising on failure.
+
+    Returns `{}` and appends to `errors` when the file is missing, is invalid
+    YAML, or has a non-mapping root. Collecting the failure lets the caller
+    report every broken register in one run instead of stopping at the first —
+    an operator fixing three registers should not have to run the check three
+    times to discover that.
+    """
     if not path.is_file():
         errors.append(f"missing register: {path.relative_to(ROOT)}")
         return {}
@@ -125,6 +133,14 @@ def _load(path: Path, errors: list[str]) -> dict:
 
 
 def main() -> int:
+    """Validate the trigger→framework chain. Returns 0 on success, 1 on error.
+
+    Warnings do not fail the run: the 20 orphaned frameworks and the catalog
+    mismatches need a governance decision on `implementation_tier` vocabulary,
+    which has no value meaning "defined but not reachable". Failing on them
+    would block every unrelated change until that decision is taken, so they are
+    reported loudly and left non-fatal.
+    """
     errors: list[str] = []
     warnings: list[str] = []
 

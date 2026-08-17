@@ -59,14 +59,27 @@ _info: list[str] = []
 
 
 def _err(msg: str) -> None:
+    """Record a failure. Any error makes the check exit 1."""
     _errors.append(msg)
 
 
 def _warn(msg: str) -> None:
+    """Record a caveat worth surfacing that must not fail the build.
+
+    Used for a sector with recorded `known_gaps`: partial coverage is a fact
+    about the register, not a defect in it, and failing on it would make
+    honest gap-recording more painful than leaving gaps undocumented — the
+    opposite of the intended incentive.
+    """
     _warnings.append(msg)
 
 
 def _load(path: Path) -> dict:
+    """Load one register, recording load failures via `_err` rather than raising.
+
+    Returns `{}` on any failure so the caller can keep validating the registers
+    that did load and report everything at once.
+    """
     if not path.is_file():
         _err(f"missing register: {path.relative_to(ROOT)}")
         return {}
@@ -82,6 +95,11 @@ def _load(path: Path) -> dict:
 
 
 def main() -> int:
+    """Validate every sector profile against the defined signal set.
+
+    Returns 0 when the register is structurally sound, 1 on any error. A sector
+    declaring `known_gaps` warns but passes — see `_warn`.
+    """
     sectors_doc = _load(SECTORS)
     signals_doc = _load(SIGNALS)
     triggers_doc = _load(TRIGGERS)
@@ -221,6 +239,11 @@ def main() -> int:
 
 
 def _report() -> None:
+    """Print collected output in severity order: info, then warnings, then errors.
+
+    Errors go to stderr so a CI log filtered to stderr shows only what actually
+    failed the run.
+    """
     for msg in _info:
         print(f"INFO:  {msg}")
     for msg in _warnings:
