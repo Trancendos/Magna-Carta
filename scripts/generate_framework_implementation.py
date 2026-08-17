@@ -249,7 +249,10 @@ SIGNAL_GROUPS: list[dict] = [
         "name": "HIPAA health data profile",
         "config_key": "HIPAA_PROFILE",
         "default_active": False,
-        "framework_ids": ["FW-062", "FW-063"],
+        # FW-062 is the HIPAA Security Rule. FW-063 (FERPA) was previously listed
+        # here and is education law, not health — see the trigger-alignment note
+        # in docs/compliance/SECTOR-PROFILES.md.
+        "framework_ids": ["FW-062"],
     },
     {
         "signal_id": "SIG-CCPA-001",
@@ -305,7 +308,9 @@ SIGNAL_GROUPS: list[dict] = [
         "name": "DORA financial sector",
         "config_key": "DORA_SCOPE",
         "default_active": False,
-        "framework_ids": ["FW-090", "FW-091"],
+        # FW-100 *is* DORA. FW-090 (MPA) / FW-091 (ABS OSPAR) were previously
+        # listed here; both remain reachable via SIG-INTL-ASSURANCE-001.
+        "framework_ids": ["FW-100"],
     },
     {
         "signal_id": "SIG-NHS-001",
@@ -313,7 +318,9 @@ SIGNAL_GROUPS: list[dict] = [
         "name": "NHS DSPT / health UK",
         "config_key": "NHS_DSPT_SCOPE",
         "default_active": False,
-        "framework_ids": ["FW-064", "FW-065"],
+        # FW-089 *is* NHS DSPT. FW-064 (IRS Pub 1075) / FW-065 (SEC 17a-4(f))
+        # were previously listed here and are US records/tax rules.
+        "framework_ids": ["FW-089"],
     },
     {
         "signal_id": "SIG-CMMC-001",
@@ -321,7 +328,18 @@ SIGNAL_GROUPS: list[dict] = [
         "name": "CMMC defense contractors",
         "config_key": "CMMC_SCOPE",
         "default_active": False,
-        "framework_ids": ["FW-055", "FW-056", "FW-057"],
+        # FW-053 is CMMC 2.0 itself, FW-042 its control basis (NIST SP
+        # 800-171/172) and FW-059 its contractual flow-down (DFARS). Previously
+        # only the DoD Impact Levels were listed, so enabling CMMC_SCOPE did not
+        # activate CMMC. FW-058 (IL6) stays out — classified, position is N/A.
+        "framework_ids": [
+            "FW-042",
+            "FW-053",
+            "FW-055",
+            "FW-056",
+            "FW-057",
+            "FW-059",
+        ],
     },
 ]
 
@@ -346,16 +364,31 @@ def load_frameworks() -> dict:
 
 
 def assign_frameworks_to_groups(frameworks: list[dict]) -> dict[str, str]:
-    """Map framework_id -> signal_id (first match wins)."""
+    """Map framework_id -> signal_id (first match wins).
+
+    Explicit ``framework_ids`` are assigned in a first pass, ahead of every
+    category sweep and filter. A signal that names a framework outright is
+    stating intent; a category sweep is only inferring one. Without this
+    ordering the sweeps silently won on list position — SIG-US-GOV-001 claimed
+    FW-062 (HIPAA Security Rule) purely because it appears earlier in
+    SIGNAL_GROUPS, leaving SIG-HIPAA-001 to activate whatever the sweeps had
+    skipped. Groups still cannot steal from one another *within* a pass.
+    """
     fw_by_id = {f["framework_id"]: f for f in frameworks}
     assignment: dict[str, str] = {}
+
+    # Pass 1 — explicit claims.
+    for group in SIGNAL_GROUPS:
+        for fid in group.get("framework_ids", []):
+            if fid in fw_by_id and fid not in assignment:
+                assignment[fid] = group["signal_id"]
+
+    # Pass 2 — category sweeps and filters, over whatever remains.
     for group in SIGNAL_GROUPS:
         sig = group["signal_id"]
         if "framework_ids" in group:
-            for fid in group["framework_ids"]:
-                if fid in fw_by_id and fid not in assignment:
-                    assignment[fid] = sig
-        elif "framework_filter" in group:
+            continue
+        if "framework_filter" in group:
             for fw in frameworks:
                 fid = fw["framework_id"]
                 if fid not in assignment and group["framework_filter"](fw):

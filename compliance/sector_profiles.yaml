@@ -1,0 +1,363 @@
+# Sector profiles — machine-readable registry
+#
+# WHAT THIS ADDS
+#
+# The estate already activates frameworks conditionally: proactive_signals.yaml
+# defines 22 signals, framework_triggers.yaml maps each signal to the
+# framework_ids it activates and the enforcement posture it demands, and
+# frameworks_register.yaml holds all 127 frameworks. That machinery works and
+# this file does not replace any of it.
+#
+# What was missing is the *lens*. Those signals are named after frameworks
+# (SIG-HIPAA-001, SIG-DORA-001, SIG-CMMC-001), not after the sectors that
+# require them. So the question an engagement actually starts with —
+#
+#     "we are delivering into healthcare; what turns on?"
+#
+# — could only be answered by someone who already knew that healthcare implies
+# HIPAA plus NHS DSPT plus GDPR. That mapping lived in a person's head. This
+# file writes it down.
+#
+# A sector profile is therefore a NAMED BUNDLE OF EXISTING SIGNALS plus the
+# engagement context a delivery team needs. It introduces no new detection
+# mechanism: signals keep their own detection (config/env), triggers keep
+# owning enforcement, and this register only says which signals a sector
+# implies.
+#
+# WHAT THIS IS NOT
+#
+#   * Not a source of truth for which frameworks apply — that is
+#     framework_triggers.yaml, reached via the signals named here.
+#   * Not legal advice. `data_types` and `notes` describe what is typically
+#     encountered; a specific client may carry obligations no register predicts.
+#   * Not exhaustive. Sectors absent here simply have no profile yet; absence
+#     means "not yet mapped", never "nothing applies".
+#
+# Human-readable sibling: docs/compliance/SECTOR-PROFILES.md
+# Validated by: scripts/sector_profiles_check.py (Layer B CI)
+#
+# Invariants the validator enforces:
+#   * every sector carries sector_id, name, description, signals, data_types,
+#     typical_clients, stakeholder_roles, delivery_notes
+#   * every signal_id referenced here exists in proactive_signals.yaml
+#   * sector_id values are unique and slug-shaped
+#   * every referenced signal is reachable from at least one trigger, so a
+#     sector cannot claim to activate frameworks that nothing would apply
+
+meta:
+  register_version: "1.0.0"
+  owner: "ISMS Lead"
+  created: "2026-08-13"
+  last_updated: "2026-08-17"
+  review_cycle: quarterly
+  signals_register: compliance/proactive_signals.yaml
+  triggers_register: compliance/framework_triggers.yaml
+  frameworks_register: compliance/frameworks_register.yaml
+  human_readable: docs/compliance/SECTOR-PROFILES.md
+
+schema:
+  sector_id: "slug identifier, lowercase with underscores"
+  name: "human-readable sector name"
+  description: "one line — what this sector covers"
+  signals: "list of signal_ids from proactive_signals.yaml this sector implies"
+  data_types: "categories of data typically handled in this sector"
+  typical_clients: "the kinds of organisation this profile is for"
+  stakeholder_roles: "who is usually involved on the client side"
+  delivery_notes: "engagement constraints that change how work is delivered"
+  notes: "optional — caveats, gaps, things deliberately not claimed"
+
+sectors:
+  - sector_id: healthcare
+    name: Healthcare & Life Sciences
+    description: >-
+      Providers, health systems and suppliers handling patient data, in the UK
+      (NHS) and/or US (HIPAA) regimes.
+    signals:
+      - SIG-HIPAA-001
+      - SIG-NHS-001
+      - SIG-GDPR-001
+    data_types:
+      - Protected Health Information (PHI)
+      - clinical records and notes
+      - patient demographics
+      - special category data (UK GDPR Art. 9)
+    typical_clients:
+      - NHS trusts and integrated care boards
+      - private hospitals and clinics
+      - health-tech and digital therapeutics suppliers
+    stakeholder_roles:
+      - Caldicott Guardian (UK)
+      - Data Protection Officer
+      - Chief Clinical Information Officer
+      - CISO / Head of IT
+    delivery_notes: >-
+      Expect information governance review before system access. NHS engagements
+      commonly require DSPT evidence and may require a DPIA before processing
+      begins. Clinical safety cases (DCB0129/DCB0160) apply where software
+      influences care decisions — that is a clinical-safety discipline, not a
+      security one, and is out of scope unless explicitly contracted.
+    notes: >-
+      Both the UK and US signals are listed because engagements frequently span
+      both. Activate only what the client's footprint genuinely requires; a
+      UK-only trust does not need HIPAA.
+
+  - sector_id: financial_services
+    name: Financial Services
+    description: >-
+      Banks, payment firms, insurers and fintechs under financial-sector
+      operational resilience and cardholder data rules.
+    signals:
+      - SIG-DORA-001
+      - SIG-PCI-001
+      - SIG-PAYMENTS-001
+      - SIG-GDPR-001
+    data_types:
+      - cardholder data (PAN, CVV)
+      - transaction and account records
+      - KYC/AML identity evidence
+      - credit and affordability data
+    typical_clients:
+      - retail and commercial banks
+      - payment service providers
+      - insurers and brokers
+      - fintech and e-money institutions
+    stakeholder_roles:
+      - Chief Risk Officer
+      - Head of Compliance / MLRO
+      - CISO
+      - Operational Resilience lead
+    delivery_notes: >-
+      Change freezes around reporting periods are common. Evidence often has to
+      satisfy an external auditor rather than the client alone, so artefacts
+      should be produced to audit standard from the outset. DORA brings
+      third-party risk obligations that make the supplier — us — in scope, not
+      merely the client.
+    notes: >-
+      PCI-DSS applies only where cardholder data is genuinely in scope.
+      Descoping via tokenisation is usually cheaper than compliance; say so
+      before assuming the full assessment is needed.
+
+  - sector_id: government_us
+    name: US Government & Federal
+    description: >-
+      Federal agencies and their suppliers, including cloud service
+      authorisation and defence supply chain requirements.
+    signals:
+      - SIG-FEDRAMP-001
+      - SIG-US-GOV-001
+      - SIG-CMMC-001
+    data_types:
+      - Controlled Unclassified Information (CUI)
+      - federal agency operational data
+      - Federal Contract Information (FCI)
+    typical_clients:
+      - federal agencies
+      - defence primes and subcontractors
+      - cloud providers pursuing authorisation
+    stakeholder_roles:
+      - Authorising Official (AO)
+      - Information System Security Officer (ISSO)
+      - Contracting Officer
+      - Facility Security Officer
+    delivery_notes: >-
+      Authorisation timelines are measured in months, not weeks, and are the
+      dominant scheduling constraint. Personnel may need citizenship status or
+      clearance. Data residency is frequently mandated to US soil, which
+      interacts directly with the Library bridge's jurisdiction gate.
+    notes: >-
+      FedRAMP authorisation is a programme, not an assessment. Do not scope it
+      as a one-off engagement.
+
+  - sector_id: defence
+    name: Defence & National Security
+    description: >-
+      Defence suppliers and the contractual security regimes attached to
+      defence supply chains.
+    signals:
+      - SIG-CMMC-001
+      - SIG-US-GOV-001
+    data_types:
+      - Controlled Unclassified Information (CUI)
+      - export-controlled technical data
+      - supply chain and logistics data
+    typical_clients:
+      - defence primes
+      - tier 2/3 defence suppliers
+      - dual-use technology manufacturers
+    stakeholder_roles:
+      - Facility Security Officer
+      - Export Control officer
+      - CISO
+    delivery_notes: >-
+      Export control (ITAR/EAR, UK equivalents) can restrict who may see
+      technical data regardless of security clearance, including on our side.
+      Establish nationality and location constraints on the delivery team
+      before assigning anyone.
+    notes: >-
+      Export control is a legal regime distinct from security classification.
+      Do not treat clearance as sufficient.
+
+      GAP: US EAR (FW-067) and US ITAR (FW-068) are in the framework register
+      but no trigger references either, so neither activates from any signal.
+      ITAR carries a deliberate not-applicable position; EAR does not, and a
+      genuine export-controlled engagement needs a signal for it.
+
+  - sector_id: retail_ecommerce
+    name: Retail & E-commerce
+    description: >-
+      Merchants and platforms taking card payments and handling consumer data
+      at volume.
+    signals:
+      - SIG-PCI-001
+      - SIG-CCPA-001
+      - SIG-GDPR-001
+      - SIG-PAYMENTS-001
+    data_types:
+      - cardholder data
+      - consumer profiles and purchase history
+      - behavioural and marketing data
+    typical_clients:
+      - online retailers and marketplaces
+      - omnichannel merchants
+      - subscription commerce
+    stakeholder_roles:
+      - Head of E-commerce
+      - Data Protection Officer
+      - CISO
+      - Payments lead
+    delivery_notes: >-
+      Peak trading periods are hard change freezes — scope delivery around
+      them. Consumer-facing changes may need marketing and legal sign-off on
+      wording as well as technical review.
+
+  - sector_id: telecommunications
+    name: Telecommunications
+    description: >-
+      Network operators and communications providers under electronic
+      communications and network security rules.
+    signals:
+      - SIG-PECR-001
+      - SIG-EU-INDUSTRY-001
+      - SIG-GDPR-001
+    data_types:
+      - communications metadata
+      - subscriber records
+      - location data
+      - lawful intercept material
+    typical_clients:
+      - fixed and mobile network operators
+      - ISPs and hosting providers
+      - communications platform providers
+    stakeholder_roles:
+      - Regulatory Affairs lead
+      - Network Security lead
+      - Data Protection Officer
+    delivery_notes: >-
+      Communications metadata carries obligations distinct from ordinary
+      personal data, and lawful intercept systems are usually out of scope
+      entirely for commercial engagements — confirm the boundary in writing.
+    notes: >-
+      GAP: SIG-EU-INDUSTRY-001 is a category sweep over the register's
+      `eu_industry` category, not a sector signal, so it activates a mixed set
+      (FINMA, Japan FISC, UAE IAR, GxP among others) with little bearing on
+      telecommunications. PECR and GDPR carry the real weight here. A dedicated
+      signal for electronic-communications duties would replace the sweep.
+
+  - sector_id: manufacturing_industrial
+    name: Manufacturing & Industrial
+    description: >-
+      Manufacturers and industrial operators with operational technology
+      alongside conventional IT.
+    signals:
+      - SIG-EU-INDUSTRY-001
+      - SIG-GDPR-001
+    data_types:
+      - operational technology telemetry
+      - production and process data
+      - intellectual property and designs
+      - supply chain data
+    typical_clients:
+      - discrete and process manufacturers
+      - industrial equipment suppliers
+      - logistics and supply chain operators
+    stakeholder_roles:
+      - OT/Engineering Manager
+      - Plant Manager
+      - CISO
+      - Health & Safety lead
+    delivery_notes: >-
+      OT is not IT. Availability and safety outrank confidentiality, active
+      scanning of production control systems can be genuinely dangerous, and
+      maintenance windows may be quarterly. IEC 62443 is the governing standard
+      for industrial control security and is not currently represented as its
+      own signal — see the gap note below.
+    notes: >-
+      GAP: no IEC 62443 signal exists yet. Industrial control engagements will
+      need one added to proactive_signals.yaml before this profile is complete.
+      SIG-EU-INDUSTRY-001 is also a category sweep rather than a sector signal
+      and activates little that bears on manufacturing — treat GDPR as the only
+      substantive activation this profile currently delivers.
+
+  - sector_id: energy_utilities
+    name: Energy & Utilities
+    description: >-
+      Generators, network operators and utilities designated as critical
+      national infrastructure.
+    signals:
+      - SIG-EU-INDUSTRY-001
+      - SIG-GDPR-001
+    data_types:
+      - grid and SCADA telemetry
+      - customer consumption data
+      - critical infrastructure topology
+    typical_clients:
+      - electricity and gas network operators
+      - generators and renewables operators
+      - water utilities
+    stakeholder_roles:
+      - CNI Compliance lead
+      - OT Security Manager
+      - Regulatory liaison
+    delivery_notes: >-
+      Designation as critical national infrastructure brings regulator
+      notification duties and can restrict where data may be processed and who
+      may access it. Assume longer approval cycles than commercial work.
+    notes: >-
+      GAP: NERC CIP (North America) and NIS2 sector-specific duties are not yet
+      represented as distinct signals, and SIG-EU-INDUSTRY-001 is a category
+      sweep rather than a sector signal. This is the weakest profile in the
+      register — treat it as a starting point for scoping, not as coverage.
+
+  - sector_id: education
+    name: Education
+    description: >-
+      Schools, universities and edtech providers handling learner data,
+      frequently including children's data.
+    signals:
+      - SIG-GDPR-001
+      - SIG-CCPA-001
+    data_types:
+      - student records and attainment data
+      - children's personal data
+      - safeguarding records
+      - research data
+    typical_clients:
+      - universities and colleges
+      - schools and multi-academy trusts
+      - edtech suppliers
+    stakeholder_roles:
+      - Data Protection Officer
+      - Designated Safeguarding Lead
+      - Head of IT
+    delivery_notes: >-
+      Children's data attracts heightened protection (UK Age Appropriate Design
+      Code, US FERPA/COPPA) and safeguarding records are among the most
+      sensitive categories the estate would ever process. Academic calendars
+      constrain delivery windows sharply.
+    notes: >-
+      GAP: FERPA exists in the framework register as FW-063 but no trigger
+      references it, so no scope signal can activate it — it was previously
+      reachable only through TRG-HIPAA-001, which was a defect (FERPA is
+      education law, not health) and has been corrected. COPPA is absent from
+      the register entirely. A US education engagement needs a signal added for
+      both before this profile is complete.
