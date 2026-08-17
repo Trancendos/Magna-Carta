@@ -640,7 +640,7 @@ entries:
   name: US CLOUD Act
   implementation_tier: reference
   signal_id: SIG-US-GOV-001
-  trigger_id: TRG-US-GOV
+  trigger_id: TRG-US-GOV-001
   auto_checks:
   - MON-013
   - MON-018
@@ -832,7 +832,7 @@ entries:
   name: CISPE Code of Conduct
   implementation_tier: reference
   signal_id: SIG-INTL-ASSURANCE-001
-  trigger_id: TRG-INTL-ASSURANCE
+  trigger_id: TRG-INTL-ASSURANCE-001
   auto_checks:
   - MON-013
   - MON-018
@@ -1096,7 +1096,7 @@ entries:
   name: CE+ Framework
   implementation_tier: reference
   signal_id: SIG-EU-INDUSTRY-001
-  trigger_id: TRG-EU-INDUSTRY
+  trigger_id: TRG-EU-INDUSTRY-001
   auto_checks:
   - MON-013
   - MON-018
@@ -1480,7 +1480,7 @@ entries:
   name: UK Research Integrity Concordat
   implementation_tier: reference
   signal_id: SIG-EU-INDUSTRY-001
-  trigger_id: TRG-EU-INDUSTRY
+  trigger_id: TRG-EU-INDUSTRY-001
   auto_checks:
   - MON-013
   - MON-018

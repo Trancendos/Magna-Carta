@@ -41,7 +41,7 @@ It is **not**:
 
 ## The chain, end to end
 
-```
+```text
 sector_profiles.yaml     "healthcare implies these signals"
         ↓
 proactive_signals.yaml   HIPAA_PROFILE=enabled  →  SIG-HIPAA-001 active

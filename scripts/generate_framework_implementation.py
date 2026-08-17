@@ -472,7 +472,23 @@ def build_catalog(frameworks: list[dict], assignment: dict[str, str]) -> dict:
         elif app in ("reference", "awareness"):
             tier = "reference"
             sig = assignment.get(fid)
-            trig = f"TRG-{sig.split('-')[1]}-{sig.split('-')[2]}" if sig else None
+            # Look the trigger up rather than rebuilding it from the signal ID.
+            # The old `f"TRG-{sig.split('-')[1]}-{sig.split('-')[2]}"` took the
+            # 2nd and 3rd hyphen-separated parts, which is only correct when the
+            # signal's name is a single word: SIG-HIPAA-001 → TRG-HIPAA-001 by
+            # luck, but SIG-US-GOV-001 → "TRG-US-GOV", dropping the -001. That
+            # produced four catalog entries naming triggers that do not exist
+            # (FW-066, FW-082, FW-108, FW-141), each claiming an activation path
+            # nothing could satisfy. SIGNAL_GROUPS already holds the real
+            # trigger_id, and the signal_gated branch below has always used it.
+            trig = (
+                next(
+                    (g["trigger_id"] for g in SIGNAL_GROUPS if g["signal_id"] == sig),
+                    None,
+                )
+                if sig
+                else None
+            )
         elif assignment.get(fid):
             sig = assignment.get(fid)
             tier = "signal_gated"

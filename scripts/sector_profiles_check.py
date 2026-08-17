@@ -137,6 +137,15 @@ def main() -> int:
         signals = sector.get("signals")
         if isinstance(signals, list):
             for signal_id in signals:
+                if not isinstance(signal_id, str) or not signal_id.strip():
+                    # `set.add()` on a mapping or list raises TypeError
+                    # (unhashable), killing the check with a traceback rather
+                    # than naming the sector that has the malformed entry.
+                    _err(
+                        f"{label}: every 'signals' entry must be a non-empty string, "
+                        f"got {type(signal_id).__name__}"
+                    )
+                    continue
                 claimed_signals.add(signal_id)
                 if signal_id not in known_signals:
                     _err(

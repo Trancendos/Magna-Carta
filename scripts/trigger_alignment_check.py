@@ -152,8 +152,20 @@ def main() -> int:
     for trig in triggers:
         tid = trig.get("trigger_id") or "<unnamed trigger>"
         fids = trig.get("framework_ids")
-        if not isinstance(fids, list):
-            errors.append(f"{tid}: 'framework_ids' must be a list")
+        if not isinstance(fids, list) or not fids:
+            # An empty list is a list, so `isinstance` alone let it through. A
+            # trigger activating nothing is not a harmless no-op: an unanchored
+            # trigger would pass every check here while activating no framework
+            # at all, and sector_profiles_check would still treat its signal as
+            # a reachable activation path.
+            errors.append(f"{tid}: 'framework_ids' must be a non-empty list")
+            continue
+        bad = [f for f in fids if not isinstance(f, str) or not f.strip()]
+        if bad:
+            # Guard before `referenced.add()`: a mapping or list element here
+            # raises TypeError (unhashable) and the check dies with a traceback
+            # instead of naming the offending trigger.
+            errors.append(f"{tid}: every 'framework_ids' entry must be a non-empty string")
             continue
         activated_by[tid] = fids
         for fid in fids:
@@ -200,7 +212,17 @@ def main() -> int:
             continue
         fid = entry.get("framework_id")
         tid = entry.get("trigger_id")
-        if not fid or not tid or tid not in activated_by:
+        if not fid or not tid:
+            continue
+        if tid not in activated_by:
+            # Was folded into the skip above, which meant a typo'd trigger name
+            # produced neither an error nor the mismatch warning: the catalog
+            # could claim an activation path that does not exist, and the check
+            # designed to find exactly that stayed silent.
+            errors.append(
+                f"{fid}: catalog names trigger {tid!r}, which is not defined in "
+                f"framework_triggers.yaml — its stated activation path does not exist"
+            )
             continue
         if fid not in activated_by[tid]:
             mismatched.append(f"{fid}→{tid}")
