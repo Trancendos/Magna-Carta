@@ -249,7 +249,10 @@ SIGNAL_GROUPS: list[dict] = [
         "name": "HIPAA health data profile",
         "config_key": "HIPAA_PROFILE",
         "default_active": False,
-        "framework_ids": ["FW-062", "FW-063"],
+        # FW-062 is the HIPAA Security Rule. FW-063 (FERPA) was previously listed
+        # here and is education law, not health — see the trigger-alignment note
+        # in docs/compliance/SECTOR-PROFILES.md.
+        "framework_ids": ["FW-062"],
     },
     {
         "signal_id": "SIG-CCPA-001",
@@ -305,7 +308,9 @@ SIGNAL_GROUPS: list[dict] = [
         "name": "DORA financial sector",
         "config_key": "DORA_SCOPE",
         "default_active": False,
-        "framework_ids": ["FW-090", "FW-091"],
+        # FW-100 *is* DORA. FW-090 (MPA) / FW-091 (ABS OSPAR) were previously
+        # listed here; both remain reachable via SIG-INTL-ASSURANCE-001.
+        "framework_ids": ["FW-100"],
     },
     {
         "signal_id": "SIG-NHS-001",
@@ -313,7 +318,9 @@ SIGNAL_GROUPS: list[dict] = [
         "name": "NHS DSPT / health UK",
         "config_key": "NHS_DSPT_SCOPE",
         "default_active": False,
-        "framework_ids": ["FW-064", "FW-065"],
+        # FW-089 *is* NHS DSPT. FW-064 (IRS Pub 1075) / FW-065 (SEC 17a-4(f))
+        # were previously listed here and are US records/tax rules.
+        "framework_ids": ["FW-089"],
     },
     {
         "signal_id": "SIG-CMMC-001",
@@ -321,7 +328,18 @@ SIGNAL_GROUPS: list[dict] = [
         "name": "CMMC defense contractors",
         "config_key": "CMMC_SCOPE",
         "default_active": False,
-        "framework_ids": ["FW-055", "FW-056", "FW-057"],
+        # FW-053 is CMMC 2.0 itself, FW-042 its control basis (NIST SP
+        # 800-171/172) and FW-059 its contractual flow-down (DFARS). Previously
+        # only the DoD Impact Levels were listed, so enabling CMMC_SCOPE did not
+        # activate CMMC. FW-058 (IL6) stays out — classified, position is N/A.
+        "framework_ids": [
+            "FW-042",
+            "FW-053",
+            "FW-055",
+            "FW-056",
+            "FW-057",
+            "FW-059",
+        ],
     },
 ]
 
@@ -340,22 +358,94 @@ ON_ACTIVATE_ADVISORY = {
 
 
 def load_frameworks() -> dict:
+    """Read `frameworks_register.yaml` — the input every other builder derives from.
+
+    Deliberately re-read rather than cached: `main` calls this twice, once before
+    and once after `update_frameworks_register` writes, so the catalog, signals
+    and triggers are all built from the register as it now stands on disk rather
+    than from a pre-update snapshot.
+    """
     path = ROOT / "compliance" / "frameworks_register.yaml"
     with path.open(encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
 def assign_frameworks_to_groups(frameworks: list[dict]) -> dict[str, str]:
-    """Map framework_id -> signal_id (first match wins)."""
+    """Map framework_id -> signal_id (first match wins).
+
+    Explicit ``framework_ids`` are assigned in a first pass, ahead of every
+    category sweep and filter. A signal that names a framework outright is
+    stating intent; a category sweep is only inferring one. Without this
+    ordering the sweeps silently won on list position — SIG-US-GOV-001 claimed
+    FW-062 (HIPAA Security Rule) purely because it appears earlier in
+    SIGNAL_GROUPS, leaving SIG-HIPAA-001 to activate whatever the sweeps had
+    skipped. Groups still cannot steal from one another *within* a pass.
+
+    A group is either explicit or sweep-based, never both. Pass 2 skips any
+    group carrying ``framework_ids``, so a group defining both would have its
+    sweep silently dropped — a mistake that would look like a working config.
+    Rejected outright rather than given a precedence rule, because the two
+    readings ("the ids plus whatever the sweep finds" vs "the ids only") are
+    both plausible and the config should not have to be guessed at.
+    """
+    # Every key that only has meaning inside pass 2. `category`,
+    # `framework_filter` and `applicability` select what a sweep picks up;
+    # `exclude_ids` and `exclude_applicability` narrow it. Alongside
+    # `framework_ids` all five are dead config.
+    sweep_keys = (
+        "framework_filter",
+        "category",
+        "applicability",
+        "exclude_ids",
+        "exclude_applicability",
+    )
+    for group in SIGNAL_GROUPS:
+        if "framework_ids" in group:
+            clashes = [k for k in sweep_keys if k in group]
+            if clashes:
+                raise ValueError(
+                    f"{group['signal_id']}: defines explicit 'framework_ids' alongside "
+                    f"sweep key(s) {clashes}. A signal group must be one or the other — "
+                    f"split it into two groups if it genuinely needs both."
+                )
+
     fw_by_id = {f["framework_id"]: f for f in frameworks}
     assignment: dict[str, str] = {}
+
+    # Pass 1 — explicit claims. First group in SIGNAL_GROUPS order wins.
+    #
+    # Three frameworks are legitimately claimed by two groups (FW-004 by GDPR
+    # and AI-US, FW-030 by PCI and PAYMENTS, FW-112 by CCPA and AI-US) because
+    # they genuinely sit in both scopes, while the catalog carries exactly one
+    # signal_id per framework. Something has to win.
+    #
+    # What matters is that the winner is *visible* rather than an accident of
+    # list position — silent first-match-wins on list order is precisely the bug
+    # this two-pass rewrite was written to fix, and leaving the same fragility
+    # in pass 1 would have re-created it one level down. Contested claims are
+    # therefore reported at generation time, so reordering SIGNAL_GROUPS can
+    # never quietly reassign a framework.
+    contested: dict[str, list[str]] = {}
+    for group in SIGNAL_GROUPS:
+        for fid in group.get("framework_ids", []):
+            if fid not in fw_by_id:
+                continue
+            contested.setdefault(fid, []).append(group["signal_id"])
+            if fid not in assignment:
+                assignment[fid] = group["signal_id"]
+    for fid, claimants in sorted(contested.items()):
+        if len(claimants) > 1:
+            print(
+                f"  contested claim: {fid} claimed by {', '.join(claimants)} "
+                f"-> {assignment[fid]} (first in SIGNAL_GROUPS order)"
+            )
+
+    # Pass 2 — category sweeps and filters, over whatever remains.
     for group in SIGNAL_GROUPS:
         sig = group["signal_id"]
         if "framework_ids" in group:
-            for fid in group["framework_ids"]:
-                if fid in fw_by_id and fid not in assignment:
-                    assignment[fid] = sig
-        elif "framework_filter" in group:
+            continue
+        if "framework_filter" in group:
             for fw in frameworks:
                 fid = fw["framework_id"]
                 if fid not in assignment and group["framework_filter"](fw):
@@ -379,6 +469,22 @@ def assign_frameworks_to_groups(frameworks: list[dict]) -> dict[str, str]:
 
 
 def update_frameworks_register(data: dict) -> None:
+    """Add any missing frameworks and promote readiness entries, then write in place.
+
+    Two normalisations that the downstream builders rely on happen here rather
+    than at read time, so the register on disk and the generated artefacts agree:
+
+      * the four `na_ids` get the shared not-applicable readiness doc, so an
+        excluded framework still points somewhere explaining *why* it is excluded
+        instead of at nothing;
+      * a framework carrying a real readiness doc is promoted out of `readiness`
+        into `programme` — unless it is `not_applicable`, where a readiness doc
+        is the exclusion rationale and promoting it would fabricate a programme
+        that no one is running.
+
+    Appends only: an existing framework is never overwritten, so hand-edits to
+    the register survive regeneration.
+    """
     frameworks = data["frameworks"]
     existing_ids = {f["framework_id"] for f in frameworks}
     for nf in NEW_FRAMEWORKS:
@@ -399,6 +505,20 @@ def update_frameworks_register(data: dict) -> None:
 
 
 def build_catalog(frameworks: list[dict], assignment: dict[str, str]) -> dict:
+    """Build the implementation catalog, one entry per framework, sorted into tiers.
+
+    The tier decides whether an entry names a signal and trigger at all:
+
+      * `excluded` — not applicable *and* not on a programme. It names neither,
+        and `trigger_alignment_check` treats a trigger ID here as an error: an
+        excluded framework that claims an activation path is a contradiction.
+      * `reference` / everything else — carries the signal it was assigned and
+        the trigger that fires it.
+
+    Trigger IDs are looked up from `SIGNAL_GROUPS`, never reconstructed from the
+    signal ID by string surgery — see the inline note on the multi-word signal
+    names that broke the old `sig.split("-")` reconstruction.
+    """
     entries = []
     for fw in frameworks:
         fid = fw["framework_id"]
@@ -411,7 +531,23 @@ def build_catalog(frameworks: list[dict], assignment: dict[str, str]) -> dict:
         elif app in ("reference", "awareness"):
             tier = "reference"
             sig = assignment.get(fid)
-            trig = f"TRG-{sig.split('-')[1]}-{sig.split('-')[2]}" if sig else None
+            # Look the trigger up rather than rebuilding it from the signal ID.
+            # The old `f"TRG-{sig.split('-')[1]}-{sig.split('-')[2]}"` took the
+            # 2nd and 3rd hyphen-separated parts, which is only correct when the
+            # signal's name is a single word: SIG-HIPAA-001 → TRG-HIPAA-001 by
+            # luck, but SIG-US-GOV-001 → "TRG-US-GOV", dropping the -001. That
+            # produced four catalog entries naming triggers that do not exist
+            # (FW-066, FW-082, FW-108, FW-141), each claiming an activation path
+            # nothing could satisfy. SIGNAL_GROUPS already holds the real
+            # trigger_id, and the signal_gated branch below has always used it.
+            trig = (
+                next(
+                    (g["trigger_id"] for g in SIGNAL_GROUPS if g["signal_id"] == sig),
+                    None,
+                )
+                if sig
+                else None
+            )
         elif assignment.get(fid):
             sig = assignment.get(fid)
             tier = "signal_gated"
@@ -459,6 +595,17 @@ def build_catalog(frameworks: list[dict], assignment: dict[str, str]) -> dict:
 
 
 def build_signals() -> dict:
+    """Build `proactive_signals.yaml` — one signal per entry in `SIGNAL_GROUPS`.
+
+    Each signal gets two detection sources, config file and environment variable,
+    reading the same `config_key`. Both are emitted for every signal so an
+    operator can turn a scope on in a container without editing a file in the
+    image, and so a signal is never detectable by only one of the two routes.
+
+    `default_state` comes from the group's `default_active`: baseline scopes
+    (core, GDPR, AI, NIST, PECR) ship active, everything else ships inactive and
+    waits to be switched on for an engagement that needs it.
+    """
     signals = []
     for g in SIGNAL_GROUPS:
         signals.append(
@@ -500,6 +647,25 @@ def build_signals() -> dict:
 
 
 def build_triggers(frameworks: list[dict], assignment: dict[str, str]) -> dict:
+    """Build `framework_triggers.yaml` — what actually happens when a signal activates.
+
+    Every applicable or conditional framework must end up under some trigger, or
+    it is unreachable: activating its scope would enforce nothing. Anything left
+    unassigned by `assign_frameworks_to_groups` therefore falls back to
+    SIG-CORE-001 rather than being dropped.
+
+    `on_activate` starts from the baseline posture and is then specialised:
+
+      * default-active baseline scopes drop to *advisory* — a framework that is
+        on from the moment the platform boots must not fail requests closed
+        until an operator has deliberately chosen the enforce profile;
+      * the named scopes each add the rules, supplier DPAs and actions that
+        their regime actually requires (HIPAA → MC-RULE-009 and SUP-005, PCI →
+        the card-data rules and SUP-003, and so on);
+      * SIG-PAYMENTS-001 replaces the posture outright rather than updating it —
+        payments enforce and fail closed from the start, so it must not inherit
+        an advisory default.
+    """
     # Group framework ids by signal
     by_signal: dict[str, list[str]] = {}
     for fid, sig in assignment.items():
@@ -650,6 +816,14 @@ def build_triggers(frameworks: list[dict], assignment: dict[str, str]) -> dict:
 
 
 def update_config_profiles() -> None:
+    """Ensure every signal's `config_key` exists in the runtime config.
+
+    Without this a newly added signal would have a detection rule pointing at a
+    config path that is simply absent, and the scope would read as neither
+    enabled nor disabled. Existing keys are never touched — an operator who has
+    switched a scope on keeps it on across regeneration; only missing keys are
+    seeded, at the group's declared default.
+    """
     path = ROOT / "config" / "magna_carta_config.json"
     with path.open(encoding="utf-8") as f:
         cfg = json.load(f)
@@ -665,6 +839,17 @@ def update_config_profiles() -> None:
 
 
 def main() -> None:
+    """Regenerate all four registers from `frameworks_register.yaml`, then report coverage.
+
+    The register is loaded twice on purpose: `update_frameworks_register` may
+    append frameworks and promote programme statuses, and the catalog, signals
+    and triggers must be built from the result, not from the pre-update copy.
+
+    Prints the count of applicable/conditional frameworks left unassigned. That
+    list should stay empty — a name appearing there is a framework whose scope
+    can be switched on while nothing enforces it — and the same condition is
+    checked as an error by `trigger_alignment_check`.
+    """
     data = load_frameworks()
     update_frameworks_register(data)
     data = load_frameworks()

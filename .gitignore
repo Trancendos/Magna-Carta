@@ -10,3 +10,11 @@ venv/
 
 # Local agent-session scaffolding (git worktrees spawned for isolated subagent tasks)
 .claude/
+
+# Python bytecode. `scripts/__pycache__/generate_framework_implementation.cpython-311.pyc`
+# was tracked and had been accumulating binary churn in every commit that ran the
+# generator — noise in a compliance repo whose diffs are meant to be reviewable,
+# and a file whose contents depend on the interpreter that happened to run last.
+__pycache__/
+*.py[cod]
+*$py.class

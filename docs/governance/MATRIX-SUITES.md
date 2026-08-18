@@ -1,9 +1,11 @@
 # Matrix Suites — bundling the estate's matrices into governed frameworks
 
-**Version:** 1.3.0 (tracks this narrative doc; independent of the YAML's own
-`meta.register_version`, which versions the registry's schema/content and only bumps when
-`compliance/matrix_suites.yaml` itself changes — unchanged since 1.0.0, as this pass only
-updated staged-vs-landed status in this doc)
+**Version:** 1.3.1 (tracks this narrative doc; independent of the YAML's own
+`meta.register_version`, which versions the registry's schema/content and bumps whenever
+`compliance/matrix_suites.yaml` itself changes — now 1.0.1, because the registry's
+`townhall_integration` description was corrected: it read `matrix-suite/<suite_id>`, a
+path-style tag the synchroniser never creates. The real payload is two separate tags,
+`["matrix-suite", "<suite_id>"]`)
 **Date:** 2026-08-07 (v1.3.0: Stage 7.4 landed — see §7)
 **Owner:** Platform Owner Trancendos / ISMS Lead
 **Machine-readable:** [compliance/matrix_suites.yaml](../../compliance/matrix_suites.yaml)

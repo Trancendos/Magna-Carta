@@ -19,13 +19,13 @@
 # the designed baseline the registry is seeded from.
 
 meta:
-  register_version: "1.0.0"
+  register_version: "1.0.1"
   owner: "Platform Owner Trancendos / ISMS Lead"
   created: "2026-07-31"
   last_updated: "2026-08-07"
   review_cadence_default: quarterly
   observatory_event_prefix: "governance.suite"
-  townhall_integration: "CranBania review cards tagged matrix-suite/<suite_id> on the shared board — landed Stage 7.4, see MATRIX-SUITES.md §6"
+  townhall_integration: "CranBania review cards tagged [\"matrix-suite\", \"<suite_id>\"] (two separate tags, not a matrix-suite/<suite_id> path) on the shared board — landed Stage 7.4, see MATRIX-SUITES.md §6"
 
 suites:
   - suite_id: SUITE-FIN

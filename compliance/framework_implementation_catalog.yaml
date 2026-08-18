@@ -386,16 +386,16 @@ entries:
   config_profile: NIST_BASELINE
 - framework_id: FW-042
   name: NIST SP 800-171 / 800-172
-  implementation_tier: baseline
-  signal_id: SIG-CORE-001
-  trigger_id: TRG-CORE-001
+  implementation_tier: signal_gated
+  signal_id: SIG-CMMC-001
+  trigger_id: TRG-CMMC-001
   auto_checks:
   - MON-013
   - MON-018
   readiness_doc: docs/compliance/readiness/NIST-FAMILY-READINESS.md
   programme_status: readiness
   applicability: not_applicable
-  config_profile: CORE_PLATFORM
+  config_profile: CMMC_SCOPE
 - framework_id: FW-043
   name: NIST SP 800-162
   implementation_tier: baseline
@@ -482,16 +482,16 @@ entries:
   config_profile: FEDRAMP_SCOPE
 - framework_id: FW-053
   name: CMMC 2.0
-  implementation_tier: baseline
-  signal_id: SIG-CORE-001
-  trigger_id: TRG-CORE-001
+  implementation_tier: signal_gated
+  signal_id: SIG-CMMC-001
+  trigger_id: TRG-CMMC-001
   auto_checks:
   - MON-013
   - MON-018
   readiness_doc: docs/compliance/CMMC-READINESS.md
   programme_status: programme
   applicability: not_applicable
-  config_profile: CORE_PLATFORM
+  config_profile: CMMC_SCOPE
 - framework_id: FW-054
   name: DoD (general)
   implementation_tier: baseline
@@ -554,16 +554,16 @@ entries:
   config_profile: null
 - framework_id: FW-059
   name: DFARS / NIST 800-171 flow-down
-  implementation_tier: baseline
-  signal_id: SIG-CORE-001
-  trigger_id: TRG-CORE-001
+  implementation_tier: signal_gated
+  signal_id: SIG-CMMC-001
+  trigger_id: TRG-CMMC-001
   auto_checks:
   - MON-013
   - MON-018
   readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
   programme_status: readiness
   applicability: not_applicable
-  config_profile: CORE_PLATFORM
+  config_profile: CMMC_SCOPE
 - framework_id: FW-060
   name: FIPS 140-3
   implementation_tier: signal_gated
@@ -591,56 +591,56 @@ entries:
 - framework_id: FW-062
   name: HIPAA Security Rule
   implementation_tier: signal_gated
-  signal_id: SIG-US-GOV-001
-  trigger_id: TRG-US-GOV-001
+  signal_id: SIG-HIPAA-001
+  trigger_id: TRG-HIPAA-001
   auto_checks:
   - MON-013
   - MON-018
   readiness_doc: docs/compliance/HIPAA-ALIGNMENT.md
   programme_status: programme
   applicability: conditional
-  config_profile: US_GOV_SCOPE
+  config_profile: HIPAA_PROFILE
 - framework_id: FW-063
   name: FERPA
-  implementation_tier: signal_gated
-  signal_id: SIG-HIPAA-001
-  trigger_id: TRG-HIPAA-001
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
   auto_checks:
   - MON-013
   - MON-018
   readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
   programme_status: readiness
   applicability: not_applicable
-  config_profile: HIPAA_PROFILE
+  config_profile: CORE_PLATFORM
 - framework_id: FW-064
   name: IRS Publication 1075
-  implementation_tier: signal_gated
-  signal_id: SIG-NHS-001
-  trigger_id: TRG-NHS-001
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
   auto_checks:
   - MON-013
   - MON-018
   readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
   programme_status: readiness
   applicability: not_applicable
-  config_profile: NHS_DSPT_SCOPE
+  config_profile: CORE_PLATFORM
 - framework_id: FW-065
   name: SEC Rule 17a-4(f)
-  implementation_tier: signal_gated
-  signal_id: SIG-NHS-001
-  trigger_id: TRG-NHS-001
+  implementation_tier: baseline
+  signal_id: SIG-CORE-001
+  trigger_id: TRG-CORE-001
   auto_checks:
   - MON-013
   - MON-018
   readiness_doc: docs/compliance/readiness/US-GOVERNMENT-READINESS.md
   programme_status: readiness
   applicability: not_applicable
-  config_profile: NHS_DSPT_SCOPE
+  config_profile: CORE_PLATFORM
 - framework_id: FW-066
   name: US CLOUD Act
   implementation_tier: reference
   signal_id: SIG-US-GOV-001
-  trigger_id: TRG-US-GOV
+  trigger_id: TRG-US-GOV-001
   auto_checks:
   - MON-013
   - MON-018
@@ -832,7 +832,7 @@ entries:
   name: CISPE Code of Conduct
   implementation_tier: reference
   signal_id: SIG-INTL-ASSURANCE-001
-  trigger_id: TRG-INTL-ASSURANCE
+  trigger_id: TRG-INTL-ASSURANCE-001
   auto_checks:
   - MON-013
   - MON-018
@@ -915,15 +915,15 @@ entries:
 - framework_id: FW-089
   name: NHS DSPT
   implementation_tier: signal_gated
-  signal_id: SIG-INTL-ASSURANCE-001
-  trigger_id: TRG-INTL-ASSURANCE-001
+  signal_id: SIG-NHS-001
+  trigger_id: TRG-NHS-001
   auto_checks:
   - MON-013
   - MON-018
   readiness_doc: docs/compliance/NHS-DSPT-READINESS.md
   programme_status: programme
   applicability: not_applicable
-  config_profile: INTL_ASSURANCE_SCOPE
+  config_profile: NHS_DSPT_SCOPE
 - framework_id: FW-090
   name: MPA
   implementation_tier: signal_gated
@@ -999,15 +999,15 @@ entries:
 - framework_id: FW-100
   name: DORA
   implementation_tier: signal_gated
-  signal_id: SIG-EU-INDUSTRY-001
-  trigger_id: TRG-EU-INDUSTRY-001
+  signal_id: SIG-DORA-001
+  trigger_id: TRG-DORA-001
   auto_checks:
   - MON-013
   - MON-018
   readiness_doc: docs/compliance/readiness/INDUSTRY-SECTOR-READINESS.md
   programme_status: programme
   applicability: conditional
-  config_profile: EU_INDUSTRY_SCOPE
+  config_profile: DORA_SCOPE
 - framework_id: FW-101
   name: FINMA
   implementation_tier: signal_gated
@@ -1096,7 +1096,7 @@ entries:
   name: CE+ Framework
   implementation_tier: reference
   signal_id: SIG-EU-INDUSTRY-001
-  trigger_id: TRG-EU-INDUSTRY
+  trigger_id: TRG-EU-INDUSTRY-001
   auto_checks:
   - MON-013
   - MON-018
@@ -1480,7 +1480,7 @@ entries:
   name: UK Research Integrity Concordat
   implementation_tier: reference
   signal_id: SIG-EU-INDUSTRY-001
-  trigger_id: TRG-EU-INDUSTRY
+  trigger_id: TRG-EU-INDUSTRY-001
   auto_checks:
   - MON-013
   - MON-018
