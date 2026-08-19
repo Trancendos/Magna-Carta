@@ -18,6 +18,7 @@ meta:
   status_legend:
     PROGRAMME_ARTEFACT: "Documentation, register entry, or config exists in Magna Carta; operational validation may be pending (see notes)"
     OPERATIONAL: "Externally validated or exercised in production (not used for MC entries yet)"
+    GAP: "Obligation identified and mapped, but no artefact or control exists yet. Used where naming the absence is the honest status -- a requirement with no evidence should not be recorded as an artefact."
   status_note: "MC requirements track the documentation programme. PROGRAMME_ARTEFACT does not imply ISO/SOC certification or signed third-party contracts."
 
 requirements:
@@ -907,3 +908,88 @@ requirements:
     last_reviewed: "2026-07-30"
     reviewer: "Fabulousa (Baron Von Hilton)"
     notes: "§4 records what's aspirational and not yet built honestly rather than implying it exists; accessibility-specific standards and gap list live separately in ACCESSIBILITY-STANDARDS.md."
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # EU CYBER RESILIENCE ACT — Regulation (EU) 2024/2847
+  # Profile: docs/compliance/EU-CRA-PROFILE.md · Legislation: LEG-011
+  # ─────────────────────────────────────────────────────────────────────────────
+  - id: MC-042
+    standard: "EU CRA / Art. 13 + Annex II"
+    title: "SBOM covering at least direct dependencies, current for the support period"
+    description: "A manufacturer must create and maintain an SBOM covering at least the product's direct dependencies, kept current throughout the product lifespan and support period, and producible on request by market surveillance authorities."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: workflow
+        path: .forgejo/workflows/security-scan.yml
+        description: "sbom-generation job — syft CycloneDX + SPDX, grype match, conditional Dependency-Track upload"
+    verification_method: artefact_review
+    last_reviewed: "2026-08-19"
+    reviewer: "Platform Owner Trancendos"
+    notes: "PARTIAL. Generation is real and dual-format. The gap is retention: SBOMs are CI artefacts on a retention window, not durable version-keyed records for released versions. This is the dependency of MC-045's 24-hour clock, not a parallel item."
+
+  - id: MC-043
+    standard: "EU CRA / Art. 13 + Annex I Part I"
+    title: "Placed on the market free from known exploitable vulnerabilities"
+    description: "Products with digital elements must be placed on the EU market without known exploitable vulnerabilities, with vulnerabilities handled effectively throughout the support period."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: script
+        path: scripts/vulnerability_census.py
+        description: "Tranc3 repo — fixable/accepted classification, fail-closed on unscanned surfaces"
+      - type: register
+        path: SECURITY_ALERT_REGISTER.md
+        description: "Tranc3 repo — per-finding disposition for accepted risks"
+    verification_method: automated_gate
+    last_reviewed: "2026-08-19"
+    reviewer: "Platform Owner Trancendos"
+    notes: "Fixable vulnerabilities cap the security score below green and block the production gate. Currently 0 fixable, 1 accepted (ecdsa PYSEC-2026-1325 — no upstream fix, documented, guarded by scripts/check_ecdsa_direct_usage.py)."
+
+  - id: MC-044
+    standard: "EU CRA / Art. 13(5) + Recital 76"
+    title: "Component maintenance trajectory evaluated at selection and tracked continuously"
+    description: "Due diligence on third-party components requires assessing their maintenance trajectory before incorporation and monitoring it continuously, since a support-period commitment of five or more years depends on upstream remaining able to supply fixes."
+    status: PROGRAMME_ARTEFACT
+    evidence:
+      - type: script
+        path: scripts/obsolescence_census.py
+        description: "Tranc3 repo — upstream liveness x our lag across all direct dependencies"
+      - type: register
+        path: docs/governance/OBSOLESCENCE-ACCEPTED.md
+        description: "Tranc3 repo — reasoned disposition per dormant component"
+    verification_method: automated_gate
+    last_reviewed: "2026-08-19"
+    reviewer: "Platform Owner Trancendos"
+    notes: "110 direct dependencies measured, 0 errored: 95 healthy, 10 lagging, 5 stranded, 0 zombie. Weekly scheduled run catches a component crossing the dormancy threshold with no commit involved, which is how obsolescence actually arrives."
+
+  - id: MC-045
+    standard: "EU CRA / Art. 14"
+    title: "24h / 72h / 14d reporting of actively exploited vulnerabilities and severe incidents"
+    description: "From 11 September 2026: early warning to the coordinating CSIRT and ENISA within 24 hours of awareness of an actively exploited vulnerability; notification within 72 hours of triage; final report within 14 days of a corrective measure being available."
+    status: GAP
+    evidence: []
+    verification_method: procedure_exercise
+    last_reviewed: "2026-08-19"
+    reviewer: "Platform Owner Trancendos"
+    notes: "THE BINDING GAP, and the one with the nearest deadline. Nothing exists: no designated CSIRT, no notification path, no clock, no named role. 24 hours is a lookup interval, not a scanning interval -- it is unmeetable by a process that begins with running a scan. Requires MC-042 retention first. Every component has an existing home (Artifactory for SBOM store, Cryptex for advisory intake, escalation FSM for the clock, Observatory for the record, /roles for a CRA Reporting Officer, CranBania for the SLA card); the work is integration, not invention."
+
+  - id: MC-046
+    standard: "EU CRA / Art. 13(8)"
+    title: "Declared support period, transparent to users"
+    description: "The manufacturer must determine and publish a support period reflecting the product's reasonable expected lifetime; absent a shorter justified lifespan, the CRA expects vulnerability handling for a minimum of five years."
+    status: GAP
+    evidence: []
+    verification_method: document_review
+    last_reviewed: "2026-08-19"
+    reviewer: "Platform Owner Trancendos"
+    notes: "No support period is declared anywhere in the estate. This is a business commitment rather than a compliance artefact -- it is the owner's decision how long Trancendos will maintain what it ships -- but it must be made before first placement, because it is published to users and cannot easily be shortened afterwards."
+
+  - id: MC-047
+    standard: "EU CRA / Art. 13(12) + Art. 31"
+    title: "Ten-year retention of technical documentation and security update availability"
+    description: "Technical documentation covering cybersecurity policies, practices and decisions must be retained and available to authorities for at least 10 years; security updates must remain accessible for 10 years after the end of the support period."
+    status: GAP
+    evidence: []
+    verification_method: document_review
+    last_reviewed: "2026-08-19"
+    reviewer: "Platform Owner Trancendos"
+    notes: "Governance documentation is version-controlled, which is a reasonable foundation, but no retention policy targets these durations. The Observatory already carries retention_class and legal_hold fields (added under MC waiver/retention work); this needs a CRA class defined and applied rather than new machinery."

@@ -131,6 +131,31 @@ active_legislation:
     review_date: "2026-09-06"
     notes: "Handbook rules — cite FCA handbook URLs; not primary legislation"
 
+  - legislation_id: LEG-011
+    name: "Regulation (EU) 2024/2847 (Cyber Resilience Act)"
+    short_name: "EU CRA"
+    jurisdiction: EU
+    status: Programme
+    celex: "32024R2847"
+    eli_uri: "https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng"
+    oj_reference: "OJ L, 2024/2847, 20.11.2024"
+    compliance_owner: "Platform Owner Trancendos / DPO"
+    profile: "docs/compliance/EU-CRA-PROFILE.md"
+    key_dates:
+      entered_into_force: "2024-12-10"
+      reporting_obligations_apply: "2026-09-11"
+      fully_applicable: "2027-12-11"
+    review_date: "2026-09-11"
+    notes: >-
+      Active rather than watch-list: obligations attach to a product with digital
+      elements placed on the EU market, and the owner has confirmed EU users are in
+      scope. The free/open-source carve-out does not apply because the platform is
+      monetised (src/monetisation/billing.py, Stripe paid tiers) and is therefore
+      supplied in the course of a commercial activity -- a determination recorded
+      with its evidence in the profile and pending legal confirmation. The estate is
+      not yet deployed, so nothing has been placed on the market yet; CRA readiness
+      is therefore a go-live gate item rather than a retrofit.
+
 watch_list:
   - watch_id: WATCH-001
     name: "Online Safety Act 2023"
