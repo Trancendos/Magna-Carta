@@ -117,15 +117,44 @@ document, and it is the one whose deadline arrives first.
 
 From 11 September 2026, Article 14 creates **two reporting paths that share their first
 two deadlines and differ in the third.** Both are submitted through the single reporting
-platform established under Article 16, simultaneously to the CSIRT designated as
-coordinator and to ENISA.
+platform established under Article 16, to the electronic notification end-point of a
+coordinating CSIRT, and are *simultaneously accessible to ENISA* — ENISA is not a second
+submission to make.
 
-Which coordinating CSIRT is *not* our choice to make. Under Article 14(7) the
-notification goes to the electronic notification end-point of the CSIRT designated as
-coordinator by the Member State of the manufacturer's **main establishment** — the place
-where decisions about the cybersecurity of its products are predominantly taken. So the
-open work is a determination and a test, not a designation: establish which Member State
-that is for Trancendos, resolve that CSIRT's endpoint, and exercise the route once.
+### Which endpoint: a two-branch determination
+
+Which coordinating CSIRT is not our choice to make, and Article 14(7) gives two branches
+rather than one. The second is probably ours.
+
+**(a) Main establishment in the Union.** The coordinating CSIRT of that Member State,
+where "main establishment" means the place decisions about the cybersecurity of its
+products are predominantly taken.
+
+**(b) No main establishment in the Union.** An ordered fallback, first available wins:
+
+| Order | Member State determined by |
+|---|---|
+| 1 | where the **authorised representative** acting for the highest number of the manufacturer's products is established |
+| 2 | where the **importer** placing the highest number on the market is established |
+| 3 | where the **distributor** making the highest number available is established |
+| 4 | where the highest number of **users** are located |
+
+**Branch (b) is the live question, and it has an unusual consequence.** Trancendos prices
+in GBP (`src/monetisation/billing.py` — free / £29 / £149) and operates from
+trancendos.com, which points away from a Union establishment. That is evidence for the
+determination rather than the determination itself, since establishment turns on where
+cybersecurity decisions are taken and not on currency or domain — but if (b) holds, then
+Trancendos has no authorised representative, no importer and no distributor, and the
+chain collapses to row 4.
+
+Row 4 means **the endpoint follows where our users are**, and therefore cannot be settled
+until there are users. That makes it a go-live determination in the strict sense: not
+merely something to do before go-live, but something go-live itself determines. Writing
+the rule down now is what makes it answerable on day one rather than during a running
+24-hour clock.
+
+So the open work is: settle which branch applies, resolve the resulting CSIRT's endpoint,
+and exercise the route once.
 
 **(a) An actively exploited vulnerability in the product**
 

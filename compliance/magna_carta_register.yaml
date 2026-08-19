@@ -992,14 +992,38 @@ requirements:
       has been exercised, no clock runs, no role is named.
 
       ENDPOINT, NOT DESIGNATION. A manufacturer does not designate a CSIRT. Under
-      Art. 14(7) the notification goes to the electronic notification end-point of the
-      CSIRT designated as coordinator by the Member State of the manufacturer's MAIN
-      ESTABLISHMENT -- the place where decisions about the cybersecurity of its
-      products are predominantly taken -- submitted through the Art. 16 single
-      reporting platform, with ENISA able to access it simultaneously. So the open
-      work is: establish which Member State that is, resolve its coordinating CSIRT's
-      endpoint, and test the route. An earlier draft said "no designated CSIRT", which
-      described a task nobody at Trancendos can perform.
+      Art. 14(7) the notification goes to the electronic notification end-point of a
+      coordinating CSIRT, submitted through the Art. 16 single reporting platform, and
+      is simultaneously accessible to ENISA -- ENISA is not a second submission.
+      An earlier draft said "no designated CSIRT", which described a task nobody at
+      Trancendos can perform.
+
+      WHICH endpoint is a TWO-BRANCH determination, and the second branch is the one
+      that probably applies here:
+      (a) MAIN ESTABLISHMENT IN THE UNION -- the coordinating CSIRT of that Member
+      State, where "main establishment" is the place decisions about the cybersecurity
+      of its products are predominantly taken.
+      (b) NO MAIN ESTABLISHMENT IN THE UNION -- an ordered fallback, first available
+      wins: (1) the Member State where the authorised representative acting for the
+      highest number of the manufacturer's products is established; failing that
+      (2) the importer placing the highest number on the market; failing that
+      (3) the distributor making the highest number available; failing that
+      (4) the Member State where the highest number of USERS are located.
+
+      Branch (b) is the live question. Trancendos prices in GBP (free / pro GBP29 /
+      business GBP149 in src/monetisation/billing.py) and operates from trancendos.com,
+      which points away from a Union establishment -- though establishment turns on
+      where cybersecurity decisions are taken, not on currency or domain, so this is
+      evidence for the determination and not the determination itself. If (b) holds,
+      Trancendos has no authorised representative, importer or distributor, so the
+      route collapses to (4): the endpoint follows WHERE OUR USERS ARE, and therefore
+      cannot be fixed until there are users. That makes it a go-live determination in
+      the strict sense -- not merely something to do before go-live, but something the
+      go-live itself determines. Recording the rule now is what makes it answerable on
+      day one instead of during a 24-hour clock.
+
+      So the open work is: settle which branch applies, resolve the resulting CSIRT's
+      endpoint, and test the route.
 
       TRIGGER: the standard is "actively exploited". An earlier draft of this entry
       glossed that as "proof-of-concept code exists", which is not the test and
