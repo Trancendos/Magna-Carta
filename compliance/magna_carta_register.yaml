@@ -929,7 +929,7 @@ requirements:
     verification_method: artefact_review
     last_reviewed: "2026-08-19"
     reviewer: "Platform Owner Trancendos"
-    notes: "PARTIAL. Generation is real and dual-format. The gap is retention: SBOMs are CI artefacts on a retention window, not durable version-keyed records for released versions. This is the dependency of MC-045's 24-hour clock, not a parallel item."
+    notes: "PARTIAL. Generation is real and dual-format. The gap is retention: SBOMs are CI artefacts on a retention window, not durable version-keyed records for released versions. This ENABLES MC-045 rather than gating it: the Article 14 clocks run from awareness, so a missing SBOM makes the 24-hour answer harder to produce but does not postpone the deadline. Both are independent go-live gates."
 
   - id: MC-043
     standard: "EU CRA / Art. 13 + Annex I Part I"
@@ -975,8 +975,10 @@ requirements:
       aware; vulnerability notification within 72 hours; final report no later than
       14 days after a corrective or mitigating measure is available.
       (b) SEVERE INCIDENT affecting the security of the product: early warning within
-      24 hours; incident notification within 72 hours; final report within ONE MONTH
-      of that 72-hour notification.
+      24 hours; incident notification within 72 hours; final report no later than ONE
+      MONTH AFTER THE SUBMISSION of that incident notification -- the clock runs from
+      when the notification is actually submitted, not from the expiry of the 72-hour
+      window, so submitting early shortens the final-report deadline too.
       The two paths share a trigger discipline and differ in the final-report clock,
       so a single combined procedure would get one of them wrong."
     status: GAP
@@ -985,8 +987,19 @@ requirements:
     last_reviewed: "2026-08-19"
     reviewer: "Platform Owner Trancendos"
     notes: >-
-      THE BINDING GAP, and the one with the nearest deadline. Nothing exists: no
-      designated CSIRT, no notification path, no clock, no named role.
+      THE BINDING GAP, and the one with the nearest deadline. Nothing exists: the
+      applicable notification endpoint has not been determined, no notification path
+      has been exercised, no clock runs, no role is named.
+
+      ENDPOINT, NOT DESIGNATION. A manufacturer does not designate a CSIRT. Under
+      Art. 14(7) the notification goes to the electronic notification end-point of the
+      CSIRT designated as coordinator by the Member State of the manufacturer's MAIN
+      ESTABLISHMENT -- the place where decisions about the cybersecurity of its
+      products are predominantly taken -- submitted through the Art. 16 single
+      reporting platform, with ENISA able to access it simultaneously. So the open
+      work is: establish which Member State that is, resolve its coordinating CSIRT's
+      endpoint, and test the route. An earlier draft said "no designated CSIRT", which
+      described a task nobody at Trancendos can perform.
 
       TRIGGER: the standard is "actively exploited". An earlier draft of this entry
       glossed that as "proof-of-concept code exists", which is not the test and

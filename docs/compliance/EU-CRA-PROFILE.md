@@ -104,7 +104,7 @@ Status key: ✅ satisfied · 🟡 partial · 🔴 gap · ⬜ not yet triggered
 | MC-042 | **SBOM covering at least top-level dependencies, kept current throughout the support period** (Annex I, Pt II, pt 1) | 🟡 | `.forgejo/workflows/security-scan.yml` `sbom-generation` runs syft producing both CycloneDX and SPDX, with grype matching and conditional Dependency-Track upload | SBOMs are CI artefacts with a retention window, not lifecycle-retained records. The CRA expects the SBOM for a *released product version* to remain available and current across the support period. Needs durable, version-keyed retention |
 | MC-043 | **Product placed on the market free from known exploitable vulnerabilities** | ✅ | `scripts/vulnerability_census.py` + `--check` in the production gate; fixable vulnerabilities cap the security score below green and block the gate. Currently 0 fixable, 1 accepted (`ecdsa` PYSEC-2026-1325, documented and guarded) | Nothing structural in the control. **Scope limit:** the duty attaches at *placement*, and nothing is placed — so this evidences the gate that will apply, not a released version. Re-evidence per release once releases exist |
 | MC-044 | **Component maintenance trajectory evaluated at selection and tracked continuously** (Art. 13(5) + Recital 34) | 🟡 | `scripts/obsolescence_census.py` measures upstream liveness and our lag for all 110 direct dependencies; `docs/governance/OBSOLESCENCE-ACCEPTED.md` records a reasoned disposition per dormant component; weekly scheduled run in `dependency-audit.yml` | Direct dependencies only. That satisfies the Annex I SBOM floor ("top-level dependencies") but not the full reach of Art. 13(5), whose due diligence covers integrated components generally — and OSSRA measures 64% of components as transitive. Best-covered of the six, and not complete |
-| MC-045 | **Art. 14 reporting via the Art. 16 platform — 24h / 72h, then 14 days (vulnerability) or one month (severe incident)** | 🔴 | Nothing. No designated CSIRT, no notification path, no clock, no named responsible role | The whole mechanism. See §5 — this is the binding gap |
+| MC-045 | **Art. 14 reporting via the Art. 16 platform — 24h / 72h, then 14 days (vulnerability) or one month (severe incident)** | 🔴 | Nothing. The applicable notification endpoint is undetermined, no notification path has been exercised, no clock runs, no responsible role is named | The whole mechanism. See §5 — this is the binding gap |
 | MC-046 | **Declared support period (min. 5 years absent shorter product life), transparent to users** | 🔴 | Nothing. No support period is declared anywhere | A published support-period statement per product, and the decision about what it is. Must be made *before* first placement, because it is a commitment to users |
 | MC-047 | **Retention — technical documentation + EU DoC (Art. 13(13)) and security updates (Art. 13(9)), each for 10 years *or* the support period, whichever is longer** | 🔴 | Governance documentation exists and is version-controlled, which is a good start, but no retention policy targets either duration | Two retention classes, one per clock. The Observatory already has `retention_class` and `legal_hold` fields, so this is configuration, not machinery. **Corrected 2026-08-19:** an earlier draft cited Art. 13(12) + Art. 31 and described the duty as "10 years *after* the support period" — both wrong, and the second overstated the obligation |
 | — | Vulnerability reported to the component's maintainer when found | 🟡 | No formal process; ad-hoc in practice | A step in the incident procedure. Cheap to add, easy to forget |
@@ -120,6 +120,13 @@ two deadlines and differ in the third.** Both are submitted through the single r
 platform established under Article 16, simultaneously to the CSIRT designated as
 coordinator and to ENISA.
 
+Which coordinating CSIRT is *not* our choice to make. Under Article 14(7) the
+notification goes to the electronic notification end-point of the CSIRT designated as
+coordinator by the Member State of the manufacturer's **main establishment** — the place
+where decisions about the cybersecurity of its products are predominantly taken. So the
+open work is a determination and a test, not a designation: establish which Member State
+that is for Trancendos, resolve that CSIRT's endpoint, and exercise the route once.
+
 **(a) An actively exploited vulnerability in the product**
 
 1. **Within 24 hours of becoming aware** — early warning.
@@ -132,7 +139,9 @@ coordinator and to ENISA.
 
 1. **Within 24 hours of becoming aware** — early warning.
 2. **Within 72 hours** — incident notification.
-3. **Within one month of that 72-hour notification** — final report.
+3. **No later than one month after the *submission* of that incident notification** —
+   final report. The clock runs from when the notification is actually submitted, not
+   from the expiry of the 72-hour window, so notifying early shortens this deadline too.
 
 Two details worth stating precisely, because getting either wrong sets the clock running
 on the wrong event or stops it too late:
@@ -142,7 +151,8 @@ on the wrong event or stops it too late:
   test. Published proof-of-concept code is evidence that a vulnerability *could* be
   exploited; the obligation attaches to evidence that it *is being* exploited.
 - **The final-report clocks differ** — 14 days from the availability of a fix for a
-  vulnerability, one month from the notification for an incident — and they are anchored
+  vulnerability, one month from the *submission* of the notification for an incident —
+  and they are anchored
   to different events. A single combined procedure will get one of them wrong.
 
 Twenty-four hours is not a scanning interval. It is a *lookup* interval. The obligation

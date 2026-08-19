@@ -41,7 +41,7 @@ which is a large body of software assembled largely from open source.
 
 **Everything substantive lives in [EU-CRA-PROFILE.md](EU-CRA-PROFILE.md)** — the staged
 application dates, the two applicability determinations and their evidence, and the
-obligation mapping to MC-042..047. This entry is deliberately a pointer rather than a
+obligation mapping to MC-042–MC-047. This entry is deliberately a pointer rather than a
 summary: the profile cites specific implementation paths, and a second copy here would
 diverge from it silently.
 
