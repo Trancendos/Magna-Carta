@@ -19,6 +19,10 @@ meta:
     PROGRAMME_ARTEFACT: "Documentation, register entry, or config exists in Magna Carta; operational validation may be pending (see notes)"
     OPERATIONAL: "Externally validated or exercised in production (not used for MC entries yet)"
     GAP: "Obligation identified and mapped, but no artefact or control exists yet. Used where naming the absence is the honest status -- a requirement with no evidence should not be recorded as an artefact."
+  status_transitions:
+    GAP_to_PROGRAMME_ARTEFACT: "When an artefact exists that a reviewer can open -- a document, script, config or register entry -- and it is listed under `evidence`. The bar is existence and reviewability, not effectiveness. A GAP entry must not move on the strength of a plan, a ticket, or an intention."
+    PROGRAMME_ARTEFACT_to_OPERATIONAL: "When the control has been externally validated or exercised in production. Not used for MC entries yet."
+    any_to_GAP: "Permitted, and expected rather than embarrassing: if a control is removed, superseded or found not to do what its entry claimed, moving the entry back to GAP is more useful than leaving a stale artefact reference in place."
   status_note: "MC requirements track the documentation programme. PROGRAMME_ARTEFACT does not imply ISO/SOC certification or signed third-party contracts."
 
 requirements:

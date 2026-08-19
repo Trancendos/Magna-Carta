@@ -149,12 +149,13 @@ active_legislation:
     notes: >-
       Active rather than watch-list: obligations attach to a product with digital
       elements placed on the EU market, and the owner has confirmed EU users are in
-      scope. The free/open-source carve-out does not apply because the platform is
-      monetised (src/monetisation/billing.py, Stripe paid tiers) and is therefore
-      supplied in the course of a commercial activity -- a determination recorded
-      with its evidence in the profile and pending legal confirmation. The estate is
-      not yet deployed, so nothing has been placed on the market yet; CRA readiness
-      is therefore a go-live gate item rather than a retrofit.
+      scope. Two determinations govern applicability -- whether the free/open-source
+      carve-out applies, and whether anything has yet been placed on the market.
+      Both are made once, with their supporting evidence, in EU-CRA-PROFILE.md
+      section 3, and are deliberately NOT restated here: the evidence cites specific
+      implementation paths, and duplicating it would let the two copies diverge
+      silently when those paths change. Net effect: CRA readiness is a go-live gate
+      item rather than a retrofit.
 
 watch_list:
   - watch_id: WATCH-001

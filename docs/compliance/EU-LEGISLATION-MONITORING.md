@@ -33,23 +33,25 @@ This complements ICO/DSIT monitoring in the UK register; it does **not** duplica
 
 Full metadata: `compliance/legislation_register.yaml` → `active_legislation`.
 
-### 2.1 CRA — staged application
+### 2.1 CRA — added 2026-08-19
 
-Added 2026-08-19. The CRA had no coverage in this framework before that date, which was a
-gap rather than a scoping decision: it is the EU regulation speaking most directly to what
-this platform is, which is a large body of software assembled largely from open source.
+The CRA had no coverage in this framework before that date, which was a gap rather than a
+scoping decision: it is the EU regulation speaking most directly to what this platform is,
+which is a large body of software assembled largely from open source.
 
-| Date | What changes |
-|---|---|
-| 10 December 2024 | Entered into force |
-| **11 September 2026** | **Reporting of actively exploited vulnerabilities and severe incidents becomes mandatory** |
-| 11 December 2027 | Fully applicable, with enforcement and penalties |
+**Everything substantive lives in [EU-CRA-PROFILE.md](EU-CRA-PROFILE.md)** — the staged
+application dates, the two applicability determinations and their evidence, and the
+obligation mapping to MC-042..047. This entry is deliberately a pointer rather than a
+summary: the profile cites specific implementation paths, and a second copy here would
+diverge from it silently.
 
-Obligations attach on **placing a product on the EU market**, and the estate is not yet
-deployed. CRA readiness is therefore a go-live gate item rather than a retrofit — see
-[EU-CRA-PROFILE.md](EU-CRA-PROFILE.md) §3.2, which is the most consequential paragraph in
-that profile. Mapped as MC-042 to MC-047; MC-045 (the 24h/72h/14d reporting mechanism) is
-the binding gap.
+Two things are worth knowing without opening it:
+
+- The nearest deadline is **11 September 2026**, when vulnerability reporting becomes
+  mandatory.
+- Obligations attach on *placing a product on the market*, and the estate is undeployed —
+  so CRA readiness is a **go-live gate item**, not a retrofit. MC-045 (the 24h/72h/14d
+  reporting mechanism) is the binding gap.
 
 ---
 
