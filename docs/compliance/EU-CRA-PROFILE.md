@@ -22,17 +22,21 @@ legislation register tracks the AI Act and GDPR as active, and watch-lists the D
 NIS2 and DORA — but not the one EU regulation that speaks directly to what this platform
 is, which is a large body of software assembled largely from open source.
 
-The prompt to open it was the 2026 OSSRA report, whose central findings map onto CRA
-obligations almost line for line: 93% of audited codebases carry components with no
-upstream development in over two years, 64% of components are transitive, and the CRA
-expects a manufacturer to know both facts about its own product, continuously, for at
-least five years.
+The prompt to open it was the **2026 Open Source Security and Risk Analysis (OSSRA)
+report** (Black Duck), covering 947 commercial codebases audited between November 2024
+and October 2025. Its central findings map onto CRA obligations almost line for line:
+93% of audited codebases carry components with no upstream development in over two
+years, and 64% of components in a typical codebase are transitive. The CRA expects a
+manufacturer to know both facts about its own product, continuously, across a support
+period of at least five years. Those figures are cited as *motivation* for opening this
+profile; no obligation below rests on them.
 
 ## 2. The dates that matter
 
 | Date | What changes | Source |
 |---|---|---|
 | 10 December 2024 | CRA entered into force | European Commission |
+| 11 June 2026 | Chapter IV (Arts 35–51, notification of conformity assessment bodies) applies — **already in force** | Art. 71(2) |
 | **11 September 2026** | **Reporting obligations for actively exploited vulnerabilities and severe incidents become mandatory** | European Commission |
 | 11 December 2027 | All substantive requirements apply, with enforcement and penalties | European Commission |
 
@@ -63,7 +67,17 @@ check.
 
 CRA obligations attach to a product with digital elements **placed on the market**. Per
 `docs/GO_LIVE_GAP_ANALYSIS.md`, the estate is not yet deployed — the remaining go-live
-blocker is precisely that. Nothing has been placed on any market.
+blocker is precisely that.
+
+**"Not deployed" is weaker evidence than it sounds, and is not by itself the finding.**
+Making a product available on the Union market covers more routes than a production
+deployment: a public download, a release artefact, a hosted preview or pilot, or EU
+customer access to a running instance can each constitute availability. Publishing
+source in a public repository does not, on its own. So the honest statement is
+conditional: *no supply route has been identified through which a product with digital
+elements has been made available to EU users, and the production deployment that would
+create one has not happened.* Confirming that positively across every channel — not just
+the deployment one — is a recorded open action, not a settled conclusion.
 
 This is the single most useful thing in this profile, so it is worth stating plainly:
 
@@ -87,12 +101,12 @@ Status key: ✅ satisfied · 🟡 partial · 🔴 gap · ⬜ not yet triggered
 
 | Ref | CRA obligation | Status | What exists today | What is missing |
 |---|---|---|---|---|
-| MC-042 | **SBOM covering at least direct dependencies, kept current throughout the support period** | 🟡 | `.forgejo/workflows/security-scan.yml` `sbom-generation` runs syft producing both CycloneDX and SPDX, with grype matching and conditional Dependency-Track upload | SBOMs are CI artefacts with a retention window, not lifecycle-retained records. The CRA expects the SBOM for a *released product version* to remain available and current across the support period. Needs durable, version-keyed retention |
-| MC-043 | **Product placed on the market free from known exploitable vulnerabilities** | ✅ | `scripts/vulnerability_census.py` + `--check` in the production gate; fixable vulnerabilities cap the security score below green and block the gate. Currently 0 fixable, 1 accepted (`ecdsa` PYSEC-2026-1325, documented and guarded) | Nothing structural. The accepted-risk disposition must be reviewable by a market surveillance authority, which `SECURITY_ALERT_REGISTER.md` already provides |
-| MC-044 | **Component maintenance trajectory evaluated at selection and tracked continuously** | ✅ | `scripts/obsolescence_census.py` measures upstream liveness and our lag for all 110 direct dependencies; `docs/governance/OBSOLESCENCE-ACCEPTED.md` records a reasoned disposition per dormant component; weekly scheduled run in `dependency-audit.yml` | Nothing structural. This obligation was the OSSRA finding that prompted the work, and it is now the best-covered one |
-| MC-045 | **24h / 72h / 14d reporting to the CSIRT coordinator and ENISA** | 🔴 | Nothing. No designated CSIRT, no notification path, no clock, no named responsible role | The whole mechanism. See §5 — this is the binding gap |
+| MC-042 | **SBOM covering at least top-level dependencies, kept current throughout the support period** (Annex I, Pt II, pt 1) | 🟡 | `.forgejo/workflows/security-scan.yml` `sbom-generation` runs syft producing both CycloneDX and SPDX, with grype matching and conditional Dependency-Track upload | SBOMs are CI artefacts with a retention window, not lifecycle-retained records. The CRA expects the SBOM for a *released product version* to remain available and current across the support period. Needs durable, version-keyed retention |
+| MC-043 | **Product placed on the market free from known exploitable vulnerabilities** | ✅ | `scripts/vulnerability_census.py` + `--check` in the production gate; fixable vulnerabilities cap the security score below green and block the gate. Currently 0 fixable, 1 accepted (`ecdsa` PYSEC-2026-1325, documented and guarded) | Nothing structural in the control. **Scope limit:** the duty attaches at *placement*, and nothing is placed — so this evidences the gate that will apply, not a released version. Re-evidence per release once releases exist |
+| MC-044 | **Component maintenance trajectory evaluated at selection and tracked continuously** (Art. 13(5) + Recital 34) | 🟡 | `scripts/obsolescence_census.py` measures upstream liveness and our lag for all 110 direct dependencies; `docs/governance/OBSOLESCENCE-ACCEPTED.md` records a reasoned disposition per dormant component; weekly scheduled run in `dependency-audit.yml` | Direct dependencies only. That satisfies the Annex I SBOM floor ("top-level dependencies") but not the full reach of Art. 13(5), whose due diligence covers integrated components generally — and OSSRA measures 64% of components as transitive. Best-covered of the six, and not complete |
+| MC-045 | **Art. 14 reporting via the Art. 16 platform — 24h / 72h, then 14 days (vulnerability) or one month (severe incident)** | 🔴 | Nothing. No designated CSIRT, no notification path, no clock, no named responsible role | The whole mechanism. See §5 — this is the binding gap |
 | MC-046 | **Declared support period (min. 5 years absent shorter product life), transparent to users** | 🔴 | Nothing. No support period is declared anywhere | A published support-period statement per product, and the decision about what it is. Must be made *before* first placement, because it is a commitment to users |
-| MC-047 | **Technical documentation retained 10 years; security updates available 10 years post-support-period** | 🔴 | Governance documentation exists and is version-controlled, which is a good start, but no retention policy targets these durations | A retention class for CRA technical documentation. The Observatory already has `retention_class` and `legal_hold` fields — this needs a class defined and applied |
+| MC-047 | **Retention — technical documentation + EU DoC (Art. 13(13)) and security updates (Art. 13(9)), each for 10 years *or* the support period, whichever is longer** | 🔴 | Governance documentation exists and is version-controlled, which is a good start, but no retention policy targets either duration | Two retention classes, one per clock. The Observatory already has `retention_class` and `legal_hold` fields, so this is configuration, not machinery. **Corrected 2026-08-19:** an earlier draft cited Art. 13(12) + Art. 31 and described the duty as "10 years *after* the support period" — both wrong, and the second overstated the obligation |
 | — | Vulnerability reported to the component's maintainer when found | 🟡 | No formal process; ad-hoc in practice | A step in the incident procedure. Cheap to add, easy to forget |
 | — | Importer/distributor obligations | ⬜ | Not applicable — Trancendos manufactures rather than imports or distributes third-party products | Revisit if the API Marketplace ever redistributes third-party products |
 
@@ -101,14 +115,35 @@ Status key: ✅ satisfied · 🟡 partial · 🔴 gap · ⬜ not yet triggered
 Of everything above, MC-045 is the obligation that cannot be satisfied by writing a
 document, and it is the one whose deadline arrives first.
 
-From 11 September 2026 a manufacturer must, on becoming aware of a vulnerability in its
-product that is **known to be exploitable** (for example, proof-of-concept code exists):
+From 11 September 2026, Article 14 creates **two reporting paths that share their first
+two deadlines and differ in the third.** Both are submitted through the single reporting
+platform established under Article 16, simultaneously to the CSIRT designated as
+coordinator and to ENISA.
 
-1. **Within 24 hours** — early warning to the CSIRT designated as coordinator in the
-   Member State of main establishment, and to ENISA.
-2. **Within 72 hours** — notification following triage confirming whether the product is
-   affected.
-3. **Within 14 days of a corrective measure** — final report.
+**(a) An actively exploited vulnerability in the product**
+
+1. **Within 24 hours of becoming aware** — early warning.
+2. **Within 72 hours** — vulnerability notification, with the product details, the nature
+   of the exploit, and any corrective or mitigating measures taken.
+3. **No later than 14 days after a corrective or mitigating measure is available** —
+   final report.
+
+**(b) A severe incident affecting the security of the product**
+
+1. **Within 24 hours of becoming aware** — early warning.
+2. **Within 72 hours** — incident notification.
+3. **Within one month of that 72-hour notification** — final report.
+
+Two details worth stating precisely, because getting either wrong sets the clock running
+on the wrong event or stops it too late:
+
+- **The trigger is "actively exploited", not "exploitable".** An earlier draft of this
+  section glossed it as "for example, proof-of-concept code exists". That is not the
+  test. Published proof-of-concept code is evidence that a vulnerability *could* be
+  exploited; the obligation attaches to evidence that it *is being* exploited.
+- **The final-report clocks differ** — 14 days from the availability of a fix for a
+  vulnerability, one month from the notification for an incident — and they are anchored
+  to different events. A single combined procedure will get one of them wrong.
 
 Twenty-four hours is not a scanning interval. It is a *lookup* interval. The obligation
 is unmeetable by a process that starts with "run a scan and see what we use", because a
@@ -118,15 +153,26 @@ the released version a customer is running.
 What it actually demands is that the question **"does advisory X affect any version of
 our product that is currently in the field?"** is answerable from an existing inventory in
 minutes. That is why MC-042's gap — SBOMs as ephemeral CI artefacts rather than durable,
-version-keyed records — is more serious than it looks, and why it is the dependency of
-MC-045 rather than a parallel item.
+version-keyed records — is more serious than it looks.
+
+**But MC-045 is not *conditional* on MC-042, and must not be scheduled as if it were.**
+The Article 14 clocks run from awareness whether or not a good inventory exists; "we were
+still building the SBOM store" is not a defence, it is a description of how the deadline
+came to be missed. They are two independent go-live gates. Durable SBOM retention makes
+the lookup fast and reliable; until it lands, an interim answer to "which shipped
+versions contain component X?" still has to exist — and has to be **exercised at least
+once against a real advisory**, because an untested reporting path is not a reporting
+path.
 
 Note also that the count starts from *awareness*, so a feed that tells you late does not
 extend the clock; it shortens the part of it you have left.
 
 ### Minimum viable mechanism
 
-Nothing here needs new infrastructure — every piece has an existing home:
+Every piece has a plausible existing home. These are **candidate mappings, not verified
+contracts** — each needs confirming against what the service actually does today before
+this work can honestly be called integration rather than invention. Anything that fails
+its check becomes an explicit go-live gap rather than an assumption:
 
 | Piece | Where it belongs |
 |---|---|

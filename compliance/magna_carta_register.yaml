@@ -11,7 +11,7 @@ meta:
   platform: "Infinity Network — Magna Carta (Tranc3 App Framework exemplar)"
   classification: "UNCLASSIFIED — PUBLIC"
   owner: "Trancendos Platform Engineering"
-  last_updated: "2026-08-07"
+  last_updated: "2026-08-19"
   review_cycle: "quarterly"
   parent_register: "compliance/register.yaml"
   runtime_config: "config/magna_carta_config.json"
@@ -918,9 +918,9 @@ requirements:
   # Profile: docs/compliance/EU-CRA-PROFILE.md · Legislation: LEG-011
   # ─────────────────────────────────────────────────────────────────────────────
   - id: MC-042
-    standard: "EU CRA / Art. 13 + Annex II"
-    title: "SBOM covering at least direct dependencies, current for the support period"
-    description: "A manufacturer must create and maintain an SBOM covering at least the product's direct dependencies, kept current throughout the product lifespan and support period, and producible on request by market surveillance authorities."
+    standard: "EU CRA / Art. 13 + Annex I, Part II, point 1"
+    title: "SBOM covering at least top-level dependencies, current for the support period"
+    description: "Annex I, Part II, point (1) requires the manufacturer to identify and document vulnerabilities and components, 'including by drawing up a software bill of materials in a commonly used and machine-readable format covering at the very least the top-level dependencies of the products', kept current through the support period and producible to market surveillance authorities on request."
     status: PROGRAMME_ARTEFACT
     evidence:
       - type: workflow
@@ -938,43 +938,75 @@ requirements:
     status: PROGRAMME_ARTEFACT
     evidence:
       - type: script
-        path: scripts/vulnerability_census.py
-        description: "Tranc3 repo — fixable/accepted classification, fail-closed on unscanned surfaces"
+        path: "Tranc3 repo: scripts/vulnerability_census.py"
+        description: "Fixable/accepted classification, fail-closed on unscanned surfaces"
       - type: register
-        path: SECURITY_ALERT_REGISTER.md
-        description: "Tranc3 repo — per-finding disposition for accepted risks"
+        path: "Tranc3 repo: SECURITY_ALERT_REGISTER.md"
+        description: "Per-finding disposition for accepted risks"
     verification_method: automated_gate
     last_reviewed: "2026-08-19"
     reviewer: "Platform Owner Trancendos"
-    notes: "Fixable vulnerabilities cap the security score below green and block the production gate. Currently 0 fixable, 1 accepted (ecdsa PYSEC-2026-1325 — no upstream fix, documented, guarded by scripts/check_ecdsa_direct_usage.py)."
+    notes: "The control is real and enforcing: fixable vulnerabilities cap the security score below green and block the production gate; CI currently reports 6 surfaces scanned, 0 errored, 0 fixable, 1 accepted (ecdsa PYSEC-2026-1325 — no upstream fix, documented, guarded by scripts/check_ecdsa_direct_usage.py). SCOPE LIMIT, stated rather than glossed: the obligation attaches to a product *placed on the market*, and nothing has been. This evidences the gate that will apply at first placement; it is not evidence about a released version, because there is none. Re-evidence per release once releases exist."
 
   - id: MC-044
-    standard: "EU CRA / Art. 13(5) + Recital 76"
+    standard: "EU CRA / Art. 13(5) + Art. 13(8) + Recital 34"
     title: "Component maintenance trajectory evaluated at selection and tracked continuously"
     description: "Due diligence on third-party components requires assessing their maintenance trajectory before incorporation and monitoring it continuously, since a support-period commitment of five or more years depends on upstream remaining able to supply fixes."
     status: PROGRAMME_ARTEFACT
     evidence:
       - type: script
-        path: scripts/obsolescence_census.py
-        description: "Tranc3 repo — upstream liveness x our lag across all direct dependencies"
+        path: "Tranc3 repo: scripts/obsolescence_census.py"
+        description: "Upstream liveness x our lag across all direct dependencies"
       - type: register
-        path: docs/governance/OBSOLESCENCE-ACCEPTED.md
-        description: "Tranc3 repo — reasoned disposition per dormant component"
+        path: "Tranc3 repo: docs/governance/OBSOLESCENCE-ACCEPTED.md"
+        description: "Reasoned disposition per dormant component"
     verification_method: automated_gate
     last_reviewed: "2026-08-19"
     reviewer: "Platform Owner Trancendos"
-    notes: "110 direct dependencies measured, 0 errored: 95 healthy, 10 lagging, 5 stranded, 0 zombie. Weekly scheduled run catches a component crossing the dormancy threshold with no commit involved, which is how obsolescence actually arrives."
+    notes: "110 direct dependencies measured, 0 errored: 95 healthy, 10 lagging, 5 stranded, 0 zombie. The weekly scheduled run catches a component crossing the dormancy threshold with no commit involved, which is how obsolescence actually arrives. SCOPE LIMIT: the census covers DIRECT dependencies only. That is sufficient for the Annex I SBOM minimum under MC-042 (the CRA asks for 'top-level dependencies'), and it is NOT the full extent of Art. 13(5), whose due-diligence duty reaches integrated components generally — and OSSRA measures 64% of components in a typical codebase as transitive. Recorded as a known scope boundary rather than left to look like full coverage; transitive maintenance-trajectory evidence is outstanding work."
 
   - id: MC-045
     standard: "EU CRA / Art. 14"
-    title: "24h / 72h / 14d reporting of actively exploited vulnerabilities and severe incidents"
-    description: "From 11 September 2026: early warning to the coordinating CSIRT and ENISA within 24 hours of awareness of an actively exploited vulnerability; notification within 72 hours of triage; final report within 14 days of a corrective measure being available."
+    title: "Article 14 reporting — two paths, two final-report clocks"
+    description: >-
+      From 11 September 2026, via the Article 16 single reporting platform, submitted
+      simultaneously to the coordinating CSIRT and ENISA.
+      (a) ACTIVELY EXPLOITED VULNERABILITY: early warning within 24 hours of becoming
+      aware; vulnerability notification within 72 hours; final report no later than
+      14 days after a corrective or mitigating measure is available.
+      (b) SEVERE INCIDENT affecting the security of the product: early warning within
+      24 hours; incident notification within 72 hours; final report within ONE MONTH
+      of that 72-hour notification.
+      The two paths share a trigger discipline and differ in the final-report clock,
+      so a single combined procedure would get one of them wrong."
     status: GAP
     evidence: []
     verification_method: procedure_exercise
     last_reviewed: "2026-08-19"
     reviewer: "Platform Owner Trancendos"
-    notes: "THE BINDING GAP, and the one with the nearest deadline. Nothing exists: no designated CSIRT, no notification path, no clock, no named role. 24 hours is a lookup interval, not a scanning interval -- it is unmeetable by a process that begins with running a scan. Requires MC-042 retention first. Every component has an existing home (Artifactory for SBOM store, Cryptex for advisory intake, escalation FSM for the clock, Observatory for the record, /roles for a CRA Reporting Officer, CranBania for the SLA card); the work is integration, not invention."
+    notes: >-
+      THE BINDING GAP, and the one with the nearest deadline. Nothing exists: no
+      designated CSIRT, no notification path, no clock, no named role.
+
+      TRIGGER: the standard is "actively exploited". An earlier draft of this entry
+      glossed that as "proof-of-concept code exists", which is not the test and
+      would have set the clock running on the wrong event.
+
+      NOT CONDITIONAL ON MC-042. Article 14 deadlines run from awareness regardless
+      of what inventory exists, so durable SBOM retention is an enabler, not a
+      precondition, and treating it as one would be a way of explaining why the
+      deadline was missed. Both are independent go-live gates. Until per-release
+      SBOM retention lands, an interim answer to "which shipped versions contain
+      component X?" must exist and be exercised at least once against a real
+      advisory -- an untested reporting path is not a reporting path.
+
+      24 hours is a lookup interval, not a scanning interval: it is unmeetable by a
+      process that begins with running a scan. Every component has an existing home
+      (Artifactory for the per-release SBOM store, Cryptex for advisory intake, the
+      escalation FSM for the clock, the Observatory for the immutable record, /roles
+      for a CRA Reporting Officer, CranBania for the SLA card). Those homes are
+      candidate mappings, not verified contracts -- each needs confirming against
+      what the service actually does before the work is scheduled as integration.
 
   - id: MC-046
     standard: "EU CRA / Art. 13(8)"
@@ -988,12 +1020,34 @@ requirements:
     notes: "No support period is declared anywhere in the estate. This is a business commitment rather than a compliance artefact -- it is the owner's decision how long Trancendos will maintain what it ships -- but it must be made before first placement, because it is published to users and cannot easily be shortened afterwards."
 
   - id: MC-047
-    standard: "EU CRA / Art. 13(12) + Art. 31"
-    title: "Ten-year retention of technical documentation and security update availability"
-    description: "Technical documentation covering cybersecurity policies, practices and decisions must be retained and available to authorities for at least 10 years; security updates must remain accessible for 10 years after the end of the support period."
+    standard: "EU CRA / Art. 13(9) + Art. 13(13)"
+    title: "Retention: technical documentation, and security-update availability"
+    description: >-
+      Two distinct obligations with the same shape of clock, both "whichever is
+      longer" rather than a flat ten years.
+      Art. 13(13): keep the technical documentation and the EU declaration of
+      conformity at the disposal of market surveillance authorities for at least
+      10 years after the product is placed on the market, OR for the support
+      period, whichever is longer.
+      Art. 13(9): each security update remains available after it is issued for a
+      minimum of 10 years, OR for the remainder of the support period, whichever
+      is longer.
     status: GAP
     evidence: []
     verification_method: document_review
     last_reviewed: "2026-08-19"
     reviewer: "Platform Owner Trancendos"
-    notes: "Governance documentation is version-controlled, which is a reasonable foundation, but no retention policy targets these durations. The Observatory already carries retention_class and legal_hold fields (added under MC waiver/retention work); this needs a CRA class defined and applied rather than new machinery."
+    notes: >-
+      CORRECTED 2026-08-19. This entry previously cited Art. 13(12) + Art. 31 and
+      described the duty as "10 years AFTER the end of the support period". Both
+      were wrong: the articles are 13(13) and 13(9), and the clock is 10 years OR
+      the support period, whichever is longer -- which is a materially shorter and
+      differently-anchored obligation than the one first recorded. A compliance
+      register that overstates a duty is not conservatively safe; it plans the
+      wrong retention and misstates the position to an authority.
+
+      Governance documentation is version-controlled, which is a reasonable
+      foundation, but no retention policy targets either duration. The Observatory
+      already carries retention_class and legal_hold fields, so this needs two CRA
+      retention classes defined and applied -- one per clock -- rather than new
+      machinery.
