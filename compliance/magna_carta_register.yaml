@@ -969,8 +969,10 @@ requirements:
     standard: "EU CRA / Art. 14"
     title: "Article 14 reporting — two paths, two final-report clocks"
     description: >-
-      From 11 September 2026, via the Article 16 single reporting platform, submitted
-      simultaneously to the coordinating CSIRT and ENISA.
+      From 11 September 2026: ONE submission, via the Article 16 single reporting
+      platform, to the electronic notification end-point of the coordinating CSIRT
+      determined under Art. 14(7); the notification is simultaneously ACCESSIBLE to
+      ENISA rather than separately submitted to it.
       (a) ACTIVELY EXPLOITED VULNERABILITY: early warning within 24 hours of becoming
       aware; vulnerability notification within 72 hours; final report no later than
       14 days after a corrective or mitigating measure is available.
