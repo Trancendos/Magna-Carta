@@ -126,11 +126,19 @@ submission to make.
 Which coordinating CSIRT is not our choice to make, and Article 14(7) gives two branches
 rather than one. The second is probably ours.
 
-**(a) Main establishment in the Union.** The coordinating CSIRT of that Member State,
-where "main establishment" means the place decisions about the cybersecurity of its
-products are predominantly taken.
+**(a) Main establishment in the Union.** The coordinating CSIRT of that Member State.
+"Main establishment" means the place decisions about the cybersecurity of its products
+are predominantly taken — and where *that* cannot be determined, the Regulation deems it
+the Member State in which the manufacturer has the establishment with the **highest
+number of employees** in the Union.
 
-**(b) No main establishment in the Union.** An ordered fallback, first available wins:
+Both rungs sit inside branch (a), and the distinction matters: a manufacturer that *has*
+Union establishments but cannot pinpoint where its cybersecurity decisions are taken
+stays in (a) on the employee-count rung. It does not fall through to (b). Reading it the
+other way would route mandatory reports to the wrong authority.
+
+**(b) No main establishment in the Union at all.** An ordered fallback, first available
+wins:
 
 | Order | Member State determined by |
 |---|---|

@@ -1001,10 +1001,14 @@ requirements:
       WHICH endpoint is a TWO-BRANCH determination, and the second branch is the one
       that probably applies here:
       (a) MAIN ESTABLISHMENT IN THE UNION -- the coordinating CSIRT of that Member
-      State, where "main establishment" is the place decisions about the cybersecurity
-      of its products are predominantly taken.
-      (b) NO MAIN ESTABLISHMENT IN THE UNION -- an ordered fallback, first available
-      wins: (1) the Member State where the authorised representative acting for the
+      State. "Main establishment" is the place decisions about the cybersecurity of its
+      products are predominantly taken; and where THAT cannot be determined, the
+      Regulation deems it the Member State in which the manufacturer has the
+      establishment with the HIGHEST NUMBER OF EMPLOYEES in the Union. Both rungs sit
+      inside branch (a): an undeterminable decision-making location does not push a
+      manufacturer that has Union establishments into branch (b).
+      (b) NO MAIN ESTABLISHMENT IN THE UNION AT ALL -- an ordered fallback, first
+      available wins: (1) the Member State where the authorised representative acting for the
       highest number of the manufacturer's products is established; failing that
       (2) the importer placing the highest number on the market; failing that
       (3) the distributor making the highest number available; failing that
