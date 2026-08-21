@@ -131,6 +131,39 @@ active_legislation:
     review_date: "2026-09-06"
     notes: "Handbook rules — cite FCA handbook URLs; not primary legislation"
 
+  - legislation_id: LEG-011
+    name: "Regulation (EU) 2024/2847 (Cyber Resilience Act)"
+    short_name: "EU CRA"
+    jurisdiction: EU
+    status: Programme
+    celex: "32024R2847"
+    eli_uri: "https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng"
+    consolidated_text_uri: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02024R2847-20241120"
+    oj_reference: "OJ L, 2024/2847, 20.11.2024"
+    compliance_owner: "Platform Owner Trancendos / DPO"
+    profile: "docs/compliance/EU-CRA-PROFILE.md"
+    # Article 71(2) staggers application. Recorded per-provision rather than as a
+    # single "applies from" date, because two of the three have already arrived.
+    key_dates:
+      entered_into_force: "2024-12-10"
+      chapter_iv_applies: "2026-06-11"        # Arts 35-51, notification of conformity assessment bodies — ALREADY IN FORCE
+      reporting_obligations_apply: "2026-09-11"  # Art 14
+      fully_applicable: "2027-12-11"
+    review_date: "2026-09-11"
+    notes: >-
+      Active rather than watch-list: obligations attach to a product with digital
+      elements placed on the EU market, and the owner has confirmed EU users are in
+      scope. Two determinations govern applicability -- whether the free/open-source
+      carve-out applies, and whether anything has yet been placed on the market.
+      Both are made once, with their supporting evidence, in EU-CRA-PROFILE.md
+      section 3, and are deliberately NOT restated here: that evidence cites specific
+      implementation paths in the Tranc3 repository, and duplicating it would let the
+      two copies diverge silently when those paths change. Net effect: CRA readiness
+      is a go-live gate item rather than a retrofit.
+      OPEN ACTIONS carried by the profile, not settled here: legal confirmation of the
+      commercial-activity determination, and a positive check of every supply channel
+      before "nothing has been placed on the market" is relied upon.
+
 watch_list:
   - watch_id: WATCH-001
     name: "Online Safety Act 2023"

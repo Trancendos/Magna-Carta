@@ -29,8 +29,29 @@ This complements ICO/DSIT monitoring in the UK register; it does **not** duplica
 |--------|-----|-------|----------|-------|
 | LEG-003 | EU GDPR | 32016R0679 | [eli/reg/2016/679/oj/eng](https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng) | DPO |
 | LEG-006 | EU AI Act | 32024R1689 | [eli/reg/2024/1689/oj/eng](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng) | AI Lead |
+| LEG-011 | **EU Cyber Resilience Act** | 32024R2847 | [eli/reg/2024/2847/oj/eng](https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng) | Platform Owner / DPO |
 
 Full metadata: `compliance/legislation_register.yaml` → `active_legislation`.
+
+### 2.1 CRA — added 2026-08-19
+
+The CRA had no coverage in this framework before that date, which was a gap rather than a
+scoping decision: it is the EU regulation speaking most directly to what this platform is,
+which is a large body of software assembled largely from open source.
+
+**Everything substantive lives in [EU-CRA-PROFILE.md](EU-CRA-PROFILE.md)** — the staged
+application dates, the two applicability determinations and their evidence, and the
+obligation mapping to MC-042–MC-047. This entry is deliberately a pointer rather than a
+summary: the profile cites specific implementation paths, and a second copy here would
+diverge from it silently.
+
+Two things are worth knowing without opening it:
+
+- The nearest deadline is **11 September 2026**, when vulnerability reporting becomes
+  mandatory.
+- Obligations attach on *placing a product on the market*, and the estate is undeployed —
+  so CRA readiness is a **go-live gate item**, not a retrofit. MC-045 (the 24h/72h/14d
+  reporting mechanism) is the binding gap.
 
 ---
 
