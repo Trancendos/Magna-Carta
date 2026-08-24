@@ -91,12 +91,16 @@ def check_index_drift(cfg: dict, findings: list[Finding]) -> None:
         pattern = item["pattern"]
         method = item["count_method"]
         if not readme.is_file():
-            findings.append(Finding(cid, "error", f"README missing: {item['readme_path']}"))
+            findings.append(
+                Finding(cid, "error", f"README missing: {item['readme_path']}")
+            )
             continue
         text = readme.read_text(encoding="utf-8")
         m = re.search(pattern, text)
         if not m:
-            findings.append(Finding(cid, "warning", f"README pattern not found: {pattern}"))
+            findings.append(
+                Finding(cid, "warning", f"README pattern not found: {pattern}")
+            )
             continue
         readme_count = int(m.group(1))
         actual = count_markdown_entries(ROOT / item["index_path"], method)
@@ -126,7 +130,9 @@ def check_stale_reviews(cfg: dict, findings: list[Finding]) -> None:
     today = date.today()
     for block in cfg.get("stale_review_patterns", []):
         cid = block.get("check_id", "MON-002")
-        max_age = block.get("max_age_days", cfg.get("settings", {}).get("default_max_age_days", 120))
+        max_age = block.get(
+            "max_age_days", cfg.get("settings", {}).get("default_max_age_days", 120)
+        )
         patterns = block.get("patterns", [])
         glob_pat = block.get("glob", "docs/**/*.md")
         for rel in ROOT.glob(glob_pat):
@@ -288,7 +294,9 @@ def validate_register_schema(cfg: dict, findings: list[Finding]) -> None:
         reg_path = ROOT / rel
         schema_path = ROOT / schema_rel
         if not reg_path.is_file():
-            findings.append(Finding(cid, "error", f"Register missing for schema check: {rel}"))
+            findings.append(
+                Finding(cid, "error", f"Register missing for schema check: {rel}")
+            )
             continue
         if not schema_path.is_file():
             findings.append(Finding(cid, "error", f"Schema missing: {schema_rel}"))
@@ -302,7 +310,9 @@ def validate_register_schema(cfg: dict, findings: list[Finding]) -> None:
         for key in schema.get("required", []):
             if key not in data:
                 findings.append(
-                    Finding(cid, "error", f"{rel} missing required top-level key: {key}")
+                    Finding(
+                        cid, "error", f"{rel} missing required top-level key: {key}"
+                    )
                 )
         properties = schema.get("properties", {})
         meta_props = properties.get("meta", {})
@@ -329,7 +339,9 @@ def validate_register_schema(cfg: dict, findings: list[Finding]) -> None:
             items = data.get(prop_name)
             if not isinstance(items, list):
                 findings.append(
-                    Finding(cid, "error", f"{rel} missing or invalid array: {prop_name}")
+                    Finding(
+                        cid, "error", f"{rel} missing or invalid array: {prop_name}"
+                    )
                 )
                 continue
             id_field = next(
@@ -373,7 +385,11 @@ def check_procedure_coverage(cfg: dict, findings: list[Finding]) -> None:
         match = re.match(pattern, proc.name)
         if not match:
             findings.append(
-                Finding(cid, "warning", f"Procedure filename not matched by MON-010: {proc.name}")
+                Finding(
+                    cid,
+                    "warning",
+                    f"Procedure filename not matched by MON-010: {proc.name}",
+                )
             )
             continue
         code = match.group(1)
@@ -608,6 +624,73 @@ def check_evidence_recurrence(cfg: dict, findings: list[Finding]) -> None:
             )
 
 
+def _get_open_actions(filepath: str) -> set[str]:
+    action_data = _load_yaml(filepath)
+    return {
+        a.get("action_id")
+        for a in action_data.get("actions", [])
+        if a.get("status") in ("Open", "In progress", "Blocked") and a.get("action_id")
+    }
+
+
+def _evaluate_trigger_enforcement(
+    trig: dict,
+    cid: str,
+    mode: str,
+    fail_closed: bool,
+    rules_by_id: dict[str, dict],
+    open_actions: set[str],
+    sig_id: str,
+    findings: list[Finding],
+) -> None:
+    on_act = trig.get("on_activate", {})
+    tid = trig.get("trigger_id", "?")
+    sev = "error"
+    for sc in trig.get("scan_checks", []):
+        if sc.get("check_id") == "MON-016":
+            sev = sc.get("severity", "error")
+            break
+    expected_mode = str(on_act.get("enforcement_mode", "enforce")).lower()
+    if mode != expected_mode:
+        findings.append(
+            Finding(
+                cid,
+                sev,
+                f"Trigger {tid}: signal {sig_id} active but enforcement.mode "
+                f"is '{mode}' (expected '{expected_mode}')",
+            )
+        )
+    if on_act.get("fail_closed_on_violation") and not fail_closed:
+        findings.append(
+            Finding(
+                cid,
+                sev,
+                f"Trigger {tid}: signal {sig_id} active but "
+                "fail_closed_on_violation is false",
+            )
+        )
+    for rule_id in on_act.get("rules_required_enabled", []):
+        rule = rules_by_id.get(rule_id)
+        if not rule or not rule.get("enabled", False):
+            findings.append(
+                Finding(
+                    cid,
+                    sev,
+                    f"Trigger {tid}: required rule {rule_id} not enabled",
+                )
+            )
+    for act_id in on_act.get("linked_actions", []):
+        if act_id in open_actions:
+            findings.append(
+                Finding(
+                    cid,
+                    "warning" if sev == "warning" else "error",
+                    f"Trigger {tid}: linked action {act_id} still open while "
+                    f"scope signal {sig_id} is active",
+                )
+            )
+
+
 def check_enforcement_alignment(cfg: dict, findings: list[Finding]) -> None:
     block = cfg.get("enforcement_alignment", {})
     if not block:
@@ -617,7 +700,9 @@ def check_enforcement_alignment(cfg: dict, findings: list[Finding]) -> None:
     signals = _load_yaml(block["signals_register"])
     config_path = ROOT / block["runtime_config"]
     if not config_path.is_file():
-        findings.append(Finding(cid, "error", f"Runtime config missing: {block['runtime_config']}"))
+        findings.append(
+            Finding(cid, "error", f"Runtime config missing: {block['runtime_config']}")
+        )
         return
     with config_path.open(encoding="utf-8") as f:
         runtime = json.load(f)
@@ -626,62 +711,15 @@ def check_enforcement_alignment(cfg: dict, findings: list[Finding]) -> None:
     fail_closed = bool(enforcement.get("fail_closed_on_violation", False))
     rules_by_id = {r["id"]: r for r in runtime.get("rules", []) if "id" in r}
     signal_states = resolve_signal_states(signals)
-    action_data = _load_yaml("compliance/compliance_action_tracker.yaml")
-    open_actions = {
-        a.get("action_id")
-        for a in action_data.get("actions", [])
-        if a.get("status") in ("Open", "In progress", "Blocked")
-    }
+    open_actions = _get_open_actions("compliance/compliance_action_tracker.yaml")
+
     for trig in triggers.get("triggers", []):
         sig_id = trig.get("signal_id", "")
         if signal_states.get(sig_id) != "active":
             continue
-        on_act = trig.get("on_activate", {})
-        tid = trig.get("trigger_id", "?")
-        sev = "error"
-        for sc in trig.get("scan_checks", []):
-            if sc.get("check_id") == "MON-016":
-                sev = sc.get("severity", "error")
-                break
-        expected_mode = str(on_act.get("enforcement_mode", "enforce")).lower()
-        if mode != expected_mode:
-            findings.append(
-                Finding(
-                    cid,
-                    sev,
-                    f"Trigger {tid}: signal {sig_id} active but enforcement.mode "
-                    f"is '{mode}' (expected '{expected_mode}')",
-                )
-            )
-        if on_act.get("fail_closed_on_violation") and not fail_closed:
-            findings.append(
-                Finding(
-                    cid,
-                    sev,
-                    f"Trigger {tid}: signal {sig_id} active but "
-                    "fail_closed_on_violation is false",
-                )
-            )
-        for rule_id in on_act.get("rules_required_enabled", []):
-            rule = rules_by_id.get(rule_id)
-            if not rule or not rule.get("enabled", False):
-                findings.append(
-                    Finding(
-                        cid,
-                        sev,
-                        f"Trigger {tid}: required rule {rule_id} not enabled",
-                    )
-                )
-        for act_id in on_act.get("linked_actions", []):
-            if act_id in open_actions:
-                findings.append(
-                    Finding(
-                        cid,
-                        "warning" if sev == "warning" else "error",
-                        f"Trigger {tid}: linked action {act_id} still open while "
-                        f"scope signal {sig_id} is active",
-                    )
-                )
+        _evaluate_trigger_enforcement(
+            trig, cid, mode, fail_closed, rules_by_id, open_actions, sig_id, findings
+        )
 
 
 def check_framework_implementation_coverage(cfg: dict, findings: list[Finding]) -> None:
@@ -696,11 +734,17 @@ def check_framework_implementation_coverage(cfg: dict, findings: list[Finding]) 
     signals = _load_yaml(block["signals_register"])
 
     framework_list = frameworks.get(block.get("items_key", "frameworks"), [])
-    framework_by_id = {f["framework_id"]: f for f in framework_list if "framework_id" in f}
+    framework_by_id = {
+        f["framework_id"]: f for f in framework_list if "framework_id" in f
+    }
     catalog_entries = catalog.get(block.get("entries_key", "entries"), [])
-    catalog_by_id = {e["framework_id"]: e for e in catalog_entries if "framework_id" in e}
+    catalog_by_id = {
+        e["framework_id"]: e for e in catalog_entries if "framework_id" in e
+    }
     signal_ids = {s.get("signal_id") for s in signals.get("signals", [])}
-    trigger_by_id = {t["trigger_id"]: t for t in triggers.get("triggers", []) if "trigger_id" in t}
+    trigger_by_id = {
+        t["trigger_id"]: t for t in triggers.get("triggers", []) if "trigger_id" in t
+    }
     trigger_coverage: dict[str, set[str]] = {}
     for trig in triggers.get("triggers", []):
         tid = trig.get("trigger_id")
@@ -725,7 +769,9 @@ def check_framework_implementation_coverage(cfg: dict, findings: list[Finding]) 
     for fid, fw in framework_by_id.items():
         if fid not in catalog_by_id:
             findings.append(
-                Finding(cid, "error", f"Framework {fid} missing from implementation catalog")
+                Finding(
+                    cid, "error", f"Framework {fid} missing from implementation catalog"
+                )
             )
             continue
         entry = catalog_by_id[fid]
@@ -770,11 +816,19 @@ def check_framework_implementation_coverage(cfg: dict, findings: list[Finding]) 
             continue
         if sig not in signal_ids:
             findings.append(
-                Finding(cid, "error", f"Framework {fid} catalog references unknown signal {sig}")
+                Finding(
+                    cid,
+                    "error",
+                    f"Framework {fid} catalog references unknown signal {sig}",
+                )
             )
         if trig not in trigger_by_id:
             findings.append(
-                Finding(cid, "error", f"Framework {fid} catalog references unknown trigger {trig}")
+                Finding(
+                    cid,
+                    "error",
+                    f"Framework {fid} catalog references unknown trigger {trig}",
+                )
             )
         covered_by = trigger_coverage.get(fid, set())
         if trig not in covered_by:
@@ -840,8 +894,12 @@ def check_proactive_monitoring(cfg: dict, findings: list[Finding]) -> None:
     pm = cfg.get("proactive_monitoring", {})
     if not pm:
         return
-    check_register_review_dates(cfg.get("legislation_watch", {}), findings, default_cid="MON-011")
-    check_register_review_dates(cfg.get("standards_watch", {}), findings, default_cid="MON-012")
+    check_register_review_dates(
+        cfg.get("legislation_watch", {}), findings, default_cid="MON-011"
+    )
+    check_register_review_dates(
+        cfg.get("standards_watch", {}), findings, default_cid="MON-012"
+    )
     check_framework_readiness_docs(cfg, findings)
     check_supplier_dpa_gates(cfg, findings)
     check_evidence_recurrence(cfg, findings)
@@ -854,7 +912,7 @@ def check_cookbook_links(cfg: dict, findings: list[Finding]) -> None:
     for block in cfg.get("cookbook_links", []):
         cid = block.get("check_id", "MON-005")
         index_path = ROOT / block["index"]
-        base = ROOT / block["base_dir"]
+        ROOT / block["base_dir"]
         if not index_path.is_file():
             findings.append(Finding(cid, "error", f"Missing index: {block['index']}"))
             continue
@@ -865,7 +923,9 @@ def check_cookbook_links(cfg: dict, findings: list[Finding]) -> None:
                 continue
             full = (index_path.parent / target).resolve()
             if not full.is_file():
-                findings.append(Finding(cid, "error", f"Broken link in {block['index']}: {target}"))
+                findings.append(
+                    Finding(cid, "error", f"Broken link in {block['index']}: {target}")
+                )
 
 
 def run_checks(*, include_weekly_cadence: bool = False) -> list[Finding]:
@@ -896,12 +956,16 @@ def print_report(findings: list[Finding]) -> None:
     for sev in ("error", "warning", "info"):
         for f in by_sev.get(sev, []):
             print(f"[{sev.upper()}] {f.check_id}: {f.message}")
-    print(f"\nSummary: {len(by_sev['error'])} errors, {len(by_sev['warning'])} warnings")
+    print(
+        f"\nSummary: {len(by_sev['error'])} errors, {len(by_sev['warning'])} warnings"
+    )
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Magna Carta compliance health check")
-    parser.add_argument("--report", action="store_true", help="Print human-readable report")
+    parser.add_argument(
+        "--report", action="store_true", help="Print human-readable report"
+    )
     parser.add_argument(
         "--strict",
         action="store_true",
