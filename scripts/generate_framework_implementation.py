@@ -370,24 +370,7 @@ def load_frameworks() -> dict:
         return yaml.safe_load(f)
 
 
-def assign_frameworks_to_groups(frameworks: list[dict]) -> dict[str, str]:
-    """Map framework_id -> signal_id (first match wins).
-
-    Explicit ``framework_ids`` are assigned in a first pass, ahead of every
-    category sweep and filter. A signal that names a framework outright is
-    stating intent; a category sweep is only inferring one. Without this
-    ordering the sweeps silently won on list position — SIG-US-GOV-001 claimed
-    FW-062 (HIPAA Security Rule) purely because it appears earlier in
-    SIGNAL_GROUPS, leaving SIG-HIPAA-001 to activate whatever the sweeps had
-    skipped. Groups still cannot steal from one another *within* a pass.
-
-    A group is either explicit or sweep-based, never both. Pass 2 skips any
-    group carrying ``framework_ids``, so a group defining both would have its
-    sweep silently dropped — a mistake that would look like a working config.
-    Rejected outright rather than given a precedence rule, because the two
-    readings ("the ids plus whatever the sweep finds" vs "the ids only") are
-    both plausible and the config should not have to be guessed at.
-    """
+def _validate_group_definitions() -> None:
     # Every key that only has meaning inside pass 2. `category`,
     # `framework_filter` and `applicability` select what a sweep picks up;
     # `exclude_ids` and `exclude_applicability` narrow it. Alongside
@@ -409,9 +392,8 @@ def assign_frameworks_to_groups(frameworks: list[dict]) -> dict[str, str]:
                     f"split it into two groups if it genuinely needs both."
                 )
 
-    fw_by_id = {f["framework_id"]: f for f in frameworks}
-    assignment: dict[str, str] = {}
 
+def _assign_explicit_claims(fw_by_id: dict[str, dict], assignment: dict[str, str]) -> None:
     # Pass 1 — explicit claims. First group in SIGNAL_GROUPS order wins.
     #
     # Three frameworks are legitimately claimed by two groups (FW-004 by GDPR
@@ -440,6 +422,8 @@ def assign_frameworks_to_groups(frameworks: list[dict]) -> dict[str, str]:
                 f"-> {assignment[fid]} (first in SIGNAL_GROUPS order)"
             )
 
+
+def _assign_sweeps_and_filters(frameworks: list[dict], assignment: dict[str, str]) -> None:
     # Pass 2 — category sweeps and filters, over whatever remains.
     for group in SIGNAL_GROUPS:
         sig = group["signal_id"]
@@ -465,6 +449,34 @@ def assign_frameworks_to_groups(frameworks: list[dict]) -> dict[str, str]:
                 if app in group.get("exclude_applicability", []):
                     continue
                 assignment[fid] = sig
+
+
+def assign_frameworks_to_groups(frameworks: list[dict]) -> dict[str, str]:
+    """Map framework_id -> signal_id (first match wins).
+
+    Explicit ``framework_ids`` are assigned in a first pass, ahead of every
+    category sweep and filter. A signal that names a framework outright is
+    stating intent; a category sweep is only inferring one. Without this
+    ordering the sweeps silently won on list position — SIG-US-GOV-001 claimed
+    FW-062 (HIPAA Security Rule) purely because it appears earlier in
+    SIGNAL_GROUPS, leaving SIG-HIPAA-001 to activate whatever the sweeps had
+    skipped. Groups still cannot steal from one another *within* a pass.
+
+    A group is either explicit or sweep-based, never both. Pass 2 skips any
+    group carrying ``framework_ids``, so a group defining both would have its
+    sweep silently dropped — a mistake that would look like a working config.
+    Rejected outright rather than given a precedence rule, because the two
+    readings ("the ids plus whatever the sweep finds" vs "the ids only") are
+    both plausible and the config should not have to be guessed at.
+    """
+    _validate_group_definitions()
+
+    fw_by_id = {f["framework_id"]: f for f in frameworks}
+    assignment: dict[str, str] = {}
+
+    _assign_explicit_claims(fw_by_id, assignment)
+    _assign_sweeps_and_filters(frameworks, assignment)
+
     return assignment
 
 
