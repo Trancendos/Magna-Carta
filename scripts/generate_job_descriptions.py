@@ -383,30 +383,32 @@ This job description supports Magna Carta compliance evidence (ISO 27001 A.5/A.6
 """
 
 
-def main() -> None:
-    JD_DIR.mkdir(parents=True, exist_ok=True)
+
+SLUG_MAP = {
+    "JD-ISMS-001": "JD-ISMS-001-ISMS-Lead.md",
+    "JD-PRI-001": "JD-PRI-001-Data-Protection-Officer.md",
+    "JD-SEC-001": "JD-SEC-001-CISO.md",
+    "JD-CAB-001": "JD-CAB-001-CAB-Chair.md",
+    "JD-ENG-001": "JD-ENG-001-Engineering-Lead.md",
+    "JD-AI-001": "JD-AI-001-AI-Governance-Lead.md",
+    "JD-HR-001": "JD-HR-001-HR-People-Lead.md",
+    "JD-FIN-001": "JD-FIN-001-Finance-Controller.md",
+    "JD-LEG-001": "JD-LEG-001-Legal-Counsel.md",
+    "JD-PRM-001": "JD-PRM-001-Procurement-Lead.md",
+    "JD-HSE-001": "JD-HSE-001-Health-Safety-Lead.md",
+    "JD-IT-001": "JD-IT-001-IT-Operations-Lead.md",
+    "JD-DAT-001": "JD-DAT-001-Data-Governance-Lead.md",
+}
+
+
+def write_job_descriptions(roles: list[tuple]) -> list[tuple[str, str, str, str]]:
     index_rows = []
-    for row in ROLES:
+    for row in roles:
         jd_id, title, short_name, reports_to, authority, summary, resp, qual, arts = row
         filename = f"{jd_id}-{title.split('(')[0].strip().replace(' / ', '-').replace(' ', '-')}.md"
         filename = filename.replace("--", "-").replace("(-", "").replace(")", "")
         # Simpler filenames
-        slug_map = {
-            "JD-ISMS-001": "JD-ISMS-001-ISMS-Lead.md",
-            "JD-PRI-001": "JD-PRI-001-Data-Protection-Officer.md",
-            "JD-SEC-001": "JD-SEC-001-CISO.md",
-            "JD-CAB-001": "JD-CAB-001-CAB-Chair.md",
-            "JD-ENG-001": "JD-ENG-001-Engineering-Lead.md",
-            "JD-AI-001": "JD-AI-001-AI-Governance-Lead.md",
-            "JD-HR-001": "JD-HR-001-HR-People-Lead.md",
-            "JD-FIN-001": "JD-FIN-001-Finance-Controller.md",
-            "JD-LEG-001": "JD-LEG-001-Legal-Counsel.md",
-            "JD-PRM-001": "JD-PRM-001-Procurement-Lead.md",
-            "JD-HSE-001": "JD-HSE-001-Health-Safety-Lead.md",
-            "JD-IT-001": "JD-IT-001-IT-Operations-Lead.md",
-            "JD-DAT-001": "JD-DAT-001-Data-Governance-Lead.md",
-        }
-        filename = slug_map[jd_id]
+        filename = SLUG_MAP.get(jd_id, filename)
         path = JD_DIR / filename
         path.write_text(
             render_jd(jd_id, title, short_name, reports_to, authority, summary, resp, qual, arts),
@@ -414,7 +416,10 @@ def main() -> None:
         )
         index_rows.append((jd_id, title, short_name, filename))
         print(f"Wrote {path.relative_to(ROOT)}")
+    return index_rows
 
+
+def write_index_file(index_rows: list[tuple[str, str, str, str]]) -> None:
     index = """# Job Descriptions Index
 
 **Version:** 1.0.0  
@@ -450,6 +455,12 @@ Template: [TEMPLATE-JOB-DESCRIPTION.md](../templates/TEMPLATE-JOB-DESCRIPTION.md
 """
     (JD_DIR / "INDEX.md").write_text(index, encoding="utf-8")
     print("Wrote docs/job-descriptions/INDEX.md")
+
+
+def main() -> None:
+    JD_DIR.mkdir(parents=True, exist_ok=True)
+    index_rows = write_job_descriptions(ROLES)
+    write_index_file(index_rows)
 
 
 if __name__ == "__main__":
