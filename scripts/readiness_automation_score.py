@@ -87,6 +87,29 @@ def _verify_item(item: dict) -> ItemResult:
     return ItemResult(item_id, title, declared, True, "verified on disk")
 
 
+def _evaluate_slot(slot: dict, files_on_disk: list[str]) -> dict:
+    status = slot.get("status", "pending_upload")
+    pattern = slot.get("expected_filename_pattern", "*")
+    matched = [f for f in files_on_disk if fnmatch.fnmatch(f.lower(), pattern.lower())]
+    if status == "not_applicable":
+        return {
+            "cert_id": slot.get("cert_id"),
+            "status": status,
+            "files": [],
+        }
+    if matched:
+        return {
+            "cert_id": slot.get("cert_id"),
+            "status": "uploaded",
+            "files": matched,
+        }
+    return {
+        "cert_id": slot.get("cert_id"),
+        "status": status,
+        "files": [],
+    }
+
+
 def scan_certification_vault() -> dict:
     cert_reg = _load_yaml("compliance/certification_evidence_register.yaml")
     root_rel = cert_reg.get("meta", {}).get("evidence_root", "docs/evidence/certifications")
@@ -98,39 +121,17 @@ def scan_certification_vault() -> dict:
 
     files_on_disk: list[str] = []
     if root.is_dir():
-        files_on_disk = [p.name for p in root.iterdir() if p.is_file() and not p.name.startswith(".")]
+        files_on_disk = [
+            p.name for p in root.iterdir() if p.is_file() and not p.name.startswith(".")
+        ]
 
     for slot in slots:
-        status = slot.get("status", "pending_upload")
-        pattern = slot.get("expected_filename_pattern", "*")
-        matched = [f for f in files_on_disk if fnmatch.fnmatch(f.lower(), pattern.lower())]
-        if status == "not_applicable":
-            slot_results.append(
-                {
-                    "cert_id": slot.get("cert_id"),
-                    "status": status,
-                    "files": [],
-                }
-            )
-            continue
-        if matched:
+        result = _evaluate_slot(slot, files_on_disk)
+        if result["status"] == "uploaded":
             uploaded += 1
-            slot_results.append(
-                {
-                    "cert_id": slot.get("cert_id"),
-                    "status": "uploaded",
-                    "files": matched,
-                }
-            )
-        else:
+        elif result["status"] != "not_applicable":
             pending += 1
-            slot_results.append(
-                {
-                    "cert_id": slot.get("cert_id"),
-                    "status": status,
-                    "files": [],
-                }
-            )
+        slot_results.append(result)
 
     return {
         "evidence_root": root_rel,
@@ -197,7 +198,9 @@ def score_readiness() -> dict:
 
 def print_report(report: dict) -> None:
     pct = report["automation_readiness_percent"]
-    print(f"Layer B automation readiness: {pct}% ({report['items_passed']}/{report['items_total']})")
+    print(
+        f"Layer B automation readiness: {pct}% ({report['items_passed']}/{report['items_total']})"
+    )
     print(f"Target: {report['target_percent']}% — agent-verifiable scope only")
     print()
     failed = [i for i in report["items"] if not i["passed"] and i["status"] != "not_applicable"]
