@@ -894,28 +894,8 @@ def _check_docs_are_generic() -> list[str]:
     return errors
 
 
-def main() -> int:
-    if not REGISTER.exists():
-        print(f"ERROR: {REGISTER} not found", file=sys.stderr)
-        return 1
 
-    raw = REGISTER.read_text(encoding="utf-8")
-    try:
-        doc = yaml.safe_load(raw)
-    except yaml.YAMLError as exc:
-        print(f"ERROR: {REGISTER} is not valid YAML: {exc}", file=sys.stderr)
-        return 1
-
-    if doc is None:
-        doc = {}
-    elif not isinstance(doc, dict):
-        print(
-            f"ERROR: {REGISTER} must parse to a mapping at the top level, got "
-            f"{type(doc).__name__}",
-            file=sys.stderr,
-        )
-        return 1
-
+def _run_all_checks(raw: str, doc: dict) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
 
@@ -938,6 +918,11 @@ def main() -> int:
     errors += _check_hard_authorities(doc)
     errors += _check_docs_name_non_overridable_controls()
 
+    return errors, warnings
+
+
+
+def _print_results(errors: list[str], warnings: list[str], doc: dict) -> int:
     for line in warnings:
         print(f"[WARNING] {line}")
     for line in errors:
@@ -954,6 +939,32 @@ def main() -> int:
         f"({fns} function types, {tiers} tiers, {len(warnings)} warning(s))"
     )
     return 0
+
+def main() -> int:
+    if not REGISTER.exists():
+        print(f"ERROR: {REGISTER} not found", file=sys.stderr)
+        return 1
+
+    raw = REGISTER.read_text(encoding="utf-8")
+    try:
+        doc = yaml.safe_load(raw)
+    except yaml.YAMLError as exc:
+        print(f"ERROR: {REGISTER} is not valid YAML: {exc}", file=sys.stderr)
+        return 1
+
+    if doc is None:
+        doc = {}
+    elif not isinstance(doc, dict):
+        print(
+            f"ERROR: {REGISTER} must parse to a mapping at the top level, got "
+            f"{type(doc).__name__}",
+            file=sys.stderr,
+        )
+        return 1
+
+    errors, warnings = _run_all_checks(raw, doc)
+    return _print_results(errors, warnings, doc)
+
 
 
 if __name__ == "__main__":
