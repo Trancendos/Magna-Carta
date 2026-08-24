@@ -303,21 +303,31 @@ def render_jd(
     art_lines = "\n".join(f"- [{a}](../{'compliance' if a.isupper() and '-' in a else 'procedures' if a.startswith('PROC') else 'bibles'}/{a}.md)" if not a.endswith(".md") else f"- {a}" for a in artefacts)
     # Fix artefact links properly
     art_links = []
+    import os
     for a in artefacts:
-        if a.startswith("PROC-"):
-            # find file - use INDEX pattern
-            art_links.append(f"- Procedure and related artefacts: `{a}` (see [procedures INDEX](../procedures/INDEX.md))")
-        elif a.endswith("-BIBLE"):
-            art_links.append(f"- [{a}](../bibles/{a}.md)")
-        elif a in ("ROPA", "FRAMEWORK"):
-            path = "ROPA.md" if a == "ROPA" else "../../FRAMEWORK.md"
-            folder = "compliance" if a == "ROPA" else ""
-            if folder:
-                art_links.append(f"- [{a}](../compliance/{path})")
+        if a == "FRAMEWORK":
+            art_links.append(f"- [{a}](../../FRAMEWORK.md)")
+            continue
+
+        found = False
+        for path in ROOT.rglob("*.md"):
+            if path.name.startswith(a) and path.name.endswith(".md"):
+                if "hymn-sheets" in str(path) or "cookbooks" in str(path):
+                    continue
+                rel_path = os.path.relpath(path, JD_DIR).replace(os.sep, "/")
+                art_links.append(f"- [{a}]({rel_path})")
+                found = True
+                break
+
+        if not found:
+            if a.startswith("PROC-"):
+                art_links.append(f"- Procedure and related artefacts: `{a}` (see [procedures INDEX](../procedures/INDEX.md))")
+            elif a.endswith("-BIBLE"):
+                art_links.append(f"- [{a}](../bibles/{a}.md)")
+            elif a == "ROPA":
+                art_links.append(f"- [{a}](../compliance/ROPA.md)")
             else:
-                art_links.append(f"- [{a}](../../FRAMEWORK.md)")
-        else:
-            art_links.append(f"- [{a}](../compliance/{a}.md)")
+                art_links.append(f"- [{a}](../compliance/{a}.md)")
     art_block = "\n".join(art_links)
 
     return f"""# {jd_id} — {title}
