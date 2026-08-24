@@ -12,10 +12,11 @@ fail=0
 
 run_or_skip() {
   local label="$1"
-  local cmd="$2"
-  if eval "$cmd" >/dev/null 2>&1; then
+  shift
+  local cmd="$1"
+  if command -v "$cmd" >/dev/null 2>&1; then
     echo "--- $label ---"
-    if eval "$cmd"; then
+    if "$@"; then
       echo "OK  $label"
     else
       echo "FINDINGS in $label — review above" >&2
