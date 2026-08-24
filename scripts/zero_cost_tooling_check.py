@@ -28,15 +28,13 @@ def _load_register() -> dict:
     with REGISTER.open(encoding="utf-8") as f:
         return yaml.safe_load(f) or {}
 
-
-def main() -> int:
+def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Zero-cost tooling register check")
     parser.add_argument("--report", action="store_true")
     parser.add_argument("--strict", action="store_true", help="Fail on optional tool hints")
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    data = _load_register()
-    tools = data.get("tools", [])
+def _check_tools(tools: list[dict], report: bool) -> tuple[int, list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
     passed = 0
@@ -63,30 +61,45 @@ def main() -> int:
             continue
 
         passed += 1
-        if args.report:
+        if report:
             tag = "mandatory" if mandatory else "optional"
             print(f"  OK  {tool_id} [{tag}] {check_path}")
 
+    return passed, errors, warnings
+
+def _check_oss_binaries(report: bool) -> None:
     # Optional OSS binaries — informational only
     for binary, tool_id in [("gitleaks", "ZCT-007"), ("bandit", "ZCT-008"), ("semgrep", "ZCT-009")]:
         if shutil.which(binary):
-            if args.report:
+            if report:
                 print(f"  OK  {tool_id} {binary} found on PATH")
-        elif args.report:
+        elif report:
             print(f"  --  {tool_id} {binary} not installed (optional)")
 
+def _print_report(passed: int, tools: list[dict], errors: list[str], warnings: list[str], strict: bool) -> None:
     mandatory_count = sum(1 for t in tools if t.get("mandatory"))
+    print()
+    print(f"Zero-cost register: {passed} tool paths verified")
+    print(f"Mandatory tools in register: {mandatory_count}")
+    if errors:
+        print(f"Errors: {len(errors)}")
+        for e in errors:
+            print(f"  ERROR: {e}")
+    if warnings and strict:
+        for w in warnings:
+            print(f"  WARN: {w}")
+
+def main() -> int:
+    args = _parse_args()
+
+    data = _load_register()
+    tools = data.get("tools", [])
+
+    passed, errors, warnings = _check_tools(tools, args.report)
+    _check_oss_binaries(args.report)
+
     if args.report:
-        print()
-        print(f"Zero-cost register: {passed} tool paths verified")
-        print(f"Mandatory tools in register: {mandatory_count}")
-        if errors:
-            print(f"Errors: {len(errors)}")
-            for e in errors:
-                print(f"  ERROR: {e}")
-        if warnings and args.strict:
-            for w in warnings:
-                print(f"  WARN: {w}")
+        _print_report(passed, tools, errors, warnings, args.strict)
 
     if errors:
         return 1
@@ -95,7 +108,6 @@ def main() -> int:
     if args.report and not errors:
         print("Zero-cost tooling check: PASSED")
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())
