@@ -1,4 +1,4 @@
-import pytest
+import unittest
 from pathlib import Path
 import sys
 import os
@@ -7,28 +7,31 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from scripts.apply_nomenclature import should_process
 
-def test_should_process():
-    # Test valid extensions
-    assert should_process(Path("test.md"))
-    assert should_process(Path("test.yaml"))
-    assert should_process(Path("test.yml"))
-    assert should_process(Path("test.json"))
+class TestApplyNomenclature(unittest.TestCase):
+    def test_should_process_valid_extensions(self):
+        self.assertTrue(should_process(Path("test.md")))
+        self.assertTrue(should_process(Path("test.yaml")))
+        self.assertTrue(should_process(Path("test.yml")))
+        self.assertTrue(should_process(Path("test.json")))
 
-    # Test invalid extensions
-    assert not should_process(Path("test.txt"))
-    assert not should_process(Path("test.py"))
+    def test_should_process_invalid_extensions(self):
+        self.assertFalse(should_process(Path("test.txt")))
+        self.assertFalse(should_process(Path("test.py")))
 
-    # Test skip dirs
-    assert not should_process(Path(".git/test.md"))
-    assert not should_process(Path("venv/test.md"))
-    assert not should_process(Path(".venv/test.md"))
-    assert not should_process(Path("node_modules/test.md"))
-    assert not should_process(Path("__pycache__/test.md"))
-    assert not should_process(Path(".cursor/test.md"))
+    def test_should_process_skip_dirs(self):
+        self.assertFalse(should_process(Path(".git/test.md")))
+        self.assertFalse(should_process(Path("venv/test.md")))
+        self.assertFalse(should_process(Path(".venv/test.md")))
+        self.assertFalse(should_process(Path("node_modules/test.md")))
+        self.assertFalse(should_process(Path("__pycache__/test.md")))
+        self.assertFalse(should_process(Path(".cursor/test.md")))
 
-    # Test the specific file skip
-    assert not should_process(Path("apply_nomenclature.py"))
+    def test_should_process_specific_file_skip(self):
+        self.assertFalse(should_process(Path("apply_nomenclature.py")))
 
-    # Test valid path with subdirectories
-    assert should_process(Path("docs/test.md"))
-    assert should_process(Path("src/components/test.json"))
+    def test_should_process_valid_path_with_subdirectories(self):
+        self.assertTrue(should_process(Path("docs/test.md")))
+        self.assertTrue(should_process(Path("src/components/test.json")))
+
+if __name__ == '__main__':
+    unittest.main()
