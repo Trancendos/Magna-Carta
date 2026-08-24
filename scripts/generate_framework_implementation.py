@@ -559,7 +559,11 @@ def build_catalog(frameworks: list[dict], assignment: dict[str, str]) -> dict:
             tier = "baseline"
             sig = "SIG-CORE-001"
             trig = "TRG-CORE-001"
-        group = next((g for g in SIGNAL_GROUPS if g["signal_id"] == sig), None) if sig else None
+        group = (
+            next((g for g in SIGNAL_GROUPS if g["signal_id"] == sig), None)
+            if sig
+            else None
+        )
         entries.append(
             {
                 "framework_id": fid,
@@ -646,6 +650,94 @@ def build_signals() -> dict:
     }
 
 
+def _group_frameworks_by_signal(
+    frameworks: list[dict], assignment: dict[str, str]
+) -> dict[str, list[str]]:
+    by_signal: dict[str, list[str]] = {}
+    for fid, sig in assignment.items():
+        by_signal.setdefault(sig, []).append(fid)
+    # Unassigned applicable/conditional get CORE
+    for fw in frameworks:
+        fid = fw["framework_id"]
+        if fid in assignment:
+            continue
+        if (
+            fw.get("applicability") in ("applicable", "conditional")
+            and fw.get("programme_status") != "not_applicable"
+        ):
+            by_signal.setdefault("SIG-CORE-001", []).append(fid)
+    return by_signal
+
+
+def _get_on_activate_config(signal_id: str) -> dict:
+    on_act = dict(ON_ACTIVATE_BASELINE)
+    if signal_id in (
+        "SIG-CORE-001",
+        "SIG-GDPR-001",
+        "SIG-AI-001",
+        "SIG-NIST-001",
+        "SIG-PECR-001",
+    ):
+        # Baseline signals default active — advisory until operator enables enforce profile
+        on_act = dict(ON_ACTIVATE_ADVISORY)
+        on_act["rules_required_enabled"] = ["MC-RULE-001", "MC-RULE-002"]
+    if signal_id == "SIG-HIPAA-001":
+        on_act.update(
+            {
+                "rules_required_enabled": ["MC-RULE-009"],
+                "supplier_dpa_required": ["SUP-005"],
+                "linked_actions": ["ACT-002", "ACT-006"],
+            }
+        )
+    if signal_id == "SIG-PCI-001":
+        on_act.update(
+            {
+                "rules_required_enabled": ["MC-RULE-001", "MC-RULE-002", "MC-RULE-006"],
+                "supplier_dpa_required": ["SUP-003"],
+                "linked_actions": ["ACT-001"],
+                "programme_status_expect": "partial",
+            }
+        )
+    if signal_id == "SIG-CCPA-001":
+        on_act.update(
+            {
+                "readiness_doc": "docs/compliance/CCPA-CPRA-ALIGNMENT.md",
+                "rules_required_enabled": ["MC-RULE-002", "MC-RULE-008"],
+            }
+        )
+    if signal_id == "SIG-FEDRAMP-001":
+        on_act.update(
+            {
+                "readiness_doc": "docs/compliance/readiness/US-GOVERNMENT-READINESS.md",
+                "rules_required_enabled": ["MC-RULE-001", "MC-RULE-006", "MC-RULE-007"],
+            }
+        )
+    if signal_id == "SIG-LGPD-001":
+        on_act.update(
+            {
+                "readiness_doc": "docs/compliance/LGPD-READINESS.md",
+                "rules_required_enabled": ["MC-RULE-002", "MC-RULE-008"],
+            }
+        )
+    if signal_id == "SIG-AI-US-001":
+        on_act.update(
+            {
+                "rules_required_enabled": ["MC-RULE-004", "MC-RULE-005"],
+                "supplier_dpa_required": ["SUP-004"],
+                "linked_actions": ["ACT-010"],
+            }
+        )
+    if signal_id == "SIG-PAYMENTS-001":
+        on_act = {
+            "enforcement_mode": "enforce",
+            "fail_closed_on_violation": True,
+            "supplier_dpa_required": ["SUP-003"],
+            "linked_actions": ["ACT-001"],
+            "rules_required_enabled": ["MC-RULE-001", "MC-RULE-006"],
+        }
+    return on_act
+
+
 def build_triggers(frameworks: list[dict], assignment: dict[str, str]) -> dict:
     """Build `framework_triggers.yaml` — what actually happens when a signal activates.
 
@@ -666,93 +758,16 @@ def build_triggers(frameworks: list[dict], assignment: dict[str, str]) -> dict:
         payments enforce and fail closed from the start, so it must not inherit
         an advisory default.
     """
-    # Group framework ids by signal
-    by_signal: dict[str, list[str]] = {}
-    for fid, sig in assignment.items():
-        by_signal.setdefault(sig, []).append(fid)
-    # Unassigned applicable/conditional get CORE
-    for fw in frameworks:
-        fid = fw["framework_id"]
-        if fid in assignment:
-            continue
-        if fw.get("applicability") in ("applicable", "conditional") and fw.get(
-            "programme_status"
-        ) != "not_applicable":
-            by_signal.setdefault("SIG-CORE-001", []).append(fid)
+    by_signal = _group_frameworks_by_signal(frameworks, assignment)
 
     triggers = []
-    existing_special = {
-        "TRG-HIPAA-001",
-        "TRG-CCPA-001",
-        "TRG-PCI-001",
-        "TRG-FEDRAMP-001",
-        "TRG-LGPD-001",
-        "TRG-AI-US-001",
-        "TRG-PAYMENTS-001",
-    }
     for g in SIGNAL_GROUPS:
         fids = sorted(set(by_signal.get(g["signal_id"], g.get("framework_ids", []))))
         if not fids:
             continue
-        on_act = dict(ON_ACTIVATE_BASELINE)
-        if g["signal_id"] in ("SIG-CORE-001", "SIG-GDPR-001", "SIG-AI-001", "SIG-NIST-001", "SIG-PECR-001"):
-            # Baseline signals default active — advisory until operator enables enforce profile
-            on_act = dict(ON_ACTIVATE_ADVISORY)
-            on_act["rules_required_enabled"] = ["MC-RULE-001", "MC-RULE-002"]
-        if g["signal_id"] == "SIG-HIPAA-001":
-            on_act.update(
-                {
-                    "rules_required_enabled": ["MC-RULE-009"],
-                    "supplier_dpa_required": ["SUP-005"],
-                    "linked_actions": ["ACT-002", "ACT-006"],
-                }
-            )
-        if g["signal_id"] == "SIG-PCI-001":
-            on_act.update(
-                {
-                    "rules_required_enabled": ["MC-RULE-001", "MC-RULE-002", "MC-RULE-006"],
-                    "supplier_dpa_required": ["SUP-003"],
-                    "linked_actions": ["ACT-001"],
-                    "programme_status_expect": "partial",
-                }
-            )
-        if g["signal_id"] == "SIG-CCPA-001":
-            on_act.update(
-                {
-                    "readiness_doc": "docs/compliance/CCPA-CPRA-ALIGNMENT.md",
-                    "rules_required_enabled": ["MC-RULE-002", "MC-RULE-008"],
-                }
-            )
-        if g["signal_id"] == "SIG-FEDRAMP-001":
-            on_act.update(
-                {
-                    "readiness_doc": "docs/compliance/readiness/US-GOVERNMENT-READINESS.md",
-                    "rules_required_enabled": ["MC-RULE-001", "MC-RULE-006", "MC-RULE-007"],
-                }
-            )
-        if g["signal_id"] == "SIG-LGPD-001":
-            on_act.update(
-                {
-                    "readiness_doc": "docs/compliance/LGPD-READINESS.md",
-                    "rules_required_enabled": ["MC-RULE-002", "MC-RULE-008"],
-                }
-            )
-        if g["signal_id"] == "SIG-AI-US-001":
-            on_act.update(
-                {
-                    "rules_required_enabled": ["MC-RULE-004", "MC-RULE-005"],
-                    "supplier_dpa_required": ["SUP-004"],
-                    "linked_actions": ["ACT-010"],
-                }
-            )
-        if g["signal_id"] == "SIG-PAYMENTS-001":
-            on_act = {
-                "enforcement_mode": "enforce",
-                "fail_closed_on_violation": True,
-                "supplier_dpa_required": ["SUP-003"],
-                "linked_actions": ["ACT-001"],
-                "rules_required_enabled": ["MC-RULE-001", "MC-RULE-006"],
-            }
+
+        on_act = _get_on_activate_config(g["signal_id"])
+
         triggers.append(
             {
                 "trigger_id": g["trigger_id"],
