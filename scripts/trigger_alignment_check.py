@@ -132,53 +132,42 @@ def _load(path: Path, errors: list[str]) -> dict:
     return data
 
 
-def main() -> int:
-    """Validate the trigger→framework chain. Returns 0 on success, 1 on error.
-
-    Warnings do not fail the run: the 20 orphaned frameworks and the catalog
-    mismatches need a governance decision on `implementation_tier` vocabulary,
-    which has no value meaning "defined but not reachable". Failing on them
-    would block every unrelated change until that decision is taken, so they are
-    reported loudly and left non-fatal.
-    """
-    errors: list[str] = []
-    warnings: list[str] = []
-
-    triggers_doc = _load(TRIGGERS, errors)
-    frameworks_doc = _load(FRAMEWORKS, errors)
-    catalog_doc = _load(CATALOG, errors)
-    if errors:
-        for line in errors:
-            print(f"[ERROR] {line}", file=sys.stderr)
-        return 1
-
-    # Validate every record rather than filtering the malformed ones out. A
-    # comprehension guarded by `isinstance(x, dict)` silently drops whatever it
-    # does not understand, so a register half-converted to some other shape
-    # would pass this check with most of it never examined — the opposite of
-    # what a register validator is for. Each collection is walked with its index
-    # so a report names the offending item.
+def _extract_frameworks(frameworks_doc: dict, errors: list[str]) -> dict[str, str]:
     fw_name: dict[str, str] = {}
     for i, f in enumerate(frameworks_doc.get("frameworks") or []):
         if not isinstance(f, dict):
-            errors.append(f"frameworks_register.yaml: frameworks[{i}] is {type(f).__name__}, expected a mapping")
+            errors.append(
+                f"frameworks_register.yaml: frameworks[{i}] is {type(f).__name__}, expected a mapping"
+            )
             continue
         fid = f.get("framework_id")
         if not isinstance(fid, str) or not fid.strip():
-            errors.append(f"frameworks_register.yaml: frameworks[{i}] has no usable 'framework_id'")
+            errors.append(
+                f"frameworks_register.yaml: frameworks[{i}] has no usable 'framework_id'"
+            )
             continue
         fw_name[fid] = f.get("name") or ""
+    return fw_name
 
+
+def _extract_triggers(triggers_doc: dict, errors: list[str]) -> list[dict]:
     triggers = []
     for i, x in enumerate(triggers_doc.get("triggers") or []):
         if not isinstance(x, dict):
-            errors.append(f"framework_triggers.yaml: triggers[{i}] is {type(x).__name__}, expected a mapping")
+            errors.append(
+                f"framework_triggers.yaml: triggers[{i}] is {type(x).__name__}, expected a mapping"
+            )
             continue
         triggers.append(x)
-    if not triggers:
-        print("[ERROR] framework_triggers.yaml: 'triggers' must be a non-empty list", file=sys.stderr)
-        return 1
+    return triggers
 
+
+def _validate_triggers(
+    triggers: list[dict],
+    fw_name: dict[str, str],
+    errors: list[str],
+    warnings: list[str],
+) -> tuple[set[str], dict[str, list[str]]]:
     referenced: set[str] = set()
     activated_by: dict[str, list[str]] = {}
 
@@ -209,7 +198,9 @@ def main() -> int:
             # Guard before `referenced.add()`: a mapping or list element here
             # raises TypeError (unhashable) and the check dies with a traceback
             # instead of naming the offending trigger.
-            errors.append(f"{tid}: every 'framework_ids' entry must be a non-empty string")
+            errors.append(
+                f"{tid}: every 'framework_ids' entry must be a non-empty string"
+            )
             continue
         activated_by[tid] = fids
         for fid in fids:
@@ -232,14 +223,21 @@ def main() -> int:
         if anchor:
             names = [fw_name.get(fid, "") for fid in fids]
             if not any(anchor_matches(anchor, n) for n in names):
-                shown = ", ".join(f"{f}={fw_name.get(f, '?')}" for f in fids) or "nothing"
+                shown = (
+                    ", ".join(f"{f}={fw_name.get(f, '?')}" for f in fids) or "nothing"
+                )
                 errors.append(
                     f"{tid} is named after {anchor!r} but activates none of it — "
                     f"activates {shown}. Enabling this scope would enforce "
                     f"frameworks the operator did not ask for while leaving "
                     f"{anchor} inactive."
                 )
+    return referenced, activated_by
 
+
+def _check_orphans(
+    fw_name: dict[str, str], referenced: set[str], warnings: list[str]
+) -> None:
     orphans = sorted(set(fw_name) - referenced)
     if orphans:
         warnings.append(
@@ -247,6 +245,13 @@ def main() -> int:
             f"signal can activate them: " + ", ".join(orphans)
         )
 
+
+def _validate_catalog(
+    catalog_doc: dict,
+    activated_by: dict[str, list[str]],
+    errors: list[str],
+    warnings: list[str],
+) -> None:
     # The catalog names, per framework, the trigger that is supposed to activate
     # it. Where that trigger does not list the framework, the two registers
     # disagree and the catalog is the one that is wrong.
@@ -310,6 +315,47 @@ def main() -> int:
             "(implementation_tier has no value for 'defined but not reachable'), "
             "so it is reported rather than failed."
         )
+
+
+def main() -> int:
+    """Validate the trigger→framework chain. Returns 0 on success, 1 on error.
+
+    Warnings do not fail the run: the 20 orphaned frameworks and the catalog
+    mismatches need a governance decision on `implementation_tier` vocabulary,
+    which has no value meaning "defined but not reachable". Failing on them
+    would block every unrelated change until that decision is taken, so they are
+    reported loudly and left non-fatal.
+    """
+    errors: list[str] = []
+    warnings: list[str] = []
+
+    triggers_doc = _load(TRIGGERS, errors)
+    frameworks_doc = _load(FRAMEWORKS, errors)
+    catalog_doc = _load(CATALOG, errors)
+    if errors:
+        for line in errors:
+            print(f"[ERROR] {line}", file=sys.stderr)
+        return 1
+
+    # Validate every record rather than filtering the malformed ones out. A
+    # comprehension guarded by `isinstance(x, dict)` silently drops whatever it
+    # does not understand, so a register half-converted to some other shape
+    # would pass this check with most of it never examined — the opposite of
+    # what a register validator is for. Each collection is walked with its index
+    # so a report names the offending item.
+    fw_name = _extract_frameworks(frameworks_doc, errors)
+    triggers = _extract_triggers(triggers_doc, errors)
+
+    if not triggers:
+        print(
+            "[ERROR] framework_triggers.yaml: 'triggers' must be a non-empty list",
+            file=sys.stderr,
+        )
+        return 1
+
+    referenced, activated_by = _validate_triggers(triggers, fw_name, errors, warnings)
+    _check_orphans(fw_name, referenced, warnings)
+    _validate_catalog(catalog_doc, activated_by, errors, warnings)
 
     for line in warnings:
         print(f"[WARNING] {line}")
