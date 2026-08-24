@@ -33,7 +33,13 @@ REQUIRED_SUPPLIER_FIELDS = [
     "transfer_mechanism",
     "review_date",
 ]
-CRITICAL_STATUSES_OK_FOR_READINESS = {"Signed", "Template issued", "In negotiation", "Not required", "N/A"}
+CRITICAL_STATUSES_OK_FOR_READINESS = {
+    "Signed",
+    "Template issued",
+    "In negotiation",
+    "Not required",
+    "N/A",
+}
 # The full recorded-status vocabulary. "Not assessed" is a legitimate register
 # state (a real processor whose DPA work hasn't started) but deliberately NOT
 # in the readiness set above: recording the gap honestly is valid, claiming
@@ -57,9 +63,8 @@ def _load_register() -> dict:
         return yaml.safe_load(f) or {}
 
 
-def run_checks() -> list[Check]:
+def _check_template() -> list[Check]:
     checks: list[Check] = []
-
     template = ROOT / TEMPLATE_PATH
     checks.append(
         Check(
@@ -68,9 +73,11 @@ def run_checks() -> list[Check]:
             TEMPLATE_PATH if template.is_file() else f"missing {TEMPLATE_PATH}",
         )
     )
+    return checks
 
-    data = _load_register()
-    suppliers = data.get("suppliers", [])
+
+def _check_suppliers(suppliers: list[dict]) -> list[Check]:
+    checks: list[Check] = []
     checks.append(
         Check(
             "supplier_register",
@@ -97,22 +104,39 @@ def run_checks() -> list[Check]:
         Check(
             "supplier_schema",
             missing_fields == 0,
-            "all required fields present"
-            if missing_fields == 0
-            else f"{missing_fields} missing field values",
+            (
+                "all required fields present"
+                if missing_fields == 0
+                else f"{missing_fields} missing field values"
+            ),
         )
     )
     checks.append(
         Check(
             "dpa_status_values",
             invalid_status == 0,
-            "valid dpa_status enums"
-            if invalid_status == 0
-            else f"{invalid_status} invalid statuses",
+            (
+                "valid dpa_status enums"
+                if invalid_status == 0
+                else f"{invalid_status} invalid statuses"
+            ),
         )
     )
 
-    onboarding = data.get("onboarding_checklist")
+    if critical_without_template_path:
+        checks.append(
+            Check(
+                "critical_supplier_notes",
+                False,
+                f"{critical_without_template_path} critical suppliers lack negotiation notes",
+            )
+        )
+
+    return checks
+
+
+def _check_onboarding(onboarding) -> list[Check]:
+    checks: list[Check] = []
     if onboarding is None:
         checks.append(
             Check(
@@ -129,24 +153,35 @@ def run_checks() -> list[Check]:
                 f"{len(onboarding) if isinstance(onboarding, list) else 0} checklist items",
             )
         )
+    return checks
 
-    policy = data.get("meta", {}).get("policy")
+
+def _check_policy(policy: str | None) -> list[Check]:
+    checks: list[Check] = []
     checks.append(
         Check(
             "policy_link",
-            bool(policy) and (ROOT / policy).is_file(),
+            bool(policy) and policy is not None and (ROOT / policy).is_file(),
             policy or "missing policy reference",
         )
     )
+    return checks
 
-    if critical_without_template_path:
-        checks.append(
-            Check(
-                "critical_supplier_notes",
-                False,
-                f"{critical_without_template_path} critical suppliers lack negotiation notes",
-            )
-        )
+
+def run_checks() -> list[Check]:
+    checks: list[Check] = []
+
+    checks.extend(_check_template())
+
+    data = _load_register()
+    suppliers = data.get("suppliers", [])
+    checks.extend(_check_suppliers(suppliers))
+
+    onboarding = data.get("onboarding_checklist")
+    checks.extend(_check_onboarding(onboarding))
+
+    policy = data.get("meta", {}).get("policy")
+    checks.extend(_check_policy(policy))
 
     return checks
 
@@ -161,7 +196,9 @@ def print_report(checks: list[Check]) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="DPA readiness check")
-    parser.add_argument("--report", action="store_true", help="Print human-readable report")
+    parser.add_argument(
+        "--report", action="store_true", help="Print human-readable report"
+    )
     args = parser.parse_args()
 
     if yaml is None:
