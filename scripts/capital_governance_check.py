@@ -702,9 +702,20 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
     return errors, warnings
 
 
-def _check_roles_and_switches(doc: dict) -> list[str]:
+def _validate_role_reference(value, where: str, role_ids: set, errors: list[str]) -> None:
+    if not value:
+        return
+    # isinstance guard before the `in` check: an unhashable truthy value
+    # (a list or mapping in the YAML) would otherwise crash `value not in
+    # role_ids` with a TypeError instead of reporting it structurally.
+    if not isinstance(value, str):
+        errors.append(f"{where} must be a string, got {value!r}")
+    elif value not in role_ids:
+        errors.append(f"{where} references undeclared role {value!r}")
+
+
+def _check_roles_presence(role_ids: set) -> list[str]:
     errors: list[str] = []
-    role_ids = {r.get("role_id") for r in (doc.get("roles") or []) if isinstance(r.get("role_id"), str)}
     if not role_ids:
         # Record and continue rather than return: an adopter that empties roles
         # entirely has also broken every kill-switch and must_not_override check
@@ -721,18 +732,11 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
                 "Stage 7.3 runtime enforcement), so dropping it would pass every "
                 "existing reference check while quietly narrowing the contract"
             )
+    return errors
 
-    def _require_role(value, where: str) -> None:
-        if not value:
-            return
-        # isinstance guard before the `in` check: an unhashable truthy value
-        # (a list or mapping in the YAML) would otherwise crash `value not in
-        # role_ids` with a TypeError instead of reporting it structurally.
-        if not isinstance(value, str):
-            errors.append(f"{where} must be a string, got {value!r}")
-        elif value not in role_ids:
-            errors.append(f"{where} references undeclared role {value!r}")
 
+def _check_transfers_exception_authority(doc: dict, role_ids: set) -> list[str]:
+    errors: list[str] = []
     # exception_authority lives under `transfers`, not directly on
     # ledger_separation. An earlier version read the wrong path, so the lookup
     # returned None, _require_role skipped on falsy, and the only role guarding
@@ -746,8 +750,12 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
             "available to anyone, and the register must not leave that ambiguous"
         )
     else:
-        _require_role(exception_authority, "ledger_separation.transfers.exception_authority")
+        _validate_role_reference(exception_authority, "ledger_separation.transfers.exception_authority", role_ids, errors)
+    return errors
 
+
+def _check_progression_gates_roles(doc: dict, role_ids: set) -> list[str]:
+    errors: list[str] = []
     for gate in doc.get("progression_gates") or []:
         gid = gate.get("gate_id", "<unnamed>")
         req = gate.get("requires") or {}
@@ -758,10 +766,10 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
                 "named to approve it lets equity cross the boundary unaccountably"
             )
         else:
-            _require_role(approval, f"{gid}.requires.approval")
+            _validate_role_reference(approval, f"{gid}.requires.approval", role_ids, errors)
         # live_capital_approval is intentionally null except at gate.tier0_to_tier1 —
         # unlike approval, its absence is a valid configuration, not an omission.
-        _require_role(req.get("live_capital_approval"), f"{gid}.requires.live_capital_approval")
+        _validate_role_reference(req.get("live_capital_approval"), f"{gid}.requires.live_capital_approval", role_ids, errors)
         evidence = req.get("evidence")
         if not (isinstance(evidence, str) and evidence.strip()):
             errors.append(
@@ -787,7 +795,11 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
                 f"{gid}.requires.max_limit_breaches must be a non-negative integer, got "
                 f"{max_breaches!r}"
             )
+    return errors
 
+
+def _check_kill_switches(doc: dict, role_ids: set) -> list[str]:
+    errors: list[str] = []
     switches = doc.get("kill_switches") or []
     if not switches:
         errors.append(
@@ -812,7 +824,7 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
                 f"kill switch {sid} declares no release_authority — a switch nobody is "
                 "named to release either never releases or anyone releases it"
             )
-        _require_role(switch.get("release_authority"), f"kill switch {sid}.release_authority")
+        _validate_role_reference(switch.get("release_authority"), f"kill switch {sid}.release_authority", role_ids, errors)
         # A time-based auto_release (anything but "never") is a clock, not a
         # fix — the condition that tripped the switch can still be true when
         # the clock runs out. Any switch that releases on a timer must name
@@ -827,7 +839,11 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
                     "no auto_release_requires — a time-based release with no named "
                     "condition can clear while the trigger is still true"
                 )
+    return errors
 
+
+def _check_protected_controls(doc: dict) -> list[str]:
+    errors: list[str] = []
     protected = set((doc.get("binding") or {}).get("must_not_override") or [])
     for required in NON_OVERRIDABLE_CONTROLS:
         if required not in protected:
@@ -835,6 +851,19 @@ def _check_roles_and_switches(doc: dict) -> list[str]:
                 f"binding.must_not_override omits {required!r} — an adopter could then "
                 "relax the control locally, which defeats it"
             )
+    return errors
+
+
+def _check_roles_and_switches(doc: dict) -> list[str]:
+    errors: list[str] = []
+    role_ids = {r.get("role_id") for r in (doc.get("roles") or []) if isinstance(r.get("role_id"), str)}
+
+    errors.extend(_check_roles_presence(role_ids))
+    errors.extend(_check_transfers_exception_authority(doc, role_ids))
+    errors.extend(_check_progression_gates_roles(doc, role_ids))
+    errors.extend(_check_kill_switches(doc, role_ids))
+    errors.extend(_check_protected_controls(doc))
+
     return errors
 
 
