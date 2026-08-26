@@ -32,11 +32,15 @@ def _load_register() -> dict:
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Zero-cost tooling register check")
     parser.add_argument("--report", action="store_true")
-    parser.add_argument("--strict", action="store_true", help="Fail on optional tool hints")
+    parser.add_argument(
+        "--strict", action="store_true", help="Fail on optional tool hints"
+    )
     return parser.parse_args()
 
 
-def _check_tools(tools: list[dict], args: argparse.Namespace) -> tuple[int, list[str], list[str]]:
+def _check_tools(
+    tools: list[dict], args: argparse.Namespace
+) -> tuple[int, list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
     passed = 0
@@ -59,7 +63,9 @@ def _check_tools(tools: list[dict], args: argparse.Namespace) -> tuple[int, list
             if mandatory:
                 errors.append(f"{tool_id} ({name}): missing {check_path}")
             else:
-                warnings.append(f"{tool_id} ({name}): optional path missing {check_path}")
+                warnings.append(
+                    f"{tool_id} ({name}): optional path missing {check_path}"
+                )
             continue
 
         passed += 1
@@ -71,7 +77,11 @@ def _check_tools(tools: list[dict], args: argparse.Namespace) -> tuple[int, list
 
 
 def _check_optional_binaries(args: argparse.Namespace) -> None:
-    for binary, tool_id in [("gitleaks", "ZCT-007"), ("bandit", "ZCT-008"), ("semgrep", "ZCT-009")]:
+    for binary, tool_id in [
+        ("gitleaks", "ZCT-007"),
+        ("bandit", "ZCT-008"),
+        ("semgrep", "ZCT-009"),
+    ]:
         if shutil.which(binary):
             if args.report:
                 print(f"  OK  {tool_id} {binary} found on PATH")
@@ -79,7 +89,13 @@ def _check_optional_binaries(args: argparse.Namespace) -> None:
             print(f"  --  {tool_id} {binary} not installed (optional)")
 
 
-def _print_report(passed: int, mandatory_count: int, errors: list[str], warnings: list[str], args: argparse.Namespace) -> None:
+def _print_report(
+    passed: int,
+    mandatory_count: int,
+    errors: list[str],
+    warnings: list[str],
+    args: argparse.Namespace,
+) -> None:
     if args.report:
         print()
         print(f"Zero-cost register: {passed} tool paths verified")
@@ -93,7 +109,9 @@ def _print_report(passed: int, mandatory_count: int, errors: list[str], warnings
                 print(f"  WARN: {w}")
 
 
-def _print_final_status(errors: list[str], warnings: list[str], args: argparse.Namespace) -> None:
+def _print_final_status(
+    errors: list[str], warnings: list[str], args: argparse.Namespace
+) -> None:
     if args.report and not errors:
         print("Zero-cost tooling check: PASSED")
 
@@ -118,6 +136,7 @@ def main() -> int:
         return 1
     _print_final_status(errors, warnings, args)
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())
