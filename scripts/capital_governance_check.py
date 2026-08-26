@@ -35,7 +35,12 @@ REGISTER = ROOT / "compliance" / "capital_governance.yaml"
 # the same reason it belongs here: progression_gates decide promotion from the
 # decision journal evidence describes, so a binding that could weaken the journal
 # defeats gate integrity without ever touching a gate.
-NON_OVERRIDABLE_CONTROLS = ("ledger_separation", "demotion", "kill_switches", "evidence")
+NON_OVERRIDABLE_CONTROLS = (
+    "ledger_separation",
+    "demotion",
+    "kill_switches",
+    "evidence",
+)
 
 # CAPITAL-GOVERNANCE.md §2 names the same four controls in prose. That prose
 # and this constant are two independent copies of one fact, and only this
@@ -64,7 +69,12 @@ REQUIRED_FUNCTION_IDS = ("INTERNAL", "EXTERNAL")
 # check is Stage 7.3 runtime enforcement, staged ahead of the rules that will
 # use it. Because nothing currently names it, an adopter could delete it from
 # roles and every existing _require_role check would still pass.
-REQUIRED_ROLE_IDS = ("capital_operator", "risk_authority", "presiding_authority", "human_owner")
+REQUIRED_ROLE_IDS = (
+    "capital_operator",
+    "risk_authority",
+    "presiding_authority",
+    "human_owner",
+)
 
 # The only two values capital_tiers.external_execution may hold. Checked as
 # an enum, not just "is it simulated_only", because _check_hard_authorities
@@ -136,7 +146,10 @@ PLATFORM_SPECIFIC_TERMS = [
 # underscores, dots, and other punctuation all count as boundaries while
 # "reporter"/"supporter" still don't false-positive on "Porter".
 _TERM_PATTERNS = [
-    (term, re.compile(rf"(?<![A-Za-z0-9]){re.escape(term)}(?![A-Za-z0-9])", re.IGNORECASE))
+    (
+        term,
+        re.compile(rf"(?<![A-Za-z0-9]){re.escape(term)}(?![A-Za-z0-9])", re.IGNORECASE),
+    )
     for term in PLATFORM_SPECIFIC_TERMS
 ]
 
@@ -146,7 +159,11 @@ def _is_finite_number(value: object) -> bool:
     reusable form of the isinstance+isfinite guard used throughout this file
     (bool is excluded because it's a Python int subtype, so True would
     otherwise silently pass any numeric check as 1)."""
-    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+    return (
+        isinstance(value, (int, float))
+        and not isinstance(value, bool)
+        and math.isfinite(value)
+    )
 
 
 def _check_is_generic(raw: str) -> list[str]:
@@ -179,7 +196,13 @@ def _check_is_generic(raw: str) -> list[str]:
 # check ran first, printing a Python traceback instead of a normal
 # validator error line. main() runs _sanitize_list_sections before any
 # other check, so every check function below can assume this shape holds.
-LIST_SECTIONS = ("roles", "function_types", "capital_tiers", "progression_gates", "kill_switches")
+LIST_SECTIONS = (
+    "roles",
+    "function_types",
+    "capital_tiers",
+    "progression_gates",
+    "kill_switches",
+)
 
 
 def _sanitize_list_sections(doc: dict) -> list[str]:
@@ -201,7 +224,9 @@ def _sanitize_list_sections(doc: dict) -> list[str]:
             if isinstance(item, dict):
                 clean.append(item)
             else:
-                errors.append(f"{key}[{index}] must be a mapping, got {type(item).__name__}")
+                errors.append(
+                    f"{key}[{index}] must be a mapping, got {type(item).__name__}"
+                )
         doc[key] = clean
     return errors
 
@@ -215,7 +240,10 @@ def _sanitize_list_sections(doc: dict) -> list[str]:
 # sections nest one level deeper (ledger_separation.transfers,
 # evidence.decision_journal) and share the same exposure at that nested key.
 DICT_SECTIONS = ("ledger_separation", "demotion", "evidence", "binding")
-NESTED_DICT_SECTIONS = (("ledger_separation", "transfers"), ("evidence", "decision_journal"))
+NESTED_DICT_SECTIONS = (
+    ("ledger_separation", "transfers"),
+    ("evidence", "decision_journal"),
+)
 
 
 def _sanitize_dict_sections(doc: dict) -> list[str]:
@@ -248,7 +276,10 @@ def _sanitize_dict_sections(doc: dict) -> list[str]:
         requires = gate.get("requires")
         if requires is not None and not isinstance(requires, dict):
             gid = gate.get("gate_id", "<unnamed>")
-            errors.append(f"progression_gates: gate {gid!r}.requires must be a mapping, got {type(requires).__name__}")
+            errors.append(
+                f"progression_gates: gate {gid!r}.requires must be a mapping, "
+                f"got {type(requires).__name__}"
+            )
             gate["requires"] = {}
     return errors
 
@@ -259,7 +290,9 @@ def _check_ledger_separation(doc: dict) -> list[str]:
     if not fts:
         return ["function_types is empty — nothing is governed"]
 
-    declared_function_ids = {ft.get("function_id") for ft in fts if isinstance(ft.get("function_id"), str)}
+    declared_function_ids = {
+        ft.get("function_id") for ft in fts if isinstance(ft.get("function_id"), str)
+    }
     for required in REQUIRED_FUNCTION_IDS:
         if required not in declared_function_ids:
             errors.append(
@@ -277,7 +310,9 @@ def _check_ledger_separation(doc: dict) -> list[str]:
             errors.append(f"function_type {fid} declares no ledger")
             continue
         if not isinstance(ledger, str):
-            errors.append(f"function_type {fid} ledger must be a string, got {ledger!r}")
+            errors.append(
+                f"function_type {fid} ledger must be a string, got {ledger!r}"
+            )
             continue
         if ledger in seen:
             errors.append(
@@ -498,10 +533,14 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
     # non-string (and possibly unhashable) id would crash this set's own
     # construction before _check_unique_ids's error is ever seen.
     known_functions = {
-        ft.get("function_id") for ft in (doc.get("function_types") or []) if isinstance(ft.get("function_id"), str)
+        ft.get("function_id")
+        for ft in (doc.get("function_types") or [])
+        if isinstance(ft.get("function_id"), str)
     }
     gate_ids = {
-        g.get("gate_id") for g in (doc.get("progression_gates") or []) if isinstance(g.get("gate_id"), str)
+        g.get("gate_id")
+        for g in (doc.get("progression_gates") or [])
+        if isinstance(g.get("gate_id"), str)
     }
     last_index = len(tiers) - 1
 
@@ -518,9 +557,13 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
         lo = lo_raw if (lo_raw is None or _is_finite_number(lo_raw)) else None
         hi = hi_raw if (hi_raw is None or _is_finite_number(hi_raw)) else None
         if lo_raw is not None and lo is None:
-            errors.append(f"{tid}: band_min_units must be a finite number, got {lo_raw!r}")
+            errors.append(
+                f"{tid}: band_min_units must be a finite number, got {lo_raw!r}"
+            )
         if hi_raw is not None and hi is None:
-            errors.append(f"{tid}: band_max_units must be a finite number, got {hi_raw!r}")
+            errors.append(
+                f"{tid}: band_max_units must be a finite number, got {hi_raw!r}"
+            )
         is_final = index == last_index
 
         if lo is None:
@@ -552,7 +595,9 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
                     "tier below the true final one"
                 )
             elif lo is not None and hi <= lo:
-                errors.append(f"{tid}: band_max_units {hi} must exceed band_min_units {lo}")
+                errors.append(
+                    f"{tid}: band_max_units {hi} must exceed band_min_units {lo}"
+                )
 
         prev_max = hi
 
@@ -605,7 +650,11 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
                 f"{tid}: max_concurrent_positions is required — CAPITAL-GOVERNANCE.md §5 "
                 "binds Stage 7.3 runtime risk enforcement to this value"
             )
-        elif not isinstance(positions, int) or isinstance(positions, bool) or positions < 1:
+        elif (
+            not isinstance(positions, int)
+            or isinstance(positions, bool)
+            or positions < 1
+        ):
             errors.append(
                 f"{tid}: max_concurrent_positions must be a positive integer, got {positions!r}"
             )
@@ -632,9 +681,13 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
             # entry that happens to be unhashable (e.g. a nested list) would
             # otherwise crash `fn not in known_functions` with a TypeError.
             if not isinstance(fn, str):
-                errors.append(f"{tid}: permitted_functions entry must be a string, got {fn!r}")
+                errors.append(
+                    f"{tid}: permitted_functions entry must be a string, got {fn!r}"
+                )
             elif fn not in known_functions:
-                errors.append(f"{tid}: permitted_functions names unknown function {fn!r}")
+                errors.append(
+                    f"{tid}: permitted_functions names unknown function {fn!r}"
+                )
 
         gate = tier.get("progression_gate")
         gate_is_valid_reference = gate is None or isinstance(gate, str)
@@ -667,7 +720,9 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
                 f"{tid}: leverage_permitted must be a boolean, got {leverage_permitted!r}"
             )
         else:
-            max_leverage_is_finite_number = max_leverage is not None and _is_finite_number(max_leverage)
+            max_leverage_is_finite_number = (
+                max_leverage is not None and _is_finite_number(max_leverage)
+            )
             if leverage_permitted:
                 if max_leverage is None:
                     errors.append(
@@ -686,7 +741,9 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
                         f"{max_leverage!r}"
                     )
                 elif max_leverage <= 1.0:
-                    warnings.append(f"{tid}: leverage_permitted is true but max_leverage <= 1.0")
+                    warnings.append(
+                        f"{tid}: leverage_permitted is true but max_leverage <= 1.0"
+                    )
             elif max_leverage is not None:
                 if not max_leverage_is_finite_number:
                     errors.append(
@@ -702,7 +759,9 @@ def _check_tier_ladder(doc: dict) -> tuple[list[str], list[str]]:
     return errors, warnings
 
 
-def _validate_role_reference(value, where: str, role_ids: set, errors: list[str]) -> None:
+def _validate_role_reference(
+    value, where: str, role_ids: set, errors: list[str]
+) -> None:
     if not value:
         return
     # isinstance guard before the `in` check: an unhashable truthy value
@@ -750,7 +809,12 @@ def _check_transfers_exception_authority(doc: dict, role_ids: set) -> list[str]:
             "available to anyone, and the register must not leave that ambiguous"
         )
     else:
-        _validate_role_reference(exception_authority, "ledger_separation.transfers.exception_authority", role_ids, errors)
+        _validate_role_reference(
+            exception_authority,
+            "ledger_separation.transfers.exception_authority",
+            role_ids,
+            errors,
+        )
     return errors
 
 
@@ -766,10 +830,17 @@ def _check_progression_gates_roles(doc: dict, role_ids: set) -> list[str]:
                 "named to approve it lets equity cross the boundary unaccountably"
             )
         else:
-            _validate_role_reference(approval, f"{gid}.requires.approval", role_ids, errors)
+            _validate_role_reference(
+                approval, f"{gid}.requires.approval", role_ids, errors
+            )
         # live_capital_approval is intentionally null except at gate.tier0_to_tier1 —
         # unlike approval, its absence is a valid configuration, not an omission.
-        _validate_role_reference(req.get("live_capital_approval"), f"{gid}.requires.live_capital_approval", role_ids, errors)
+        _validate_role_reference(
+            req.get("live_capital_approval"),
+            f"{gid}.requires.live_capital_approval",
+            role_ids,
+            errors,
+        )
         evidence = req.get("evidence")
         if not (isinstance(evidence, str) and evidence.strip()):
             errors.append(
@@ -790,7 +861,11 @@ def _check_progression_gates_roles(doc: dict, role_ids: set) -> list[str]:
                     f"{gid}.requires.{field} must be a non-negative integer, got {value!r}"
                 )
         max_breaches = req.get("max_limit_breaches")
-        if not isinstance(max_breaches, int) or isinstance(max_breaches, bool) or max_breaches < 0:
+        if (
+            not isinstance(max_breaches, int)
+            or isinstance(max_breaches, bool)
+            or max_breaches < 0
+        ):
             errors.append(
                 f"{gid}.requires.max_limit_breaches must be a non-negative integer, got "
                 f"{max_breaches!r}"
@@ -806,7 +881,9 @@ def _check_kill_switches(doc: dict, role_ids: set) -> list[str]:
             "kill_switches is empty — at least one emergency halt control is required; "
             "an adopter that removes them all would have no automatic stop left"
         )
-    declared_switch_ids = {s.get("switch_id") for s in switches if isinstance(s.get("switch_id"), str)}
+    declared_switch_ids = {
+        s.get("switch_id") for s in switches if isinstance(s.get("switch_id"), str)
+    }
     for required_switch in REQUIRED_KILL_SWITCH_IDS:
         if required_switch not in declared_switch_ids:
             errors.append(
@@ -824,7 +901,12 @@ def _check_kill_switches(doc: dict, role_ids: set) -> list[str]:
                 f"kill switch {sid} declares no release_authority — a switch nobody is "
                 "named to release either never releases or anyone releases it"
             )
-        _validate_role_reference(switch.get("release_authority"), f"kill switch {sid}.release_authority", role_ids, errors)
+        _validate_role_reference(
+            switch.get("release_authority"),
+            f"kill switch {sid}.release_authority",
+            role_ids,
+            errors,
+        )
         # A time-based auto_release (anything but "never") is a clock, not a
         # fix — the condition that tripped the switch can still be true when
         # the clock runs out. Any switch that releases on a timer must name
@@ -856,7 +938,11 @@ def _check_protected_controls(doc: dict) -> list[str]:
 
 def _check_roles_and_switches(doc: dict) -> list[str]:
     errors: list[str] = []
-    role_ids = {r.get("role_id") for r in (doc.get("roles") or []) if isinstance(r.get("role_id"), str)}
+    role_ids = {
+        r.get("role_id")
+        for r in (doc.get("roles") or [])
+        if isinstance(r.get("role_id"), str)
+    }
 
     errors.extend(_check_roles_presence(role_ids))
     errors.extend(_check_transfers_exception_authority(doc, role_ids))
@@ -876,8 +962,10 @@ def _check_docs_name_non_overridable_controls() -> list[str]:
     try:
         doc_text = CAPITAL_GOVERNANCE_DOC.read_text(encoding="utf-8")
     except OSError as exc:
-        return [f"cannot read {CAPITAL_GOVERNANCE_DOC} to verify it names every "
-                f"non-overridable control: {exc}"]
+        return [
+            f"cannot read {CAPITAL_GOVERNANCE_DOC} to verify it names every "
+            f"non-overridable control: {exc}"
+        ]
     errors: list[str] = []
     for control in NON_OVERRIDABLE_CONTROLS:
         needle = DOC_PROSE_FOR_CONTROL.get(control, control)
