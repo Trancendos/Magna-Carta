@@ -300,10 +300,10 @@ def render_jd(
 ) -> str:
     resp_lines = "\n".join(f"- {r}" for r in responsibilities)
     qual_lines = "\n".join(f"- {q}" for q in qualifications)
-    art_lines = "\n".join(f"- [{a}](../{'compliance' if a.isupper() and '-' in a else 'procedures' if a.startswith('PROC') else 'bibles'}/{a}.md)" if not a.endswith(".md") else f"- {a}" for a in artefacts)
     # Fix artefact links properly
     art_links = []
     import os
+
     for a in artefacts:
         if a == "FRAMEWORK":
             art_links.append(f"- [{a}](../../FRAMEWORK.md)")
@@ -321,7 +321,9 @@ def render_jd(
 
         if not found:
             if a.startswith("PROC-"):
-                art_links.append(f"- Procedure and related artefacts: `{a}` (see [procedures INDEX](../procedures/INDEX.md))")
+                art_links.append(
+                    f"- Procedure and related artefacts: `{a}` (see [procedures INDEX](../procedures/INDEX.md))"
+                )
             elif a.endswith("-BIBLE"):
                 art_links.append(f"- [{a}](../bibles/{a}.md)")
             elif a == "ROPA":
@@ -419,7 +421,17 @@ def main() -> None:
         filename = slug_map[jd_id]
         path = JD_DIR / filename
         path.write_text(
-            render_jd(jd_id, title, short_name, reports_to, authority, summary, resp, qual, arts),
+            render_jd(
+                jd_id,
+                title,
+                short_name,
+                reports_to,
+                authority,
+                summary,
+                resp,
+                qual,
+                arts,
+            ),
             encoding="utf-8",
         )
         index_rows.append((jd_id, title, short_name, filename))
