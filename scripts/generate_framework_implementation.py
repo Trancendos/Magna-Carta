@@ -128,18 +128,20 @@ SIGNAL_GROUPS: list[dict] = [
         "name": "Platform baseline",
         "config_key": "CORE_PLATFORM",
         "default_active": True,
-        "framework_filter": lambda fw: fw.get("applicability") == "applicable"
-        and fw.get("framework_id")
-        not in {
-            "FW-110",
-            "FW-133",
-            "FW-134",
-            "FW-138",
-            "FW-144",
-            "FW-132",
-            "FW-131",
-            "FW-005",
-        },
+        "framework_filter": lambda fw: (
+            fw.get("applicability") == "applicable"
+            and fw.get("framework_id")
+            not in {
+                "FW-110",
+                "FW-133",
+                "FW-134",
+                "FW-138",
+                "FW-144",
+                "FW-132",
+                "FW-131",
+                "FW-005",
+            }
+        ),
     },
     {
         "signal_id": "SIG-GDPR-001",
@@ -393,7 +395,9 @@ def _validate_group_definitions() -> None:
                 )
 
 
-def _assign_explicit_claims(fw_by_id: dict[str, dict], assignment: dict[str, str]) -> None:
+def _assign_explicit_claims(
+    fw_by_id: dict[str, dict], assignment: dict[str, str]
+) -> None:
     # Pass 1 — explicit claims. First group in SIGNAL_GROUPS order wins.
     #
     # Three frameworks are legitimately claimed by two groups (FW-004 by GDPR
@@ -423,7 +427,9 @@ def _assign_explicit_claims(fw_by_id: dict[str, dict], assignment: dict[str, str
             )
 
 
-def _assign_sweeps_and_filters(frameworks: list[dict], assignment: dict[str, str]) -> None:
+def _assign_sweeps_and_filters(
+    frameworks: list[dict], assignment: dict[str, str]
+) -> None:
     # Pass 2 — category sweeps and filters, over whatever remains.
     for group in SIGNAL_GROUPS:
         sig = group["signal_id"]
@@ -506,9 +512,12 @@ def update_frameworks_register(data: dict) -> None:
     for fw in frameworks:
         if fw["framework_id"] in na_ids:
             fw["readiness_doc"] = NA_DOC
-        if fw.get("programme_status") == "readiness" and fw.get("readiness_doc"):
-            if fw.get("applicability") != "not_applicable":
-                fw["programme_status"] = "programme"
+        if (
+            fw.get("programme_status") == "readiness"
+            and fw.get("readiness_doc")
+            and fw.get("applicability") != "not_applicable"
+        ):
+            fw["programme_status"] = "programme"
     data["meta"]["framework_count"] = len(frameworks)
     data["meta"]["last_updated"] = "2026-06-09"
     path = ROOT / "compliance" / "frameworks_register.yaml"
@@ -571,7 +580,11 @@ def build_catalog(frameworks: list[dict], assignment: dict[str, str]) -> dict:
             tier = "baseline"
             sig = "SIG-CORE-001"
             trig = "TRG-CORE-001"
-        group = next((g for g in SIGNAL_GROUPS if g["signal_id"] == sig), None) if sig else None
+        group = (
+            next((g for g in SIGNAL_GROUPS if g["signal_id"] == sig), None)
+            if sig
+            else None
+        )
         entries.append(
             {
                 "framework_id": fid,
@@ -687,27 +700,25 @@ def build_triggers(frameworks: list[dict], assignment: dict[str, str]) -> dict:
         fid = fw["framework_id"]
         if fid in assignment:
             continue
-        if fw.get("applicability") in ("applicable", "conditional") and fw.get(
-            "programme_status"
-        ) != "not_applicable":
+        if (
+            fw.get("applicability") in ("applicable", "conditional")
+            and fw.get("programme_status") != "not_applicable"
+        ):
             by_signal.setdefault("SIG-CORE-001", []).append(fid)
 
     triggers = []
-    existing_special = {
-        "TRG-HIPAA-001",
-        "TRG-CCPA-001",
-        "TRG-PCI-001",
-        "TRG-FEDRAMP-001",
-        "TRG-LGPD-001",
-        "TRG-AI-US-001",
-        "TRG-PAYMENTS-001",
-    }
     for g in SIGNAL_GROUPS:
         fids = sorted(set(by_signal.get(g["signal_id"], g.get("framework_ids", []))))
         if not fids:
             continue
         on_act = dict(ON_ACTIVATE_BASELINE)
-        if g["signal_id"] in ("SIG-CORE-001", "SIG-GDPR-001", "SIG-AI-001", "SIG-NIST-001", "SIG-PECR-001"):
+        if g["signal_id"] in (
+            "SIG-CORE-001",
+            "SIG-GDPR-001",
+            "SIG-AI-001",
+            "SIG-NIST-001",
+            "SIG-PECR-001",
+        ):
             # Baseline signals default active — advisory until operator enables enforce profile
             on_act = dict(ON_ACTIVATE_ADVISORY)
             on_act["rules_required_enabled"] = ["MC-RULE-001", "MC-RULE-002"]
@@ -722,7 +733,11 @@ def build_triggers(frameworks: list[dict], assignment: dict[str, str]) -> dict:
         if g["signal_id"] == "SIG-PCI-001":
             on_act.update(
                 {
-                    "rules_required_enabled": ["MC-RULE-001", "MC-RULE-002", "MC-RULE-006"],
+                    "rules_required_enabled": [
+                        "MC-RULE-001",
+                        "MC-RULE-002",
+                        "MC-RULE-006",
+                    ],
                     "supplier_dpa_required": ["SUP-003"],
                     "linked_actions": ["ACT-001"],
                     "programme_status_expect": "partial",
@@ -739,7 +754,11 @@ def build_triggers(frameworks: list[dict], assignment: dict[str, str]) -> dict:
             on_act.update(
                 {
                     "readiness_doc": "docs/compliance/readiness/US-GOVERNMENT-READINESS.md",
-                    "rules_required_enabled": ["MC-RULE-001", "MC-RULE-006", "MC-RULE-007"],
+                    "rules_required_enabled": [
+                        "MC-RULE-001",
+                        "MC-RULE-006",
+                        "MC-RULE-007",
+                    ],
                 }
             )
         if g["signal_id"] == "SIG-LGPD-001":
