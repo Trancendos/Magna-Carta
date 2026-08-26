@@ -900,7 +900,7 @@ def check_cookbook_links(cfg: dict, findings: list[Finding]) -> None:
     for block in cfg.get("cookbook_links", []):
         cid = block.get("check_id", "MON-005")
         index_path = ROOT / block["index"]
-        base = ROOT / block["base_dir"]
+
         if not index_path.is_file():
             findings.append(Finding(cid, "error", f"Missing index: {block['index']}"))
             continue
