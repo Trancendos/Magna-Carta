@@ -121,9 +121,7 @@ def scan_certification_vault() -> dict:
 
     files_on_disk: list[str] = []
     if root.is_dir():
-        files_on_disk = [
-            p.name for p in root.iterdir() if p.is_file() and not p.name.startswith(".")
-        ]
+        files_on_disk = [p.name for p in root.iterdir() if p.is_file() and not p.name.startswith(".")]
 
     for slot in slots:
         result = _evaluate_slot(slot, files_on_disk)
@@ -198,9 +196,7 @@ def score_readiness() -> dict:
 
 def print_report(report: dict) -> None:
     pct = report["automation_readiness_percent"]
-    print(
-        f"Layer B automation readiness: {pct}% ({report['items_passed']}/{report['items_total']})"
-    )
+    print(f"Layer B automation readiness: {pct}% ({report['items_passed']}/{report['items_total']})")
     print(f"Target: {report['target_percent']}% — agent-verifiable scope only")
     print()
     failed = [i for i in report["items"] if not i["passed"] and i["status"] != "not_applicable"]
@@ -215,10 +211,7 @@ def print_report(report: dict) -> None:
         f"{vault['pending']} pending_upload, {vault['not_applicable']} N/A"
     )
     gates = report["owner_gates"]
-    print(
-        f"Owner go-live gates open (Layer C): {gates['owner_gates_open']} "
-        f"(not scored against Layer B)"
-    )
+    print(f"Owner go-live gates open (Layer C): {gates['owner_gates_open']} " f"(not scored against Layer B)")
 
 
 def main() -> int:
