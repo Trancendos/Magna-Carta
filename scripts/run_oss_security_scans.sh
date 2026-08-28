@@ -10,23 +10,6 @@ echo "=== OSS security scans SEC-006 (zero cost, no SaaS) ==="
 ran=0
 fail=0
 
-run_or_skip() {
-  local label="$1"
-  local cmd="$2"
-  if eval "$cmd" >/dev/null 2>&1; then
-    echo "--- $label ---"
-    if eval "$cmd"; then
-      echo "OK  $label"
-    else
-      echo "FINDINGS in $label — review above" >&2
-      fail=1
-    fi
-    ran=1
-  else
-    echo "SKIP $label ($cmd not available)"
-  fi
-}
-
 if command -v gitleaks >/dev/null 2>&1; then
   echo "--- gitleaks ---"
   if gitleaks detect --source "$ROOT" --no-banner --redact 2>/dev/null; then

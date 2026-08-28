@@ -47,6 +47,33 @@ run_step "DPA readiness" python3 scripts/dpa_readiness_check.py --report
 run_step "Security testing SEC-002" python3 scripts/run_security_testing.py --report
 run_step "Zero-cost tooling ZCT" python3 scripts/zero_cost_tooling_check.py --report
 
+# Unit tests. The repository had no tests/ directory when this step was added,
+# and several open PRs propose the first ones; without this the suite they add
+# would sit in the tree and never execute -- coverage that reads as real and
+# is not.
+#
+# The three outcomes are deliberately distinct. A missing tests/ is a visible
+# SKIP, because there is genuinely nothing to run yet and this activates by
+# itself the moment the first test lands. A tests/ directory with pytest
+# missing is a hard FAIL rather than a skip: a mandatory check whose tool is
+# absent must not report success. pytest's own exit code is left to stand,
+# including exit 5 (collected nothing), which for an existing tests/ directory
+# is a defect worth surfacing rather than passing over.
+if [[ -d "$ROOT/tests" ]]; then
+  if python3 -c "import pytest" 2>/dev/null; then
+    run_step "Unit tests" python3 -m pytest "$ROOT/tests" -q
+  else
+    echo "--- Unit tests ---"
+    echo "FAIL Unit tests: tests/ exists but pytest is not installed (pip install -r requirements.txt)" >&2
+    fail=1
+    echo
+  fi
+else
+  echo "--- Unit tests ---"
+  echo "SKIP no tests/ directory yet — this step runs automatically once one exists"
+  echo
+fi
+
 if [[ -x "$ROOT/scripts/run_oss_security_scans.sh" ]]; then
   echo "--- OSS security stack SEC-006 (optional tools) ---"
   if "$ROOT/scripts/run_oss_security_scans.sh"; then
