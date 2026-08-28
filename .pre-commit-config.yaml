@@ -1,0 +1,44 @@
+# pre-commit.ci is installed on this repository but no config existed, so it
+# had nothing to read and reported `error during ci config` on every run. That
+# is not a per-PR failure: the same error is red on `main` itself (as
+# `pre-commit.ci - push`, since 2026-08-21), so no pull request here could
+# reach a fully green state regardless of its contents. This file gives the
+# service something valid to run.
+#
+# Deliberately check-only. pre-commit.ci pushes autofix commits back onto the
+# PR branch, so a formatting hook here would rewrite files across a repo that
+# has never been through one -- burying real diffs under reformatting churn in
+# 240 governance documents. Every hook below either passes or reports; none
+# rewrites a file.
+#
+# The repo's own validators (scripts/*.py, run in .github/workflows) are not
+# duplicated here: they need the repo's Python environment, which pre-commit.ci
+# does not provision. This file covers the generic file-integrity checks only.
+#
+# Verified against the current tree before landing: all 26 YAML files and 21
+# JSON files parse, and every executable already carries a shebang -- so these
+# hooks pass on `main` as it stands rather than turning one red status into
+# another.
+
+ci:
+  # Off for the same reason the hooks are check-only.
+  autofix_prs: false
+  autoupdate_schedule: monthly
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+        # The compliance register and framework catalog are the source of
+        # truth for every generated document; a parse error there is a real
+        # outage, not a style nit.
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: detect-private-key
+      - id: check-executables-have-shebangs
+      - id: check-added-large-files
+        # The register is legitimately ~60KB and grows; 1MB leaves headroom
+        # while still catching an accidentally committed archive or binary.
+        args: ["--maxkb=1024"]
