@@ -1,2 +1,8 @@
 # Magna Carta compliance scripts — Layer B automation (zero-cost local tooling)
 PyYAML>=6.0
+# pytest is listed here, rather than in a separate dev file, because
+# .github/ and .forgejo/ layer-b-ci.yml install `-r requirements.txt` and
+# nothing else. A dev-only file would not reach the runners, so the unit-test
+# step in run_layer_b_local_ci.sh would report "pytest not installed" on every
+# run -- a check that exists and never executes.
+pytest>=8.0
