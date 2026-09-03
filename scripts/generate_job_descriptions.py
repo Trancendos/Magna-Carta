@@ -287,21 +287,15 @@ ROLES = [
 ]
 
 
-def render_jd(
-    jd_id: str,
-    title: str,
-    short_name: str,
-    reports_to: str,
-    authority: str,
-    summary: str,
-    responsibilities: list[str],
-    qualifications: list[str],
-    artefacts: list[str],
-) -> str:
-    resp_lines = "\n".join(f"- {r}" for r in responsibilities)
-    qual_lines = "\n".join(f"- {q}" for q in qualifications)
-    art_lines = "\n".join(f"- [{a}](../{'compliance' if a.isupper() and '-' in a else 'procedures' if a.startswith('PROC') else 'bibles'}/{a}.md)" if not a.endswith(".md") else f"- {a}" for a in artefacts)
-    # Fix artefact links properly
+def _format_responsibilities(responsibilities: list[str]) -> str:
+    return "\n".join(f"- {r}" for r in responsibilities)
+
+
+def _format_qualifications(qualifications: list[str]) -> str:
+    return "\n".join(f"- {q}" for q in qualifications)
+
+
+def _format_artefacts(artefacts: list[str]) -> str:
     art_links = []
     for a in artefacts:
         if a.startswith("PROC-"):
@@ -318,7 +312,23 @@ def render_jd(
                 art_links.append(f"- [{a}](../../FRAMEWORK.md)")
         else:
             art_links.append(f"- [{a}](../compliance/{a}.md)")
-    art_block = "\n".join(art_links)
+    return "\n".join(art_links)
+
+
+def render_jd(
+    jd_id: str,
+    title: str,
+    short_name: str,
+    reports_to: str,
+    authority: str,
+    summary: str,
+    responsibilities: list[str],
+    qualifications: list[str],
+    artefacts: list[str],
+) -> str:
+    resp_lines = _format_responsibilities(responsibilities)
+    qual_lines = _format_qualifications(qualifications)
+    art_block = _format_artefacts(artefacts)
 
     return f"""# {jd_id} — {title}
 
