@@ -37,8 +37,8 @@ This job description supports Magna Carta compliance evidence (ISO 27001 A.5/A.6
 
 ## 4. Compliance artefacts owned or consulted
 
-- Procedure and related artefacts: `PROC-DSR-001` (see [procedures INDEX](../procedures/INDEX.md))
-- [POL-PRI-001](../compliance/POL-PRI-001.md)
+- [PROC-DSR-001](../procedures/PROC-DSR-001-Data-Subject-Requests.md)
+- [POL-PRI-001](../policies/POL-PRI-001-Data-Protection-Privacy.md)
 - [PRIVACY-BIBLE](../bibles/PRIVACY-BIBLE.md)
 - [ROPA](../compliance/ROPA.md)
 

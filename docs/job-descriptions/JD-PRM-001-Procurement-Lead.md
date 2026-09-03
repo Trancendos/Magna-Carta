@@ -35,9 +35,9 @@ This job description supports Magna Carta compliance evidence (ISO 27001 A.5/A.6
 
 ## 4. Compliance artefacts owned or consulted
 
-- Procedure and related artefacts: `PROC-PRM-001` (see [procedures INDEX](../procedures/INDEX.md))
+- [PROC-PRM-001](../procedures/PROC-PRM-001-Procurement-Supplier-Engagement.md)
 - [PROCUREMENT-BIBLE](../bibles/PROCUREMENT-BIBLE.md)
-- [POL-SUP-001](../compliance/POL-SUP-001.md)
+- [POL-SUP-001](../policies/POL-SUP-001-Supplier-Management.md)
 
 - [RACI-MATRIX.md](../governance/RACI-MATRIX.md)
 - [TEMPLATE-JOB-DESCRIPTION.md](../templates/TEMPLATE-JOB-DESCRIPTION.md)

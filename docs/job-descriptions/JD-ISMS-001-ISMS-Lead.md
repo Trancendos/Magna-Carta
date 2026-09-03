@@ -37,10 +37,10 @@ This job description supports Magna Carta compliance evidence (ISO 27001 A.5/A.6
 
 ## 4. Compliance artefacts owned or consulted
 
-- Procedure and related artefacts: `PROC-CMP-001` (see [procedures INDEX](../procedures/INDEX.md))
-- Procedure and related artefacts: `PROC-CAPA-001` (see [procedures INDEX](../procedures/INDEX.md))
+- [PROC-CMP-001](../procedures/PROC-CMP-001-Compliance-Review.md)
+- [PROC-CAPA-001](../procedures/PROC-CAPA-001-Corrective-Action.md)
 - [COMPLIANCE-BLUEPRINT](../compliance/COMPLIANCE-BLUEPRINT.md)
-- [RACI-MATRIX](../compliance/RACI-MATRIX.md)
+- [RACI-MATRIX](../governance/RACI-MATRIX.md)
 
 - [RACI-MATRIX.md](../governance/RACI-MATRIX.md)
 - [TEMPLATE-JOB-DESCRIPTION.md](../templates/TEMPLATE-JOB-DESCRIPTION.md)
