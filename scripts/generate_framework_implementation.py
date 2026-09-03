@@ -504,6 +504,62 @@ def update_frameworks_register(data: dict) -> None:
         yaml.dump(data, f, sort_keys=False, allow_unicode=True, width=120)
 
 
+def _build_catalog_entry(fw: dict, assignment: dict[str, str]) -> dict:
+    fid = fw["framework_id"]
+    app = fw.get("applicability", "")
+    status = fw.get("programme_status", "")
+    if app == "not_applicable" and status == "not_applicable":
+        tier = "excluded"
+        sig = None
+        trig = None
+    elif app in ("reference", "awareness"):
+        tier = "reference"
+        sig = assignment.get(fid)
+        # Look the trigger up rather than rebuilding it from the signal ID.
+        # The old `f"TRG-{sig.split('-')[1]}-{sig.split('-')[2]}"` took the
+        # 2nd and 3rd hyphen-separated parts, which is only correct when the
+        # signal's name is a single word: SIG-HIPAA-001 → TRG-HIPAA-001 by
+        # luck, but SIG-US-GOV-001 → "TRG-US-GOV", dropping the -001. That
+        # produced four catalog entries naming triggers that do not exist
+        # (FW-066, FW-082, FW-108, FW-141), each claiming an activation path
+        # nothing could satisfy. SIGNAL_GROUPS already holds the real
+        # trigger_id, and the signal_gated branch below has always used it.
+        trig = (
+            next(
+                (g["trigger_id"] for g in SIGNAL_GROUPS if g["signal_id"] == sig),
+                None,
+            )
+            if sig
+            else None
+        )
+    elif assignment.get(fid):
+        sig = assignment.get(fid)
+        tier = "signal_gated"
+        trig = next(
+            (g["trigger_id"] for g in SIGNAL_GROUPS if g["signal_id"] == sig),
+            None,
+        )
+    else:
+        tier = "baseline"
+        sig = "SIG-CORE-001"
+        trig = "TRG-CORE-001"
+    group = (
+        next((g for g in SIGNAL_GROUPS if g["signal_id"] == sig), None) if sig else None
+    )
+    return {
+        "framework_id": fid,
+        "name": fw.get("name"),
+        "implementation_tier": tier,
+        "signal_id": sig,
+        "trigger_id": trig,
+        "auto_checks": ["MON-013", "MON-018"],
+        "readiness_doc": fw.get("readiness_doc"),
+        "programme_status": status,
+        "applicability": app,
+        "config_profile": group["config_key"] if group else None,
+    }
+
+
 def build_catalog(frameworks: list[dict], assignment: dict[str, str]) -> dict:
     """Build the implementation catalog, one entry per framework, sorted into tiers.
 
@@ -519,61 +575,7 @@ def build_catalog(frameworks: list[dict], assignment: dict[str, str]) -> dict:
     signal ID by string surgery — see the inline note on the multi-word signal
     names that broke the old `sig.split("-")` reconstruction.
     """
-    entries = []
-    for fw in frameworks:
-        fid = fw["framework_id"]
-        app = fw.get("applicability", "")
-        status = fw.get("programme_status", "")
-        if app == "not_applicable" and status == "not_applicable":
-            tier = "excluded"
-            sig = None
-            trig = None
-        elif app in ("reference", "awareness"):
-            tier = "reference"
-            sig = assignment.get(fid)
-            # Look the trigger up rather than rebuilding it from the signal ID.
-            # The old `f"TRG-{sig.split('-')[1]}-{sig.split('-')[2]}"` took the
-            # 2nd and 3rd hyphen-separated parts, which is only correct when the
-            # signal's name is a single word: SIG-HIPAA-001 → TRG-HIPAA-001 by
-            # luck, but SIG-US-GOV-001 → "TRG-US-GOV", dropping the -001. That
-            # produced four catalog entries naming triggers that do not exist
-            # (FW-066, FW-082, FW-108, FW-141), each claiming an activation path
-            # nothing could satisfy. SIGNAL_GROUPS already holds the real
-            # trigger_id, and the signal_gated branch below has always used it.
-            trig = (
-                next(
-                    (g["trigger_id"] for g in SIGNAL_GROUPS if g["signal_id"] == sig),
-                    None,
-                )
-                if sig
-                else None
-            )
-        elif assignment.get(fid):
-            sig = assignment.get(fid)
-            tier = "signal_gated"
-            trig = next(
-                (g["trigger_id"] for g in SIGNAL_GROUPS if g["signal_id"] == sig),
-                None,
-            )
-        else:
-            tier = "baseline"
-            sig = "SIG-CORE-001"
-            trig = "TRG-CORE-001"
-        group = next((g for g in SIGNAL_GROUPS if g["signal_id"] == sig), None) if sig else None
-        entries.append(
-            {
-                "framework_id": fid,
-                "name": fw.get("name"),
-                "implementation_tier": tier,
-                "signal_id": sig,
-                "trigger_id": trig,
-                "auto_checks": ["MON-013", "MON-018"],
-                "readiness_doc": fw.get("readiness_doc"),
-                "programme_status": status,
-                "applicability": app,
-                "config_profile": group["config_key"] if group else None,
-            }
-        )
+    entries = [_build_catalog_entry(fw, assignment) for fw in frameworks]
     return {
         "meta": {
             "register_version": "1.0.0",
@@ -675,27 +677,26 @@ def build_triggers(frameworks: list[dict], assignment: dict[str, str]) -> dict:
         fid = fw["framework_id"]
         if fid in assignment:
             continue
-        if fw.get("applicability") in ("applicable", "conditional") and fw.get(
-            "programme_status"
-        ) != "not_applicable":
+        if (
+            fw.get("applicability") in ("applicable", "conditional")
+            and fw.get("programme_status") != "not_applicable"
+        ):
             by_signal.setdefault("SIG-CORE-001", []).append(fid)
 
     triggers = []
-    existing_special = {
-        "TRG-HIPAA-001",
-        "TRG-CCPA-001",
-        "TRG-PCI-001",
-        "TRG-FEDRAMP-001",
-        "TRG-LGPD-001",
-        "TRG-AI-US-001",
-        "TRG-PAYMENTS-001",
-    }
+
     for g in SIGNAL_GROUPS:
         fids = sorted(set(by_signal.get(g["signal_id"], g.get("framework_ids", []))))
         if not fids:
             continue
         on_act = dict(ON_ACTIVATE_BASELINE)
-        if g["signal_id"] in ("SIG-CORE-001", "SIG-GDPR-001", "SIG-AI-001", "SIG-NIST-001", "SIG-PECR-001"):
+        if g["signal_id"] in (
+            "SIG-CORE-001",
+            "SIG-GDPR-001",
+            "SIG-AI-001",
+            "SIG-NIST-001",
+            "SIG-PECR-001",
+        ):
             # Baseline signals default active — advisory until operator enables enforce profile
             on_act = dict(ON_ACTIVATE_ADVISORY)
             on_act["rules_required_enabled"] = ["MC-RULE-001", "MC-RULE-002"]
@@ -710,7 +711,11 @@ def build_triggers(frameworks: list[dict], assignment: dict[str, str]) -> dict:
         if g["signal_id"] == "SIG-PCI-001":
             on_act.update(
                 {
-                    "rules_required_enabled": ["MC-RULE-001", "MC-RULE-002", "MC-RULE-006"],
+                    "rules_required_enabled": [
+                        "MC-RULE-001",
+                        "MC-RULE-002",
+                        "MC-RULE-006",
+                    ],
                     "supplier_dpa_required": ["SUP-003"],
                     "linked_actions": ["ACT-001"],
                     "programme_status_expect": "partial",
@@ -727,7 +732,11 @@ def build_triggers(frameworks: list[dict], assignment: dict[str, str]) -> dict:
             on_act.update(
                 {
                     "readiness_doc": "docs/compliance/readiness/US-GOVERNMENT-READINESS.md",
-                    "rules_required_enabled": ["MC-RULE-001", "MC-RULE-006", "MC-RULE-007"],
+                    "rules_required_enabled": [
+                        "MC-RULE-001",
+                        "MC-RULE-006",
+                        "MC-RULE-007",
+                    ],
                 }
             )
         if g["signal_id"] == "SIG-LGPD-001":
