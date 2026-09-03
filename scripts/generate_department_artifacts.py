@@ -284,39 +284,36 @@ def write_hymn(code: str, title: str, slug: str | None = None) -> None:
     print(f"Wrote {path.relative_to(ROOT)}")
 
 
-def write_bible(filename: str, title: str, owner: str, proc_code: str, proc_title: str, policies: str, summary: str) -> None:
-    path = ROOT / f"docs/bibles/{filename}.md"
-    slug = slugify(proc_title)
-    proc_file = f"PROC-{proc_code}-001-{slug}.md"
-    content = f"""# {title} Bible
+def _bible_header(title: str, owner: str) -> str:
+    return f"""# {title} Bible
 
 **Version:** 1.0.0  
 **Date:** 2026-06-09  
 **Owner:** {owner}  
-**Classification:** Internal — departmental reference
+**Classification:** Internal — departmental reference"""
 
----
 
-## 1. What this Bible is
+def _bible_intro(title: str, summary: str) -> str:
+    return f"""## 1. What this Bible is
 
 Canonical reference for **{title.lower()}** at Trancendos. {summary}
 
-**Honesty rule:** ✅ = programme artefact in Magna Carta. 🎯 = live execution, vendor contract, or external attestation required.
+**Honesty rule:** ✅ = programme artefact in Magna Carta. 🎯 = live execution, vendor contract, or external attestation required."""
 
----
 
-## 2. Core artefacts
+def _bible_core_artefacts(proc_code: str, proc_file: str, slug: str, policies: str) -> str:
+    return f"""## 2. Core artefacts
 
 | Type | ID | Status |
 |------|-----|--------|
 | Procedure | [PROC-{proc_code}-001](../procedures/{proc_file}) | ✅ Programme |
 | Cookbook | [COOK-{proc_code}-001](../cookbooks/COOK-{proc_code}-001-{slug}.md) | ✅ Programme |
 | Hymn sheet | [HYMN-{proc_code}-001](../hymn-sheets/HYMN-{proc_code}-001-{slug}-Checklist.md) | ✅ Programme |
-| Policies | {policies} | See policies index |
+| Policies | {policies} | See policies index |"""
 
----
 
-## 3. Regulatory & framework alignment
+def _bible_alignment() -> str:
+    return """## 3. Regulatory & framework alignment
 
 | Framework | Relevance |
 |-----------|-----------|
@@ -324,40 +321,40 @@ Canonical reference for **{title.lower()}** at Trancendos. {summary}
 | SOC 2 | CC1–CC5 depending on domain |
 | UK employment / safety law | Where HR/HSE/MHL intersect |
 
-Detail: [STANDARDS-AND-FRAMEWORKS-REGISTER.md](../compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md)
+Detail: [STANDARDS-AND-FRAMEWORKS-REGISTER.md](../compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md)"""
 
----
 
-## 4. Key processes
+def _bible_processes(proc_code: str) -> str:
+    return f"""## 4. Key processes
 
 ```
 Trigger → PROC-{proc_code}-001 → COOK-{proc_code}-001 → HYMN-{proc_code}-001 → Evidence → PROC-CMP-001
-```
+```"""
 
----
 
-## 5. Registers & evidence
+def _bible_evidence() -> str:
+    return """## 5. Registers & evidence
 
 | Artefact | Path |
 |----------|------|
 | Coverage honesty | [COMPLIANCE-COVERAGE-REGISTER.md](../compliance/COMPLIANCE-COVERAGE-REGISTER.md) |
 | Maturity % | [COMPLIANCE-MATURITY-AND-BENCHMARK.md](../compliance/COMPLIANCE-MATURITY-AND-BENCHMARK.md) |
 | RACI | [RACI-MATRIX.md](../governance/RACI-MATRIX.md) |
-| Job descriptions | [job-descriptions/INDEX.md](../job-descriptions/INDEX.md) |
+| Job descriptions | [job-descriptions/INDEX.md](../job-descriptions/INDEX.md) |"""
 
----
 
-## 6. Operational gaps (honest)
+def _bible_gaps() -> str:
+    return """## 6. Operational gaps (honest)
 
 | Gap | Blocker |
 |-----|---------|
 | Named process owner in production HRIS | 🎯 HR / exec appointment |
 | Vendor or tooling integration | 🎯 Commercial selection |
-| External attestation (audit, inspection) | 🎯 Schedule with third party |
+| External attestation (audit, inspection) | 🎯 Schedule with third party |"""
 
----
 
-## 7. Review
+def _bible_review() -> str:
+    return """## 7. Review
 
 | Activity | Frequency |
 |----------|-----------|
@@ -366,6 +363,25 @@ Trigger → PROC-{proc_code}-001 → COOK-{proc_code}-001 → HYMN-{proc_code}-0
 
 **Next review:** 2027-06-09
 """
+
+
+def write_bible(filename: str, title: str, owner: str, proc_code: str, proc_title: str, policies: str, summary: str) -> None:
+    path = ROOT / f"docs/bibles/{filename}.md"
+    slug = slugify(proc_title)
+    proc_file = f"PROC-{proc_code}-001-{slug}.md"
+
+    parts = [
+        _bible_header(title, owner),
+        _bible_intro(title, summary),
+        _bible_core_artefacts(proc_code, proc_file, slug, policies),
+        _bible_alignment(),
+        _bible_processes(proc_code),
+        _bible_evidence(),
+        _bible_gaps(),
+        _bible_review()
+    ]
+
+    content = "\n\n---\n\n".join(parts)
     path.write_text(content, encoding="utf-8")
     print(f"Wrote {path.relative_to(ROOT)}")
 
