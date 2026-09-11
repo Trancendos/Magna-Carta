@@ -6,14 +6,31 @@ semgrep>=1.60
 pip-audit>=2.7
 # Transitive override: semgrep pins pyjwt~=2.12; 2.13+ fixes PYSEC-2026-175–179
 pyjwt>=2.13.0
-# NOT overridden — mcp 1.23.3 (transitive via semgrep). pip-audit flags it for
-# PYSEC-2026-3481/-3482 (fixed in 1.27.2) and -3483 (fixed in 1.28.1), but semgrep
-# hard-pins `mcp==1.23.3`: forcing >=1.28.1 resolves to 2.0.0 and breaks semgrep
-# itself, which is a worse outcome than the finding. Verified by attempting it.
+# RESOLVED 2026-09-11 — mcp (transitive via semgrep), PYSEC-2026-3481/-3482/-3483.
 #
-# Accepted for now. These are dev-time scanner dependencies — semgrep runs locally
-# and in the optional SEC-006 tier, is never deployed, and is not exposed to
-# untrusted input. Revisit when semgrep relaxes its pin; until then pip-audit will
-# keep reporting it, which is the correct behaviour for an accepted finding.
+# This block used to record an accepted finding: semgrep hard-pinned
+# `mcp==1.23.3`, forcing `mcp>=1.28.1` resolved to 2.0.0 and broke semgrep, so
+# the three advisories were accepted and pip-audit was expected to keep
+# reporting them. It said "Revisit when semgrep relaxes its pin."
+#
+# semgrep did not relax the pin — it MOVED it, which is better, and nothing
+# here noticed. Re-measured 2026-09-11:
+#
+#   semgrep 1.173.0 / 1.175.0 / 1.177.0 -> Requires-Dist: mcp==1.29.0
+#   mcp 1.23.3 -> 6 OSV advisories
+#   mcp 1.29.0 -> 0 OSV advisories
+#
+# `semgrep>=1.60` above is a floating lower bound, so a fresh resolve already
+# takes the current release and therefore already takes mcp 1.29.0. The finding
+# is gone, and no override is needed to close it — which is why nothing here
+# had to change for it to stop being true, and why nothing reported that it had.
+#
+# The note is rewritten rather than deleted: an accepted finding reads exactly
+# the same whether it is live or stale, and the only thing that distinguishes
+# them is someone re-measuring. If pip-audit reports an mcp advisory again,
+# re-measure before re-accepting rather than restoring this text.
 
+# Transitive pin: wcmatch reaches this file only via semgrep, and 8.5.2 carries a
+# ReDoS in extended-glob parsing (AIKIDO-2026-334325). Nothing here imports wcmatch,
+# so none of the 9.0/10.1/10.2/11.0 breaking changes apply.
 wcmatch==11.0
