@@ -43,7 +43,7 @@
 
 | Principle | Implementation |
 |-----------|----------------|
-| Data minimisation | Pydantic schemas; optional fields; no unnecessary PII in logs (`Dimensional/sanitize.py`) |
+| Data minimisation | Pydantic schemas; optional fields; no unnecessary PII in logs (`Dimensionals/sanitize.py`) |
 | Purpose limitation | ROPA defines purposes; Magna Carta config blocks cross-purpose use without basis |
 | Storage limitation | 90-day audit retention; tenant-configurable AI history |
 | Integrity & confidentiality | AES-GCM SQLite encryption; TLS 1.2+; vault for secrets |

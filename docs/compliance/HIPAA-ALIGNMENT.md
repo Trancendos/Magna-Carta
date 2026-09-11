@@ -38,7 +38,7 @@
 | Security management process | Risk analysis & management | `RISK_REGISTER.md`, DEFSTAN register | `tranc3-repo/compliance/register.yaml` |
 | Assigned security responsibility | Security officer | CISO role in [COMPLIANCE-BLUEPRINT.md](COMPLIANCE-BLUEPRINT.md) | FRAMEWORK §9 RACI |
 | Workforce security | Access authorisation | PROC-IAM-001, RBAC | `infinity-auth`, JWT/MFA |
-| Information access management | Minimum necessary | Ice Box, Pydantic schemas, log sanitisation | `Dimensional/sanitize.py` |
+| Information access management | Minimum necessary | Ice Box, Pydantic schemas, log sanitisation | `Dimensionals/sanitize.py` |
 | Security awareness training | Workforce training | AI literacy + security awareness programme | PROC-CMP-001 calendar |
 | Security incident procedures | IR workflow | PROC-IR-001, WarRoom | Observatory audit trail |
 | Contingency plan | BCP/DR | PROC-BCP-001, `scripts/dr_restore.py` | DR runbook |

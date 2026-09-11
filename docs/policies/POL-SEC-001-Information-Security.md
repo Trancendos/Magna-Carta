@@ -39,7 +39,7 @@ All employees, contractors, and systems processing Trancendos or customer data. 
 - No deployment of known critical vulnerabilities without waiver
 
 ### 4.4 Logging and monitoring
-- Security-relevant events logged; PII redacted (`Dimensional/sanitize.py`)
+- Security-relevant events logged; PII redacted (`Dimensionals/sanitize.py`)
 - 90-day default log retention unless law requires longer
 - Alerts for auth failures, rate limit breaches, service health degradation
 

@@ -45,7 +45,7 @@ This document defines the **target operating architecture** for Tranc3 under the
 ┌───────────────────────────────────▼─────────────────────────────────────┐
 │                      API GATEWAY / MAIN APPLICATION                      │
 │   api.py — FastAPI · middleware stack · Magna Carta compliance hook    │
-│   Dimensional/middleware — telemetry · rate limit · auth                  │
+│   Dimensionals/middleware — telemetry · rate limit · auth                  │
 └───────────────────────────────────┬─────────────────────────────────────┘
                                     │ Docker internal network
         ┌───────────────────────────┼───────────────────────────┐
@@ -101,7 +101,7 @@ This document defines the **target operating architecture** for Tranc3 under the
 | Files | files-service volume | Volume encryption | PROC-BCP-001 |
 | Metrics | Prometheus TSDB | Local disk | 30-day retention |
 
-**Data flow rule:** PII must not appear in application logs; use `Dimensional/sanitize.py`.
+**Data flow rule:** PII must not appear in application logs; use `Dimensionals/sanitize.py`.
 
 ---
 
@@ -119,7 +119,7 @@ User → infinity-auth (JWT issue)
 |-----------|------|----------|
 | Zero Trust IAM | `src/auth/zero_trust.py` | REQ-IA-001 |
 | FastAPI deps | `src/auth/dependencies.py` | REQ-IA-001 |
-| API keys | `Dimensional/middleware/auth.py` | REQ-IA-001 |
+| API keys | `Dimensionals/middleware/auth.py` | REQ-IA-001 |
 | Vault secrets | `workers/vault-service/` | REQ-IA-002 |
 
 ---
