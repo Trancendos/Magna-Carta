@@ -36,9 +36,9 @@ This job description supports Magna Carta compliance evidence (ISO 27001 A.5/A.6
 
 ## 4. Compliance artefacts owned or consulted
 
-- Procedure and related artefacts: `PROC-IT-001` (see [procedures INDEX](../procedures/INDEX.md))
-- Procedure and related artefacts: `PROC-BCP-001` (see [procedures INDEX](../procedures/INDEX.md))
-- Procedure and related artefacts: `PROC-IAM-001` (see [procedures INDEX](../procedures/INDEX.md))
+- [PROC-IT-001](../procedures/PROC-IT-001-IT-Service-Management.md)
+- [PROC-BCP-001](../procedures/PROC-BCP-001-Backup-Restore.md)
+- [PROC-IAM-001](../procedures/PROC-IAM-001-Access-Provisioning.md)
 - [IT-BIBLE](../bibles/IT-BIBLE.md)
 
 - [RACI-MATRIX.md](../governance/RACI-MATRIX.md)
