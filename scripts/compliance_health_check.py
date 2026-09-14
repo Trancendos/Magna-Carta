@@ -147,6 +147,62 @@ def check_stale_reviews(cfg: dict, findings: list[Finding]) -> None:
                 )
 
 
+def check_register_id_uniqueness(cfg: dict, findings: list[Finding]) -> None:
+    """Every identifier in a register must name exactly one thing.
+
+    Added 2026-09-14 after ACT-016 was issued twice -- once for HRIS role
+    appointments and once, months later, for the DUAA complaints duty. Nothing
+    noticed. Every other check here reads these registers by id, and a duplicate
+    id is not a cosmetic problem in a compliance register: an action closed
+    under a shared id closes the wrong obligation, and evidence filed against it
+    cannot be shown to belong to either.
+
+    Config-driven rather than written once for the action tracker, because the
+    same collision is possible in every register with an id column and there is
+    no reason to discover it one register at a time.
+    """
+    block = cfg.get("register_id_uniqueness", {})
+    if not block:
+        return
+    cid = block.get("check_id", "MON-016")
+    for spec in block.get("registers", []):
+        rel = spec["source"]
+        src = ROOT / rel
+        if not src.is_file() or yaml is None:
+            findings.append(Finding(cid, "error", f"{rel}: register not readable"))
+            continue
+        with src.open(encoding="utf-8") as f:
+            data = yaml.safe_load(f) or {}
+        items = data.get(spec["items_key"]) or []
+        if not items:
+            # A register that checks clean because it is empty is the failure
+            # mode this check exists to make impossible elsewhere.
+            findings.append(
+                Finding(cid, "error", f"{rel}: '{spec['items_key']}' is empty — nothing was checked")
+            )
+            continue
+        field = spec["id_field"]
+        seen: dict[str, int] = {}
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            value = item.get(field)
+            if value is None:
+                findings.append(Finding(cid, "error", f"{rel}: an entry has no '{field}'"))
+                continue
+            seen[str(value)] = seen.get(str(value), 0) + 1
+        for value, count in sorted(seen.items()):
+            if count > 1:
+                findings.append(
+                    Finding(
+                        cid,
+                        "error",
+                        f"{rel}: {field} {value} is used by {count} entries — "
+                        "an identifier must name exactly one thing",
+                    )
+                )
+
+
 def check_overdue_actions(cfg: dict, findings: list[Finding]) -> None:
     block = cfg.get("action_overdue", {})
     if not block:
@@ -970,6 +1026,7 @@ def run_checks(*, include_weekly_cadence: bool = False) -> list[Finding]:
     check_index_drift(cfg, findings)
     check_stale_reviews(cfg, findings)
     check_overdue_actions(cfg, findings)
+    check_register_id_uniqueness(cfg, findings)
     check_cookbook_links(cfg, findings)
     check_procedure_coverage(cfg, findings)
     check_weekly_cadence(cfg, findings)

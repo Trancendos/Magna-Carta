@@ -36,10 +36,10 @@ This job description supports Magna Carta compliance evidence (ISO 27001 A.5/A.6
 
 ## 4. Compliance artefacts owned or consulted
 
-- Procedure and related artefacts: `PROC-LEG-001` (see [procedures INDEX](../procedures/INDEX.md))
-- Procedure and related artefacts: `PROC-IP-001` (see [procedures INDEX](../procedures/INDEX.md))
+- [PROC-LEG-001](../procedures/PROC-LEG-001-Legal-Contract-Management.md)
+- [PROC-IP-001](../procedures/PROC-IP-001-Intellectual-Property-Management.md)
 - [LEGAL-BIBLE](../bibles/LEGAL-BIBLE.md)
-- [POL-SUP-001](../compliance/POL-SUP-001.md)
+- [POL-SUP-001](../policies/POL-SUP-001-Supplier-Management.md)
 
 - [RACI-MATRIX.md](../governance/RACI-MATRIX.md)
 - [TEMPLATE-JOB-DESCRIPTION.md](../templates/TEMPLATE-JOB-DESCRIPTION.md)

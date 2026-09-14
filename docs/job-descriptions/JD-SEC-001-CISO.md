@@ -37,8 +37,8 @@ This job description supports Magna Carta compliance evidence (ISO 27001 A.5/A.6
 
 ## 4. Compliance artefacts owned or consulted
 
-- Procedure and related artefacts: `PROC-IR-001` (see [procedures INDEX](../procedures/INDEX.md))
-- Procedure and related artefacts: `PROC-VUL-001` (see [procedures INDEX](../procedures/INDEX.md))
+- [PROC-IR-001](../procedures/PROC-IR-001-Incident-Response.md)
+- [PROC-VUL-001](../procedures/PROC-VUL-001-Vulnerability-Management.md)
 - [SECURITY-BIBLE](../bibles/SECURITY-BIBLE.md)
 - [AI-SECURITY-THREAT-MODEL](../compliance/AI-SECURITY-THREAT-MODEL.md)
 

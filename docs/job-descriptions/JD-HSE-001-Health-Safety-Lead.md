@@ -35,9 +35,9 @@ This job description supports Magna Carta compliance evidence (ISO 27001 A.5/A.6
 
 ## 4. Compliance artefacts owned or consulted
 
-- Procedure and related artefacts: `PROC-HSE-001` (see [procedures INDEX](../procedures/INDEX.md))
+- [PROC-HSE-001](../procedures/PROC-HSE-001-Workplace-Health-Safety.md)
 - [HEALTH-SAFETY-BIBLE](../bibles/HEALTH-SAFETY-BIBLE.md)
-- Procedure and related artefacts: `PROC-BLD-001` (see [procedures INDEX](../procedures/INDEX.md))
+- [PROC-BLD-001](../procedures/PROC-BLD-001-Building-Regulations-Premises.md)
 
 - [RACI-MATRIX.md](../governance/RACI-MATRIX.md)
 - [TEMPLATE-JOB-DESCRIPTION.md](../templates/TEMPLATE-JOB-DESCRIPTION.md)

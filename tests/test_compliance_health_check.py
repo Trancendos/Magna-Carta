@@ -23,6 +23,8 @@ import pytest
 
 from scripts import compliance_health_check as chc
 
+ROOT = Path(__file__).resolve().parent.parent
+
 
 @pytest.fixture
 def rooted(tmp_path, monkeypatch) -> Path:
@@ -130,3 +132,86 @@ class TestResolveSignalStates:
         """An absent key must not read as an enabled feature."""
         (rooted / "test_config.json").write_text(json.dumps({"something_else": True}))
         assert chc.resolve_signal_states(self._config_signal()) == {"SIG-02": "inactive"}
+
+
+class TestRegisterIdUniqueness:
+    """MON-016. ACT-016 was issued twice and nothing looked."""
+
+    CFG = {
+        "register_id_uniqueness": {
+            "check_id": "MON-TEST",
+            "registers": [
+                {
+                    "source": "compliance/compliance_action_tracker.yaml",
+                    "items_key": "actions",
+                    "id_field": "action_id",
+                }
+            ],
+        }
+    }
+
+    def _register(self, *ids) -> dict:
+        return {"actions": [{"action_id": i, "title": f"t{i}"} for i in ids]}
+
+    def test_a_repeated_id_is_an_error(self, monkeypatch, tmp_path):
+        import yaml as _y
+
+        monkeypatch.setattr(chc, "ROOT", tmp_path)
+        (tmp_path / "compliance").mkdir()
+        (tmp_path / "compliance" / "compliance_action_tracker.yaml").write_text(
+            _y.safe_dump(self._register("ACT-001", "ACT-002", "ACT-001"))
+        )
+        findings: list = []
+        chc.check_register_id_uniqueness(self.CFG, findings)
+        assert [f.severity for f in findings] == ["error"]
+        assert "ACT-001 is used by 2 entries" in findings[0].message
+
+    def test_distinct_ids_pass(self, monkeypatch, tmp_path):
+        import yaml as _y
+
+        monkeypatch.setattr(chc, "ROOT", tmp_path)
+        (tmp_path / "compliance").mkdir()
+        (tmp_path / "compliance" / "compliance_action_tracker.yaml").write_text(
+            _y.safe_dump(self._register("ACT-001", "ACT-002", "ACT-003"))
+        )
+        findings: list = []
+        chc.check_register_id_uniqueness(self.CFG, findings)
+        assert findings == []
+
+    def test_an_empty_register_is_an_error_not_a_pass(self, monkeypatch, tmp_path):
+        """A check that reports clean because it looked at nothing is the bug."""
+        import yaml as _y
+
+        monkeypatch.setattr(chc, "ROOT", tmp_path)
+        (tmp_path / "compliance").mkdir()
+        (tmp_path / "compliance" / "compliance_action_tracker.yaml").write_text(
+            _y.safe_dump({"actions": []})
+        )
+        findings: list = []
+        chc.check_register_id_uniqueness(self.CFG, findings)
+        assert [f.severity for f in findings] == ["error"]
+        assert "nothing was checked" in findings[0].message
+
+    def test_a_missing_register_is_an_error(self, monkeypatch, tmp_path):
+        monkeypatch.setattr(chc, "ROOT", tmp_path)
+        findings: list = []
+        chc.check_register_id_uniqueness(self.CFG, findings)
+        assert [f.severity for f in findings] == ["error"]
+        assert "not readable" in findings[0].message
+
+    def test_the_live_registers_are_actually_covered(self):
+        """Three registers are named in the config; all three must still parse."""
+        import yaml as _y
+
+        cfg = _y.safe_load(
+            (ROOT / "compliance" / "maintenance_monitor.yaml").read_text(encoding="utf-8")
+        )
+        specs = (cfg.get("register_id_uniqueness") or {}).get("registers") or []
+        assert len(specs) >= 3, "MON-016 covers fewer registers than it was given"
+        for spec in specs:
+            data = _y.safe_load((ROOT / spec["source"]).read_text(encoding="utf-8"))
+            items = data.get(spec["items_key"])
+            assert items, f"{spec['source']}: {spec['items_key']} is empty"
+            ids = [i.get(spec["id_field"]) for i in items if isinstance(i, dict)]
+            assert all(ids), f"{spec['source']}: an entry has no {spec['id_field']}"
+            assert len(ids) == len(set(ids)), f"{spec['source']}: duplicate ids {ids}"
