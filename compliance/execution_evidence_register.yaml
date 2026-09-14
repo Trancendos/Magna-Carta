@@ -149,8 +149,8 @@ recurrence_schedule:
   - evidence_id: EEV-006
     title: "Quarterly EUR-Lex delegated-act scan"
     cadence_days: 90
-    last_completed: "2026-06-09"
-    next_due: "2026-09-07"
+    last_completed: "2026-09-14"
+    next_due: "2026-12-13"
     owner: "AI Lead / DPO"
     linked_action: ACT-014
   - evidence_id: EEV-007

@@ -157,10 +157,22 @@ legislation_watch:
   items_key: active_legislation
   review_field: review_date
   max_overdue_days: 0
+  # Speak before the gate closes, not after. With this at 0 the check was silent
+  # until the day it hard-failed; ten reviews lapsed together on 2026-09-06 with
+  # no prior signal and blocked every pull request for a week.
+  warn_within_days: 30
+  # Anti-cliff. Those ten lapsed together because one generation run stamped one
+  # date on all of them. Staggering fixed it; this is what stops it recurring.
+  max_shared_review_date: 2
   exclude_status: ["N/A"]
 
 standards_watch:
   check_id: MON-012
+  # Same two rules as MON-011 above. standards_watch had already recreated the
+  # cliff before anyone noticed the first one: all five entries shared
+  # 2026-12-08, primed to repeat the outage in December.
+  warn_within_days: 30
+  max_shared_review_date: 2
   register: compliance/standards_watch.yaml
   items_key: active_standards
   review_field: review_date
@@ -195,6 +207,9 @@ evidence_recurrence:
   check_id: MON-015
   register: compliance/execution_evidence_register.yaml
   schedule_key: recurrence_schedule
+  # As MON-011. A recurring evidence obligation that only announces itself once
+  # it is already late cannot be scheduled, only apologised for.
+  warn_within_days: 30
 
 enforcement_alignment:
   check_id: MON-016
