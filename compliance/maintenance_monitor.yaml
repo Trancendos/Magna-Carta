@@ -343,3 +343,48 @@ cookbook_links:
   - check_id: MON-005
     index: docs/hymn-sheets/INDEX.md
     base_dir: docs/hymn-sheets
+
+# MON-019 — an identifier must name exactly one thing.
+#
+# ACT-016 was issued twice, months apart, and no check looked. Listing the
+# registers here rather than hard-coding the action tracker: every register
+# below is read by id somewhere in this script, so a collision in any of them
+# has the same consequence.
+register_id_uniqueness:
+  check_id: MON-019
+  registers:
+    - source: compliance/compliance_action_tracker.yaml
+      items_key: actions
+      id_field: action_id
+    - source: compliance/legislation_register.yaml
+      items_key: active_legislation
+      id_field: legislation_id
+    - source: compliance/execution_evidence_register.yaml
+      items_key: records
+      id_field: evidence_id
+
+# MON-020 — an identifier cited anywhere must exist in the register that defines it.
+#
+# MON-019 proves each id names one thing inside its register. It says nothing
+# about the citations outside it, which is how renumbering ACT-016 -> ACT-020 left
+# three documents pointing at an unrelated HRIS action while every check passed.
+identifier_references:
+  check_id: MON-020
+  identifiers:
+    - register: compliance/compliance_action_tracker.yaml
+      items_key: actions
+      id_field: action_id
+      pattern: "ACT-[0-9]{3}"
+      search:
+        - "compliance/*.yaml"
+        - "docs/compliance/*.md"
+        - "docs/evidence/*.md"
+    - register: compliance/legislation_register.yaml
+      items_key: active_legislation
+      id_field: legislation_id
+      pattern: "LEG-[0-9]{3}"
+      search:
+        - "compliance/*.yaml"
+        - "docs/compliance/*.md"
+        - "docs/evidence/*.md"
+

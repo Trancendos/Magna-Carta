@@ -147,6 +147,226 @@ def check_stale_reviews(cfg: dict, findings: list[Finding]) -> None:
                 )
 
 
+def _check_ids_are_in_the_checked_list(
+    spec: dict, data: dict, findings: list[Finding], cid: str, rel: str
+) -> None:
+    """An id in the right file and the wrong list is invisible, not duplicated.
+
+    ACT-021 was appended to compliance_action_tracker.yaml and landed at the end
+    of the file, which is inside `programme_milestones` rather than `actions`.
+    The schema does not describe that key, so MON-009 never looked at it; MON-003
+    reads `actions`, so the action was never overdue; and the uniqueness check
+    above reads `actions`, so it was never checked for collisions either. A
+    recorded obligation that no check can see is worse than an unrecorded one,
+    because the record says it is handled. Caught by codeant-ai.
+
+    An id that ALSO appears in the checked list is a cross-reference, not a
+    stray: execution_evidence_register.yaml's `recurrence_schedule` carries
+    EEV-006 and EEV-007 to give them a cadence, and both are records in their own
+    right. The first version of this check flagged those two, which is the
+    over-broad reading -- what makes ACT-021 a defect is that it appeared
+    NOWHERE ELSE.
+    """
+    field = spec["id_field"]
+    checked = spec["items_key"]
+    known = {
+        item.get(field)
+        for item in (data.get(checked) or [])
+        if isinstance(item, dict) and item.get(field)
+    }
+    for key, value in data.items():
+        if key == checked or not isinstance(value, list):
+            continue
+        strays = []
+        for item in value:
+            if not isinstance(item, dict):
+                continue
+            raw = item.get(field)
+            if not raw:
+                continue
+            if not isinstance(raw, str):
+                # Reported, not sorted alongside the strings: mixed types reached
+                # sorted() and raised TypeError, so the check that exists to
+                # report malformed registers died on one. (codeant-ai)
+                findings.append(
+                    Finding(
+                        cid,
+                        "error",
+                        f"{rel}: an entry under '{key}' has '{field}': {raw!r} — "
+                        "an identifier must be a non-empty string",
+                    )
+                )
+                continue
+            if raw not in known:
+                strays.append(raw)
+        if strays:
+            findings.append(
+                Finding(
+                    cid,
+                    "error",
+                    f"{rel}: {', '.join(sorted(strays))} carries '{field}' but sits under "
+                    f"'{key}' and nowhere in '{checked}' — no check that reads "
+                    f"'{checked}' can see it",
+                )
+            )
+
+
+def check_identifier_references_resolve(cfg: dict, findings: list[Finding]) -> None:
+    """An id cited anywhere must exist in the register that defines it.
+
+    MON-020, added 2026-09-14 after renumbering ACT-016 -> ACT-020 left three
+    documents citing ACT-016 for the DUAA complaints duty -- an id that now
+    unambiguously means an unrelated HRIS action. A reader following the
+    legislation record landed on the wrong obligation, and every existing check
+    passed: MON-019 proves each id names one thing INSIDE its register and says
+    nothing about the citations outside it. Caught by chatgpt-codex-connector.
+
+    Deliberately a text scan rather than a field walk. The references that went
+    stale were in prose -- "Raised as ACT-016." in a YAML block scalar, "(**ACT-016**)"
+    in markdown -- so a check that only followed structured `linked_action` fields
+    would have reported clean on exactly the citations that were wrong.
+    """
+    block = cfg.get("identifier_references", {})
+    if not block:
+        return
+    cid = block.get("check_id", "MON-020")
+    for spec in block.get("identifiers", []):
+        register = ROOT / spec["register"]
+        if not register.is_file() or yaml is None:
+            findings.append(Finding(cid, "error", f"{spec['register']}: register not readable"))
+            continue
+        with register.open(encoding="utf-8") as f:
+            data = yaml.safe_load(f) or {}
+        defined = {
+            str(item.get(spec["id_field"]))
+            for item in (data.get(spec["items_key"]) or [])
+            if isinstance(item, dict) and item.get(spec["id_field"])
+        }
+        if not defined:
+            findings.append(
+                Finding(cid, "error", f"{spec['register']}: defines no ids — nothing to resolve against")
+            )
+            continue
+        pattern = re.compile(spec["pattern"])
+        for rel in sorted(_iter_reference_files(spec)):
+            try:
+                text = rel.read_text(encoding="utf-8")
+            except OSError as exc:
+                findings.append(Finding(cid, "error", f"{rel}: cannot be read: {exc}"))
+                continue
+            if rel == register:
+                continue
+            unknown = sorted({m.group(0) for m in pattern.finditer(text)} - defined)
+            if unknown:
+                findings.append(
+                    Finding(
+                        cid,
+                        "error",
+                        f"{rel.relative_to(ROOT)} cites {', '.join(unknown)}, which "
+                        f"{spec['register']} does not define",
+                    )
+                )
+
+
+def _iter_reference_files(spec: dict):
+    for glob in spec.get("search", []):
+        yield from ROOT.glob(glob)
+
+
+def check_register_id_uniqueness(cfg: dict, findings: list[Finding]) -> None:
+    """Every identifier in a register must name exactly one thing.
+
+    Added 2026-09-14 after ACT-016 was issued twice -- once for HRIS role
+    appointments and once, months later, for the DUAA complaints duty. Nothing
+    noticed. Every other check here reads these registers by id, and a duplicate
+    id is not a cosmetic problem in a compliance register: an action closed
+    under a shared id closes the wrong obligation, and evidence filed against it
+    cannot be shown to belong to either.
+
+    Config-driven rather than written once for the action tracker, because the
+    same collision is possible in every register with an id column and there is
+    no reason to discover it one register at a time.
+
+    MON-019, not MON-016: sourcery-ai pointed out that MON-016 already belongs to
+    enforcement_alignment, so this check shipped with an id collision of its own,
+    in the check that detects id collisions. Findings from two unrelated checks
+    would have been indistinguishable to anything filtering by check_id.
+    """
+    block = cfg.get("register_id_uniqueness", {})
+    if not block:
+        return
+    cid = block.get("check_id", "MON-019")
+    for spec in block.get("registers", []):
+        rel = spec["source"]
+        src = ROOT / rel
+        if not src.is_file() or yaml is None:
+            findings.append(Finding(cid, "error", f"{rel}: register not readable"))
+            continue
+        try:
+            with src.open(encoding="utf-8") as f:
+                data = yaml.safe_load(f) or {}
+        except (OSError, yaml.YAMLError) as exc:
+            # Without this the health check dies here with a traceback and every
+            # check after it never runs -- one unparseable register silencing the
+            # rest of the estate's reporting.
+            findings.append(Finding(cid, "error", f"{rel}: cannot be read: {exc}"))
+            continue
+        if not isinstance(data, dict):
+            findings.append(
+                Finding(cid, "error", f"{rel}: root is {type(data).__name__}, expected a mapping")
+            )
+            continue
+        items = data.get(spec["items_key"]) or []
+        if not items:
+            # A register that checks clean because it is empty is the failure
+            # mode this check exists to make impossible elsewhere.
+            findings.append(
+                Finding(cid, "error", f"{rel}: '{spec['items_key']}' is empty — nothing was checked")
+            )
+            continue
+        field = spec["id_field"]
+        seen: dict[str, int] = {}
+        for index, item in enumerate(items):
+            if not isinstance(item, dict):
+                findings.append(
+                    Finding(
+                        cid,
+                        "error",
+                        f"{rel}: {spec['items_key']}[{index}] is {type(item).__name__}, "
+                        "expected a mapping — a register that skips what it cannot read "
+                        "reports clean on the part it did read",
+                    )
+                )
+                continue
+            value = item.get(field)
+            # Not `is None`: an id is a string other documents cite by name, so
+            # "" and 123 are unusable rather than merely unique. The lightweight
+            # schema check confirms the field exists, not its type. (codex)
+            if not isinstance(value, str) or not value.strip():
+                findings.append(
+                    Finding(
+                        cid,
+                        "error",
+                        f"{rel}: {spec['items_key']}[{index}] has '{field}': {value!r} — "
+                        "an identifier must be a non-empty string",
+                    )
+                )
+                continue
+            seen[value] = seen.get(value, 0) + 1
+        _check_ids_are_in_the_checked_list(spec, data, findings, cid, rel)
+
+        for value, count in sorted(seen.items()):
+            if count > 1:
+                findings.append(
+                    Finding(
+                        cid,
+                        "error",
+                        f"{rel}: {field} {value} is used by {count} entries — "
+                        "an identifier must name exactly one thing",
+                    )
+                )
+
+
 def check_overdue_actions(cfg: dict, findings: list[Finding]) -> None:
     block = cfg.get("action_overdue", {})
     if not block:
@@ -277,86 +497,100 @@ def _validate_object_fields(
             )
 
 
-def validate_register_schema(cfg: dict, findings: list[Finding]) -> None:
-    """Lightweight structural validation without external jsonschema dependency."""
-    import json
-
-    for block in cfg.get("schema_validation", []):
-        cid = block.get("check_id", "MON-009")
-        rel = block["register"]
-        schema_rel = block["schema"]
-        reg_path = ROOT / rel
-        schema_path = ROOT / schema_rel
-        if not reg_path.is_file():
-            findings.append(Finding(cid, "error", f"Register missing for schema check: {rel}"))
+def _validate_schema_properties(
+    cid: str,
+    rel: str,
+    data: dict,
+    properties: dict,
+    findings: list[Finding],
+) -> None:
+    for prop_name, prop_schema in properties.items():
+        if prop_name == "meta":
             continue
-        if not schema_path.is_file():
-            findings.append(Finding(cid, "error", f"Schema missing: {schema_rel}"))
+        if prop_schema.get("type") != "array":
             continue
-        if yaml is None:
+        items_schema = prop_schema.get("items", {})
+        if items_schema.get("type") != "object":
             continue
-        with schema_path.open(encoding="utf-8") as f:
-            schema = json.load(f)
-        with reg_path.open(encoding="utf-8") as f:
-            data = yaml.safe_load(f) or {}
-        for key in schema.get("required", []):
-            if key not in data:
+        required_item_fields = items_schema.get("required", [])
+        if not required_item_fields:
+            continue
+        items = data.get(prop_name)
+        if not isinstance(items, list):
+            findings.append(
+                Finding(cid, "error", f"{rel} missing or invalid array: {prop_name}")
+            )
+            continue
+        id_field = next(
+            (f for f in required_item_fields if f.endswith("_id") or f == "id"),
+            None,
+        )
+        for idx, item in enumerate(items):
+            if not isinstance(item, dict):
                 findings.append(
-                    Finding(cid, "error", f"{rel} missing required top-level key: {key}")
+                    Finding(
+                        cid,
+                        "error",
+                        f"{rel} {prop_name}[{idx}] is not an object",
+                    )
                 )
-        properties = schema.get("properties", {})
-        meta_props = properties.get("meta", {})
-        if isinstance(data.get("meta"), dict) and meta_props.get("type") == "object":
+                continue
+            label = prop_name
+            if id_field and id_field in item:
+                label = f"{prop_name} item {item[id_field]}"
             _validate_object_fields(
                 cid,
                 rel,
-                data["meta"],
-                meta_props.get("required", []),
-                "meta",
+                item,
+                required_item_fields,
+                label,
                 findings,
             )
-        for prop_name, prop_schema in properties.items():
-            if prop_name == "meta":
-                continue
-            if prop_schema.get("type") != "array":
-                continue
-            items_schema = prop_schema.get("items", {})
-            if items_schema.get("type") != "object":
-                continue
-            required_item_fields = items_schema.get("required", [])
-            if not required_item_fields:
-                continue
-            items = data.get(prop_name)
-            if not isinstance(items, list):
-                findings.append(
-                    Finding(cid, "error", f"{rel} missing or invalid array: {prop_name}")
-                )
-                continue
-            id_field = next(
-                (f for f in required_item_fields if f.endswith("_id") or f == "id"),
-                None,
+
+
+def _validate_schema_block(block: dict, findings: list[Finding]) -> None:
+    cid = block.get("check_id", "MON-009")
+    rel = block["register"]
+    schema_rel = block["schema"]
+    reg_path = ROOT / rel
+    schema_path = ROOT / schema_rel
+    if not reg_path.is_file():
+        findings.append(
+            Finding(cid, "error", f"Register missing for schema check: {rel}")
+        )
+        return
+    if not schema_path.is_file():
+        findings.append(Finding(cid, "error", f"Schema missing: {schema_rel}"))
+        return
+    if yaml is None:
+        return
+    with schema_path.open(encoding="utf-8") as f:
+        schema = json.load(f)
+    with reg_path.open(encoding="utf-8") as f:
+        data = yaml.safe_load(f) or {}
+    for key in schema.get("required", []):
+        if key not in data:
+            findings.append(
+                Finding(cid, "error", f"{rel} missing required top-level key: {key}")
             )
-            for idx, item in enumerate(items):
-                if not isinstance(item, dict):
-                    findings.append(
-                        Finding(
-                            cid,
-                            "error",
-                            f"{rel} {prop_name}[{idx}] is not an object",
-                        )
-                    )
-                    continue
-                label = prop_name
-                if id_field and id_field in item:
-                    label = f"{prop_name} item {item[id_field]}"
-                _validate_object_fields(
-                    cid,
-                    rel,
-                    item,
-                    required_item_fields,
-                    label,
-                    findings,
-                )
+    properties = schema.get("properties", {})
+    meta_props = properties.get("meta", {})
+    if isinstance(data.get("meta"), dict) and meta_props.get("type") == "object":
+        _validate_object_fields(
+            cid,
+            rel,
+            data["meta"],
+            meta_props.get("required", []),
+            "meta",
+            findings,
+        )
+    _validate_schema_properties(cid, rel, data, properties, findings)
+
+
+def validate_register_schema(cfg: dict, findings: list[Finding]) -> None:
+    """Lightweight structural validation without external jsonschema dependency."""
+    for block in cfg.get("schema_validation", []):
+        _validate_schema_block(block, findings)
 
 
 def check_procedure_coverage(cfg: dict, findings: list[Finding]) -> None:
@@ -700,124 +934,130 @@ def check_evidence_recurrence(cfg: dict, findings: list[Finding]) -> None:
             )
 
 
+def _get_open_actions(filepath: str) -> set[str]:
+    action_data = _load_yaml(filepath)
+    return {
+        a.get("action_id")
+        for a in action_data.get("actions", [])
+        if a.get("status") in ("Open", "In progress", "Blocked") and a.get("action_id")
+    }
+
+
+def _evaluate_trigger_enforcement(
+    trig: dict,
+    cid: str,
+    mode: str,
+    fail_closed: bool,
+    rules_by_id: dict[str, dict],
+    open_actions: set[str],
+    sig_id: str,
+    findings: list[Finding],
+) -> None:
+    on_act = trig.get("on_activate", {})
+    tid = trig.get("trigger_id", "?")
+    sev = "error"
+    for sc in trig.get("scan_checks", []):
+        if sc.get("check_id") == "MON-016":
+            sev = sc.get("severity", "error")
+            break
+    expected_mode = str(on_act.get("enforcement_mode", "enforce")).lower()
+    if mode != expected_mode:
+        findings.append(
+            Finding(
+                cid,
+                sev,
+                f"Trigger {tid}: signal {sig_id} active but enforcement.mode "
+                f"is '{mode}' (expected '{expected_mode}')",
+            )
+        )
+    if on_act.get("fail_closed_on_violation") and not fail_closed:
+        findings.append(
+            Finding(
+                cid,
+                sev,
+                f"Trigger {tid}: signal {sig_id} active but "
+                "fail_closed_on_violation is false",
+            )
+        )
+    for rule_id in on_act.get("rules_required_enabled", []):
+        rule = rules_by_id.get(rule_id)
+        if not rule or not rule.get("enabled", False):
+            findings.append(
+                Finding(
+                    cid,
+                    sev,
+                    f"Trigger {tid}: required rule {rule_id} not enabled",
+                )
+            )
+    for act_id in on_act.get("linked_actions", []):
+        if act_id in open_actions:
+            findings.append(
+                Finding(
+                    cid,
+                    "warning" if sev == "warning" else "error",
+                    f"Trigger {tid}: linked action {act_id} still open while "
+                    f"scope signal {sig_id} is active",
+                )
+            )
+
+
 def check_enforcement_alignment(cfg: dict, findings: list[Finding]) -> None:
     block = cfg.get("enforcement_alignment", {})
     if not block:
         return
-    cid = block.get("check_id", "MON-016")
+    cid = block.get("check_id", "MON-019")
     triggers = _load_yaml(block["triggers_register"])
     signals = _load_yaml(block["signals_register"])
     config_path = ROOT / block["runtime_config"]
     if not config_path.is_file():
-        findings.append(Finding(cid, "error", f"Runtime config missing: {block['runtime_config']}"))
+        findings.append(
+            Finding(cid, "error", f"Runtime config missing: {block['runtime_config']}")
+        )
         return
     with config_path.open(encoding="utf-8") as f:
         runtime = json.load(f)
     enforcement = runtime.get("enforcement", {})
     mode = str(enforcement.get("mode", "advisory")).lower()
-    fail_closed = bool(enforcement.get("fail_closed_on_violation", False))
-    rules_by_id = {r["id"]: r for r in runtime.get("rules", []) if "id" in r}
-    signal_states = resolve_signal_states(signals)
-    action_data = _load_yaml("compliance/compliance_action_tracker.yaml")
-    open_actions = {
-        a.get("action_id")
-        for a in action_data.get("actions", [])
-        if a.get("status") in ("Open", "In progress", "Blocked")
-    }
-    for trig in triggers.get("triggers", []):
-        sig_id = trig.get("signal_id", "")
-        if signal_states.get(sig_id) != "active":
-            continue
-        on_act = trig.get("on_activate", {})
-        tid = trig.get("trigger_id", "?")
-        sev = "error"
-        for sc in trig.get("scan_checks", []):
-            if sc.get("check_id") == "MON-016":
-                sev = sc.get("severity", "error")
-                break
-        expected_mode = str(on_act.get("enforcement_mode", "enforce")).lower()
-        if mode != expected_mode:
-            findings.append(
-                Finding(
-                    cid,
-                    sev,
-                    f"Trigger {tid}: signal {sig_id} active but enforcement.mode "
-                    f"is '{mode}' (expected '{expected_mode}')",
-                )
-            )
-        if on_act.get("fail_closed_on_violation") and not fail_closed:
-            findings.append(
-                Finding(
-                    cid,
-                    sev,
-                    f"Trigger {tid}: signal {sig_id} active but "
-                    "fail_closed_on_violation is false",
-                )
-            )
-        for rule_id in on_act.get("rules_required_enabled", []):
-            rule = rules_by_id.get(rule_id)
-            if not rule or not rule.get("enabled", False):
-                findings.append(
-                    Finding(
-                        cid,
-                        sev,
-                        f"Trigger {tid}: required rule {rule_id} not enabled",
-                    )
-                )
-        for act_id in on_act.get("linked_actions", []):
-            if act_id in open_actions:
-                findings.append(
-                    Finding(
-                        cid,
-                        "warning" if sev == "warning" else "error",
-                        f"Trigger {tid}: linked action {act_id} still open while "
-                        f"scope signal {sig_id} is active",
-                    )
-                )
-
-
-def check_framework_implementation_coverage(cfg: dict, findings: list[Finding]) -> None:
-    """Ensure every in-scope framework has catalog + trigger wiring (MON-018)."""
-    block = cfg.get("framework_implementation", {})
-    if not block:
-        return
-    cid = block.get("check_id", "MON-018")
-    catalog = _load_yaml(block["catalog"])
-    frameworks = _load_yaml(block["frameworks_register"])
-    triggers = _load_yaml(block["triggers_register"])
-    signals = _load_yaml(block["signals_register"])
-
-    framework_list = frameworks.get(block.get("items_key", "frameworks"), [])
-    framework_by_id = {f["framework_id"]: f for f in framework_list if "framework_id" in f}
-    catalog_entries = catalog.get(block.get("entries_key", "entries"), [])
-    catalog_by_id = {e["framework_id"]: e for e in catalog_entries if "framework_id" in e}
-    signal_ids = {s.get("signal_id") for s in signals.get("signals", [])}
-    trigger_by_id = {t["trigger_id"]: t for t in triggers.get("triggers", []) if "trigger_id" in t}
-    trigger_coverage: dict[str, set[str]] = {}
-    for trig in triggers.get("triggers", []):
-        tid = trig.get("trigger_id")
-        for fid in trig.get("framework_ids", []):
-            trigger_coverage.setdefault(fid, set()).add(tid)
-
-    require_applicability = set(
-        block.get("require_coverage_for_applicability", ["applicable", "conditional"])
-    )
-    exclude_status = set(block.get("exclude_status", ["not_applicable"]))
-    expected_count = catalog.get("meta", {}).get("entry_count")
-    if expected_count is not None and expected_count != len(framework_list):
+    # NOT bool(): this flag gates whether a trigger asking for fail-closed
+    # enforcement is reported as unmet, so `bool("false")` -> True suppresses
+    # exactly the finding it exists to raise. A non-boolean value is a
+    # misconfiguration and is reported as one rather than coerced. (codeant-ai)
+    raw_fail_closed = enforcement.get("fail_closed_on_violation", False)
+    if not isinstance(raw_fail_closed, bool):
         findings.append(
             Finding(
                 cid,
                 "error",
-                f"Catalog entry_count {expected_count} != frameworks_register "
-                f"({len(framework_list)})",
+                f"runtime config fail_closed_on_violation is "
+                f"{type(raw_fail_closed).__name__} {raw_fail_closed!r}, expected true or false",
             )
         )
+    fail_closed = raw_fail_closed is True
+    rules_by_id = {r["id"]: r for r in runtime.get("rules", []) if "id" in r}
+    signal_states = resolve_signal_states(signals)
+    open_actions = _get_open_actions("compliance/compliance_action_tracker.yaml")
 
+    for trig in triggers.get("triggers", []):
+        sig_id = trig.get("signal_id", "")
+        if signal_states.get(sig_id) != "active":
+            continue
+        _evaluate_trigger_enforcement(
+            trig, cid, mode, fail_closed, rules_by_id, open_actions, sig_id, findings
+        )
+
+
+def _check_catalog_presence_and_drift(
+    cid: str,
+    framework_by_id: dict[str, dict],
+    catalog_by_id: dict[str, dict],
+    findings: list[Finding],
+) -> None:
     for fid, fw in framework_by_id.items():
         if fid not in catalog_by_id:
             findings.append(
-                Finding(cid, "error", f"Framework {fid} missing from implementation catalog")
+                Finding(
+                    cid, "error", f"Framework {fid} missing from implementation catalog"
+                )
             )
             continue
         entry = catalog_by_id[fid]
@@ -831,6 +1071,18 @@ def check_framework_implementation_coverage(cfg: dict, findings: list[Finding]) 
                 )
             )
 
+
+def _check_in_scope_framework_wiring(
+    cid: str,
+    framework_by_id: dict[str, dict],
+    catalog_by_id: dict[str, dict],
+    signal_ids: set[str],
+    trigger_by_id: dict[str, dict],
+    trigger_coverage: dict[str, set[str]],
+    require_applicability: set[str],
+    exclude_status: set[str],
+    findings: list[Finding],
+) -> None:
     for fid, fw in framework_by_id.items():
         applicability = fw.get("applicability", "")
         status = fw.get("programme_status", "")
@@ -862,11 +1114,19 @@ def check_framework_implementation_coverage(cfg: dict, findings: list[Finding]) 
             continue
         if sig not in signal_ids:
             findings.append(
-                Finding(cid, "error", f"Framework {fid} catalog references unknown signal {sig}")
+                Finding(
+                    cid,
+                    "error",
+                    f"Framework {fid} catalog references unknown signal {sig}",
+                )
             )
         if trig not in trigger_by_id:
             findings.append(
-                Finding(cid, "error", f"Framework {fid} catalog references unknown trigger {trig}")
+                Finding(
+                    cid,
+                    "error",
+                    f"Framework {fid} catalog references unknown trigger {trig}",
+                )
             )
         covered_by = trigger_coverage.get(fid, set())
         if trig not in covered_by:
@@ -888,11 +1148,77 @@ def check_framework_implementation_coverage(cfg: dict, findings: list[Finding]) 
                 )
             )
 
+
+def _check_catalog_orphans(
+    cid: str,
+    framework_by_id: dict[str, dict],
+    catalog_by_id: dict[str, dict],
+    findings: list[Finding],
+) -> None:
     for fid in catalog_by_id:
         if fid not in framework_by_id:
             findings.append(
                 Finding(cid, "error", f"Catalog entry {fid} not in frameworks_register")
             )
+
+
+def check_framework_implementation_coverage(cfg: dict, findings: list[Finding]) -> None:
+    """Ensure every in-scope framework has catalog + trigger wiring (MON-018)."""
+    block = cfg.get("framework_implementation", {})
+    if not block:
+        return
+    cid = block.get("check_id", "MON-018")
+    catalog = _load_yaml(block["catalog"])
+    frameworks = _load_yaml(block["frameworks_register"])
+    triggers = _load_yaml(block["triggers_register"])
+    signals = _load_yaml(block["signals_register"])
+
+    framework_list = frameworks.get(block.get("items_key", "frameworks"), [])
+    framework_by_id = {
+        f["framework_id"]: f for f in framework_list if "framework_id" in f
+    }
+    catalog_entries = catalog.get(block.get("entries_key", "entries"), [])
+    catalog_by_id = {
+        e["framework_id"]: e for e in catalog_entries if "framework_id" in e
+    }
+    signal_ids = {s.get("signal_id") for s in signals.get("signals", [])}
+    trigger_by_id = {
+        t["trigger_id"]: t for t in triggers.get("triggers", []) if "trigger_id" in t
+    }
+    trigger_coverage: dict[str, set[str]] = {}
+    for trig in triggers.get("triggers", []):
+        tid = trig.get("trigger_id")
+        for fid in trig.get("framework_ids", []):
+            trigger_coverage.setdefault(fid, set()).add(tid)
+
+    require_applicability = set(
+        block.get("require_coverage_for_applicability", ["applicable", "conditional"])
+    )
+    exclude_status = set(block.get("exclude_status", ["not_applicable"]))
+    expected_count = catalog.get("meta", {}).get("entry_count")
+    if expected_count is not None and expected_count != len(framework_list):
+        findings.append(
+            Finding(
+                cid,
+                "error",
+                f"Catalog entry_count {expected_count} != frameworks_register "
+                f"({len(framework_list)})",
+            )
+        )
+
+    _check_catalog_presence_and_drift(cid, framework_by_id, catalog_by_id, findings)
+    _check_in_scope_framework_wiring(
+        cid,
+        framework_by_id,
+        catalog_by_id,
+        signal_ids,
+        trigger_by_id,
+        trigger_coverage,
+        require_applicability,
+        exclude_status,
+        findings,
+    )
+    _check_catalog_orphans(cid, framework_by_id, catalog_by_id, findings)
 
 
 def check_trigger_integrity(cfg: dict, findings: list[Finding]) -> None:
@@ -970,6 +1296,8 @@ def run_checks(*, include_weekly_cadence: bool = False) -> list[Finding]:
     check_index_drift(cfg, findings)
     check_stale_reviews(cfg, findings)
     check_overdue_actions(cfg, findings)
+    check_register_id_uniqueness(cfg, findings)
+    check_identifier_references_resolve(cfg, findings)
     check_cookbook_links(cfg, findings)
     check_procedure_coverage(cfg, findings)
     check_weekly_cadence(cfg, findings)

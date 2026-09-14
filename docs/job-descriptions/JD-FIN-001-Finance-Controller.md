@@ -36,9 +36,9 @@ This job description supports Magna Carta compliance evidence (ISO 27001 A.5/A.6
 
 ## 4. Compliance artefacts owned or consulted
 
-- Procedure and related artefacts: `PROC-FIN-001` (see [procedures INDEX](../procedures/INDEX.md))
+- [PROC-FIN-001](../procedures/PROC-FIN-001-Financial-Controls-Reporting.md)
 - [FINANCE-BIBLE](../bibles/FINANCE-BIBLE.md)
-- Procedure and related artefacts: `PROC-PAY-001` (see [procedures INDEX](../procedures/INDEX.md))
+- [PROC-PAY-001](../procedures/PROC-PAY-001-Payroll-Compensation-Administration.md)
 
 - [RACI-MATRIX.md](../governance/RACI-MATRIX.md)
 - [TEMPLATE-JOB-DESCRIPTION.md](../templates/TEMPLATE-JOB-DESCRIPTION.md)

@@ -62,7 +62,7 @@ Added as **LEG-012**.
 **Open obligation (not yet evidenced).** s.103 inserts **s.164A DPA 2018**, a
 statutory complaints-handling duty requiring a compliant complaints process. The
 ICO's stated deadline was **June 2026**, which has passed. Nothing in this
-repository evidences such a process. Recorded as an open gap (**ACT-016**) rather
+repository evidences such a process. Recorded as an open gap (**ACT-020**) rather
 than marked compliant.
 
 #### F-2 — EU AI Act high-risk deadline deferred, transparency unchanged (**LEG-006**)

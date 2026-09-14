@@ -37,8 +37,8 @@ This job description supports Magna Carta compliance evidence (ISO 27001 A.5/A.6
 
 ## 4. Compliance artefacts owned or consulted
 
-- Procedure and related artefacts: `PROC-AI-002` (see [procedures INDEX](../procedures/INDEX.md))
-- Procedure and related artefacts: `PROC-AI-003` (see [procedures INDEX](../procedures/INDEX.md))
+- [PROC-AI-002](../procedures/PROC-AI-002-Fairness-Bias-Testing.md)
+- [PROC-AI-003](../procedures/PROC-AI-003-AI-Security-Threat-Assessment.md)
 - [AI-GOVERNANCE](../compliance/AI-GOVERNANCE.md)
 - [AI-SECURITY-SCOPING-MATRIX](../compliance/AI-SECURITY-SCOPING-MATRIX.md)
 
