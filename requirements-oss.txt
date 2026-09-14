@@ -15,3 +15,5 @@ pyjwt>=2.13.0
 # and in the optional SEC-006 tier, is never deployed, and is not exposed to
 # untrusted input. Revisit when semgrep relaxes its pin; until then pip-audit will
 # keep reporting it, which is the correct behaviour for an accepted finding.
+
+wcmatch==11.0
