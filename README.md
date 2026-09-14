@@ -115,7 +115,7 @@ Runtime enforcement for the **Tranc3 App Framework** lives in the [Tranc3](https
 | [docs/governance/DOCUMENTATION-ARTIFACT-MODEL.md](docs/governance/DOCUMENTATION-ARTIFACT-MODEL.md) | Taxonomy: policies, cookbooks, bibles, hymn sheets, schemas |
 | [docs/governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md](docs/governance/COMPLIANCE-MAINTENANCE-PROGRAMME.md) | Automated freshness monitoring and review cadence |
 | [docs/governance/REVIEWERS-REGISTER.md](docs/governance/REVIEWERS-REGISTER.md) | Reviewer roles, RACI, and escalation paths |
-| [docs/compliance/COMPLIANCE-ACTION-TRACKER.md](docs/compliance/COMPLIANCE-ACTION-TRACKER.md) | Open compliance actions (ACT-001–015) |
+| [docs/compliance/COMPLIANCE-ACTION-TRACKER.md](docs/compliance/COMPLIANCE-ACTION-TRACKER.md) | Open compliance actions |
 | [docs/compliance/TRANC3-REGISTER-BRIDGE.md](docs/compliance/TRANC3-REGISTER-BRIDGE.md) | MC-001–MC-011 ↔ REQ-### / MC-RULE mapping (MC-011) |
 | [docs/compliance/RISK-REGISTER.md](docs/compliance/RISK-REGISTER.md) | Information security risk register |
 | [docs/compliance/SOC2-EVIDENCE-SCHEDULE.md](docs/compliance/SOC2-EVIDENCE-SCHEDULE.md) | SOC 2 Type II evidence catalogue |

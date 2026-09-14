@@ -226,6 +226,20 @@ Human-readable playbooks: [EXTERNAL-ACTION-EXECUTION-GUIDE.md](../compliance/EXT
 | `max_age_days` | int | no | Staleness threshold |
 | `severity` | enum | yes | error, warning, info |
 
+### register_id_uniqueness (MON-016)
+
+Validates that identifiers are unique across specified registers.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `check_id` | string | yes | `MON-016` |
+| `registers` | list | yes | List of register specifications |
+| `registers[].source` | string | yes | Path to register file |
+| `registers[].items_key` | string | yes | YAML key containing the list of items to check |
+| `registers[].id_field` | string | yes | Field name within each item that should be unique |
+
+**Purpose:** Detects duplicate identifiers within a register (e.g. `ACT-016` issued twice). An identifier collision prevents correct evidence linking and obligation tracking.
+
 ---
 
 ## 10. Human register tables (markdown)
