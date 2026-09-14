@@ -24,9 +24,29 @@ fail=0
 # OSS_SCAN_REQUIRED is a comma-separated list of scanners whose absence is a
 # failure rather than a skip. A caller that believes this tier ran sets it; a
 # developer without the stack installed does not, and still gets skips.
+#
+# Names in it are validated against KNOWN_SCANNERS before anything runs. Without
+# that, `OSS_SCAN_REQUIRED=pip_audi` requires a scanner that does not exist, so
+# nothing is ever found missing and the run exits 0 having required nothing --
+# a gate that is configured, reports, and cannot act, which is the failure this
+# whole block was written to remove. Caught by sourcery-ai on #53.
+KNOWN_SCANNERS="gitleaks bandit semgrep pip-audit"
 SKIPPED=""
+HANDLED=""
 REQUIRED="${OSS_SCAN_REQUIRED:-}"
 
+for want in ${REQUIRED//,/ }; do
+  case " $KNOWN_SCANNERS " in
+    *" $want "*) ;;
+    *)
+      echo "FAIL OSS_SCAN_REQUIRED names a scanner this script does not run: $want" >&2
+      echo "     known scanners: $KNOWN_SCANNERS" >&2
+      exit 1
+      ;;
+  esac
+done
+
+HANDLED="$HANDLED gitleaks"
 if command -v gitleaks >/dev/null 2>&1; then
   echo "--- gitleaks ---"
   if gitleaks detect --source "$ROOT" --no-banner --redact 2>/dev/null; then
@@ -46,6 +66,7 @@ else
   SKIPPED="$SKIPPED gitleaks"
 fi
 
+HANDLED="$HANDLED bandit"
 if command -v bandit >/dev/null 2>&1; then
   echo "--- bandit (Python scripts/) ---"
   if bandit -r "$ROOT/scripts" -q -ll -f txt; then
@@ -60,6 +81,7 @@ else
   SKIPPED="$SKIPPED bandit"
 fi
 
+HANDLED="$HANDLED semgrep"
 if command -v semgrep >/dev/null 2>&1; then
   echo "--- semgrep (community auto rules) ---"
   if semgrep scan --config auto --error --quiet "$ROOT/scripts" "$ROOT/compliance" 2>/dev/null \
@@ -75,6 +97,7 @@ else
   SKIPPED="$SKIPPED semgrep"
 fi
 
+HANDLED="$HANDLED pip-audit"
 if command -v pip-audit >/dev/null 2>&1; then
   for req in requirements.txt requirements-oss.txt; do
     if [[ -f "$ROOT/$req" ]]; then
@@ -115,6 +138,29 @@ else
   echo "SKIP pip-audit (pip install -r requirements-oss.txt)"
   SKIPPED="$SKIPPED pip-audit"
 fi
+
+# KNOWN_SCANNERS is the list OSS_SCAN_REQUIRED is validated against, so a scanner
+# added above without being added to it would be un-requirable -- silently
+# optional forever. Checked here rather than trusted.
+for handled in $HANDLED; do
+  case " $KNOWN_SCANNERS " in
+    *" $handled "*) ;;
+    *)
+      echo "FAIL $handled runs here but is missing from KNOWN_SCANNERS," >&2
+      echo "     so OSS_SCAN_REQUIRED can never require it." >&2
+      exit 1
+      ;;
+  esac
+done
+for known in $KNOWN_SCANNERS; do
+  case " $HANDLED " in
+    *" $known "*) ;;
+    *)
+      echo "FAIL KNOWN_SCANNERS lists $known but no block here runs or skips it." >&2
+      exit 1
+      ;;
+  esac
+done
 
 # A scanner that was not installed reported nothing, which is not the same as
 # reporting nothing wrong. Say which, every run, so the difference is on the record
