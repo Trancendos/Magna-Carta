@@ -370,11 +370,9 @@ Trigger → PROC-{proc_code}-001 → COOK-{proc_code}-001 → HYMN-{proc_code}-0
     print(f"Wrote {path.relative_to(ROOT)}")
 
 
-def write_hr_bible() -> None:
-    path = ROOT / "docs/bibles/HR-BIBLE.md"
-    if path.exists():
-        return
-    content = """# Human Resources Bible
+def get_hr_bible_content() -> str:
+    """Return the content for the Human Resources Bible."""
+    return """# Human Resources Bible
 
 **Version:** 1.0.0  
 **Date:** 2026-06-09  
@@ -432,6 +430,14 @@ Role definitions: [job-descriptions/INDEX.md](../job-descriptions/INDEX.md)
 
 **Next review:** 2027-06-09
 """
+
+
+def write_hr_bible() -> None:
+    """Write the Human Resources Bible document."""
+    path = ROOT / "docs/bibles/HR-BIBLE.md"
+    if path.exists():
+        return
+    content = get_hr_bible_content()
     path.write_text(content, encoding="utf-8")
     print(f"Wrote {path.relative_to(ROOT)}")
 
