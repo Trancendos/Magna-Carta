@@ -37,6 +37,8 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 | ACT-017 | Complete premises fire risk assessment (FRA) | Facilities / H&S | 2026-10-31 | P2 | Open | 🎯 |
 | ACT-018 | Activate payroll provider and live RTI reporting | Finance | 2026-12-31 | P2 | Open | 🎯 |
 | ACT-019 | Name H&S officer and execute RIDDOR reporting drill | HR / H&S | 2026-09-30 | P2 | Open | 🎯 |
+| ACT-020 | DUAA s.164A statutory complaints-handling process | DPO | 2026-10-26 | P1 | Open | 🎯 |
+| ACT-021 | Article 30 Record of Processing Activities (ROPA) does not exist | DPO | 2026-11-14 | P1 | Open | 📋 |
 
 ---
 

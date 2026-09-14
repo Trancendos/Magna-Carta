@@ -340,3 +340,112 @@ class TestMalformedRegistersAreReportedNotRaised:
         chc.check_register_id_uniqueness(self.CFG, findings)
         assert [f.severity for f in findings] == ["error"]
         assert "actions[0] is str" in findings[0].message
+
+
+class TestIdentifierReferencesResolve:
+    """MON-020. Renumbering ACT-016 left three documents citing the old id."""
+
+    @staticmethod
+    def _cfg(tmp_path) -> dict:
+        return {
+            "identifier_references": {
+                "check_id": "MON-TEST",
+                "identifiers": [
+                    {
+                        "register": "compliance/tracker.yaml",
+                        "items_key": "actions",
+                        "id_field": "action_id",
+                        "pattern": r"ACT-[0-9]{3}",
+                        "search": ["docs/*.md"],
+                    }
+                ],
+            }
+        }
+
+    @staticmethod
+    def _tree(tmp_path, doc_text: str, ids=("ACT-001",)) -> None:
+        import yaml as _y
+
+        (tmp_path / "compliance").mkdir(exist_ok=True)
+        (tmp_path / "docs").mkdir(exist_ok=True)
+        (tmp_path / "compliance" / "tracker.yaml").write_text(
+            _y.safe_dump({"actions": [{"action_id": i} for i in ids]}), encoding="utf-8"
+        )
+        (tmp_path / "docs" / "note.md").write_text(doc_text, encoding="utf-8")
+
+    def _run(self, monkeypatch, tmp_path) -> list:
+        monkeypatch.setattr(chc, "ROOT", tmp_path)
+        findings: list = []
+        chc.check_identifier_references_resolve(self._cfg(tmp_path), findings)
+        return findings
+
+    def test_a_citation_of_an_id_that_does_not_exist_is_an_error(self, monkeypatch, tmp_path):
+        self._tree(tmp_path, "Raised as ACT-016.")
+        findings = self._run(monkeypatch, tmp_path)
+        assert [f.severity for f in findings] == ["error"]
+        assert "ACT-016" in findings[0].message
+
+    def test_a_citation_of_a_defined_id_passes(self, monkeypatch, tmp_path):
+        self._tree(tmp_path, "Raised as ACT-001.")
+        assert self._run(monkeypatch, tmp_path) == []
+
+    def test_prose_citations_are_found_not_only_structured_fields(self, monkeypatch, tmp_path):
+        """The three that went stale were all in prose, not in linked_action."""
+        self._tree(tmp_path, "an open gap (**ACT-016**) rather than compliant")
+        assert [f.severity for f in self._run(monkeypatch, tmp_path)] == ["error"]
+
+    def test_a_register_defining_nothing_is_an_error_not_a_pass(self, monkeypatch, tmp_path):
+        self._tree(tmp_path, "no citations here", ids=())
+        findings = self._run(monkeypatch, tmp_path)
+        assert [f.severity for f in findings] == ["error"]
+        assert "nothing to resolve against" in findings[0].message
+
+    def test_the_live_tree_resolves(self):
+        """Not a tautology: probed by reintroducing the stale reference."""
+        findings: list = []
+        import yaml as _y
+
+        cfg = _y.safe_load(
+            (ROOT / "compliance" / "maintenance_monitor.yaml").read_text(encoding="utf-8")
+        )
+        assert cfg.get("identifier_references", {}).get("identifiers"), "MON-020 covers nothing"
+        chc.check_identifier_references_resolve(cfg, findings)
+        assert findings == [], [f.message for f in findings]
+
+
+class TestAnIdentifierMustBeANonEmptyString:
+    """`""` and `123` were accepted as unique. (codex)"""
+
+    CFG = {
+        "register_id_uniqueness": {
+            "check_id": "MON-TEST",
+            "registers": [
+                {
+                    "source": "compliance/tracker.yaml",
+                    "items_key": "actions",
+                    "id_field": "action_id",
+                }
+            ],
+        }
+    }
+
+    def _run(self, monkeypatch, tmp_path, actions) -> list:
+        import yaml as _y
+
+        monkeypatch.setattr(chc, "ROOT", tmp_path)
+        (tmp_path / "compliance").mkdir(exist_ok=True)
+        (tmp_path / "compliance" / "tracker.yaml").write_text(
+            _y.safe_dump({"actions": actions}), encoding="utf-8"
+        )
+        findings: list = []
+        chc.check_register_id_uniqueness(self.CFG, findings)
+        return findings
+
+    @pytest.mark.parametrize("bad", ["", "   ", 123, True, [], {}])
+    def test_an_unusable_id_is_an_error(self, monkeypatch, tmp_path, bad):
+        findings = self._run(monkeypatch, tmp_path, [{"action_id": bad}])
+        assert [f.severity for f in findings] == ["error"]
+        assert "non-empty string" in findings[0].message
+
+    def test_a_real_id_passes(self, monkeypatch, tmp_path):
+        assert self._run(monkeypatch, tmp_path, [{"action_id": "ACT-001"}]) == []

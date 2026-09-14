@@ -194,6 +194,68 @@ def _check_ids_are_in_the_checked_list(
             )
 
 
+def check_identifier_references_resolve(cfg: dict, findings: list[Finding]) -> None:
+    """An id cited anywhere must exist in the register that defines it.
+
+    MON-020, added 2026-09-14 after renumbering ACT-016 -> ACT-020 left three
+    documents citing ACT-016 for the DUAA complaints duty -- an id that now
+    unambiguously means an unrelated HRIS action. A reader following the
+    legislation record landed on the wrong obligation, and every existing check
+    passed: MON-019 proves each id names one thing INSIDE its register and says
+    nothing about the citations outside it. Caught by chatgpt-codex-connector.
+
+    Deliberately a text scan rather than a field walk. The references that went
+    stale were in prose -- "Raised as ACT-016." in a YAML block scalar, "(**ACT-016**)"
+    in markdown -- so a check that only followed structured `linked_action` fields
+    would have reported clean on exactly the citations that were wrong.
+    """
+    block = cfg.get("identifier_references", {})
+    if not block:
+        return
+    cid = block.get("check_id", "MON-020")
+    for spec in block.get("identifiers", []):
+        register = ROOT / spec["register"]
+        if not register.is_file() or yaml is None:
+            findings.append(Finding(cid, "error", f"{spec['register']}: register not readable"))
+            continue
+        with register.open(encoding="utf-8") as f:
+            data = yaml.safe_load(f) or {}
+        defined = {
+            str(item.get(spec["id_field"]))
+            for item in (data.get(spec["items_key"]) or [])
+            if isinstance(item, dict) and item.get(spec["id_field"])
+        }
+        if not defined:
+            findings.append(
+                Finding(cid, "error", f"{spec['register']}: defines no ids — nothing to resolve against")
+            )
+            continue
+        pattern = re.compile(spec["pattern"])
+        for rel in sorted(_iter_reference_files(spec)):
+            try:
+                text = rel.read_text(encoding="utf-8")
+            except OSError as exc:
+                findings.append(Finding(cid, "error", f"{rel}: cannot be read: {exc}"))
+                continue
+            if rel == register:
+                continue
+            unknown = sorted({m.group(0) for m in pattern.finditer(text)} - defined)
+            if unknown:
+                findings.append(
+                    Finding(
+                        cid,
+                        "error",
+                        f"{rel.relative_to(ROOT)} cites {', '.join(unknown)}, which "
+                        f"{spec['register']} does not define",
+                    )
+                )
+
+
+def _iter_reference_files(spec: dict):
+    for glob in spec.get("search", []):
+        yield from ROOT.glob(glob)
+
+
 def check_register_id_uniqueness(cfg: dict, findings: list[Finding]) -> None:
     """Every identifier in a register must name exactly one thing.
 
@@ -260,10 +322,20 @@ def check_register_id_uniqueness(cfg: dict, findings: list[Finding]) -> None:
                 )
                 continue
             value = item.get(field)
-            if value is None:
-                findings.append(Finding(cid, "error", f"{rel}: an entry has no '{field}'"))
+            # Not `is None`: an id is a string other documents cite by name, so
+            # "" and 123 are unusable rather than merely unique. The lightweight
+            # schema check confirms the field exists, not its type. (codex)
+            if not isinstance(value, str) or not value.strip():
+                findings.append(
+                    Finding(
+                        cid,
+                        "error",
+                        f"{rel}: {spec['items_key']}[{index}] has '{field}': {value!r} — "
+                        "an identifier must be a non-empty string",
+                    )
+                )
                 continue
-            seen[str(value)] = seen.get(str(value), 0) + 1
+            seen[value] = seen.get(value, 0) + 1
         _check_ids_are_in_the_checked_list(spec, data, findings, cid, rel)
 
         for value, count in sorted(seen.items()):
@@ -1208,6 +1280,7 @@ def run_checks(*, include_weekly_cadence: bool = False) -> list[Finding]:
     check_stale_reviews(cfg, findings)
     check_overdue_actions(cfg, findings)
     check_register_id_uniqueness(cfg, findings)
+    check_identifier_references_resolve(cfg, findings)
     check_cookbook_links(cfg, findings)
     check_procedure_coverage(cfg, findings)
     check_weekly_cadence(cfg, findings)
