@@ -23,6 +23,7 @@ import sys
 from pathlib import Path
 
 import yaml
+import typing
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTER = ROOT / "compliance" / "matrix_suites.yaml"
@@ -56,6 +57,62 @@ REQUIRED_SUITE_FIELDS = [
 ]
 
 
+def check_matrix(
+    m: dict[str, typing.Any],
+    sid: str,
+    seen_matrix_ids: dict[str, str],
+    errors: list[str],
+) -> None:
+    mid = m.get("id")
+    if not mid:
+        errors.append(f"{sid}: matrix entry without id")
+        return
+    if mid in seen_matrix_ids:
+        errors.append(
+            f"matrix {mid} assigned to both {seen_matrix_ids[mid]} and {sid} "
+            f"— every matrix must have exactly one governing suite"
+        )
+    seen_matrix_ids[mid] = sid
+    if m.get("repo") == "magna-carta":
+        path = ROOT / str(m.get("path", ""))
+        if not path.is_file():
+            errors.append(f"{sid}: {mid} path does not exist: {m.get('path')}")
+
+
+def check_suite(
+    suite: dict[str, typing.Any],
+    seen_suite_ids: set[str],
+    today: _dt.date,
+    seen_matrix_ids: dict[str, str],
+    errors: list[str],
+    warnings: list[str],
+) -> None:
+    sid = suite.get("suite_id", "<missing suite_id>")
+    if sid in seen_suite_ids:
+        errors.append(f"duplicate suite_id {sid}")
+    seen_suite_ids.add(sid)
+
+    for field in REQUIRED_SUITE_FIELDS:
+        if not suite.get(field):
+            errors.append(f"{sid}: missing required field '{field}'")
+
+    pillar = suite.get("pillar")
+    if pillar and pillar not in PILLARS:
+        errors.append(f"{sid}: pillar '{pillar}' is not a platform Pillar")
+
+    nr = suite.get("next_review")
+    if nr:
+        try:
+            due = _dt.date.fromisoformat(str(nr))
+            if due < today:
+                warnings.append(f"{sid}: review overdue (next_review {due})")
+        except ValueError:
+            errors.append(f"{sid}: next_review '{nr}' is not an ISO date")
+
+    for m in suite.get("matrices") or []:
+        check_matrix(m, sid, seen_matrix_ids, errors)
+
+
 def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
@@ -75,43 +132,7 @@ def main() -> int:
     today = _dt.date.today()
 
     for suite in suites:
-        sid = suite.get("suite_id", "<missing suite_id>")
-        if sid in seen_suite_ids:
-            errors.append(f"duplicate suite_id {sid}")
-        seen_suite_ids.add(sid)
-
-        for field in REQUIRED_SUITE_FIELDS:
-            if not suite.get(field):
-                errors.append(f"{sid}: missing required field '{field}'")
-
-        pillar = suite.get("pillar")
-        if pillar and pillar not in PILLARS:
-            errors.append(f"{sid}: pillar '{pillar}' is not a platform Pillar")
-
-        nr = suite.get("next_review")
-        if nr:
-            try:
-                due = _dt.date.fromisoformat(str(nr))
-                if due < today:
-                    warnings.append(f"{sid}: review overdue (next_review {due})")
-            except ValueError:
-                errors.append(f"{sid}: next_review '{nr}' is not an ISO date")
-
-        for m in suite.get("matrices") or []:
-            mid = m.get("id")
-            if not mid:
-                errors.append(f"{sid}: matrix entry without id")
-                continue
-            if mid in seen_matrix_ids:
-                errors.append(
-                    f"matrix {mid} assigned to both {seen_matrix_ids[mid]} and {sid} "
-                    f"— every matrix must have exactly one governing suite"
-                )
-            seen_matrix_ids[mid] = sid
-            if m.get("repo") == "magna-carta":
-                path = ROOT / str(m.get("path", ""))
-                if not path.is_file():
-                    errors.append(f"{sid}: {mid} path does not exist: {m.get('path')}")
+        check_suite(suite, seen_suite_ids, today, seen_matrix_ids, errors, warnings)
 
     for line in warnings:
         print(f"[WARNING] {line}")
