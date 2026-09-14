@@ -134,13 +134,8 @@ def slugify(title: str) -> str:
     )
 
 
-def write_proc(code: str, title: str, owner: str, policies: str, summary: str) -> None:
-    slug = slugify(title)
-    path = ROOT / f"docs/procedures/PROC-{code}-001-{slug}.md"
-    if path.exists():
-        return
-    bible = BIBLE_MAP[code]
-    content = f"""# PROC-{code}-001 — {title}
+def _generate_proc_content(code: str, title: str, owner: str, policies: str, summary: str, slug: str, bible: str) -> str:
+    return f"""# PROC-{code}-001 — {title}
 
 **Version:** 1.0.0 · **Owner:** {owner} · **Policies:** {policies}
 
@@ -210,6 +205,15 @@ def write_proc(code: str, title: str, owner: str, policies: str, summary: str) -
 - [{bible}](../bibles/{bible}.md)
 - [COMPLIANCE-MATURITY-AND-BENCHMARK.md](../compliance/COMPLIANCE-MATURITY-AND-BENCHMARK.md)
 """
+
+
+def write_proc(code: str, title: str, owner: str, policies: str, summary: str) -> None:
+    slug = slugify(title)
+    path = ROOT / f"docs/procedures/PROC-{code}-001-{slug}.md"
+    if path.exists():
+        return
+    bible = BIBLE_MAP[code]
+    content = _generate_proc_content(code, title, owner, policies, summary, slug, bible)
     path.write_text(content, encoding="utf-8")
     print(f"Wrote {path.relative_to(ROOT)}")
 
