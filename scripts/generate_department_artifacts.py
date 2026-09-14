@@ -134,13 +134,8 @@ def slugify(title: str) -> str:
     )
 
 
-def write_proc(code: str, title: str, owner: str, policies: str, summary: str) -> None:
-    slug = slugify(title)
-    path = ROOT / f"docs/procedures/PROC-{code}-001-{slug}.md"
-    if path.exists():
-        return
-    bible = BIBLE_MAP[code]
-    content = f"""# PROC-{code}-001 — {title}
+def _generate_proc_content(code: str, title: str, owner: str, policies: str, summary: str, slug: str, bible: str) -> str:
+    return f"""# PROC-{code}-001 — {title}
 
 **Version:** 1.0.0 · **Owner:** {owner} · **Policies:** {policies}
 
@@ -210,6 +205,15 @@ def write_proc(code: str, title: str, owner: str, policies: str, summary: str) -
 - [{bible}](../bibles/{bible}.md)
 - [COMPLIANCE-MATURITY-AND-BENCHMARK.md](../compliance/COMPLIANCE-MATURITY-AND-BENCHMARK.md)
 """
+
+
+def write_proc(code: str, title: str, owner: str, policies: str, summary: str) -> None:
+    slug = slugify(title)
+    path = ROOT / f"docs/procedures/PROC-{code}-001-{slug}.md"
+    if path.exists():
+        return
+    bible = BIBLE_MAP[code]
+    content = _generate_proc_content(code, title, owner, policies, summary, slug, bible)
     path.write_text(content, encoding="utf-8")
     print(f"Wrote {path.relative_to(ROOT)}")
 
@@ -284,39 +288,36 @@ def write_hymn(code: str, title: str, slug: str | None = None) -> None:
     print(f"Wrote {path.relative_to(ROOT)}")
 
 
-def write_bible(filename: str, title: str, owner: str, proc_code: str, proc_title: str, policies: str, summary: str) -> None:
-    path = ROOT / f"docs/bibles/{filename}.md"
-    slug = slugify(proc_title)
-    proc_file = f"PROC-{proc_code}-001-{slug}.md"
-    content = f"""# {title} Bible
+def _bible_header(title: str, owner: str) -> str:
+    return f"""# {title} Bible
 
 **Version:** 1.0.0  
 **Date:** 2026-06-09  
 **Owner:** {owner}  
-**Classification:** Internal — departmental reference
+**Classification:** Internal — departmental reference"""
 
----
 
-## 1. What this Bible is
+def _bible_intro(title: str, summary: str) -> str:
+    return f"""## 1. What this Bible is
 
 Canonical reference for **{title.lower()}** at Trancendos. {summary}
 
-**Honesty rule:** ✅ = programme artefact in Magna Carta. 🎯 = live execution, vendor contract, or external attestation required.
+**Honesty rule:** ✅ = programme artefact in Magna Carta. 🎯 = live execution, vendor contract, or external attestation required."""
 
----
 
-## 2. Core artefacts
+def _bible_core_artefacts(proc_code: str, proc_file: str, slug: str, policies: str) -> str:
+    return f"""## 2. Core artefacts
 
 | Type | ID | Status |
 |------|-----|--------|
 | Procedure | [PROC-{proc_code}-001](../procedures/{proc_file}) | ✅ Programme |
 | Cookbook | [COOK-{proc_code}-001](../cookbooks/COOK-{proc_code}-001-{slug}.md) | ✅ Programme |
 | Hymn sheet | [HYMN-{proc_code}-001](../hymn-sheets/HYMN-{proc_code}-001-{slug}-Checklist.md) | ✅ Programme |
-| Policies | {policies} | See policies index |
+| Policies | {policies} | See policies index |"""
 
----
 
-## 3. Regulatory & framework alignment
+def _bible_alignment() -> str:
+    return """## 3. Regulatory & framework alignment
 
 | Framework | Relevance |
 |-----------|-----------|
@@ -324,40 +325,81 @@ Canonical reference for **{title.lower()}** at Trancendos. {summary}
 | SOC 2 | CC1–CC5 depending on domain |
 | UK employment / safety law | Where HR/HSE/MHL intersect |
 
-Detail: [STANDARDS-AND-FRAMEWORKS-REGISTER.md](../compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md)
+Detail: [STANDARDS-AND-FRAMEWORKS-REGISTER.md](../compliance/STANDARDS-AND-FRAMEWORKS-REGISTER.md)"""
 
----
 
-## 4. Key processes
+def _bible_processes(proc_code: str) -> str:
+    return f"""## 4. Key processes
 
 ```
 Trigger → PROC-{proc_code}-001 → COOK-{proc_code}-001 → HYMN-{proc_code}-001 → Evidence → PROC-CMP-001
-```
+```"""
 
----
 
-## 5. Registers & evidence
+# Per-bible rows in the §5 registers table, keyed by the file the generator
+# writes. These seven rows were added to four bibles by hand and deleted again by
+# the next generator run -- MC-012, MC-013, MC-016, MC-017, MC-018, MC-019 and
+# MC-020, each pointing a bible at the per-service posture matrix that governs
+# it. Nothing reported the loss: `write_bible` rewrites the whole file, so an
+# edit to a generated document survives exactly until someone runs the generator,
+# and the diff then reads as the generator working correctly.
+#
+# Carried here so regeneration reproduces them. A bible that needs a new matrix
+# reference gets a line in this map, not a hand edit to docs/bibles/.
+BIBLE_MATRIX_ROWS: dict[str, list[str]] = {
+    "DATA-MANAGEMENT-BIBLE": [
+        "| Per-Service/Solution/Application/AI knowledge/classification/retention posture "
+        "| [KNOWLEDGE-MATRIX.md](../compliance/KNOWLEDGE-MATRIX.md) (MC-018) |",
+    ],
+    "FINANCE-BIBLE": [
+        "| Per-Service/Solution/Application FCA/financial posture "
+        "| [FINANCIAL-MATRIX.md](../compliance/FINANCIAL-MATRIX.md) (MC-017) |",
+        "| Per-Service/Solution/Application revenue/monetisation posture "
+        "| [REVENUE-MATRIX.md](../compliance/REVENUE-MATRIX.md) (MC-019) |",
+        "| Per-Service/Solution/Application tax posture "
+        "| [TAXATION-MATRIX.md](../compliance/TAXATION-MATRIX.md) (MC-020) |",
+    ],
+    "IP-BIBLE": [
+        "| Per-Service/Solution/Application/AI IP posture "
+        "| [INTELLECTUAL-PROPERTY-MATRIX.md](../compliance/INTELLECTUAL-PROPERTY-MATRIX.md) (MC-013) |",
+        "| Per-Service/Solution/Application/AI license posture (OSS/model licensing) "
+        "| [LICENSE-COMPLIANCE-MATRIX.md](../compliance/LICENSE-COMPLIANCE-MATRIX.md) (MC-012) |",
+    ],
+    "LEGAL-BIBLE": [
+        "| Per-Service/Solution/Application/AI legal posture "
+        "| [LEGAL-MATRIX.md](../compliance/LEGAL-MATRIX.md) (MC-016) |",
+    ],
+}
+
+
+def _bible_evidence(filename: str = "") -> str:
+    rows = [
+        "| Coverage honesty | [COMPLIANCE-COVERAGE-REGISTER.md](../compliance/COMPLIANCE-COVERAGE-REGISTER.md) |",
+        "| Maturity % | [COMPLIANCE-MATURITY-AND-BENCHMARK.md](../compliance/COMPLIANCE-MATURITY-AND-BENCHMARK.md) |",
+        "| RACI | [RACI-MATRIX.md](../governance/RACI-MATRIX.md) |",
+        "| Job descriptions | [job-descriptions/INDEX.md](../job-descriptions/INDEX.md) |",
+    ]
+    rows.extend(BIBLE_MATRIX_ROWS.get(filename, []))
+    table = "\n".join(rows)
+    return f"""## 5. Registers & evidence
 
 | Artefact | Path |
 |----------|------|
-| Coverage honesty | [COMPLIANCE-COVERAGE-REGISTER.md](../compliance/COMPLIANCE-COVERAGE-REGISTER.md) |
-| Maturity % | [COMPLIANCE-MATURITY-AND-BENCHMARK.md](../compliance/COMPLIANCE-MATURITY-AND-BENCHMARK.md) |
-| RACI | [RACI-MATRIX.md](../governance/RACI-MATRIX.md) |
-| Job descriptions | [job-descriptions/INDEX.md](../job-descriptions/INDEX.md) |
+{table}"""
 
----
 
-## 6. Operational gaps (honest)
+def _bible_gaps() -> str:
+    return """## 6. Operational gaps (honest)
 
 | Gap | Blocker |
 |-----|---------|
 | Named process owner in production HRIS | 🎯 HR / exec appointment |
 | Vendor or tooling integration | 🎯 Commercial selection |
-| External attestation (audit, inspection) | 🎯 Schedule with third party |
+| External attestation (audit, inspection) | 🎯 Schedule with third party |"""
 
----
 
-## 7. Review
+def _bible_review() -> str:
+    return """## 7. Review
 
 | Activity | Frequency |
 |----------|-----------|
@@ -366,15 +408,32 @@ Trigger → PROC-{proc_code}-001 → COOK-{proc_code}-001 → HYMN-{proc_code}-0
 
 **Next review:** 2027-06-09
 """
+
+
+def write_bible(filename: str, title: str, owner: str, proc_code: str, proc_title: str, policies: str, summary: str) -> None:
+    path = ROOT / f"docs/bibles/{filename}.md"
+    slug = slugify(proc_title)
+    proc_file = f"PROC-{proc_code}-001-{slug}.md"
+
+    parts = [
+        _bible_header(title, owner),
+        _bible_intro(title, summary),
+        _bible_core_artefacts(proc_code, proc_file, slug, policies),
+        _bible_alignment(),
+        _bible_processes(proc_code),
+        _bible_evidence(filename),
+        _bible_gaps(),
+        _bible_review()
+    ]
+
+    content = "\n\n---\n\n".join(parts)
     path.write_text(content, encoding="utf-8")
     print(f"Wrote {path.relative_to(ROOT)}")
 
 
-def write_hr_bible() -> None:
-    path = ROOT / "docs/bibles/HR-BIBLE.md"
-    if path.exists():
-        return
-    content = """# Human Resources Bible
+def _hr_bible_content() -> str:
+    """Return the content for the Human Resources Bible."""
+    return """# Human Resources Bible
 
 **Version:** 1.0.0  
 **Date:** 2026-06-09  
@@ -432,6 +491,14 @@ Role definitions: [job-descriptions/INDEX.md](../job-descriptions/INDEX.md)
 
 **Next review:** 2027-06-09
 """
+
+
+def write_hr_bible() -> None:
+    """Write the Human Resources Bible document."""
+    path = ROOT / "docs/bibles/HR-BIBLE.md"
+    if path.exists():
+        return
+    content = _hr_bible_content()
     path.write_text(content, encoding="utf-8")
     print(f"Wrote {path.relative_to(ROOT)}")
 
