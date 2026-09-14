@@ -54,6 +54,15 @@ jobs:
           # any runner where the two do not resolve to the same interpreter.
           python3 -m pip install --upgrade pip
           python3 -m pip install -r requirements.txt
+          # bandit and pip-audit, named rather than installed from requirements-oss.txt,
+          # because that file also carries semgrep: a ~100MB install whose rule set is
+          # fetched from a remote registry at scan time, so enabling it here would trade
+          # a deterministic gate for a network-dependent one. These two are offline and
+          # fast, and pip-audit is the one that matters most -- it resolves each
+          # requirements file in a fresh virtualenv, so an unresolvable manifest fails
+          # here rather than reaching main behind a green check, which is what happened
+          # with `wcmatch==11.0` on 2026-09-14.
+          python3 -m pip install bandit pip-audit
           python3 --version && python3 -m pip --version
 
       # run_layer_b_local_ci.sh is the single entry point the programme already uses
@@ -61,4 +70,10 @@ jobs:
       # cannot drift: compliance health, automation readiness, DPA readiness,
       # SEC-002 security testing and the zero-cost tooling register.
       - name: Layer B local CI
+        # Naming the two scanners installed above turns their absence into a failure.
+        # Without it the OSS tier prints SKIP for everything and exits 0, which is what
+        # it did on every CI run before 2026-09-14 -- a tier that has never executed,
+        # reporting the same exit code as a tier that executed and found nothing.
+        env:
+          OSS_SCAN_REQUIRED: bandit,pip-audit
         run: bash scripts/run_layer_b_local_ci.sh

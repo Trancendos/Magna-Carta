@@ -10,6 +10,23 @@ echo "=== OSS security scans SEC-006 (zero cost, no SaaS) ==="
 ran=0
 fail=0
 
+# Which scanners actually ran, and which were absent. Until 2026-09-14 this script
+# tracked only a boolean: if NO scanner was installed it printed a reassuring line
+# and exited 0, and if SOME were installed it reported on those and said nothing
+# about the rest. Layer B CI installs only requirements.txt, so every OSS scanner
+# was absent on every run -- the tier has never executed in CI, and the exit code
+# said clean the whole time.
+#
+# That is how an unresolvable `wcmatch==11.0` reached main behind a green Layer B
+# check: pip-audit resolves each requirements file in a fresh virtualenv, so it is
+# exactly the check that would have refused it, and it was never installed.
+#
+# OSS_SCAN_REQUIRED is a comma-separated list of scanners whose absence is a
+# failure rather than a skip. A caller that believes this tier ran sets it; a
+# developer without the stack installed does not, and still gets skips.
+SKIPPED=""
+REQUIRED="${OSS_SCAN_REQUIRED:-}"
+
 if command -v gitleaks >/dev/null 2>&1; then
   echo "--- gitleaks ---"
   if gitleaks detect --source "$ROOT" --no-banner --redact 2>/dev/null; then
@@ -26,6 +43,7 @@ if command -v gitleaks >/dev/null 2>&1; then
   ran=1
 else
   echo "SKIP gitleaks (run ./scripts/install_zero_cost_security_stack.sh)"
+  SKIPPED="$SKIPPED gitleaks"
 fi
 
 if command -v bandit >/dev/null 2>&1; then
@@ -39,6 +57,7 @@ if command -v bandit >/dev/null 2>&1; then
   ran=1
 else
   echo "SKIP bandit (pip install -r requirements-oss.txt)"
+  SKIPPED="$SKIPPED bandit"
 fi
 
 if command -v semgrep >/dev/null 2>&1; then
@@ -53,6 +72,7 @@ if command -v semgrep >/dev/null 2>&1; then
   ran=1
 else
   echo "SKIP semgrep (pip install -r requirements-oss.txt)"
+  SKIPPED="$SKIPPED semgrep"
 fi
 
 if command -v pip-audit >/dev/null 2>&1; then
@@ -93,6 +113,28 @@ if command -v pip-audit >/dev/null 2>&1; then
   done
 else
   echo "SKIP pip-audit (pip install -r requirements-oss.txt)"
+  SKIPPED="$SKIPPED pip-audit"
+fi
+
+# A scanner that was not installed reported nothing, which is not the same as
+# reporting nothing wrong. Say which, every run, so the difference is on the record
+# even when nothing is required.
+if [[ -n "$SKIPPED" ]]; then
+  echo "BLIND — these scanners were not installed and looked at nothing:$SKIPPED" >&2
+fi
+
+if [[ -n "$REQUIRED" ]]; then
+  missing=""
+  for want in ${REQUIRED//,/ }; do
+    if [[ " $SKIPPED " == *" $want "* ]]; then
+      missing="$missing $want"
+    fi
+  done
+  if [[ -n "$missing" ]]; then
+    echo "FAIL required scanner(s) not installed:$missing" >&2
+    echo "      OSS_SCAN_REQUIRED names them, so a blind run is a failed run here." >&2
+    exit 1
+  fi
 fi
 
 if [[ $ran -eq 0 ]]; then

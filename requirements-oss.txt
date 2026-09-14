@@ -30,7 +30,28 @@ pyjwt>=2.13.0
 # them is someone re-measuring. If pip-audit reports an mcp advisory again,
 # re-measure before re-accepting rather than restoring this text.
 
-# Transitive pin: wcmatch reaches this file only via semgrep, and 8.5.2 carries a
-# ReDoS in extended-glob parsing (AIKIDO-2026-334325). Nothing here imports wcmatch,
-# so none of the 9.0/10.1/10.2/11.0 breaking changes apply.
-wcmatch==11.0
+# NOT PINNED 2026-09-14 — wcmatch, AIKIDO-2026-334325 (ReDoS in extended-glob
+# parsing), reported HIGH against 8.5.2 and autofixed to `wcmatch==11.0` by PR #51.
+#
+# That pin was merged and is reverted here: it cannot resolve. semgrep declares
+# `Requires-Dist: wcmatch~=8.3` (measured against 1.173.0 and 1.177.0, the current
+# release), which is `>=8.3,<9`, and 8.5.2 is the last 8.x wcmatch ever published.
+# So no specifier satisfies both semgrep and the proposed fix, and with the pin in
+# place `pip install -r requirements-oss.txt` fails outright:
+#
+#   ResolutionImpossible: Cannot install -r requirements-oss.txt (line 5)
+#   [semgrep>=1.60] ... and wcmatch==11.0
+#
+# The whole OSS security tier installs from this file, so the pin did not harden
+# the scanners — it uninstalled them.
+#
+# On the advisory itself: OSV returns ZERO records for wcmatch at any version,
+# checked with a control in the same run (mcp 1.23.3 -> 6 records), so this is a
+# vendor-proprietary finding that cannot be verified here and that pip-audit, which
+# reads OSV, will never report either way. wcmatch reaches this file only as a
+# semgrep transitive; nothing in this repository imports it, and the patterns
+# semgrep feeds it are its own rule files, not untrusted input.
+#
+# Left unpinned deliberately: semgrep resolves its own wcmatch, and adding a
+# constraint here can only break that resolve. Revisit if semgrep widens the pin
+# past 9.0, or if a fixed 8.x appears.

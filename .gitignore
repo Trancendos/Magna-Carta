@@ -18,3 +18,6 @@ venv/
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Coverage output — a build artefact, not a reviewable diff
+.coverage
