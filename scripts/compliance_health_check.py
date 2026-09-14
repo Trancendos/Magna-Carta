@@ -147,6 +147,53 @@ def check_stale_reviews(cfg: dict, findings: list[Finding]) -> None:
                 )
 
 
+def _check_ids_are_in_the_checked_list(
+    spec: dict, data: dict, findings: list[Finding], cid: str, rel: str
+) -> None:
+    """An id in the right file and the wrong list is invisible, not duplicated.
+
+    ACT-021 was appended to compliance_action_tracker.yaml and landed at the end
+    of the file, which is inside `programme_milestones` rather than `actions`.
+    The schema does not describe that key, so MON-009 never looked at it; MON-003
+    reads `actions`, so the action was never overdue; and the uniqueness check
+    above reads `actions`, so it was never checked for collisions either. A
+    recorded obligation that no check can see is worse than an unrecorded one,
+    because the record says it is handled. Caught by codeant-ai.
+
+    An id that ALSO appears in the checked list is a cross-reference, not a
+    stray: execution_evidence_register.yaml's `recurrence_schedule` carries
+    EEV-006 and EEV-007 to give them a cadence, and both are records in their own
+    right. The first version of this check flagged those two, which is the
+    over-broad reading -- what makes ACT-021 a defect is that it appeared
+    NOWHERE ELSE.
+    """
+    field = spec["id_field"]
+    checked = spec["items_key"]
+    known = {
+        item.get(field)
+        for item in (data.get(checked) or [])
+        if isinstance(item, dict) and item.get(field)
+    }
+    for key, value in data.items():
+        if key == checked or not isinstance(value, list):
+            continue
+        strays = [
+            item.get(field)
+            for item in value
+            if isinstance(item, dict) and item.get(field) and item.get(field) not in known
+        ]
+        if strays:
+            findings.append(
+                Finding(
+                    cid,
+                    "error",
+                    f"{rel}: {', '.join(sorted(strays))} carries '{field}' but sits under "
+                    f"'{key}' and nowhere in '{checked}' — no check that reads "
+                    f"'{checked}' can see it",
+                )
+            )
+
+
 def check_register_id_uniqueness(cfg: dict, findings: list[Finding]) -> None:
     """Every identifier in a register must name exactly one thing.
 
@@ -160,19 +207,36 @@ def check_register_id_uniqueness(cfg: dict, findings: list[Finding]) -> None:
     Config-driven rather than written once for the action tracker, because the
     same collision is possible in every register with an id column and there is
     no reason to discover it one register at a time.
+
+    MON-019, not MON-016: sourcery-ai pointed out that MON-016 already belongs to
+    enforcement_alignment, so this check shipped with an id collision of its own,
+    in the check that detects id collisions. Findings from two unrelated checks
+    would have been indistinguishable to anything filtering by check_id.
     """
     block = cfg.get("register_id_uniqueness", {})
     if not block:
         return
-    cid = block.get("check_id", "MON-016")
+    cid = block.get("check_id", "MON-019")
     for spec in block.get("registers", []):
         rel = spec["source"]
         src = ROOT / rel
         if not src.is_file() or yaml is None:
             findings.append(Finding(cid, "error", f"{rel}: register not readable"))
             continue
-        with src.open(encoding="utf-8") as f:
-            data = yaml.safe_load(f) or {}
+        try:
+            with src.open(encoding="utf-8") as f:
+                data = yaml.safe_load(f) or {}
+        except (OSError, yaml.YAMLError) as exc:
+            # Without this the health check dies here with a traceback and every
+            # check after it never runs -- one unparseable register silencing the
+            # rest of the estate's reporting.
+            findings.append(Finding(cid, "error", f"{rel}: cannot be read: {exc}"))
+            continue
+        if not isinstance(data, dict):
+            findings.append(
+                Finding(cid, "error", f"{rel}: root is {type(data).__name__}, expected a mapping")
+            )
+            continue
         items = data.get(spec["items_key"]) or []
         if not items:
             # A register that checks clean because it is empty is the failure
@@ -183,14 +247,25 @@ def check_register_id_uniqueness(cfg: dict, findings: list[Finding]) -> None:
             continue
         field = spec["id_field"]
         seen: dict[str, int] = {}
-        for item in items:
+        for index, item in enumerate(items):
             if not isinstance(item, dict):
+                findings.append(
+                    Finding(
+                        cid,
+                        "error",
+                        f"{rel}: {spec['items_key']}[{index}] is {type(item).__name__}, "
+                        "expected a mapping — a register that skips what it cannot read "
+                        "reports clean on the part it did read",
+                    )
+                )
                 continue
             value = item.get(field)
             if value is None:
                 findings.append(Finding(cid, "error", f"{rel}: an entry has no '{field}'"))
                 continue
             seen[str(value)] = seen.get(str(value), 0) + 1
+        _check_ids_are_in_the_checked_list(spec, data, findings, cid, rel)
+
         for value, count in sorted(seen.items()):
             if count > 1:
                 findings.append(
@@ -841,7 +916,7 @@ def check_enforcement_alignment(cfg: dict, findings: list[Finding]) -> None:
     block = cfg.get("enforcement_alignment", {})
     if not block:
         return
-    cid = block.get("check_id", "MON-016")
+    cid = block.get("check_id", "MON-019")
     triggers = _load_yaml(block["triggers_register"])
     signals = _load_yaml(block["signals_register"])
     config_path = ROOT / block["runtime_config"]
@@ -854,7 +929,21 @@ def check_enforcement_alignment(cfg: dict, findings: list[Finding]) -> None:
         runtime = json.load(f)
     enforcement = runtime.get("enforcement", {})
     mode = str(enforcement.get("mode", "advisory")).lower()
-    fail_closed = bool(enforcement.get("fail_closed_on_violation", False))
+    # NOT bool(): this flag gates whether a trigger asking for fail-closed
+    # enforcement is reported as unmet, so `bool("false")` -> True suppresses
+    # exactly the finding it exists to raise. A non-boolean value is a
+    # misconfiguration and is reported as one rather than coerced. (codeant-ai)
+    raw_fail_closed = enforcement.get("fail_closed_on_violation", False)
+    if not isinstance(raw_fail_closed, bool):
+        findings.append(
+            Finding(
+                cid,
+                "error",
+                f"runtime config fail_closed_on_violation is "
+                f"{type(raw_fail_closed).__name__} {raw_fail_closed!r}, expected true or false",
+            )
+        )
+    fail_closed = raw_fail_closed is True
     rules_by_id = {r["id"]: r for r in runtime.get("rules", []) if "id" in r}
     signal_states = resolve_signal_states(signals)
     open_actions = _get_open_actions("compliance/compliance_action_tracker.yaml")

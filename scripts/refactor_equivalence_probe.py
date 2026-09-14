@@ -114,13 +114,28 @@ def _entry(doc: dict, **fields: Any) -> dict:
 
 
 def _run(script: Path, rel: str, text: str) -> str:
-    """Run `script` with `rel` replaced by `text`, then put `rel` back."""
-    path = ROOT / rel
+    """Run `script` with `rel` replaced by `text`, then put `rel` back.
+
+    Both paths are checked against the tree rather than trusted. `script` comes
+    from CASES and from `git show`, and `rel` from CASES, so neither is user
+    input today -- but "today" is the whole weakness of that argument, and this
+    function both executes one path and overwrites another. Asserting the
+    invariant costs two lines and makes it true rather than intended.
+    """
+    resolved = script.resolve()
+    if resolved.parent != (ROOT / "scripts").resolve() or resolved.suffix != ".py":
+        raise SystemExit(f"refusing to execute {script}: not a script in scripts/")
+    path = (ROOT / rel).resolve()
+    if not path.is_relative_to(ROOT.resolve()) or not path.is_file():
+        raise SystemExit(f"refusing to overwrite {rel}: not a file in this repository")
     original = path.read_text(encoding="utf-8")
     try:
         path.write_text(text, encoding="utf-8")
-        result = subprocess.run(
-            [sys.executable, str(script)], cwd=ROOT,
+        # No shell, argv as a list, and both elements constrained above:
+        # sys.executable is this interpreter and `resolved` is a .py file in
+        # scripts/. Running a script is the entire purpose of this tool.
+        result = subprocess.run(  # nosemgrep: python.lang.security.audit.dangerous-subprocess-use-audit
+            [sys.executable, str(resolved)], cwd=ROOT,
             capture_output=True, text=True, timeout=300,
         )
         return f"exit={result.returncode}\n{result.stdout}{result.stderr}"

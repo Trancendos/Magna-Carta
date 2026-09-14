@@ -135,7 +135,11 @@ class TestResolveSignalStates:
 
 
 class TestRegisterIdUniqueness:
-    """MON-016. ACT-016 was issued twice and nothing looked."""
+    """MON-019. ACT-016 was issued twice and nothing looked.
+
+    MON-019 and not MON-016, because MON-016 was already enforcement_alignment's:
+    the check that finds id collisions shipped with one. Caught by sourcery-ai.
+    """
 
     CFG = {
         "register_id_uniqueness": {
@@ -207,7 +211,7 @@ class TestRegisterIdUniqueness:
             (ROOT / "compliance" / "maintenance_monitor.yaml").read_text(encoding="utf-8")
         )
         specs = (cfg.get("register_id_uniqueness") or {}).get("registers") or []
-        assert len(specs) >= 3, "MON-016 covers fewer registers than it was given"
+        assert len(specs) >= 3, "MON-019 covers fewer registers than it was given"
         for spec in specs:
             data = _y.safe_load((ROOT / spec["source"]).read_text(encoding="utf-8"))
             items = data.get(spec["items_key"])
@@ -215,3 +219,124 @@ class TestRegisterIdUniqueness:
             ids = [i.get(spec["id_field"]) for i in items if isinstance(i, dict)]
             assert all(ids), f"{spec['source']}: an entry has no {spec['id_field']}"
             assert len(ids) == len(set(ids)), f"{spec['source']}: duplicate ids {ids}"
+
+
+class TestTheCheckIdsAreThemselvesUnique:
+    """The check that finds id collisions shipped with one. Caught by sourcery-ai."""
+
+    def test_no_two_checks_share_a_check_id(self):
+        """A duplicate id makes two unrelated findings indistinguishable."""
+        import collections
+
+        import yaml
+
+        cfg = yaml.safe_load(
+            (ROOT / "compliance" / "maintenance_monitor.yaml").read_text(encoding="utf-8")
+        )
+        # A check_id repeated across the ENTRIES of one check is correct -- twenty
+        # required files all report as MON-001. A check_id claimed by two different
+        # top-level checks is not.
+        owner: dict[str, str] = {}
+        clashes = []
+        for name, block in cfg.items():
+            if not isinstance(block, dict):
+                continue
+            cid = block.get("check_id")
+            if not cid:
+                continue
+            if cid in owner and owner[cid] != name:
+                clashes.append(f"{cid}: {owner[cid]} and {name}")
+            owner.setdefault(cid, name)
+        assert not clashes, f"check_id claimed by two checks: {clashes}"
+
+
+class TestAnIdInTheWrongListIsReported:
+    """ACT-021 was recorded where no check could see it, which reads as handled."""
+
+    SPEC = {"items_key": "actions", "id_field": "action_id"}
+
+    def _run(self, data: dict) -> list:
+        findings: list = []
+        chc._check_ids_are_in_the_checked_list(
+            self.SPEC, data, findings, "MON-TEST", "tracker.yaml"
+        )
+        return findings
+
+    def test_an_id_that_appears_only_outside_the_checked_list_is_an_error(self):
+        data = {
+            "actions": [{"action_id": "ACT-001"}],
+            "programme_milestones": [{"action_id": "ACT-021", "title": "stray"}],
+        }
+        findings = self._run(data)
+        assert [f.severity for f in findings] == ["error"]
+        assert "ACT-021" in findings[0].message
+        assert "programme_milestones" in findings[0].message
+
+    def test_an_id_that_also_appears_inside_it_is_a_cross_reference(self):
+        """execution_evidence_register's recurrence_schedule is exactly this shape."""
+        data = {
+            "actions": [{"action_id": "ACT-001"}],
+            "recurrence_schedule": [{"action_id": "ACT-001", "cadence_days": 90}],
+        }
+        assert self._run(data) == []
+
+    def test_other_top_level_keys_are_left_alone(self):
+        data = {"actions": [{"action_id": "ACT-001"}], "meta": {"owner": "x"}, "schema": "y"}
+        assert self._run(data) == []
+
+    def test_the_live_tracker_has_no_stray(self):
+        import yaml
+
+        data = yaml.safe_load(
+            (ROOT / "compliance" / "compliance_action_tracker.yaml").read_text(encoding="utf-8")
+        )
+        assert data.get("actions"), "actions is empty — nothing was checked"
+        assert self._run(data) == []
+
+
+class TestMalformedRegistersAreReportedNotRaised:
+    """One unparseable register must not stop every check after it."""
+
+    CFG = {
+        "register_id_uniqueness": {
+            "check_id": "MON-TEST",
+            "registers": [
+                {
+                    "source": "compliance/compliance_action_tracker.yaml",
+                    "items_key": "actions",
+                    "id_field": "action_id",
+                }
+            ],
+        }
+    }
+
+    def _write(self, tmp_path, text: str):
+        (tmp_path / "compliance").mkdir(exist_ok=True)
+        (tmp_path / "compliance" / "compliance_action_tracker.yaml").write_text(
+            text, encoding="utf-8"
+        )
+
+    def test_invalid_yaml_is_a_finding(self, monkeypatch, tmp_path):
+        monkeypatch.setattr(chc, "ROOT", tmp_path)
+        self._write(tmp_path, "actions: [unclosed\n")
+        findings: list = []
+        chc.check_register_id_uniqueness(self.CFG, findings)
+        assert [f.severity for f in findings] == ["error"]
+        assert "cannot be read" in findings[0].message
+
+    def test_a_non_mapping_root_is_a_finding(self, monkeypatch, tmp_path):
+        monkeypatch.setattr(chc, "ROOT", tmp_path)
+        self._write(tmp_path, "- just\n- a list\n")
+        findings: list = []
+        chc.check_register_id_uniqueness(self.CFG, findings)
+        assert [f.severity for f in findings] == ["error"]
+        assert "expected a mapping" in findings[0].message
+
+    def test_a_non_mapping_entry_is_reported_not_skipped(self, monkeypatch, tmp_path):
+        """Skipping what it cannot read is the failure this check exists to stop."""
+        monkeypatch.setattr(chc, "ROOT", tmp_path)
+        self._write(tmp_path, 'actions:\n  - "a bare string"\n  - action_id: ACT-001\n')
+        findings: list = []
+        chc.check_register_id_uniqueness(self.CFG, findings)
+        assert [f.severity for f in findings] == ["error"]
+        assert "actions[0] is str" in findings[0].message

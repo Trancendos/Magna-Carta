@@ -154,6 +154,15 @@ def _extract_frameworks(frameworks_doc: dict, errors: list[str]) -> dict[str, st
                 f"frameworks_register.yaml: frameworks[{i}] has no usable 'framework_id'"
             )
             continue
+        if fid in fw_name:
+            # Last writer won, so a duplicate record was invisible and every
+            # trigger naming this id was anchor-matched against whichever name
+            # came second. (codeant-ai)
+            errors.append(
+                f"frameworks_register.yaml: framework_id {fid} is used by more than "
+                "one record — an identifier must name exactly one framework"
+            )
+            continue
         fw_name[fid] = f.get("name") or ""
     return fw_name
 
@@ -349,6 +358,12 @@ def main() -> int:
     triggers = _extract_triggers(triggers_doc, errors)
 
     if not triggers:
+        # Report what was found before the summary, not instead of it. When every
+        # entry is malformed, _extract_triggers has just recorded which index and
+        # which type for each -- and the generic "must be a non-empty list" alone
+        # sends the reader back to a file that is not, in fact, empty.
+        for line in errors:
+            print(f"[ERROR] {line}", file=sys.stderr)
         print(
             "[ERROR] framework_triggers.yaml: 'triggers' must be a non-empty list",
             file=sys.stderr,

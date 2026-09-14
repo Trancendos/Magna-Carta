@@ -341,9 +341,19 @@ def _resolve_artefact(artefact_id: str) -> Path | None:
     )
 
 
+#: Artefacts the job-description template links from its own fixed footer. An id
+#: named in a role's artefact list AND emitted there rendered twice -- visible in
+#: JD-ISMS-001, which listed RACI-MATRIX and then had the footer link it again
+#: (codeant-ai). Skipped here rather than removed from ROLES, because the role
+#: really does consult them; the template is just already saying so.
+_LINKED_BY_THE_TEMPLATE_FOOTER = {"RACI-MATRIX", "TEMPLATE-JOB-DESCRIPTION"}
+
+
 def _format_artefacts(artefacts: list[str]) -> str:
     art_links = []
     for a in artefacts:
+        if a in _LINKED_BY_THE_TEMPLATE_FOOTER:
+            continue
         if a == "FRAMEWORK":
             # The one artefact above docs/, so it has no candidate to resolve.
             art_links.append(f"- [{a}](../../FRAMEWORK.md)")

@@ -344,14 +344,14 @@ cookbook_links:
     index: docs/hymn-sheets/INDEX.md
     base_dir: docs/hymn-sheets
 
-# MON-016 — an identifier must name exactly one thing.
+# MON-019 — an identifier must name exactly one thing.
 #
 # ACT-016 was issued twice, months apart, and no check looked. Listing the
 # registers here rather than hard-coding the action tracker: every register
 # below is read by id somewhere in this script, so a collision in any of them
 # has the same consequence.
 register_id_uniqueness:
-  check_id: MON-016
+  check_id: MON-019
   registers:
     - source: compliance/compliance_action_tracker.yaml
       items_key: actions

@@ -76,12 +76,36 @@ def _check_tools(
     return passed, errors, warnings
 
 
-def _check_optional_binaries(args: argparse.Namespace) -> None:
-    for binary, tool_id in [
-        ("gitleaks", "ZCT-007"),
-        ("bandit", "ZCT-008"),
-        ("semgrep", "ZCT-009"),
-    ]:
+def _optional_binaries(tools: list[dict]) -> list[tuple[str, str]]:
+    """(binary, tool_id) for every optional tool the OSS scan script invokes.
+
+    Read from the register rather than hardcoded. The hardcoded list named
+    ZCT-007, -008 and -009 and had fallen behind ZCT-010 (pip-audit), which is in
+    the register with the same `invoked_by` as the other three and whose presence
+    was therefore never reported at all (codeant-ai). A list that must be kept in
+    step with a register by hand is a list that eventually is not.
+    """
+    out = []
+    for tool in tools:
+        tool_id = tool.get("tool_id")
+        if tool.get("mandatory") or not tool_id:
+            continue
+        if "run_oss_security_scans.sh" not in str(tool.get("invoked_by", "")):
+            continue
+        binary = tool.get("binary")
+        if not binary:
+            # Named explicitly in the register, not inferred from the install
+            # prose: ZCT-007's install field is a URL and a sentence, so any
+            # guess at it is wrong. A tool with no `binary` is reported rather
+            # than quietly dropped, which is how ZCT-010 went unnoticed.
+            print(f"  --  {tool_id} has no 'binary' in the register; cannot check PATH")
+            continue
+        out.append((str(binary), tool_id))
+    return out
+
+
+def _check_optional_binaries(args: argparse.Namespace, tools: list[dict]) -> None:
+    for binary, tool_id in _optional_binaries(tools):
         if shutil.which(binary):
             if args.report:
                 print(f"  OK  {tool_id} {binary} found on PATH")
@@ -118,7 +142,7 @@ def main() -> int:
     passed, errors, warnings = _check_tools(tools, args)
 
     # Optional OSS binaries — informational only
-    _check_optional_binaries(args)
+    _check_optional_binaries(args, tools)
 
     mandatory_count = sum(1 for t in tools if t.get("mandatory"))
     _print_report(passed, mandatory_count, errors, warnings, args)

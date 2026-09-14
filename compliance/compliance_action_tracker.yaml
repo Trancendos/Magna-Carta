@@ -283,6 +283,29 @@ actions:
     source: "PROC-HSE-001, HEALTH-SAFETY-BIBLE"
     evidence_target: "Named H&S lead in HRIS; tabletop drill minutes in evidence folder"
 
+  - action_id: ACT-021
+    title: "Article 30 Record of Processing Activities (ROPA) does not exist"
+    owner: DPO
+    due_date: "2026-11-14"
+    status: Open
+    priority: P1
+    validation_type: programme
+    executor: owner
+    source: "scripts/generate_job_descriptions.py artefact resolution, 2026-09-14"
+    evidence_target: >-
+      A ROPA covering every processing activity, at a stable path under docs/,
+      resolvable by artefact id so the job descriptions link to it rather than
+      declaring it absent.
+    notes: >-
+      Named as an owned artefact by JD-DAT-001 and JD-PRI-001, and referenced by
+      INTERNAL-AUDIT-PROGRAMME, RACI-MATRIX and RESEARCH-DATA-CONCORDAT-ANNEX.
+      No document exists. It was not visible because the job description
+      generator emitted `../compliance/ROPA.md` whether or not the target was
+      there, so the gap rendered as a working artefact with a broken link --
+      one of eight dead links across the thirteen job descriptions. The
+      generator now states the absence; this records it. Article 30 UK GDPR is
+      a standing obligation, hence P1.
+
 programme_milestones:
   - milestone_id: PM-001
     title: "COMPLIANCE-COVERAGE-REGISTER published"
@@ -398,26 +421,3 @@ programme_milestones:
       certification_evidence_register.yaml, scripts/readiness_automation_score.py,
       scripts/run_security_testing.py, scripts/dpa_readiness_check.py,
       docs/compliance/COMPLIANCE-READINESS-MODEL.md, AIKIDO-SECURITY-TESTING-FRAMEWORK.md
-
-  - action_id: ACT-021
-    title: "Article 30 Record of Processing Activities (ROPA) does not exist"
-    owner: DPO
-    due_date: "2026-11-14"
-    status: Open
-    priority: P1
-    validation_type: internal
-    executor: owner
-    source: "scripts/generate_job_descriptions.py artefact resolution, 2026-09-14"
-    evidence_target: >-
-      A ROPA covering every processing activity, at a stable path under docs/,
-      resolvable by artefact id so the job descriptions link to it rather than
-      declaring it absent.
-    notes: >-
-      Named as an owned artefact by JD-DAT-001 and JD-PRI-001, and referenced by
-      INTERNAL-AUDIT-PROGRAMME, RACI-MATRIX and RESEARCH-DATA-CONCORDAT-ANNEX.
-      No document exists. It was not visible because the job description
-      generator emitted `../compliance/ROPA.md` whether or not the target was
-      there, so the gap rendered as a working artefact with a broken link --
-      one of eight dead links across the thirteen job descriptions. The
-      generator now states the absence; this records it. Article 30 UK GDPR is
-      a standing obligation, hence P1.
