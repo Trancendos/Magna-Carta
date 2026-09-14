@@ -22,7 +22,8 @@ Canonical reference for **enterprise data management** at Trancendos. Data class
 | Procedure | [PROC-DAT-001](../procedures/PROC-DAT-001-Enterprise-Data-Management.md) | ✅ Programme |
 | Cookbook | [COOK-DAT-001](../cookbooks/COOK-DAT-001-Enterprise-Data-Management.md) | ✅ Programme |
 | Hymn sheet | [HYMN-DAT-001](../hymn-sheets/HYMN-DAT-001-Enterprise-Data-Management-Checklist.md) | ✅ Programme |
-| Policies | POL-PRI-001, ROPA | See policies index |
+| Policies | POL-PRI-001 | See policies index |
+| Gap | ROPA (**absent**: tracked as [ACT-021](../../compliance/compliance_action_tracker.yaml)) | ⚠️ Article 30 obligation |
 
 ---
 
