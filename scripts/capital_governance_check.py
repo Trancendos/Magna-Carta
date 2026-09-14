@@ -51,6 +51,13 @@ CAPITAL_GOVERNANCE_DOC = ROOT / "docs" / "governance" / "CAPITAL-GOVERNANCE.md"
 # differs from its identifier.
 DOC_PROSE_FOR_CONTROL = {"kill_switches": "kill switches"}
 
+_NON_OVERRIDABLE_CONTROL_PATTERNS = {
+    control: re.compile(
+        r"\s+".join(re.escape(word) for word in DOC_PROSE_FOR_CONTROL.get(control, control).split())
+    )
+    for control in NON_OVERRIDABLE_CONTROLS
+}
+
 # The fixed pair of function types ledger_separation depends on. Not just
 # "function_types must be non-empty" (the existing check): an adopter could
 # satisfy that with only INTERNAL, silently dropping external capital
@@ -851,13 +858,13 @@ def _check_docs_name_non_overridable_controls() -> list[str]:
                 f"non-overridable control: {exc}"]
     errors: list[str] = []
     for control in NON_OVERRIDABLE_CONTROLS:
-        needle = DOC_PROSE_FOR_CONTROL.get(control, control)
         # \s+ between words, not a literal substring search: Markdown prose
         # wraps at arbitrary column widths, so "kill switches" can legitimately
         # appear in the source as "kill\nswitches" without the doc having
         # drifted from the constant at all.
-        pattern = re.compile(r"\s+".join(re.escape(word) for word in needle.split()))
+        pattern = _NON_OVERRIDABLE_CONTROL_PATTERNS[control]
         if not pattern.search(doc_text):
+            needle = DOC_PROSE_FOR_CONTROL.get(control, control)
             errors.append(
                 f"{CAPITAL_GOVERNANCE_DOC.name} does not mention {control!r} (looked for "
                 f"{needle!r}) — it and NON_OVERRIDABLE_CONTROLS have drifted apart"
