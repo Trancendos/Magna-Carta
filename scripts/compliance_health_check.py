@@ -448,6 +448,60 @@ def resolve_signal_states(signals_data: dict) -> dict[str, str]:
     return states
 
 
+def _check_review_date_clustering(
+    block: dict,
+    data: dict,
+    findings: list[Finding],
+    cid: str,
+    rel: str,
+    items_key: str,
+    exclude: set[str],
+) -> None:
+    """Refuse to let a register stamp many reviews onto one date.
+
+    On 2026-09-06 ten of eleven entries in the legislation register fell due on
+    the same day, because the register was generated on 2026-06-08 and every
+    item was stamped with `meta.review_cycle` (quarterly) added to that one
+    generation date. They came due together, failed together, and MON-011 turned
+    every pull request in the repository red for a week.
+
+    Staggering the dates clears the outage. Only this stops it recurring, and it
+    had already been recreated elsewhere before anyone noticed: all five entries
+    in standards_watch.yaml shared 2026-12-08, a second cliff primed to fire.
+
+    An error rather than a warning, deliberately. A warning here would be one
+    more advisory line in a check that already prints several, and the failure
+    mode it guards against is the whole queue stopping. `max_shared_review_date`
+    tunes it; a register that genuinely needs a synchronised review sets the
+    threshold and says why in the config.
+    """
+    limit = block.get("max_shared_review_date", 0)
+    if not limit:
+        return
+    review_field = block.get("review_field", "review_date")
+    by_date: dict[str, list[str]] = {}
+    for item in data.get(items_key, []):
+        if str(item.get("status", "")).lower() in exclude:
+            continue
+        raw = item.get(review_field)
+        if not raw:
+            continue
+        item_id = item.get("legislation_id") or item.get("standard_id") or "?"
+        by_date.setdefault(str(raw)[:10], []).append(item_id)
+    for when, ids in sorted(by_date.items()):
+        if len(ids) > limit:
+            findings.append(
+                Finding(
+                    cid,
+                    "error",
+                    f"{rel}: {len(ids)} items share {review_field} {when} "
+                    f"({', '.join(sorted(ids))}) — limit is {limit}. Dates "
+                    f"clustered on one day come due together and block the "
+                    f"queue together; stagger them across the review cycle.",
+                )
+            )
+
+
 def check_register_review_dates(
     block: dict,
     findings: list[Finding],
@@ -463,6 +517,19 @@ def check_register_review_dates(
     review_field = block.get("review_field", "review_date")
     exclude = {str(s).lower() for s in block.get("exclude_status", [])}
     max_overdue = block.get("max_overdue_days", 0)
+    # How long before a review falls due this check starts saying so. Without it
+    # the check is silent until the day it hard-fails, which is how ten
+    # legislation reviews lapsed together on 2026-09-06 with no prior signal and
+    # took every pull request in the repository down with them. A compliance
+    # calendar that only speaks after the date has passed is reporting history,
+    # not managing a schedule. 0 restores the old silent-then-fail behaviour.
+    warn_within = block.get("warn_within_days", 0)
+    # The anti-cliff rule. The lapse above was not ten independent oversights:
+    # the register was generated on one day and every item stamped with one
+    # review date 90 days out, so they came due together and failed together.
+    # Staggering the dates fixes today's outage; refusing to let them re-cluster
+    # is what stops the next one. See _check_review_date_clustering.
+    _check_review_date_clustering(block, data, findings, cid, rel, items_key, exclude)
     today = date.today()
     for item in data.get(items_key, []):
         status = str(item.get("status", "")).lower()
@@ -481,14 +548,26 @@ def check_register_review_dates(
             )
             continue
         overdue = (today - review_dt).days
+        item_id = item.get("legislation_id") or item.get("standard_id") or "?"
         if overdue > max_overdue:
-            item_id = item.get("legislation_id") or item.get("standard_id") or "?"
             findings.append(
                 Finding(
                     cid,
                     "error",
                     f"{rel} item {item_id} {review_field} overdue by {overdue}d "
                     f"(due {review_dt})",
+                )
+            )
+        elif warn_within and -overdue <= warn_within:
+            # Still in date, but close enough that someone can act. This is the
+            # signal that did not exist before: it names the item while there is
+            # time to review it, rather than after the gate has already closed.
+            findings.append(
+                Finding(
+                    cid,
+                    "warning",
+                    f"{rel} item {item_id} {review_field} due in {-overdue}d "
+                    f"({review_dt}) — review now, before it blocks the queue",
                 )
             )
 
@@ -596,14 +675,27 @@ def check_evidence_recurrence(cfg: dict, findings: list[Finding]) -> None:
                 )
             )
             continue
+        eid = item.get("evidence_id", "?")
+        # Same horizon as MON-011, for the same reason: this check was silent
+        # until the day it hard-failed. EEV-006 went from invisible to blocking
+        # the queue with no intervening signal.
+        warn_within = block.get("warn_within_days", 0)
         if due < today:
-            eid = item.get("evidence_id", "?")
             overdue = (today - due).days
             findings.append(
                 Finding(
                     cid,
                     "error",
                     f"Recurring evidence {eid} overdue by {overdue}d (due {due})",
+                )
+            )
+        elif warn_within and (due - today).days <= warn_within:
+            findings.append(
+                Finding(
+                    cid,
+                    "warning",
+                    f"Recurring evidence {eid} due in {(due - today).days}d "
+                    f"({due}) — schedule it now, before it blocks the queue",
                 )
             )
 

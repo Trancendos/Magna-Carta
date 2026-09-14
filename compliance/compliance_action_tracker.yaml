@@ -202,6 +202,27 @@ actions:
       First quarterly scan baseline closed 2026-06-09. Next quarterly scan due 2026-09-30;
       recurring ACT-014-style review continues on PROC-CMP-001 calendar.
 
+  - action_id: ACT-016
+    title: "DUAA s.164A statutory complaints-handling process"
+    owner: DPO
+    due_date: "2026-10-26"
+    status: Open
+    priority: P1
+    validation_type: external
+    executor: owner
+    source: "REV-2026-09-14 finding F-1; legislation_register.yaml LEG-012"
+    evidence_target: >-
+      A documented, reachable complaints process satisfying s.164A DPA 2018 (as
+      inserted by s.103 Data (Use and Access) Act 2025), referenced from the
+      privacy notice, with response timescales and escalation to the ICO.
+    notes: >-
+      Raised by the 2026-09-14 legislation review, which found the DUAA absent
+      from the register entirely. The ICO's stated deadline for a compliant
+      complaints process was June 2026 and has passed, so this is an open gap
+      rather than forward-looking work. Due date aligned to LEG-012's next
+      review so the two are considered together. P1 because the obligation is
+      live and unevidenced, not because a regulator has raised it.
+
   - action_id: ACT-015
     title: "First semi-annual harmonised standards and ETSI deliverable watch"
     owner: AI Lead / ISMS Lead

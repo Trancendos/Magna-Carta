@@ -100,7 +100,7 @@ INTERNET (untrusted)
 |------|------|
 | `api.py` | FastAPI application; imports Magna Carta compliance singleton |
 | `src/compliance/magna_carta.py` | Runtime compliance hooks (config-driven) |
-| `Dimensional/middleware/` | Telemetry, rate limit, auth middleware |
+| `Dimensionals/middleware/` | Telemetry, rate limit, auth middleware |
 | `src/auth/zero_trust.py` | Zero Trust IAM |
 | `src/validation/loop_validator.py` | AI cascade / loop prevention |
 

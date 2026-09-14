@@ -62,13 +62,27 @@ if command -v pip-audit >/dev/null 2>&1; then
       # Accepted findings are suppressed HERE, next to the scan, so the acceptance
       # is real rather than a comment the scanner never reads. Each --ignore-vuln
       # must have a written disposition in the requirements file it applies to.
-      #   PYSEC-2026-3481/3482/3483: mcp 1.23.3, transitive via semgrep's hard pin —
-      #   see requirements-oss.txt (dev-time scanner dep, never deployed; forcing
-      #   >=1.28.1 breaks semgrep itself, verified).
-      if pip-audit -r "$ROOT/$req" \
-          --ignore-vuln PYSEC-2026-3481 \
-          --ignore-vuln PYSEC-2026-3482 \
-          --ignore-vuln PYSEC-2026-3483; then
+      #
+      # There are currently NO suppressions, and the empty list is the point.
+      # Until 2026-09-11 three were passed unconditionally to BOTH requirements
+      # files:
+      #
+      #   --ignore-vuln PYSEC-2026-3481 / -3482 / -3483   (mcp 1.23.3)
+      #
+      # They were justified by a disposition in requirements-oss.txt recording
+      # that semgrep hard-pinned `mcp==1.23.3` and that forcing >=1.28.1 broke
+      # semgrep. That stopped being true: semgrep 1.173.0 onwards declares
+      # `Requires-Dist: mcp==1.29.0`, and mcp 1.29.0 carries zero OSV advisories
+      # against six for 1.23.3. The disposition is retired in requirements-oss.txt.
+      #
+      # Removing the flags with it is not tidying. A suppression outliving its
+      # disposition breaks the rule stated two lines above, and it fails in the
+      # dangerous direction: pip-audit would keep silencing those three ids for
+      # BOTH requirements files, so if a future resolve ever pulled a vulnerable
+      # mcp back in, this scan would report OK and nobody would learn anything.
+      # An advisory that no longer applies needs no flag; one that applies again
+      # needs a fresh written disposition, not this one restored.
+      if pip-audit -r "$ROOT/$req"; then
         echo "OK  pip-audit $req"
       else
         echo "FINDINGS in pip-audit $req — review above" >&2

@@ -24,7 +24,16 @@ schema:
   oj_reference: "Official Journal citation"
   consolidated_text_uri: "EUR-Lex consolidated text (if applicable)"
   uk_legislation_uri: "legislation.gov.uk URI (UK acts only)"
-  review_date: "YYYY-MM-DD"
+  review_cycle: "quarterly | semiannual | annual — how fast this instrument
+    actually moves. Set per item, not per register: the EU AI Act and the FCA
+    Handbook do not change at the same rate as the Computer Misuse Act 1990."
+  last_reviewed: "YYYY-MM-DD — when a reviewer last checked this instrument
+    against its authoritative source. Distinct from review_date, which is when
+    the NEXT review falls due. Without both, a register cannot show whether a
+    date was met or merely moved."
+  review_date: "YYYY-MM-DD — next review due. MON-011 errors once it passes and
+    warns for 30 days before. Dates must be staggered: max_shared_review_date
+    caps how many items may fall due on one day."
 
 active_legislation:
   - legislation_id: LEG-001
@@ -35,7 +44,9 @@ active_legislation:
     uk_legislation_uri: "https://www.legislation.gov.uk/ukpga/2018/12/contents"
     compliance_owner: DPO
     obligations: ["OBL-001", "OBL-002", "OBL-003", "OBL-004", "OBL-005", "OBL-006", "OBL-007", "OBL-008"]
-    review_date: "2026-09-06"
+    review_cycle: quarterly
+    last_reviewed: "2026-09-14"
+    review_date: "2026-10-05"
 
   - legislation_id: LEG-002
     name: "Data Protection Act 2018"
@@ -43,7 +54,9 @@ active_legislation:
     status: Programme
     uk_legislation_uri: "https://www.legislation.gov.uk/ukpga/2018/12/contents"
     compliance_owner: DPO
-    review_date: "2026-09-06"
+    review_cycle: quarterly
+    last_reviewed: "2026-09-14"
+    review_date: "2026-10-12"
 
   - legislation_id: LEG-003
     name: "Regulation (EU) 2016/679 (General Data Protection Regulation)"
@@ -56,7 +69,9 @@ active_legislation:
     consolidated_text_uri: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679"
     compliance_owner: DPO
     obligations: ["OBL-001", "OBL-002", "OBL-003", "OBL-004", "OBL-005", "OBL-006", "OBL-007", "OBL-008"]
-    review_date: "2026-09-06"
+    review_cycle: semiannual
+    last_reviewed: "2026-09-14"
+    review_date: "2026-12-07"
 
   - legislation_id: LEG-004
     name: "Computer Misuse Act 1990"
@@ -64,7 +79,9 @@ active_legislation:
     status: Programme
     uk_legislation_uri: "https://www.legislation.gov.uk/ukpga/1990/18/contents"
     compliance_owner: CISO
-    review_date: "2026-09-06"
+    review_cycle: annual
+    last_reviewed: "2026-09-14"
+    review_date: "2027-09-13"
 
   - legislation_id: LEG-005
     name: "Privacy and Electronic Communications Regulations 2003 (UK PECR)"
@@ -73,7 +90,9 @@ active_legislation:
     uk_legislation_uri: "https://www.legislation.gov.uk/uksi/2003/2426/contents"
     compliance_owner: DPO
     obligations: ["OBL-110", "OBL-111", "OBL-112"]
-    review_date: "2026-09-06"
+    review_cycle: quarterly
+    last_reviewed: "2026-09-14"
+    review_date: "2026-10-19"
 
   - legislation_id: LEG-006
     name: "Regulation (EU) 2024/1689 (Artificial Intelligence Act)"
@@ -93,8 +112,27 @@ active_legislation:
       art_14: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_14"
       art_15: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_15"
       art_50: "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_50"
-    review_date: "2026-09-06"
-    notes: "Delegated and implementing acts tracked in secondary_legislation_watch"
+    review_cycle: quarterly
+    last_reviewed: "2026-09-14"
+    review_date: "2026-11-02"
+    key_dates:
+      # REV-2026-09-14: the Digital Omnibus on AI was published in the OJ on
+      # 2026-07-24 and entered into force 2026-07-27 -- six days before the
+      # original high-risk deadline, and seven weeks AFTER this register was
+      # last reviewed. SCAN-2026-Q2-01 explicitly said "High-risk deadline
+      # 2 Aug 2026 -- track Digital Omnibus proposals", so the June review
+      # opened this loop and the lapsed date is what stopped it closing.
+      art_50_transparency_applies: "2026-08-02"   # UNCHANGED by the Omnibus — live now
+      art_50_watermarking_grace_ends: "2026-12-02"  # deployed systems only
+      annex_iii_high_risk_applies: "2027-12-02"   # deferred from 2026-08-02
+      annex_i_embedded_applies: "2028-08-02"      # deferred from 2027-08-02
+    notes: >-
+      Delegated and implementing acts tracked in secondary_legislation_watch.
+      REV-2026-09-14: the deferral is NOT a reprieve for this platform. Article 50
+      transparency took effect 2026-08-02 on its original schedule and is live
+      today; only the Annex III high-risk regime moved. A register that recorded
+      "high-risk deadline 2 Aug 2026" and nothing else would have read as though
+      everything had slipped.
 
   - legislation_id: LEG-007
     name: "Copyright, Designs and Patents Act 1988"
@@ -102,7 +140,9 @@ active_legislation:
     status: Programme
     uk_legislation_uri: "https://www.legislation.gov.uk/ukpga/1988/48/contents"
     compliance_owner: Legal
-    review_date: "2026-09-06"
+    review_cycle: semiannual
+    last_reviewed: "2026-09-14"
+    review_date: "2027-03-08"
 
   - legislation_id: LEG-008
     name: "Companies Act 2006"
@@ -111,7 +151,9 @@ active_legislation:
     uk_legislation_uri: "https://www.legislation.gov.uk/ukpga/2006/46/contents"
     compliance_owner: Finance
     obligations: ["OBL-063"]
-    review_date: "2026-09-06"
+    review_cycle: semiannual
+    last_reviewed: "2026-09-14"
+    review_date: "2027-01-11"
 
   - legislation_id: LEG-009
     name: "Health Insurance Portability and Accountability Act (HIPAA) Security Rule"
@@ -119,7 +161,9 @@ active_legislation:
     status: Programme
     compliance_owner: "DPO / CISO"
     obligations: ["OBL-090", "OBL-091", "OBL-092", "OBL-093", "OBL-094"]
-    review_date: "2026-09-06"
+    review_cycle: semiannual
+    last_reviewed: "2026-09-14"
+    review_date: "2027-02-08"
     notes: "US federal law — cite HHS/OCR guidance; not on EUR-Lex"
 
   - legislation_id: LEG-010
@@ -128,7 +172,9 @@ active_legislation:
     status: Programme
     compliance_owner: "Legal / ISMS"
     obligations: ["OBL-100", "OBL-101", "OBL-102", "OBL-103", "OBL-104", "OBL-105"]
-    review_date: "2026-09-06"
+    review_cycle: quarterly
+    last_reviewed: "2026-09-14"
+    review_date: "2026-11-16"
     notes: "Handbook rules — cite FCA handbook URLs; not primary legislation"
 
   - legislation_id: LEG-011
@@ -149,7 +195,9 @@ active_legislation:
       chapter_iv_applies: "2026-06-11"        # Arts 35-51, notification of conformity assessment bodies — ALREADY IN FORCE
       reporting_obligations_apply: "2026-09-11"  # Art 14
       fully_applicable: "2027-12-11"
-    review_date: "2026-09-11"
+    review_cycle: quarterly
+    last_reviewed: "2026-09-14"
+    review_date: "2026-11-09"
     notes: >-
       Active rather than watch-list: obligations attach to a product with digital
       elements placed on the EU market, and the owner has confirmed EU users are in
@@ -163,6 +211,37 @@ active_legislation:
       OPEN ACTIONS carried by the profile, not settled here: legal confirmation of the
       commercial-activity determination, and a positive check of every supply channel
       before "nothing has been placed on the market" is relied upon.
+
+  - legislation_id: LEG-012
+    name: "Data (Use and Access) Act 2025"
+    short_name: "DUAA"
+    jurisdiction: UK
+    status: Programme
+    uk_legislation_uri: "https://www.legislation.gov.uk/ukpga/2025/18/contents"
+    compliance_owner: DPO
+    # Added by REV-2026-09-14. The DUAA received Royal Assent on 2025-06-19 and
+    # AMENDS the three instruments this register already tracks -- UK GDPR
+    # (LEG-001), DPA 2018 (LEG-002) and PECR (LEG-005) -- yet appeared nowhere in
+    # the estate. The register was last reviewed 2026-06-09, four months after
+    # the bulk of its data protection provisions commenced, and did not catch it.
+    # That is the finding the lapsed review date was standing in front of.
+    amends: ["LEG-001", "LEG-002", "LEG-005"]
+    key_dates:
+      royal_assent: "2025-06-19"
+      commencement_no_1: "2025-08-20"          # Part 1 Smart Data; s.111 PECR breach notification
+      commencement_no_6: "2026-02-05"          # bulk of Part 5 data protection amendments
+      all_dp_provisions_commenced: "2026-06-19"  # ICO confirmation
+    obligations: ["OBL-001", "OBL-002", "OBL-003", "OBL-004", "OBL-005", "OBL-006", "OBL-007", "OBL-008"]
+    review_cycle: quarterly
+    last_reviewed: "2026-09-14"
+    review_date: "2026-10-26"
+    notes: >-
+      OPEN OBLIGATION, NOT YET EVIDENCED. s.103 inserts s.164A DPA 2018, a
+      statutory complaints-handling duty: a controller must have a compliant
+      complaints process. The ICO's stated deadline was June 2026, which has
+      passed. Nothing in this repository currently evidences that process, so
+      this is recorded as an open gap for the owner rather than marked compliant.
+      Raised as ACT-016.
 
 watch_list:
   - watch_id: WATCH-001

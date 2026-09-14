@@ -41,7 +41,9 @@ active_standards:
       - "docs/compliance/ETSI-SAI-ALIGNMENT.md"
       - "docs/compliance/OWASP-AI-EXCHANGE-ALIGNMENT.md"
       - "docs/procedures/PROC-AI-003-AI-Security-Threat-Assessment.md"
-    review_date: "2026-12-08"
+    review_cycle: semiannual
+    last_reviewed: "2026-09-14"
+    review_date: "2026-11-23"
     notes: >
       Reference standard for AI lifecycle cybersecurity (design through EOL).
       Not an EU harmonised standard; does not confer presumption of conformity
@@ -58,7 +60,9 @@ active_standards:
     harmonised_status: none
     compliance_owner: "AI Lead"
     related_standards: ["STD-WATCH-001"]
-    review_date: "2026-12-08"
+    review_cycle: semiannual
+    last_reviewed: "2026-09-14"
+    review_date: "2026-12-07"
     notes: "Implementation guidance for EN 304 223 — consult when gap-assessing PROC-AI-003"
 
   - standard_id: STD-WATCH-003
@@ -71,7 +75,9 @@ active_standards:
     harmonised_status: none
     compliance_owner: "AI Lead"
     related_standards: ["STD-WATCH-001"]
-    review_date: "2026-12-08"
+    review_cycle: semiannual
+    last_reviewed: "2026-09-14"
+    review_date: "2026-12-21"
     notes: "Predecessor analysis; retained for historical traceability only"
 
   - standard_id: STD-WATCH-004
@@ -87,7 +93,9 @@ active_standards:
     programme_artefacts:
       - "docs/compliance/AI-GOVERNANCE.md"
       - "docs/compliance/EU-LEGISLATION-MONITORING.md"
-    review_date: "2026-12-08"
+    review_cycle: semiannual
+    last_reviewed: "2026-09-14"
+    review_date: "2027-01-18"
     notes: "Informative EU AI Act mapping — use alongside LEG-006 article anchors, not as legal advice"
 
   - standard_id: STD-WATCH-005
@@ -101,7 +109,9 @@ active_standards:
     status: Monitor
     harmonised_status: published_not_oj
     compliance_owner: CISO
-    review_date: "2026-12-08"
+    review_cycle: semiannual
+    last_reviewed: "2026-09-14"
+    review_date: "2027-02-15"
     notes: >
       Consumer IoT baseline (UK PSTI / RED alignment). Lower priority for B2B AI
       platform unless consumer IoT endpoints enter scope.
