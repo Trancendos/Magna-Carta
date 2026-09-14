@@ -102,7 +102,7 @@ DOMAINS = [
         "DATA-MANAGEMENT-BIBLE",
         "Enterprise Data Management",
         "DPO / Data Governance Lead",
-        "POL-PRI-001, ROPA",
+        "POL-PRI-001",
         "Data classification, retention schedules, master data ownership, quality metrics, archive/deletion.",
     ),
 ]
@@ -305,15 +305,40 @@ Canonical reference for **{title.lower()}** at Trancendos. {summary}
 **Honesty rule:** ✅ = programme artefact in Magna Carta. 🎯 = live execution, vendor contract, or external attestation required."""
 
 
-def _bible_core_artefacts(proc_code: str, proc_file: str, slug: str, policies: str) -> str:
+# Per-bible rows appended to the §2 core-artefacts table, keyed by the file the
+# generator writes. A named artefact that does not exist belongs in the table
+# that lists the artefacts, said as an absence rather than left off it -- listing
+# ROPA beside POL-PRI-001 read as a document this repository has.
+#
+# Added after dosubot wrote this row into docs/bibles/DATA-MANAGEMENT-BIBLE.md by
+# hand on 2026-09-14. It was the right row, in a generated file: the next run of
+# this script would have erased it, which is the same loss BIBLE_MATRIX_ROWS
+# below was added to stop. Carried here so it survives.
+BIBLE_GAP_ROWS: dict[str, list[str]] = {
+    "DATA-MANAGEMENT-BIBLE": [
+        "| Gap | ROPA (**absent**: tracked as "
+        "[ACT-021](../../compliance/compliance_action_tracker.yaml)) "
+        "| ⚠️ Article 30 obligation |",
+    ],
+}
+
+
+def _bible_core_artefacts(
+    proc_code: str, proc_file: str, slug: str, policies: str, filename: str = ""
+) -> str:
+    rows = [
+        f"| Procedure | [PROC-{proc_code}-001](../procedures/{proc_file}) | ✅ Programme |",
+        f"| Cookbook | [COOK-{proc_code}-001](../cookbooks/COOK-{proc_code}-001-{slug}.md) | ✅ Programme |",
+        f"| Hymn sheet | [HYMN-{proc_code}-001](../hymn-sheets/HYMN-{proc_code}-001-{slug}-Checklist.md) | ✅ Programme |",
+        f"| Policies | {policies} | See policies index |",
+    ]
+    rows.extend(BIBLE_GAP_ROWS.get(filename, []))
+    table = "\n".join(rows)
     return f"""## 2. Core artefacts
 
 | Type | ID | Status |
 |------|-----|--------|
-| Procedure | [PROC-{proc_code}-001](../procedures/{proc_file}) | ✅ Programme |
-| Cookbook | [COOK-{proc_code}-001](../cookbooks/COOK-{proc_code}-001-{slug}.md) | ✅ Programme |
-| Hymn sheet | [HYMN-{proc_code}-001](../hymn-sheets/HYMN-{proc_code}-001-{slug}-Checklist.md) | ✅ Programme |
-| Policies | {policies} | See policies index |"""
+{table}"""
 
 
 def _bible_alignment() -> str:
@@ -418,7 +443,7 @@ def write_bible(filename: str, title: str, owner: str, proc_code: str, proc_titl
     parts = [
         _bible_header(title, owner),
         _bible_intro(title, summary),
-        _bible_core_artefacts(proc_code, proc_file, slug, policies),
+        _bible_core_artefacts(proc_code, proc_file, slug, policies, filename),
         _bible_alignment(),
         _bible_processes(proc_code),
         _bible_evidence(filename),
