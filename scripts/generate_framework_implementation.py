@@ -128,18 +128,20 @@ SIGNAL_GROUPS: list[dict] = [
         "name": "Platform baseline",
         "config_key": "CORE_PLATFORM",
         "default_active": True,
-        "framework_filter": lambda fw: fw.get("applicability") == "applicable"
-        and fw.get("framework_id")
-        not in {
-            "FW-110",
-            "FW-133",
-            "FW-134",
-            "FW-138",
-            "FW-144",
-            "FW-132",
-            "FW-131",
-            "FW-005",
-        },
+        "framework_filter": lambda fw: (
+            fw.get("applicability") == "applicable"
+            and fw.get("framework_id")
+            not in {
+                "FW-110",
+                "FW-133",
+                "FW-134",
+                "FW-138",
+                "FW-144",
+                "FW-132",
+                "FW-131",
+                "FW-005",
+            }
+        ),
     },
     {
         "signal_id": "SIG-GDPR-001",
@@ -370,28 +372,8 @@ def load_frameworks() -> dict:
         return yaml.safe_load(f)
 
 
-def assign_frameworks_to_groups(frameworks: list[dict]) -> dict[str, str]:
-    """Map framework_id -> signal_id (first match wins).
-
-    Explicit ``framework_ids`` are assigned in a first pass, ahead of every
-    category sweep and filter. A signal that names a framework outright is
-    stating intent; a category sweep is only inferring one. Without this
-    ordering the sweeps silently won on list position — SIG-US-GOV-001 claimed
-    FW-062 (HIPAA Security Rule) purely because it appears earlier in
-    SIGNAL_GROUPS, leaving SIG-HIPAA-001 to activate whatever the sweeps had
-    skipped. Groups still cannot steal from one another *within* a pass.
-
-    A group is either explicit or sweep-based, never both. Pass 2 skips any
-    group carrying ``framework_ids``, so a group defining both would have its
-    sweep silently dropped — a mistake that would look like a working config.
-    Rejected outright rather than given a precedence rule, because the two
-    readings ("the ids plus whatever the sweep finds" vs "the ids only") are
-    both plausible and the config should not have to be guessed at.
-    """
-    # Every key that only has meaning inside pass 2. `category`,
-    # `framework_filter` and `applicability` select what a sweep picks up;
-    # `exclude_ids` and `exclude_applicability` narrow it. Alongside
-    # `framework_ids` all five are dead config.
+def _validate_signal_groups() -> None:
+    """Check that a group defines either 'framework_ids' or sweep keys, but not both."""
     sweep_keys = (
         "framework_filter",
         "category",
@@ -409,22 +391,11 @@ def assign_frameworks_to_groups(frameworks: list[dict]) -> dict[str, str]:
                     f"split it into two groups if it genuinely needs both."
                 )
 
-    fw_by_id = {f["framework_id"]: f for f in frameworks}
-    assignment: dict[str, str] = {}
 
-    # Pass 1 — explicit claims. First group in SIGNAL_GROUPS order wins.
-    #
-    # Three frameworks are legitimately claimed by two groups (FW-004 by GDPR
-    # and AI-US, FW-030 by PCI and PAYMENTS, FW-112 by CCPA and AI-US) because
-    # they genuinely sit in both scopes, while the catalog carries exactly one
-    # signal_id per framework. Something has to win.
-    #
-    # What matters is that the winner is *visible* rather than an accident of
-    # list position — silent first-match-wins on list order is precisely the bug
-    # this two-pass rewrite was written to fix, and leaving the same fragility
-    # in pass 1 would have re-created it one level down. Contested claims are
-    # therefore reported at generation time, so reordering SIGNAL_GROUPS can
-    # never quietly reassign a framework.
+def _assign_explicit_frameworks(
+    frameworks: list[dict], assignment: dict[str, str], fw_by_id: dict[str, dict]
+) -> None:
+    """Pass 1 — explicit claims. First group in SIGNAL_GROUPS order wins."""
     contested: dict[str, list[str]] = {}
     for group in SIGNAL_GROUPS:
         for fid in group.get("framework_ids", []):
@@ -440,7 +411,11 @@ def assign_frameworks_to_groups(frameworks: list[dict]) -> dict[str, str]:
                 f"-> {assignment[fid]} (first in SIGNAL_GROUPS order)"
             )
 
-    # Pass 2 — category sweeps and filters, over whatever remains.
+
+def _assign_sweep_frameworks(
+    frameworks: list[dict], assignment: dict[str, str]
+) -> None:
+    """Pass 2 — category sweeps and filters, over whatever remains."""
     for group in SIGNAL_GROUPS:
         sig = group["signal_id"]
         if "framework_ids" in group:
@@ -465,6 +440,53 @@ def assign_frameworks_to_groups(frameworks: list[dict]) -> dict[str, str]:
                 if app in group.get("exclude_applicability", []):
                     continue
                 assignment[fid] = sig
+
+
+def assign_frameworks_to_groups(frameworks: list[dict]) -> dict[str, str]:
+    """Map framework_id -> signal_id (first match wins).
+
+    Explicit ``framework_ids`` are assigned in a first pass, ahead of every
+    category sweep and filter. A signal that names a framework outright is
+    stating intent; a category sweep is only inferring one. Without this
+    ordering the sweeps silently won on list position — SIG-US-GOV-001 claimed
+    FW-062 (HIPAA Security Rule) purely because it appears earlier in
+    SIGNAL_GROUPS, leaving SIG-HIPAA-001 to activate whatever the sweeps had
+    skipped. Groups still cannot steal from one another *within* a pass.
+
+    A group is either explicit or sweep-based, never both. Pass 2 skips any
+    group carrying ``framework_ids``, so a group defining both would have its
+    sweep silently dropped — a mistake that would look like a working config.
+    Rejected outright rather than given a precedence rule, because the two
+    readings ("the ids plus whatever the sweep finds" vs "the ids only") are
+    both plausible and the config should not have to be guessed at.
+    """
+    # Every key that only has meaning inside pass 2. `category`,
+    # `framework_filter` and `applicability` select what a sweep picks up;
+    # `exclude_ids` and `exclude_applicability` narrow it. Alongside
+    # `framework_ids` all five are dead config.
+    _validate_signal_groups()
+
+    fw_by_id = {f["framework_id"]: f for f in frameworks}
+    assignment: dict[str, str] = {}
+
+    # Pass 1 — explicit claims. First group in SIGNAL_GROUPS order wins.
+    #
+    # Three frameworks are legitimately claimed by two groups (FW-004 by GDPR
+    # and AI-US, FW-030 by PCI and PAYMENTS, FW-112 by CCPA and AI-US) because
+    # they genuinely sit in both scopes, while the catalog carries exactly one
+    # signal_id per framework. Something has to win.
+    #
+    # What matters is that the winner is *visible* rather than an accident of
+    # list position — silent first-match-wins on list order is precisely the bug
+    # this two-pass rewrite was written to fix, and leaving the same fragility
+    # in pass 1 would have re-created it one level down. Contested claims are
+    # therefore reported at generation time, so reordering SIGNAL_GROUPS can
+    # never quietly reassign a framework.
+    _assign_explicit_frameworks(frameworks, assignment, fw_by_id)
+
+    # Pass 2 — category sweeps and filters, over whatever remains.
+    _assign_sweep_frameworks(frameworks, assignment)
+
     return assignment
 
 
@@ -559,7 +581,11 @@ def build_catalog(frameworks: list[dict], assignment: dict[str, str]) -> dict:
             tier = "baseline"
             sig = "SIG-CORE-001"
             trig = "TRG-CORE-001"
-        group = next((g for g in SIGNAL_GROUPS if g["signal_id"] == sig), None) if sig else None
+        group = (
+            next((g for g in SIGNAL_GROUPS if g["signal_id"] == sig), None)
+            if sig
+            else None
+        )
         entries.append(
             {
                 "framework_id": fid,
@@ -675,9 +701,10 @@ def build_triggers(frameworks: list[dict], assignment: dict[str, str]) -> dict:
         fid = fw["framework_id"]
         if fid in assignment:
             continue
-        if fw.get("applicability") in ("applicable", "conditional") and fw.get(
-            "programme_status"
-        ) != "not_applicable":
+        if (
+            fw.get("applicability") in ("applicable", "conditional")
+            and fw.get("programme_status") != "not_applicable"
+        ):
             by_signal.setdefault("SIG-CORE-001", []).append(fid)
 
     triggers = []
@@ -695,7 +722,13 @@ def build_triggers(frameworks: list[dict], assignment: dict[str, str]) -> dict:
         if not fids:
             continue
         on_act = dict(ON_ACTIVATE_BASELINE)
-        if g["signal_id"] in ("SIG-CORE-001", "SIG-GDPR-001", "SIG-AI-001", "SIG-NIST-001", "SIG-PECR-001"):
+        if g["signal_id"] in (
+            "SIG-CORE-001",
+            "SIG-GDPR-001",
+            "SIG-AI-001",
+            "SIG-NIST-001",
+            "SIG-PECR-001",
+        ):
             # Baseline signals default active — advisory until operator enables enforce profile
             on_act = dict(ON_ACTIVATE_ADVISORY)
             on_act["rules_required_enabled"] = ["MC-RULE-001", "MC-RULE-002"]
@@ -710,7 +743,11 @@ def build_triggers(frameworks: list[dict], assignment: dict[str, str]) -> dict:
         if g["signal_id"] == "SIG-PCI-001":
             on_act.update(
                 {
-                    "rules_required_enabled": ["MC-RULE-001", "MC-RULE-002", "MC-RULE-006"],
+                    "rules_required_enabled": [
+                        "MC-RULE-001",
+                        "MC-RULE-002",
+                        "MC-RULE-006",
+                    ],
                     "supplier_dpa_required": ["SUP-003"],
                     "linked_actions": ["ACT-001"],
                     "programme_status_expect": "partial",
@@ -727,7 +764,11 @@ def build_triggers(frameworks: list[dict], assignment: dict[str, str]) -> dict:
             on_act.update(
                 {
                     "readiness_doc": "docs/compliance/readiness/US-GOVERNMENT-READINESS.md",
-                    "rules_required_enabled": ["MC-RULE-001", "MC-RULE-006", "MC-RULE-007"],
+                    "rules_required_enabled": [
+                        "MC-RULE-001",
+                        "MC-RULE-006",
+                        "MC-RULE-007",
+                    ],
                 }
             )
         if g["signal_id"] == "SIG-LGPD-001":
