@@ -372,16 +372,8 @@ def _check_unique_ids(doc: dict) -> list[str]:
     return errors
 
 
-def _check_hard_authorities(doc: dict) -> list[str]:
-    """Some authority slots are not "any declared role" — they are the human
-    checkpoints the layer is built around. _require_role (used elsewhere)
-    only checks that a referenced role exists, which would let an adopter
-    legally point one of these at capital_operator: the role exists, so the
-    weaker check passes, while the checkpoint the field exists to provide is
-    defeated. These are checked against the specific role they require.
-    """
+def _check_hard_authorities_transfers(doc: dict) -> list[str]:
     errors: list[str] = []
-
     transfers = (doc.get("ledger_separation") or {}).get("transfers") or {}
     exception_authority = transfers.get("exception_authority")
     if exception_authority is not None and exception_authority != "human_owner":
@@ -390,7 +382,11 @@ def _check_hard_authorities(doc: dict) -> list[str]:
             "human_owner — the one sanctioned ledger crossing is a human "
             "checkpoint by design, not a role any declared actor may hold"
         )
+    return errors
 
+
+def _check_hard_authorities_gates(doc: dict) -> list[str]:
+    errors: list[str] = []
     # A tier whose external_execution is simulated_only is the one this register's
     # own docs call "the one progression the presiding authority cannot grant
     # alone" — the gate that lifts a tier out of simulation into live money is a
@@ -430,7 +426,11 @@ def _check_hard_authorities(doc: dict) -> list[str]:
                 "when set — it exists to require a checkpoint above "
                 "presiding_authority, not a delegatable role"
             )
+    return errors
 
+
+def _check_hard_authorities_switches(doc: dict) -> list[str]:
+    errors: list[str] = []
     for switch in doc.get("kill_switches") or []:
         sid = switch.get("switch_id", "<unnamed>")
         release_authority = switch.get("release_authority")
@@ -469,7 +469,21 @@ def _check_hard_authorities(doc: dict) -> list[str]:
                     "definition, and a hard kill is not a call any automated "
                     "role gets to make"
                 )
+    return errors
 
+
+def _check_hard_authorities(doc: dict) -> list[str]:
+    """Some authority slots are not "any declared role" — they are the human
+    checkpoints the layer is built around. _require_role (used elsewhere)
+    only checks that a referenced role exists, which would let an adopter
+    legally point one of these at capital_operator: the role exists, so the
+    weaker check passes, while the checkpoint the field exists to provide is
+    defeated. These are checked against the specific role they require.
+    """
+    errors: list[str] = []
+    errors.extend(_check_hard_authorities_transfers(doc))
+    errors.extend(_check_hard_authorities_gates(doc))
+    errors.extend(_check_hard_authorities_switches(doc))
     return errors
 
 
