@@ -449,3 +449,70 @@ class TestAnIdentifierMustBeANonEmptyString:
 
     def test_a_real_id_passes(self, monkeypatch, tmp_path):
         assert self._run(monkeypatch, tmp_path, [{"action_id": "ACT-001"}]) == []
+
+
+class TestTheDocumentationMatchesTheConfiguration:
+    """REGISTER-SCHEMAS.md documented MON-016 after the check had moved to MON-019.
+
+    It slipped because the edit that renumbered it was a `str.replace` against
+    text that had changed under it: a no-op that reported nothing, which is the
+    same shape as every other defect this branch found. A check id is the handle
+    a reader uses to find what fired, so a document naming the wrong one sends
+    them to the wrong check. (codeant-ai)
+    """
+
+    def test_every_check_documented_in_register_schemas_names_its_configured_id(self):
+        import re
+
+        import yaml
+
+        cfg = yaml.safe_load(
+            (ROOT / "compliance" / "maintenance_monitor.yaml").read_text(encoding="utf-8")
+        )
+        configured = {
+            name: block["check_id"]
+            for name, block in cfg.items()
+            if isinstance(block, dict) and block.get("check_id")
+        }
+        doc = (ROOT / "docs" / "schemas" / "REGISTER-SCHEMAS.md").read_text(encoding="utf-8")
+
+        wrong = []
+        # "### <check name> (MON-0xx)" is how the document titles each section.
+        for heading, documented in re.findall(r"^### (\w+) \((MON-\d+)\)", doc, re.M):
+            if heading in configured and configured[heading] != documented:
+                wrong.append(f"{heading}: documented {documented}, configured {configured[heading]}")
+        assert not wrong, wrong
+
+    def test_at_least_one_check_is_documented_by_id(self):
+        """Otherwise the test above passes by matching nothing."""
+        import re
+
+        doc = (ROOT / "docs" / "schemas" / "REGISTER-SCHEMAS.md").read_text(encoding="utf-8")
+        assert re.findall(r"^### \w+ \(MON-\d+\)", doc, re.M)
+
+
+class TestStrayIdsOfTheWrongType:
+    """A mixed-type register reached sorted() and took the health check down."""
+
+    SPEC = {"items_key": "actions", "id_field": "action_id"}
+
+    def _run(self, data: dict) -> list:
+        findings: list = []
+        chc._check_ids_are_in_the_checked_list(
+            self.SPEC, data, findings, "MON-TEST", "tracker.yaml"
+        )
+        return findings
+
+    def test_a_non_string_id_is_reported_rather_than_sorted(self):
+        data = {
+            "actions": [{"action_id": "ACT-001"}],
+            "programme_milestones": [{"action_id": 123}, {"action_id": "ACT-999"}],
+        }
+        messages = [f.message for f in self._run(data)]
+        assert any("123" in m and "non-empty string" in m for m in messages)
+        assert any("ACT-999" in m and "nowhere in" in m for m in messages)
+
+    @pytest.mark.parametrize("bad", [123, 1.5, ["x"], {"a": 1}])
+    def test_no_id_type_makes_the_check_raise(self, bad):
+        data = {"actions": [{"action_id": "ACT-001"}], "other": [{"action_id": bad}]}
+        assert self._run(data)  # reports rather than raises

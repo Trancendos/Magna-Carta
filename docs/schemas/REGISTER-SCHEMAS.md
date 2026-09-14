@@ -226,13 +226,13 @@ Human-readable playbooks: [EXTERNAL-ACTION-EXECUTION-GUIDE.md](../compliance/EXT
 | `max_age_days` | int | no | Staleness threshold |
 | `severity` | enum | yes | error, warning, info |
 
-### register_id_uniqueness (MON-016)
+### register_id_uniqueness (MON-019)
 
 Validates that identifiers are unique across specified registers.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `check_id` | string | yes | `MON-016` |
+| `check_id` | string | yes | `MON-019` |
 | `registers` | list | yes | List of register specifications |
 | `registers[].source` | string | yes | Path to register file |
 | `registers[].items_key` | string | yes | YAML key containing the list of items to check |

@@ -177,11 +177,28 @@ def _check_ids_are_in_the_checked_list(
     for key, value in data.items():
         if key == checked or not isinstance(value, list):
             continue
-        strays = [
-            item.get(field)
-            for item in value
-            if isinstance(item, dict) and item.get(field) and item.get(field) not in known
-        ]
+        strays = []
+        for item in value:
+            if not isinstance(item, dict):
+                continue
+            raw = item.get(field)
+            if not raw:
+                continue
+            if not isinstance(raw, str):
+                # Reported, not sorted alongside the strings: mixed types reached
+                # sorted() and raised TypeError, so the check that exists to
+                # report malformed registers died on one. (codeant-ai)
+                findings.append(
+                    Finding(
+                        cid,
+                        "error",
+                        f"{rel}: an entry under '{key}' has '{field}': {raw!r} — "
+                        "an identifier must be a non-empty string",
+                    )
+                )
+                continue
+            if raw not in known:
+                strays.append(raw)
         if strays:
             findings.append(
                 Finding(
