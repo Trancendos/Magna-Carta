@@ -226,6 +226,41 @@ Human-readable playbooks: [EXTERNAL-ACTION-EXECUTION-GUIDE.md](../compliance/EXT
 | `max_age_days` | int | no | Staleness threshold |
 | `severity` | enum | yes | error, warning, info |
 
+### register_id_uniqueness (MON-019)
+
+Validates that identifiers are unique across specified registers.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `check_id` | string | yes | `MON-019` |
+| `registers` | list | yes | List of register specifications |
+| `registers[].source` | string | yes | Path to register file |
+| `registers[].items_key` | string | yes | YAML key containing the list of items to check |
+| `registers[].id_field` | string | yes | Field name within each item that should be unique |
+
+**Purpose:** Detects duplicate identifiers within a register (e.g. `ACT-016` issued twice). An identifier collision prevents correct evidence linking and obligation tracking.
+
+---
+
+### identifier_references (MON-020)
+
+Validates that every identifier cited outside its register is one that register defines.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `check_id` | string | yes | `MON-020` |
+| `identifiers` | list | yes | List of identifier specifications |
+| `identifiers[].register` | string | yes | Path to the register that defines these ids |
+| `identifiers[].items_key` | string | yes | YAML key containing the list of defining items |
+| `identifiers[].id_field` | string | yes | Field name within each item holding the id |
+| `identifiers[].pattern` | string | yes | Regular expression matching the id form in prose (e.g. `ACT-[0-9]{3}`) |
+| `identifiers[].search` | list | yes | Globs, relative to the repository root, of files to scan for citations |
+
+**Purpose:** Renumbering `ACT-016` to `ACT-020` left three documents citing an id that no
+longer existed. The stale citations were in prose — inside a YAML block scalar and inside
+markdown — so a check that followed only structured `linked_action` fields would have
+reported clean on exactly the citations that were wrong. This one reads the text.
+
 ---
 
 ## 10. Human register tables (markdown)

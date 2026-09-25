@@ -55,13 +55,22 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install -r requirements.txt
           # bandit and pip-audit, named rather than installed from requirements-oss.txt,
-          # because that file also carries semgrep: a ~100MB install whose rule set is
-          # fetched from a remote registry at scan time, so enabling it here would trade
-          # a deterministic gate for a network-dependent one. These two are offline and
-          # fast, and pip-audit is the one that matters most -- it resolves each
-          # requirements file in a fresh virtualenv, so an unresolvable manifest fails
-          # here rather than reaching main behind a green check, which is what happened
-          # with `wcmatch==11.0` on 2026-09-14.
+          # because that file also carries semgrep: a ~100MB install whose RULE SET is
+          # fetched from a remote registry at scan time, so what the gate enforces can
+          # change between two runs of the same commit.
+          #
+          # Not because these two are offline -- pip-audit is not, and an earlier
+          # version of this comment said so wrongly (caught by sourcery-ai on #53).
+          # bandit is pure static analysis, but pip-audit resolves each requirements
+          # file in a real virtualenv against the package index and queries an advisory
+          # service. What it does not do is let a remote change redefine the check: the
+          # rules are advisory records about named versions, not a rule set that
+          # rewrites the gate. A runner without network fails these steps loudly rather
+          # than passing them blind.
+          #
+          # pip-audit is the one that matters most here, because resolving the manifest
+          # is the check: an unresolvable one fails here instead of reaching main behind
+          # a green check, which is what happened with `wcmatch==11.0` on 2026-09-14.
           python3 -m pip install bandit pip-audit
           python3 --version && python3 -m pip --version
 

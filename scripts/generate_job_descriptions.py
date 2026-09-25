@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -287,6 +288,92 @@ ROLES = [
 ]
 
 
+def _format_responsibilities(responsibilities: list[str]) -> str:
+    return "\n".join(f"- {r}" for r in responsibilities)
+
+
+def _format_qualifications(qualifications: list[str]) -> str:
+    return "\n".join(f"- {q}" for q in qualifications)
+
+
+# Directories holding per-task checklists rather than the governing artefact.
+# Matched on a path COMPONENT, not a substring of the whole path: a substring
+# test would also exclude anything that ever lands under a directory whose name
+# happens to contain one of these words.
+_NOT_AN_ARTEFACT_DIR = {"hymn-sheets", "cookbooks"}
+
+
+def _resolve_artefact(artefact_id: str) -> Path | None:
+    """The single document `artefact_id` names, or None if it is not in the repo.
+
+    Resolution is deterministic by construction, because the obvious
+    implementation is not. Walking the tree and taking the first filename that
+    starts with the id makes the generated link depend on `rglob` order, which
+    is filesystem order -- so two machines regenerating these thirteen
+    documents would disagree, in a repository whose whole value is that its
+    diffs are reviewable. That is not hypothetical here: `AI-GOVERNANCE` matches
+    both `docs/compliance/AI-GOVERNANCE.md` and
+    `docs/governance/AI-GOVERNANCE-COMMITTEE-CHARTER.md`, and a first-match walk
+    picks whichever one the filesystem happened to hand over first.
+
+    So: candidates are sorted, an exact stem match wins over a prefix match, and
+    a genuine tie raises instead of choosing. Of the 41 artefact ids in ROLES,
+    38 resolve to exactly one file, `AI-GOVERNANCE` resolves by exact stem, and
+    `ROPA` resolves to nothing -- see _format_artefacts.
+    """
+    candidates = sorted(
+        path
+        for path in (ROOT / "docs").rglob(f"{artefact_id}*.md")
+        if not (_NOT_AN_ARTEFACT_DIR & set(path.parts))
+    )
+    if not candidates:
+        return None
+    if len(candidates) == 1:
+        return candidates[0]
+    exact = [p for p in candidates if p.stem == artefact_id]
+    if len(exact) == 1:
+        return exact[0]
+    raise SystemExit(
+        f"{artefact_id} matches {len(candidates)} documents and none of them "
+        f"exactly: {', '.join(str(c.relative_to(ROOT)) for c in candidates)}. "
+        "Pick one by renaming, or give the artefact an unambiguous id -- "
+        "resolving this by walk order is how a generator stops being reproducible."
+    )
+
+
+#: Artefacts the job-description template links from its own fixed footer. An id
+#: named in a role's artefact list AND emitted there rendered twice -- visible in
+#: JD-ISMS-001, which listed RACI-MATRIX and then had the footer link it again
+#: (codeant-ai). Skipped here rather than removed from ROLES, because the role
+#: really does consult them; the template is just already saying so.
+_LINKED_BY_THE_TEMPLATE_FOOTER = {"RACI-MATRIX", "TEMPLATE-JOB-DESCRIPTION"}
+
+
+def _format_artefacts(artefacts: list[str]) -> str:
+    art_links = []
+    for a in artefacts:
+        if a in _LINKED_BY_THE_TEMPLATE_FOOTER:
+            continue
+        if a == "FRAMEWORK":
+            # The one artefact above docs/, so it has no candidate to resolve.
+            art_links.append(f"- [{a}](../../FRAMEWORK.md)")
+            continue
+        target = _resolve_artefact(a)
+        if target is None:
+            # Named as a governing artefact and absent from the repository. The
+            # link that used to be emitted here pointed at ../compliance/<id>.md
+            # whether or not that file existed -- eight of the seventy-two links
+            # across these thirteen documents were dead on 2026-09-14, and a dead
+            # link in a job description reads as an artefact that exists. Say what
+            # is true instead, and let the register carry the gap.
+            art_links.append(f"- `{a}` — not present in this repository")
+            print(f"  WARNING: {a} is named by a job description but has no document")
+            continue
+        rel = os.path.relpath(target, JD_DIR).replace(os.sep, "/")
+        art_links.append(f"- [{a}]({rel})")
+    return "\n".join(art_links)
+
+
 def render_jd(
     jd_id: str,
     title: str,
@@ -298,27 +385,9 @@ def render_jd(
     qualifications: list[str],
     artefacts: list[str],
 ) -> str:
-    resp_lines = "\n".join(f"- {r}" for r in responsibilities)
-    qual_lines = "\n".join(f"- {q}" for q in qualifications)
-    art_lines = "\n".join(f"- [{a}](../{'compliance' if a.isupper() and '-' in a else 'procedures' if a.startswith('PROC') else 'bibles'}/{a}.md)" if not a.endswith(".md") else f"- {a}" for a in artefacts)
-    # Fix artefact links properly
-    art_links = []
-    for a in artefacts:
-        if a.startswith("PROC-"):
-            # find file - use INDEX pattern
-            art_links.append(f"- Procedure and related artefacts: `{a}` (see [procedures INDEX](../procedures/INDEX.md))")
-        elif a.endswith("-BIBLE"):
-            art_links.append(f"- [{a}](../bibles/{a}.md)")
-        elif a in ("ROPA", "FRAMEWORK"):
-            path = "ROPA.md" if a == "ROPA" else "../../FRAMEWORK.md"
-            folder = "compliance" if a == "ROPA" else ""
-            if folder:
-                art_links.append(f"- [{a}](../compliance/{path})")
-            else:
-                art_links.append(f"- [{a}](../../FRAMEWORK.md)")
-        else:
-            art_links.append(f"- [{a}](../compliance/{a}.md)")
-    art_block = "\n".join(art_links)
+    resp_lines = _format_responsibilities(responsibilities)
+    qual_lines = _format_qualifications(qualifications)
+    art_block = _format_artefacts(artefacts)
 
     return f"""# {jd_id} — {title}
 
@@ -383,30 +452,36 @@ This job description supports Magna Carta compliance evidence (ISO 27001 A.5/A.6
 """
 
 
-def main() -> None:
-    JD_DIR.mkdir(parents=True, exist_ok=True)
+SLUG_MAP = {
+    "JD-ISMS-001": "JD-ISMS-001-ISMS-Lead.md",
+    "JD-PRI-001": "JD-PRI-001-Data-Protection-Officer.md",
+    "JD-SEC-001": "JD-SEC-001-CISO.md",
+    "JD-CAB-001": "JD-CAB-001-CAB-Chair.md",
+    "JD-ENG-001": "JD-ENG-001-Engineering-Lead.md",
+    "JD-AI-001": "JD-AI-001-AI-Governance-Lead.md",
+    "JD-HR-001": "JD-HR-001-HR-People-Lead.md",
+    "JD-FIN-001": "JD-FIN-001-Finance-Controller.md",
+    "JD-LEG-001": "JD-LEG-001-Legal-Counsel.md",
+    "JD-PRM-001": "JD-PRM-001-Procurement-Lead.md",
+    "JD-HSE-001": "JD-HSE-001-Health-Safety-Lead.md",
+    "JD-IT-001": "JD-IT-001-IT-Operations-Lead.md",
+    "JD-DAT-001": "JD-DAT-001-Data-Governance-Lead.md",
+}
+
+
+def write_job_descriptions(roles: list[tuple]) -> list[tuple[str, str, str, str]]:
     index_rows = []
-    for row in ROLES:
+    for row in roles:
         jd_id, title, short_name, reports_to, authority, summary, resp, qual, arts = row
-        filename = f"{jd_id}-{title.split('(')[0].strip().replace(' / ', '-').replace(' ', '-')}.md"
-        filename = filename.replace("--", "-").replace("(-", "").replace(")", "")
-        # Simpler filenames
-        slug_map = {
-            "JD-ISMS-001": "JD-ISMS-001-ISMS-Lead.md",
-            "JD-PRI-001": "JD-PRI-001-Data-Protection-Officer.md",
-            "JD-SEC-001": "JD-SEC-001-CISO.md",
-            "JD-CAB-001": "JD-CAB-001-CAB-Chair.md",
-            "JD-ENG-001": "JD-ENG-001-Engineering-Lead.md",
-            "JD-AI-001": "JD-AI-001-AI-Governance-Lead.md",
-            "JD-HR-001": "JD-HR-001-HR-People-Lead.md",
-            "JD-FIN-001": "JD-FIN-001-Finance-Controller.md",
-            "JD-LEG-001": "JD-LEG-001-Legal-Counsel.md",
-            "JD-PRM-001": "JD-PRM-001-Procurement-Lead.md",
-            "JD-HSE-001": "JD-HSE-001-Health-Safety-Lead.md",
-            "JD-IT-001": "JD-IT-001-IT-Operations-Lead.md",
-            "JD-DAT-001": "JD-DAT-001-Data-Governance-Lead.md",
-        }
-        filename = slug_map[jd_id]
+        # Deliberately a strict lookup. A role added to ROLES without a SLUG_MAP
+        # entry must stop the generator, not quietly receive a filename derived
+        # from its title: these paths are linked from the bibles, the RACI matrix
+        # and INDEX.md, and a silently differently-shaped one is a broken
+        # convention nobody is told about. Two lines deriving exactly that
+        # fallback stood here and were overwritten on the very next line, dead
+        # since they were written; the refactor that moved SLUG_MAP out of the
+        # loop made them reachable instead of removing them.
+        filename = SLUG_MAP[jd_id]
         path = JD_DIR / filename
         path.write_text(
             render_jd(jd_id, title, short_name, reports_to, authority, summary, resp, qual, arts),
@@ -414,7 +489,10 @@ def main() -> None:
         )
         index_rows.append((jd_id, title, short_name, filename))
         print(f"Wrote {path.relative_to(ROOT)}")
+    return index_rows
 
+
+def write_index_file(index_rows: list[tuple[str, str, str, str]]) -> None:
     index = """# Job Descriptions Index
 
 **Version:** 1.0.0  
@@ -450,6 +528,12 @@ Template: [TEMPLATE-JOB-DESCRIPTION.md](../templates/TEMPLATE-JOB-DESCRIPTION.md
 """
     (JD_DIR / "INDEX.md").write_text(index, encoding="utf-8")
     print("Wrote docs/job-descriptions/INDEX.md")
+
+
+def main() -> None:
+    JD_DIR.mkdir(parents=True, exist_ok=True)
+    index_rows = write_job_descriptions(ROLES)
+    write_index_file(index_rows)
 
 
 if __name__ == "__main__":

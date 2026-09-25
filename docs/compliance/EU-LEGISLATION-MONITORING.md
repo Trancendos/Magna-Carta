@@ -129,7 +129,7 @@ Citation standards: [EUR-LEX-ELI-REFERENCE.md](EUR-LEX-ELI-REFERENCE.md).
 
 | Scan ID | Date | Reviewer | Summary | Next due |
 |---------|------|----------|---------|----------|
-| SCAN-2026-Q3-01 | 2026-09-14 | Claude Code (prepared) | Digital Omnibus on AI published OJ 2026-07-24, in force 2026-07-27: Annex III high-risk deferred to 2027-12-02, Annex I to 2028-08-02; **Art 50 transparency unchanged and live from 2026-08-02**. CRA Art 14 reporting live from 2026-09-11 (24h/72h). DUAA 2025 found absent from the register — added as LEG-012 with an open s.164A complaints gap (ACT-016). Closes the "track Digital Omnibus proposals" item opened by SCAN-2026-Q2-01. Full record: [LEGISLATION-REVIEW-LOG.md](../evidence/LEGISLATION-REVIEW-LOG.md) REV-2026-09-14. | 2026-12-13 |
+| SCAN-2026-Q3-01 | 2026-09-14 | Claude Code (prepared) | Digital Omnibus on AI published OJ 2026-07-24, in force 2026-07-27: Annex III high-risk deferred to 2027-12-02, Annex I to 2028-08-02; **Art 50 transparency unchanged and live from 2026-08-02**. CRA Art 14 reporting live from 2026-09-11 (24h/72h). DUAA 2025 found absent from the register — added as LEG-012 with an open s.164A complaints gap (ACT-020). Closes the "track Digital Omnibus proposals" item opened by SCAN-2026-Q2-01. Full record: [LEGISLATION-REVIEW-LOG.md](../evidence/LEGISLATION-REVIEW-LOG.md) REV-2026-09-14. | 2026-12-13 |
 | SCAN-2026-Q2-01 | 2026-06-09 | AI Lead / DPO | No OJ-published delegated acts under CELEX 32024R1689 at scan date. GPAI Code of Practice published Jul 2025 — monitor. High-risk deadline 2 Aug 2026 — track Digital Omnibus proposals. `secondary_legislation_watch` last_checked → 2026-06-09. | 2026-09-30 |
 | — | 2026-06-08 | Programme | Initial register seeded | 2026-09-30 🎯 |
 

@@ -68,6 +68,7 @@ tools:
     name: "Gitleaks (optional OSS)"
     cost_model: free_oss
     mandatory: false
+    binary: "gitleaks"
     install: "https://github.com/gitleaks/gitleaks — binary or go install"
     invoked_by: scripts/run_oss_security_scans.sh
     notes: "Skipped gracefully if not installed"
@@ -76,6 +77,7 @@ tools:
     name: "Bandit Python SAST (optional OSS)"
     cost_model: free_oss
     mandatory: false
+    binary: "bandit"
     install: "pip install bandit"
     invoked_by: scripts/run_oss_security_scans.sh
     notes: "Skipped gracefully if not installed"
@@ -84,6 +86,7 @@ tools:
     name: "Semgrep Community (optional OSS)"
     cost_model: free_oss
     mandatory: false
+    binary: "semgrep"
     install: "pip install semgrep"
     invoked_by: scripts/run_oss_security_scans.sh
     notes: "Community ruleset; no Semgrep Teams subscription required"
@@ -92,6 +95,7 @@ tools:
     name: "pip-audit (optional OSS)"
     cost_model: free_oss
     mandatory: false
+    binary: "pip-audit"
     install: "pip install pip-audit"
     invoked_by: scripts/run_oss_security_scans.sh
     notes: "Dependency CVE check when requirements.txt present"

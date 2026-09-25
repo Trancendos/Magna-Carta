@@ -16,6 +16,7 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 |--------|---------|
 | ✅ **Programme** | Artefact or process exists in Magna Carta |
 | 🎯 **External validation** | Requires signed contract, fee, audit, or operational run |
+| 📋 **Internal artefact** | Requires a document this repository must author; no external party, fee or run involved |
 
 ---
 
@@ -37,6 +38,8 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 | ACT-017 | Complete premises fire risk assessment (FRA) | Facilities / H&S | 2026-10-31 | P2 | Open | 🎯 |
 | ACT-018 | Activate payroll provider and live RTI reporting | Finance | 2026-12-31 | P2 | Open | 🎯 |
 | ACT-019 | Name H&S officer and execute RIDDOR reporting drill | HR / H&S | 2026-09-30 | P2 | Open | 🎯 |
+| ACT-020 | DUAA s.164A statutory complaints-handling process | DPO | 2026-10-26 | P1 | Open | 🎯 |
+| ACT-021 | Article 30 Record of Processing Activities (ROPA) does not exist | DPO | 2026-11-14 | P1 | Open | 📋 |
 
 ---
 
@@ -70,7 +73,7 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 
 ## 5. External validation playbook
 
-Open 🎯 actions (ACT-001–003, ACT-005, ACT-007–010, ACT-012, ACT-016–019) use step-by-step playbooks in [EXTERNAL-ACTION-EXECUTION-GUIDE.md](EXTERNAL-ACTION-EXECUTION-GUIDE.md). Machine-readable packages: `compliance/execution_evidence_register.yaml` → `external_action_packages`.
+Open 🎯 actions (ACT-001–003, ACT-005, ACT-007–010, ACT-012, ACT-016–020) use step-by-step playbooks in [EXTERNAL-ACTION-EXECUTION-GUIDE.md](EXTERNAL-ACTION-EXECUTION-GUIDE.md). Machine-readable packages: `compliance/execution_evidence_register.yaml` → `external_action_packages`.
 
 ---
 
