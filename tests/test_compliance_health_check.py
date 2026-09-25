@@ -490,6 +490,48 @@ class TestTheDocumentationMatchesTheConfiguration:
         doc = (ROOT / "docs" / "schemas" / "REGISTER-SCHEMAS.md").read_text(encoding="utf-8")
         assert re.findall(r"^### \w+ \(MON-\d+\)", doc, re.M)
 
+    #: Checks REGISTER-SCHEMAS.md does not document, measured 2026-09-14. The
+    #: document was written for register *schemas*, and these twelve predate the
+    #: convention of documenting a check there; they are a real gap, recorded
+    #: rather than closed in this branch. The set may shrink. It may not grow.
+    UNDOCUMENTED = {
+        "action_overdue",
+        "enforcement_alignment",
+        "evidence_recurrence",
+        "framework_implementation",
+        "framework_readiness",
+        "legislation_watch",
+        "procedure_coverage",
+        "standards_watch",
+        "supplier_dpa_gates",
+        "trigger_integrity",
+        "weekly_cadence",
+    }
+
+    def test_no_new_check_is_undocumented(self):
+        """The id-matching test above compares only checks the document mentions.
+
+        A check documented nowhere matches nothing and passes — which is what
+        MON-020 did, having been added with no section of its own. (codeant-ai)
+        """
+        import re
+
+        import yaml
+
+        cfg = yaml.safe_load(
+            (ROOT / "compliance" / "maintenance_monitor.yaml").read_text(encoding="utf-8")
+        )
+        configured = {
+            name
+            for name, block in cfg.items()
+            if isinstance(block, dict) and block.get("check_id")
+        }
+        doc = (ROOT / "docs" / "schemas" / "REGISTER-SCHEMAS.md").read_text(encoding="utf-8")
+        documented = {h for h, _ in re.findall(r"^### (\w+) \((MON-\d+)\)", doc, re.M)}
+
+        new_gaps = sorted(configured - documented - self.UNDOCUMENTED)
+        assert not new_gaps, f"configured but documented nowhere: {new_gaps}"
+
 
 class TestStrayIdsOfTheWrongType:
     """A mixed-type register reached sorted() and took the health check down."""

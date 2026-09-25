@@ -35,7 +35,9 @@ SKIPPED=""
 HANDLED=""
 REQUIRED="${OSS_SCAN_REQUIRED:-}"
 
+REQUIRED_COUNT=0
 for want in ${REQUIRED//,/ }; do
+  REQUIRED_COUNT=$((REQUIRED_COUNT + 1))
   case " $KNOWN_SCANNERS " in
     *" $want "*) ;;
     *)
@@ -45,6 +47,16 @@ for want in ${REQUIRED//,/ }; do
       ;;
   esac
 done
+
+# `OSS_SCAN_REQUIRED=,` and `OSS_SCAN_REQUIRED=" "` are non-empty strings that
+# split into no words at all, so the loop above validates nothing and the gate
+# below requires nothing -- set, reporting, and unable to act. That is the same
+# defect the name validation removed, one level further in. Caught by CodeRabbit.
+if [[ -n "$REQUIRED" && "$REQUIRED_COUNT" -eq 0 ]]; then
+  echo "FAIL OSS_SCAN_REQUIRED is set but names no scanner: '$REQUIRED'" >&2
+  echo "     unset it to allow skips, or name scanners from: $KNOWN_SCANNERS" >&2
+  exit 1
+fi
 
 HANDLED="$HANDLED gitleaks"
 if command -v gitleaks >/dev/null 2>&1; then

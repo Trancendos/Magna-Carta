@@ -338,6 +338,29 @@ Playbooks for **ACT-001–ACT-019** items that cannot close from repository work
 
 ---
 
+### 3.17 DUAA s.164A complaints-handling process (ACT-020)
+
+| Field | Value |
+|-------|-------|
+| Owner | DPO |
+| Priority | P1 |
+| Source | Data (Use and Access) Act 2025 s.164A; LEG-012 |
+
+**Prerequisites:** ✅ Privacy notice and DPO role defined in repo.
+
+**Steps:**
+
+1. Draft the complaints procedure: how a data subject complains, to whom, and in what form.
+2. Set and publish the acknowledgement deadline (30 days from receipt) and the substantive
+   response deadline, and record where each is measured from.
+3. Publish the route in the privacy notice and in any in-product privacy surface.
+4. Record complaints, acknowledgements and outcomes in a log the DPO can produce on request.
+5. Close ACT-020 when the procedure is published and the log exists.
+
+**Evidence target:** Published complaints procedure; complaints log with at least the schema in place.
+
+---
+
 ## 4. Closed baseline actions (reference)
 
 | Action | Evidence ID | Artefact |

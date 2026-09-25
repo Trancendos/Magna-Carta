@@ -235,8 +235,24 @@ def check_identifier_references_resolve(cfg: dict, findings: list[Finding]) -> N
         if not register.is_file() or yaml is None:
             findings.append(Finding(cid, "error", f"{spec['register']}: register not readable"))
             continue
-        with register.open(encoding="utf-8") as f:
-            data = yaml.safe_load(f) or {}
+        try:
+            with register.open(encoding="utf-8") as f:
+                data = yaml.safe_load(f) or {}
+        except (OSError, yaml.YAMLError) as exc:
+            # As MON-019. This guard was written there and not here, so the check
+            # that proves every cited id resolves would itself have died on an
+            # unparseable register, taking every later check down with it.
+            findings.append(Finding(cid, "error", f"{spec['register']}: cannot be read: {exc}"))
+            continue
+        if not isinstance(data, dict):
+            findings.append(
+                Finding(
+                    cid,
+                    "error",
+                    f"{spec['register']}: root is {type(data).__name__}, expected a mapping",
+                )
+            )
+            continue
         defined = {
             str(item.get(spec["id_field"]))
             for item in (data.get(spec["items_key"]) or [])
@@ -1005,7 +1021,12 @@ def check_enforcement_alignment(cfg: dict, findings: list[Finding]) -> None:
     block = cfg.get("enforcement_alignment", {})
     if not block:
         return
-    cid = block.get("check_id", "MON-019")
+    # MON-016, and only MON-016. Renumbering the uniqueness check MON-016 -> MON-019
+    # was done with a `str.replace` carrying no count, which walked past the check
+    # being renumbered and rewrote this fallback too -- so a config with no explicit
+    # check_id would have filed enforcement findings under the id of a different
+    # check. The collision the renumbering removed, reintroduced by the renumbering.
+    cid = block.get("check_id", "MON-016")
     triggers = _load_yaml(block["triggers_register"])
     signals = _load_yaml(block["signals_register"])
     config_path = ROOT / block["runtime_config"]

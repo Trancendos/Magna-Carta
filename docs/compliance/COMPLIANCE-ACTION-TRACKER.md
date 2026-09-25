@@ -16,6 +16,7 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 |--------|---------|
 | ✅ **Programme** | Artefact or process exists in Magna Carta |
 | 🎯 **External validation** | Requires signed contract, fee, audit, or operational run |
+| 📋 **Internal artefact** | Requires a document this repository must author; no external party, fee or run involved |
 
 ---
 
@@ -72,7 +73,7 @@ Tracks open compliance gaps, remediation owners, and due dates. Referenced by [O
 
 ## 5. External validation playbook
 
-Open 🎯 actions (ACT-001–003, ACT-005, ACT-007–010, ACT-012, ACT-016–019) use step-by-step playbooks in [EXTERNAL-ACTION-EXECUTION-GUIDE.md](EXTERNAL-ACTION-EXECUTION-GUIDE.md). Machine-readable packages: `compliance/execution_evidence_register.yaml` → `external_action_packages`.
+Open 🎯 actions (ACT-001–003, ACT-005, ACT-007–010, ACT-012, ACT-016–020) use step-by-step playbooks in [EXTERNAL-ACTION-EXECUTION-GUIDE.md](EXTERNAL-ACTION-EXECUTION-GUIDE.md). Machine-readable packages: `compliance/execution_evidence_register.yaml` → `external_action_packages`.
 
 ---
 

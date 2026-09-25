@@ -25,6 +25,7 @@ from __future__ import annotations
 import copy
 import difflib
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -164,7 +165,17 @@ def _probe(name: str, script_name: str, mutations: list[Mutation], ref: str) -> 
         return
     # Run the committed copy from scripts/ so its ROOT (parents[1]) still
     # resolves to this repository rather than a temp directory.
-    old = ROOT / "scripts" / f"_probe_{script_name}"
+    # A fixed name here (`_probe_<script>`) is one path two runs share: a second
+    # probe, or a stale copy left by a killed one, silently becomes the baseline
+    # the working tree is compared against -- and a repository file that happened
+    # to carry the name would be overwritten and then deleted. mkstemp gives a
+    # name nothing else holds, and refuses rather than clobbering. Caught by
+    # CodeRabbit.
+    handle, old_path = tempfile.mkstemp(
+        prefix=f"_probe_{script_name[:-3]}_", suffix=".py", dir=ROOT / "scripts"
+    )
+    os.close(handle)
+    old = Path(old_path)
     old.write_text(committed.stdout, encoding="utf-8")
     new = ROOT / "scripts" / script_name
     try:
